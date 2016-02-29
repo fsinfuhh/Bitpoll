@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Dudel Index{% endblock %}
+
+{% block content %}
+    <form action="{%  url 'index' %}" method="post">
+        {% csrf_token %}
+        {{ new_Poll }}
+        <input type="submit" value="Create" />
+    </form>
+
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% load tz %}
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>{% block title %} dudel {% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+        {% block head %}{% endblock %}
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default navbar-inverse" role="navigation" style="background: cadetblue;">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                        <span class="sr-only">{{ _("Toggle navigation") }}</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/" class="navbar-brand"> dudel </a>
+
+                    <div class="navbar-left visible-sm visible-xs">
+                        <a class="btn navbar-btn btn-default" href="www.mafiasi.de" style="margin-top: 10px;" target="_blank"> {# TODO #}
+                            <i class="fa fa-home"></i> MafiasiHub
+                        </a>
+
+                        <a class="btn navbar-btn btn-default" href="{%  url 'index' %}" style="margin-top: 10px;">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navbar-left hidden-sm hidden-xs">
+                    <a class="btn navbar-btn btn-default" href="www.mafiasi.de" style="margin-top: 10px;" target="_blank"> {# TODO #}
+                        <i class="fa fa-home"></i> dudel
+                    </a>
+                    <a class="btn navbar-btn btn-default" href="{%  url 'index' %}" style="margin-top: 10px;">
+                        <i class="fa fa-plus"></i> {% trans "Create poll" %}
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                    {% if request.user.is_authenticated %}
+                    <form class="navbar-form navbar-right" method="POST" action="{%  url 'login' %}" style="border: 0; padding-right: 0; padding-left: 0;">
+                        <div class="form-group">
+                            {# {{ login_form.username(class="form-control", placeholder=login_form.username.label.text) }}  TODO #}
+                        </div>
+                        <div class="form-group">
+                            {# {{ login_form.password(class="form-control", placeholder=login_form.password.label.text) }}  TODO #}
+                        </div>
+                        {# {{ login_form.hidden_tag() }} #}
+                        <input type="submit" class="btn navbar-btn btn-primary" value="{% trans "Login" %}" />
+
+                        {% comment %} {% if config.REGISTRATIONS_ENABLED %}
+                        <a href="{% url 'register' %}" class="btn btn-default">{% trans "Register" %}</a>
+                        {% endif %} {% endcomment %}
+                    </form>
+                    {% else %}
+                    <div class="navbar-right">
+                        <a class="btn navbar-btn btn-default current-user" href="{% url 'index' %}">
+                            {# <img src="{{ request.user.get_avatar(40) }}"> TODO #}
+                            {{ request.user.get_full_name }}
+                        </a>
+                        {% comment %} {% if config.GROUPS_ENABLED or current_user.groups %}
+                        <a class="btn navbar-btn btn-default" href="{%  url 'groups' %}"><i class="fa fa-users"></i></a>
+                         {% endif %} {% endcomment %}
+                        <a class="btn navbar-btn btn-default" href="{% url 'index' %}"><i class="fa fa-wrench"></i></a>
+                        <a class="btn navbar-btn btn-default" href="{% url 'index' %}"><i class="fa fa-sign-out"></i></a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            {# {% include "_flashes.html" %} #}
+            {% block content %}
+            {% endblock %}
+        </div>
+        <footer>
+            <div class="container">
+                {% comment %} {% if config.DEBUG or config.TESTING %}
+                        {{ alert('warning', 'Dudel is configured with <code>DEBUG = True</code> or <code>TESTING = True</code>.'|safe) }}
+                {% endif %}
+                Powered by <a href="http://github.com/opatut/dudel">Dudel</a>
+                {% for link in config.FOOTER_LINKS %}
+                    &middot; <a href="{{ link[1] }}" target="_blank">{{ link[0] }}</a>
+                {% endfor %}
+                <form class="form-inline" action="{{ url_for('user_change_language', next=request.url) }}" method="POST">
+                    {{ lang_form.hidden_tag() }}
+                    {% for language in lang_form.language %}
+                        &middot; {{ language() }}
+                    {% endfor %}
+                </form> TODO {% endcomment %}
+                &middot;
+                Current timezone is {% get_current_timezone as time %} {{ time }}.
+            </div>
+        </footer>
+
+        {% comment %} {% assets "js_all" -%}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {%- endassets %}
+
+
+        <script type="text/javascript">
+            i18n.load("{{lang}}");
+            Date.setLocale("{{lang}}");
+        </script> TODO {% endcomment %}
+
+        {% block foot %}{% endblock %}
+    </body>
+</html>
