@@ -14,6 +14,9 @@ urlpatterns = [
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices$', views.edit_choice, name='poll_editChoice'),
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices/date/$', views.edit_date_choice, name='poll_editDateChoice'),
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices/dateTime/$', views.edit_date_time_choice, name='poll_editDateTimeChoice'),
+    url(r'^([a-zA-Z0-9_\-]+)/edit/choices/dateTime/date$', views.edit_dt_choice_date, name='poll_editDTChoiceDate'),
+    url(r'^([a-zA-Z0-9_\-]+)/edit/choices/dateTime/time$', views.edit_dt_choice_time, name='poll_editDTChoiceTime'),
+    url(r'^([a-zA-Z0-9_\-]+)/edit/choices/dateTime/combinations$', views.edit_dt_choice_combinations, name='poll_editDTChoiceCombinations'),
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices/universal/$', views.edit_universal_choice, name='poll_editUniversalChoice'),
 
     url(r'^([a-zA-Z0-9_\-]+)/values$', views.values, name='poll_values'),

@@ -57,7 +57,7 @@ class ChoiceValue(models.Model):
     icon = models.CharField(max_length=64)
     color = models.CharField(max_length=6)
     weight = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
-    poll_id = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
 
     def __str__(self):
         return u'ChoiceValue {}'.format(self.title)
@@ -67,16 +67,16 @@ class Comment(models.Model):
     text = models.TextField()
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    poll_id = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
 
     def __str__(self):
         return u'CommentID {} by {}'.format(self.id, self.name)
 
 
 class PollWatch(models.Model):
-    poll_id = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return u'Pollwatch of Poll {} and User {}'.format(self.poll_id, self.user_id)
@@ -88,8 +88,8 @@ class Vote(models.Model):
     date_created = models.DateTimeField()
     comment = models.TextField()
     assigned_by_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='assigning')
-    poll_id = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return u'Vote {}'.format(self.name)
