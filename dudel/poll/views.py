@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
-from django.http import HttpResponseRedirect
+# from django.http import HttpResponseRedirect
 from .forms import PollCreationForm, DateChoiceCreationForm, UniversalChoiceCreationForm, DTChoiceCreationDateForm, DTChoiceCreationTimeForm
 from .models import Poll, Choice, ChoiceValue
 
@@ -96,7 +96,9 @@ def edit_dt_choice_time(request, poll_url):
         if form.is_valid():
             times = form.cleaned_data['time'].split(',')
             dates = form.cleaned_data['data'].split(';')
-            
+            for time in times:
+                for date in dates:
+                    pass
         elif form.cleaned_data['date'] != "":
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': form,

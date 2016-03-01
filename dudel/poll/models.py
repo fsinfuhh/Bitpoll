@@ -22,7 +22,7 @@ class Poll(models.Model):
     title = models.CharField(max_length=80)
     description = models.TextField()
     url = models.CharField(max_length=80, unique=True)
-    type = models.CharField(max_length=20, choices=POLL_TYPES, default="normal")
+    type = models.CharField(max_length=20, choices=POLL_TYPES, default="universal")
     created = models.DateTimeField(auto_now_add=True)
     """owner_id = models.ForeignKey(Member)"""
 
