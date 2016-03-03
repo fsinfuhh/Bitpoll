@@ -7,6 +7,9 @@ from .models import Poll, Choice, ChoiceValue
 # Create your views here.
 
 
+"""
+    Displays for a given poll its fields along with all possible choices.
+"""
 def poll(request, poll_url):
     poll = get_object_or_404(Poll, url=poll_url)
     return TemplateResponse(request, "poll/poll.html", {
@@ -14,6 +17,14 @@ def poll(request, poll_url):
     })
 
 
+"""
+    Takes title, type, due-date, url and public listening (boolean) of a poll as the user's input and checks the
+    validity.
+    If the input is valid, the poll and all possible choicevalues (yes, no and maybe) are saved. Depending on the
+    poll-type, the user is directed to the type's choice-creation-site.
+
+    If the input is not valid, the user is directed back for correction.
+"""
 def index(request):
     if request.method == 'POST':
         form = PollCreationForm(request.POST)
@@ -52,6 +63,12 @@ def edit_choice(request, poll_id):
     pass
 
 
+"""
+    Takes several dates as the user's input und checks the validity.
+    If the input is valid, for every given date a choice is created and saved. The user is directed to the poll's site.
+
+    If the input is not valid, the user is directed back for correction.
+"""
 def edit_date_choice(request, poll_url):
     poll = get_object_or_404(Poll, url=poll_url)
     if request.method == 'POST':
@@ -72,6 +89,12 @@ def edit_date_time_choice(request, poll_url):
     pass
 
 
+"""
+    Takes several dates as the user's input and checks if it's valid.
+    If the data is valid, the user is directed to the time-input-site. (The date is passed on as an argument)
+
+    If the data is not valid, the user is directed back for correction.
+"""
 def edit_dt_choice_date(request, poll_url):
     poll = get_object_or_404(Poll, url=poll_url)
     if request.method == 'POST':
@@ -89,6 +112,13 @@ def edit_dt_choice_date(request, poll_url):
     })
 
 
+"""
+    Takes several times as the user's input and checks the validity.
+    If the data is valid, the user is directed to the combinations-site, to which all possible combinations of
+        dates and times are passed on.
+    If the dates are missing, the user is directed back to the date-input-site.
+    If the times are missing, the user is directed back to the time-input-site.
+"""
 def edit_dt_choice_time(request, poll_url):
     poll = get_object_or_404(Poll, url=poll_url)
     if request.method == 'POST':
@@ -115,6 +145,12 @@ def edit_dt_choice_combinations(request, poll_url):
     pass
 
 
+"""
+    Takes the text of a choice as the user's input and checks its validity.
+    If the input is valid, the choice is saved (with 01.01.1970 as date) and the user is directed to the poll's site.
+
+    If the input is not valid, the user is directed back for correction.
+"""
 def edit_universal_choice(request, poll_url):
     poll = get_object_or_404(Poll, url=poll_url)
     if request.method == 'POST':
