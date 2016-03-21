@@ -24,9 +24,9 @@ class DTChoiceCreationDateForm(Form):
 
 
 class DTChoiceCreationTimeForm(Form):
-    #def __init__(self, date, *args, **kwargs):
-    #    super(DTChoiceCreationTimeForm, self).__init__(*args, **kwargs)
-    #    self.date.initial = date
+    """def __init__(self, date, *args, **kwargs):
+        super(DTChoiceCreationTimeForm, self).__init__(*args, **kwargs)
+        self.date.initial = date"""
 
     date = CharField()
     time = CharField()
