@@ -2,7 +2,8 @@ from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 # from django.http import HttpResponseRedirect
 from .forms import PollCreationForm, DateChoiceCreationForm, UniversalChoiceCreationForm, DTChoiceCreationDateForm, DTChoiceCreationTimeForm
-from .models import Poll, Choice, ChoiceValue
+from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice
+from datetime import datetime
 
 # Create your views here.
 
@@ -192,10 +193,39 @@ def delete(request, poll_id):
 
 
 def vote(request, poll_id):
+    """
+    :param request:
+    :param poll_id:
+    :return:
+
+    Takes vote with comments as input and saves the vote along with all comments.
+    """
     current_poll = Poll.objects.get_or_404(id=poll_id)
     if request.method == 'POST':
+        if request.user.is_authenticated():
+            current_vote = Vote(name=request.user.get_username(),
+                                date_created=datetime.now(),
+                                comment=request.POST['comment'],
+                                poll=current_poll,
+                                user=request.user)
+        else:
+            current_vote = Vote(name=request.POST['name'],
+                                anonymous='anonymous' in request.POST,
+                                date_created=datetime.now(),
+                                comment=request.POST['comment'],
+                                poll=current_poll,
+                                user=request.user)
+        current_vote.save()
+
         for choice in current_poll.choices:
-            data = request.POST[choice.id]
+            choice_value = request.POST[choice.id]
+            comment = request.POST['comment_' + choice.id]
+            current_choice = VoteChoice(value_id=choice_value,
+                                        vote_id=current_vote,
+                                        choice_id=choice.id,
+                                        comment=comment)
+            current_choice.save()
+
     else:
         return TemplateResponse(request, 'poll/VoteCreation.html', {
 
