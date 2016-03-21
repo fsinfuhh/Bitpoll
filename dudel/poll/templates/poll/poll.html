@@ -3,5 +3,13 @@
 {% block title %}Dudel Index{% endblock %}
 
 {% block content %}
-    {{ poll }}
+    {{ poll.title }}<br>
+    {{ poll.due_date }}<br>
+    {{ poll.anonymous_allowed }}<br>
+    {{ poll.description }}<br>
+    
+    {% for foo in poll.choice_set.all %}
+        {{ foo }}<br>
+    {% endfor %}
+    
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Dudel Index{% endblock %}
+
+{% block content %}
+    {% for choice in choices %}
+        {% if poll.type == universal %}
+            <label> {{ choice.text }}</label>
+        {% elif poll.type == datetime%}
+            <label> {{ choice.date.date }} </label>
+        {% else %}
+            <label> {{ choice.date }} </label>
+        {% endif %}
+
+        {% for value in choice_values %}
+            <input type="radio" id="{{ value.id }}" name="{{ choice.id }}">
+        {% endfor %}
+    {% endfor %}
+
+
+
+{% endblock %}
