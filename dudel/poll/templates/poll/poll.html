@@ -3,12 +3,12 @@
 {% block title %}Dudel Index{% endblock %}
 
 {% block content %}
-    {{ poll.title }}<br>
-    {{ poll.due_date }}<br>
-    {{ poll.anonymous_allowed }}<br>
-    {{ poll.description }}<br>
+    <label>Title: </label> {{ poll.title }}<br />
+    <label>Due-Date: </label> {{ poll.due_date }}<br />
+    <label>Anonymous votes allowed: </label> {{ poll.anonymous_allowed }}<br />
+    <label>Description: </label> <textarea cols="40" rows="5" readonly>{{ poll.description }}</textarea><br /><br /><br />
 
-    <label>Choices:</label>
+    <label>Choices: </label>
     {% for choice in poll.choice_set.all %}
         {{ choice }}
     {% endfor %}
@@ -25,6 +25,7 @@
                     {% endif %}
                 {% endfor %}
             {% endfor %}
+        <input type="submit" name="Submit" value="Edit">
         <br />
     {% endfor %}
 
