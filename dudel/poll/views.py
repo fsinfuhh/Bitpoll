@@ -57,15 +57,15 @@ def delete_comment(request, comment_id):
     pass
 
 
-def edit(request, poll_id):
+def edit(request, poll_url):
     pass
 
 
-def watch(request, poll_id):
+def watch(request, poll_url):
     pass
 
 
-def edit_choice(request, poll_id):
+def edit_choice(request, poll_url):
     pass
 
 
@@ -184,23 +184,23 @@ def edit_universal_choice(request, poll_url):
     })
 
 
-def values(request, poll_id):
+def values(request, poll_url):
     pass
 
 
-def delete(request, poll_id):
+def delete(request, poll_url):
     pass
 
 
-def vote(request, poll_id):
+def vote(request, poll_url):
     """
     :param request:
-    :param poll_id:
+    :param poll_url:
     :return:
 
     Takes vote with comments as input and saves the vote along with all comments.
     """
-    current_poll = Poll.objects.get_or_404(id=poll_id)
+    current_poll = get_object_or_404(Poll, url=poll_url)
     if request.method == 'POST':
         if request.user.is_authenticated():
             current_vote = Vote(name=request.user.get_username(),
@@ -217,32 +217,35 @@ def vote(request, poll_id):
                                 user=request.user)
         current_vote.save()
 
-        for choice in current_poll.choices:
-            choice_value = request.POST[choice.id]
-            comment = request.POST['comment_' + choice.id]
+        for choice in current_poll.choice_set.all():
+            choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
             current_choice = VoteChoice(value_id=choice_value,
                                         vote_id=current_vote,
-                                        choice_id=choice.id,
-                                        comment=comment)
+                                        choice_id=choice,
+                                        comment=request.POST['comment_' + str(choice.id)])
             current_choice.save()
+
+        return redirect('poll', poll_url)
 
     else:
         return TemplateResponse(request, 'poll/VoteCreation.html', {
-
+            'poll': current_poll,
+            'choices': current_poll.choice_set,
+            'values': current_poll.choicevalue_set
         })
 
 
-def vote_assign(request, poll_id, vote_id):
+def vote_assign(request, poll_url, vote_id):
     pass
 
 
-def vote_edit(request, poll_id, vote_id):
+def vote_edit(request, poll_url, vote_id):
     pass
 
 
-def vote_delete(request, poll_id, vote_id):
+def vote_delete(request, poll_url, vote_id):
     pass
 
 
-def copy(request, poll_id):
+def copy(request, poll_url):
     pass

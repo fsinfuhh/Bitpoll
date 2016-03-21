@@ -3,31 +3,36 @@
 {% block title %}Dudel Index{% endblock %}
 
 {% block content %}
-    <form action="{% url 'vote_cast' %}" method="POST">
-    {% for choice in choices %}
-        {% if poll.type == universal %}
-            <label> {{ choice.text }}</label>
-        {% elif poll.type == datetime%}
-            <label> {{ choice.date.date }} </label>
-        {% else %}
-            <label> {{ choice.date }} </label>
-        {% endif %}
+    <form action="{% url 'poll_vote' poll.url %}" method="POST">{% csrf_token %}
+        {% for choice in choices.all %}
+            {% if poll.type == universal %}
+                <label> {{ choice.text }}</label>
+            {% elif poll.type == datetime%}
+                <label> {{ choice.date.date }} </label>
+            {% else %}
+                <label> {{ choice.date }} </label>
+            {% endif %}
 
-        {% for value in choice_values %}
-            <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="">
-            <input type="text" name="comment_{{ choice.id }}" title="">
+            {% for value in values.all %}
+                <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="" /> {{ value.title }}
+            {% endfor %}
+            <input type="text" name="comment_{{ choice.id }}" title="" />
+            <br />
         {% endfor %}
-    {% endfor %}
 
-    {% if request.user.is_authenticated %}
-        <input type="text" name="name" title="Your name:" value="{{ request.user.username }}" readonly>
-    {% else %}
-        <input type="text" name="name" title="Your name:">
-    {% endif %}
+        <label>Your name:</label>
+        {% if request.user.is_authenticated %}
+            <input type="text" name="name" title="Your name:" value="{{ request.user.username }}" readonly />
+        {% else %}
+            <input type="text" name="name" title="Your name:" />
+        {% endif %}
+        <br />
 
-    <input type="checkbox" name="anonymous" title="Post anonymous vote" value="true">
-    <textarea title="Comment:" name="comment" cols="5" rows="40"></textarea>
-    <input type="submit" name="submit" value="Absenden" />
+        <input type="checkbox" name="anonymous" title="Post anonymous vote" value="true" /> Post anonymous vote <br />
+
+        <label>Comment:</label>
+        <textarea title="Comment:" name="comment" cols="40" rows="5"></textarea><br />
+        <input type="submit" name="submit" value="Absenden" />
 
     </form>
 
