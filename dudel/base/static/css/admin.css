@@ -1,0 +1,19 @@
+.navbar {
+    border-radius: 0;
+}
+
+footer {
+    margin: 3em 0;
+    color: #AAA;
+    text-align: center;
+}
+
+h2 {
+    margin: 1em 0;
+}
+
+.auto-width {
+    width: auto;
+}
+
+

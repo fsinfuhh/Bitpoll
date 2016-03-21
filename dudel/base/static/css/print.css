@@ -1,0 +1,44 @@
+.navbar, .nav {
+    display: none !important;
+}
+
+.poll .choice {
+    color: #000;
+    text-shadow: none;
+}
+
+* {
+    background: none !important;
+}
+
+footer,
+.noprint {
+    display: none !important;
+}
+
+table, table th, table td {
+    border: 1px solid black !important;
+    border-collapse: collapse !important;
+}
+
+.container {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+td {
+    text-align: center;
+}
+
+.choice-sum, .author {
+    white-space: nowrap;
+}
+
+.choice-sum {
+    font-size: 0.8em;
+    font-weight: normal;
+}
+
+.print-only {
+    display: block;
+}

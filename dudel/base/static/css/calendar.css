@@ -1,0 +1,39 @@
+.calendar {
+  display: inline-block; }
+  .calendar table {
+    margin: 0.5em;
+    display: inline-block; }
+    .calendar table tr:first-child {
+      background: #F6F6F6; }
+    .calendar table tr:nth-child(2) {
+      font-size: 0.8em; }
+    .calendar table td {
+      text-align: center;
+      padding: 4pt !important; }
+      .calendar table td.left {
+        border-right: 1px solid #DDD;
+        border-bottom: 0;
+        border-top: 0; }
+      .calendar table td .btn {
+        display: inline-block;
+        width: 2.5em;
+        text-align: center; }
+  .calendar .title {
+    text-align: center; }
+
+.calendar-list {
+  display: inline-block;
+  padding: 1em 0;
+  vertical-align: top;
+  white-space: normal; }
+  .calendar-list ul {
+    padding: 0;
+    list-style: none; }
+    .calendar-list ul li {
+      display: block;
+      margin-bottom: 4px; }
+
+.time-buttons .btn {
+  display: inline-block;
+  width: 2.5em;
+  text-align: center; }
