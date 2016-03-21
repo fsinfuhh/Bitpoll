@@ -3,6 +3,7 @@
 {% block title %}Dudel Index{% endblock %}
 
 {% block content %}
+    <form action="{% url('vote_cast') %}" method="POST">
     {% for choice in choices %}
         {% if poll.type == universal %}
             <label> {{ choice.text }}</label>
@@ -13,9 +14,11 @@
         {% endif %}
 
         {% for value in choice_values %}
-            <input type="radio" id="{{ value.id }}" name="{{ choice.id }}" title="">
+            <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="">
         {% endfor %}
     {% endfor %}
+    <input type="submit" name="submit" value="Absenden" />
+    </form>
 
 
 

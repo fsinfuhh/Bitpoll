@@ -192,7 +192,14 @@ def delete(request, poll_id):
 
 
 def vote(request, poll_id):
-    pass
+    current_poll = Poll.objects.get_or_404(id=poll_id)
+    if request.method == 'POST':
+        for choice in current_poll.choices:
+            data = request.POST[choice.id]
+    else:
+        return TemplateResponse(request, 'poll/VoteCreation.html', {
+
+        })
 
 
 def vote_assign(request, poll_id, vote_id):
