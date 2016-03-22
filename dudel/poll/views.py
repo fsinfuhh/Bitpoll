@@ -2,7 +2,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 # from django.http import HttpResponseRedirect
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, DTChoiceCreationDateForm, DTChoiceCreationTimeForm
-from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice
+from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment
 from datetime import datetime
 
 # Create your views here.
@@ -61,8 +61,49 @@ def edit_comment(request, poll_url, comment_id):
     pass
 
 
-def delete_comment(request, comment_id):
-    pass
+def delete_comment(request, poll_url, comment_id):
+    """
+    :param request:
+    :param poll_url: url of poll belonging to comment
+    :param comment_id: ID of comment to be deleted
+    :return:
+
+    Case Delete:
+        If the user is authenticated and equal to the saved user of the comment, the comment is deleted
+        and the user is directed back to the poll's page
+
+        If the user is authenticated but differs from the saved user of the comment, the user is directed
+        back with error message "Deletion not allowed. You are not [comment.name]"
+
+        Without authentication the user is directed back with error message "Deletion not allowed.
+        You are not authenticated."
+
+    Case Cancel:
+        The user is redirected back to the poll's page.
+    """
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    current_comment = get_object_or_404(Comment, id=comment_id)
+    error_msg = ""
+
+    if request.method == 'POST':
+        if 'Delete' in request.POST:
+            if request.user.is_authenticated():
+                # TODO additional possibilities of deleting
+                if request.user == current_comment.user:
+                    current_comment.delete()
+                    return redirect('poll', poll_url)
+                else:
+                    error_msg = "Deletion not allowed. You are not " + str(current_comment.name) + "."
+            else:
+                error_msg = "Deletion not allowed. You are not authenticated."
+        else:
+            return redirect('poll', poll_url)
+
+    return TemplateResponse(request, 'poll/VoteDelete.html', {
+        'poll': current_poll,
+        'comment': current_comment,
+        'error': error_msg,
+    })
 
 
 def edit(request, poll_url):
