@@ -189,7 +189,28 @@ def values(request, poll_url):
 
 
 def delete(request, poll_url):
-    pass
+    """
+    :param request:
+    :param poll_url:
+    :return:
+    """
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    error_msg = ""
+
+    if request.method == 'POST':
+        if 'Delete' in request.POST:
+            if request.user.is_authenticated():
+                # TODO restriction for deletion
+                return redirect('index')
+            else:
+                error_msg = "Deletion not allowed. You are not authenticated."
+        else:
+            return redirect('poll', poll_url)
+
+    return TemplateResponse(request, 'poll/PollDelete.html', {
+        'poll': current_poll,
+        'error': error_msg,
+    })
 
 
 def vote(request, poll_url):

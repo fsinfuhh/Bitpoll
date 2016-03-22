@@ -9,6 +9,11 @@
     <label>Description: </label> <textarea cols="40" rows="5" readonly>{{ poll.description }}</textarea><br /><br /><br />
 
     <a href="{% url 'poll_copy' poll.url %}"> Copy </a>
+    <a href="{% url 'poll_delete' poll.url %}"> Delete </a>
+
+    <br /><br />
+
+    <a href="{% url 'poll_vote' poll.url %}"> Vote </a>
 
     <br /><br />
 
