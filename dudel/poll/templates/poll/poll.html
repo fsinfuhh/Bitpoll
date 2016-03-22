@@ -6,7 +6,7 @@
     <label>Title: </label> {{ poll.title }}<br />
     <label>Due-Date: </label> {{ poll.due_date }}<br />
     <label>Anonymous votes allowed: </label> {{ poll.anonymous_allowed }}<br />
-    <label>Description: </label> <textarea cols="40" rows="5" readonly>{{ poll.description }}</textarea><br /><br /><br />
+    <label>Description: </label> <textarea title="description" cols="40" rows="5" readonly>{{ poll.description }}</textarea><br /><br /><br />
 
     <a href="{% url 'poll_copy' poll.url %}"> Copy </a>
     <a href="{% url 'poll_delete' poll.url %}"> Delete </a>
@@ -40,5 +40,17 @@
         <a href="{% url 'poll_voteEdit' poll.url vote.id %}" > Edit </a>
         <a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a>
         <br />
+    {% endfor %}
+
+    <br /><br/>
+    <!-- TODO function new comment -->
+    {% for comment in poll.comment_set.all %}
+        <label>Name: </label>
+        <input type="text" title="name" value="{{ comment.name }}" readonly><br />
+        <textarea title="comment_text" cols="40" rows="5">{{ comment.text }}</textarea><br />
+        <label>Date of Creation: </label>
+        <input type="datetime" title="date_of_creation" value="{{ comment.date_created }}" readonly><br />
+        <a href="{% url 'poll_commentEdit' poll.url comment.id %}"> Edit </a>
+        <a href="{% url 'poll_commentDelete' poll.url comment.id %}"> Delete </a>
     {% endfor %}
 {% endblock %}

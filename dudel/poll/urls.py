@@ -6,7 +6,9 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     # url(r'^create', views.create, name='poll_create'),
     url(r'^([a-zA-Z0-9_\-]+)$', views.poll, name='poll'),
-    url(r'^([a-zA-Z0-9_\-]+)/comment/delete/(\d+)$', views.delete_comment, name='poll_deleteComment'),
+    url(r'^([a-zA-Z0-9_\-]+)/comment$', views.comment, name='poll_comment'),
+    url(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/edit$', views.edit_comment, name='poll_editComment'),
+    url(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/delete$', views.delete_comment, name='poll_deleteComment'),
     url(r'^([a-zA-Z0-9_\-]+)/edit$', views.edit, name='poll_edit'),
     url(r'^([a-zA-Z0-9_\-]+)/watch$', views.watch, name='poll_watch'),
 

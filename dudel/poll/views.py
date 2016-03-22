@@ -11,7 +11,7 @@ from datetime import datetime
 def poll(request, poll_url):
     """
     :param request
-    :param poll_url
+    :param poll_url: url of poll
 
     Displays for a given poll its fields along with all possible choices.
     """
@@ -53,6 +53,14 @@ def index(request):
     })
 
 
+def comment(request, poll_url):
+    pass
+
+
+def edit_comment(request, poll_url, comment_id):
+    pass
+
+
 def delete_comment(request, comment_id):
     pass
 
@@ -71,8 +79,8 @@ def edit_choice(request, poll_url):
 
 def edit_date_choice(request, poll_url):
     """
-    :param request
-    :param poll_url
+    :param request:
+    :param poll_url: url of poll
 
     Takes several dates as the user's input und checks the validity.
     If the input is valid, for every given date a choice is created and saved. The user is directed to the poll's site.
@@ -100,8 +108,8 @@ def edit_date_time_choice(request, poll_url):
 
 def edit_dt_choice_date(request, poll_url):
     """
-    :param request
-    :param poll_url
+    :param request:
+    :param poll_url: url of poll
 
     Takes several dates as the user's input and checks if it's valid.
     If the data is valid, the user is directed to the time-input-site. (The date is passed on as an argument)
@@ -126,8 +134,8 @@ def edit_dt_choice_date(request, poll_url):
 
 def edit_dt_choice_time(request, poll_url):
     """
-    :param request
-    :param poll_url
+    :param request:
+    :param poll_url: url of poll
 
     Takes several times as the user's input and checks the validity.
     If the data is valid, the user is directed to the combinations-site, to which all possible combinations of
@@ -162,8 +170,8 @@ def edit_dt_choice_combinations(request, poll_url):
 
 def edit_universal_choice(request, poll_url):
     """
-    :param request
-    :param poll_url
+    :param request:
+    :param poll_url: url of poll
 
     Takes the text of a choice as the user's input and checks its validity.
     If the input is valid, the choice is saved (with 01.01.1970 as date) and the user is directed to the poll's site.
@@ -191,8 +199,11 @@ def values(request, poll_url):
 def delete(request, poll_url):
     """
     :param request:
-    :param poll_url:
+    :param poll_url: url of poll to be deleted
     :return:
+
+    Given Poll is deleted if delete-button is pressed and if user is authenticated.
+    Otherwise the user is directed back to the poll's page.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     error_msg = ""
@@ -216,7 +227,7 @@ def delete(request, poll_url):
 def vote(request, poll_url):
     """
     :param request:
-    :param poll_url:
+    :param poll_url: Url of poll
     :return:
 
     Takes vote with comments as input and saves the vote along with all comments.
@@ -263,14 +274,18 @@ def vote_assign(request, poll_url, vote_id):
 def vote_edit(request, poll_url, vote_id):
     """
     :param request:
-    :param poll_url:
-    :param vote_id:
+    :param poll_url: Url of Poll belonging to vote
+    :param vote_id: ID of vote to be edited
     :return:
+
+    All changes in the given vote are saved.
+
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     current_vote = get_object_or_404(Vote, id=vote_id)
 
     if request.method == 'POST':
+        # TODO authentication check
         if request.user.is_anonymous():
             current_vote.name = request.POST['name']
         current_vote.anonymous = 'anonymous' in request.POST
@@ -306,9 +321,22 @@ def vote_edit(request, poll_url, vote_id):
 def vote_delete(request, poll_url, vote_id):
     """
     :param request:
-    :param poll_url:
-    :param vote_id:
+    :param poll_url: url of Poll belonging to vote
+    :param vote_id: ID of vote to be deleted
     :return:
+
+    Case Delete:
+        If the user is authenticated and is equal to the saved user in the vote, the current vote is deleted.
+        The user is redirected to the poll's page.
+
+        If the user is authenticated but not equal to the saved user, the user is directed back with
+        error message "Deletion not allowed. You are not [user of vote]".
+
+        If the user is not authenticated, the user is directed back with error message
+        "Deletion not allowed. You are not authenticated."
+
+    Case Cancel:
+        The user is directed back to the poll's page.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     current_vote = get_object_or_404(Vote, id=vote_id)
@@ -336,6 +364,15 @@ def vote_delete(request, poll_url, vote_id):
 
 
 def copy(request, poll_url):
+    """
+    :param request:
+    :param poll_url: Url of current poll
+    :return:
+
+    Takes a new title (optional), a new url (required) and a new due_date (required) as user input.
+    Current poll is copied. Title, url and due-date are adapted.
+    The new Poll is saved and the user is directed to its page.
+    """
     current_poll = get_object_or_404(Poll, url=poll_url)
 
     if request.method == 'POST':
