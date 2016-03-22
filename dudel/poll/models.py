@@ -101,5 +101,7 @@ class VoteChoice(models.Model):
     vote_id = models.ForeignKey(Vote, on_delete=models.CASCADE)
     choice_id = models.ForeignKey(Choice, on_delete=models.CASCADE)
 
+    # TODO (vote_id, choice_id) should be unique
+
     def __str__(self):
         return u'VoteChoice {}'.format(self.id)

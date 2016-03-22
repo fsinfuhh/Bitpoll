@@ -8,6 +8,10 @@
     <label>Anonymous votes allowed: </label> {{ poll.anonymous_allowed }}<br />
     <label>Description: </label> <textarea cols="40" rows="5" readonly>{{ poll.description }}</textarea><br /><br /><br />
 
+    <a href="{% url 'poll_copy' poll.url %}"> Copy </a>
+
+    <br /><br />
+
     <label>Choices: </label>
     {% for choice in poll.choice_set.all %}
         {{ choice }}
@@ -21,12 +25,15 @@
                 {% for  vote_choice in choice.votechoice_set.all%}
                     {% if vote_choice.vote_id == vote %}
                         {{ vote_choice.value_id.title }}
-                        {{ vote_choice.comment }}
+                        {% if vote_choice.comment != "" %}
+                            {{ vote_choice.comment }}
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
-        <input type="submit" name="Submit" value="Edit">
+
+        <a href="{% url 'poll_voteEdit' poll.url vote.id %}" > Edit </a>
+        <a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a>
         <br />
     {% endfor %}
-
 {% endblock %}

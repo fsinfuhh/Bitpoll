@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Dudel Index{% endblock %}
+
+<!-- poll: current poll
+     vote: current vote to be edited
+     choices: list of all possible choices
+     values: list of all possible ChoiceValues of the current poll
+     vote_choices: dictionary (choice_id, VoteChoice) of all voteChoices belonging to the current vote -->
+{% block content %}
+    <form action="{% url 'poll_voteEdit' poll.url vote.id %}" method="POST">{% csrf_token %}
+        <!--{% for choice in choices.all %}
+            {% if poll.type == universal %}
+                <label> {{ choice.text }}</label>
+            {% elif poll.type == datetime %}
+                <label> {{ choice.date.date }} </label>
+            {% else %}
+                <label> {{ choice.date }} </label>
+            {% endif %}
+
+            {% with choice as key %}
+                {% for value in values.all %}
+                    {% if value.id == vote_choices.key.value_id %}
+                        <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="" checked /> {{ value.title }}
+                    {% else %}
+                        <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="" /> {{ value.title }}
+                    {% endif %}
+                {% endfor %}
+                <input type="text" name="comment_{{ choice.id }}" title="" value="{{ vote_choices.key.comment }}"/>
+                <br />
+            {% endwith %}
+        {% endfor %}-->
+
+        {% for choice, values, comment, voted in vote_choices %}
+            {% if poll.type == universal %}
+                <label> {{ choice.text }}</label>
+            {% elif poll.type == datetime %}
+                <label> {{ choice.date.date }} </label>
+            {% else %}
+                <label> {{ choice.date }} </label>
+            {% endif %}
+
+            {% for value in values %}
+                {% if value == voted %}
+                    <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="" checked /> {{ value.title }}
+                {% else %}
+                    <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="" /> {{ value.title }}
+                {% endif %}
+            {% endfor %}
+
+            <input type="text" name="comment_{{ choice.id }}" title="" value="{{ comment }}"/>
+            <br />
+        {% endfor %}
+
+        <label>Your name:</label>
+        {% if request.user.is_authenticated %}
+            <input type="text" name="name" title="Your name:" value="{{ request.user.username }}" readonly />
+        {% else %}
+            <input type="text" name="name" title="Your name:" value="{{ vote.name }}"/>
+        {% endif %}
+        <br />
+
+        {% if vote.anonymous %}
+            <input type="checkbox" name="anonymous" title="Post anonymous vote" value="true" checked /> Post anonymous vote <br />
+        {% else %}
+            <input type="checkbox" name="anonymous" title="Post anonymous vote" value="true" /> Post anonymous vote <br />
+        {% endif %}
+
+        <label>Comment:</label>
+        <textarea title="Comment:" name="comment" cols="40" rows="5">{{ vote.comment }}</textarea><br />
+        <input type="submit" name="submit" value="Edit" />
+
+    </form>
+
+
+
+{% endblock %}

@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^([a-zA-Z0-9_\-]+)/vote/(\d+)/assign$', views.vote_assign, name='poll_voteAssign'),
     url(r'^([a-zA-Z0-9_\-]+)/vote/(\d+)/edit$', views.vote_edit, name='poll_voteEdit'),
     url(r'^([a-zA-Z0-9_\-]+)/vote/(\d+)/delete$', views.vote_delete, name='poll_voteDelete'),
+    # url(r'^([a-zA-Z0-9_\-]+)/vote/(\d+)/delete/Error$', views.vote_delete, name='poll_voteDeleteError'),
 
     url(r'^([a-zA-Z0-9_\-]+)/copy$', views.copy, name='poll_copy'),
 ]

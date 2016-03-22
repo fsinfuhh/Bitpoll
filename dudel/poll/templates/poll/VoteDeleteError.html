@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Dudel Index{% endblock %}
+
+{% block content %}
+    <div class="alert alert-danger"> Deletion not allowed. You are not authenticated. </div>
+    <br /><br />
+
+    <a href="{% url 'poll' poll_url %}"> Back </a>
+{% endblock %}

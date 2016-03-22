@@ -9,6 +9,12 @@ class PollCreationForm(ModelForm):
         fields = ['title', 'type', 'public_listening', 'due_date', 'url']
 
 
+class PollCopyForm(ModelForm):
+    class Meta:
+        model = Poll
+        fields = ['title', 'due_date', 'url']
+
+
 class DateChoiceCreationForm(Form):
     fields = CharField()
 

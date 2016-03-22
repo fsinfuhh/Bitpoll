@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 # from django.http import HttpResponseRedirect
-from .forms import PollCreationForm, DateChoiceCreationForm, UniversalChoiceCreationForm, DTChoiceCreationDateForm, DTChoiceCreationTimeForm
+from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, DTChoiceCreationDateForm, DTChoiceCreationTimeForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice
 from datetime import datetime
 
@@ -240,12 +240,112 @@ def vote_assign(request, poll_url, vote_id):
 
 
 def vote_edit(request, poll_url, vote_id):
-    pass
+    """
+    :param request:
+    :param poll_url:
+    :param vote_id:
+    :return:
+    """
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    current_vote = get_object_or_404(Vote, id=vote_id)
+
+    if request.method == 'POST':
+        if request.user.is_anonymous():
+            current_vote.name = request.POST['name']
+        current_vote.anonymous = 'anonymous' in request.POST
+        current_vote.comment = request.POST['comment']
+
+        current_vote.save()
+
+        for choice in current_poll.choice_set.all():
+            current_choice = get_object_or_404(VoteChoice, vote_id=vote_id, choice_id=choice.id)
+            value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+            current_choice.value_id = value
+            current_choice.comment = request.POST['comment_' + str(choice.id)]
+
+            current_choice.save()
+
+        return redirect('poll', poll_url)
+
+    else:
+        vote_choices = []
+        for choice in current_poll.choice_set.all():
+            vote_choice = get_object_or_404(VoteChoice, vote_id=vote_id, choice_id=choice.id)
+            vote_choices.append((choice, current_poll.choicevalue_set.all(), vote_choice.comment, vote_choice.value_id))
+
+        return TemplateResponse(request, 'poll/VoteEdit.html', {
+            'poll': current_poll,
+            'choices': current_poll.choice_set,
+            'values': current_poll.choicevalue_set,
+            'vote': current_vote,
+            'vote_choices': vote_choices
+        })
 
 
 def vote_delete(request, poll_url, vote_id):
-    pass
+    """
+    :param request:
+    :param poll_url:
+    :param vote_id:
+    :return:
+    """
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    current_vote = get_object_or_404(Vote, id=vote_id)
+    error_msg = ""
+
+    if request.method == 'POST':
+        if 'Delete' in request.POST:
+            if request.user.is_authenticated():
+                # TODO additional possibilities of deleting
+                if request.user == current_vote.user:
+                    current_vote.delete()
+                    return redirect('poll', poll_url)
+                else:
+                    error_msg = "Deletion not allowed. You are not " + str(current_vote.name) + "."
+            else:
+                error_msg = "Deletion not allowed. You are not authenticated."
+        else:
+            return redirect('poll', poll_url)
+
+    return TemplateResponse(request, 'poll/VoteDelete.html', {
+        'poll': current_poll,
+        'vote': current_vote,
+        'error': error_msg,
+    })
 
 
 def copy(request, poll_url):
-    pass
+    current_poll = get_object_or_404(Poll, url=poll_url)
+
+    if request.method == 'POST':
+        form = PollCopyForm(request.POST)
+        if form.is_valid():
+            choice_values = current_poll.choicevalue_set.all()
+            choices = current_poll.choice_set.all()
+
+            current_poll.pk = None
+            current_poll.title = form.cleaned_data['title']
+            current_poll.url = form.cleaned_data['url']
+            current_poll.due_date = form.cleaned_data['due_date']
+
+            current_poll.save()
+
+            for value in choice_values:
+                value.pk = None
+                value.poll = current_poll
+                value.save()
+
+            for choice in choices:
+                choice.pk = None
+                choice.poll = current_poll
+                choice.save()
+
+            return redirect('poll', current_poll.url)
+
+    else:
+        form = PollCopyForm({'title': "Copy of" + current_poll.title})
+
+    return TemplateResponse(request, 'poll/Copy.html', {
+        'new_Poll': form,
+        'poll': poll_url
+    })
