@@ -9,10 +9,10 @@
     {% endif %}
     <div class="alert alert-danger"> Shall the following Comment be deleted? </div><br />
     <label>Name: </label>
-    <input type="text" title="name" value="comment.name" readonly><br />
-    <textarea title="comment_text" cols="40" rows="5" readonly>{{ poll.text }}</textarea><br />
-    <label>Due-Date:</label>
-    <input type="datetime" title="date_of_creation" value="{{ poll.due_date }}" readonly >
+    <input type="text" title="name" value="{{ comment.name }}" readonly><br />
+    <textarea title="comment_text" cols="40" rows="5" readonly>{{ comment.text }}</textarea><br />
+    <label>Date of Creation:</label>
+    <input type="datetime" title="date_of_creation" value="{{ comment.date_created }}" readonly >
 
     <br /><br />
     <form action="{% url 'poll_deleteComment' poll.url comment.id %}" method="POST">{% csrf_token %}

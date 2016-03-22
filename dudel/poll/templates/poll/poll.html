@@ -3,29 +3,30 @@
 {% block title %}Dudel Index{% endblock %}
 
 {% block content %}
-    <label>Title: </label> {{ poll.title }}<br />
-    <label>Due-Date: </label> {{ poll.due_date }}<br />
-    <label>Anonymous votes allowed: </label> {{ poll.anonymous_allowed }}<br />
-    <label>Description: </label> <textarea title="description" cols="40" rows="5" readonly>{{ poll.description }}</textarea><br /><br /><br />
+    <form action="{% url 'poll' poll.url %}" method="POST">{% csrf_token %}
+        <label>Title: </label> {{ poll.title }}<br />
+        <label>Due-Date: </label> {{ poll.due_date }}<br />
+        <label>Anonymous votes allowed: </label> {{ poll.anonymous_allowed }}<br />
+        <label>Description: </label> <textarea title="description" cols="40" rows="5" readonly>{{ poll.description }}</textarea><br /><br /><br />
 
-    <a href="{% url 'poll_copy' poll.url %}"> Copy </a>
-    <a href="{% url 'poll_delete' poll.url %}"> Delete </a>
+        <a href="{% url 'poll_copy' poll.url %}"> Copy </a>
+        <a href="{% url 'poll_delete' poll.url %}"> Delete </a>
 
-    <br /><br />
+        <br /><br />
 
-    <a href="{% url 'poll_vote' poll.url %}"> Vote </a>
+        <a href="{% url 'poll_vote' poll.url %}"> Vote </a>
 
-    <br /><br />
+        <br /><br />
 
-    <label>Choices: </label>
-    {% for choice in poll.choice_set.all %}
-        {{ choice }}
-    {% endfor %}
-    <br />
+        <label>Choices: </label>
+        {% for choice in poll.choice_set.all %}
+            {{ choice }}
+        {% endfor %}
+        <br />
 
-    <!-- TODO efficiency of listing of all votes by real sql-statement -->
-    {% for vote in poll.vote_set.all %}
-        <label> {{ vote.user.username }}: </label>
+        <!-- TODO efficiency of listing of all votes by real sql-statement -->
+        {% for vote in poll.vote_set.all %}
+            <label> {{ vote.user.username }}: </label>
             {% for choice in poll.choice_set.all %}
                 {% for  vote_choice in choice.votechoice_set.all%}
                     {% if vote_choice.vote_id == vote %}
@@ -37,20 +38,36 @@
                 {% endfor %}
             {% endfor %}
 
-        <a href="{% url 'poll_voteEdit' poll.url vote.id %}" > Edit </a>
-        <a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a>
-        <br />
-    {% endfor %}
+            <a href="{% url 'poll_voteEdit' poll.url vote.id %}" > Edit </a>
+            <a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a>
+            <br />
+        {% endfor %}
 
-    <br /><br/>
-    <!-- TODO function new comment -->
-    {% for comment in poll.comment_set.all %}
-        <label>Name: </label>
-        <input type="text" title="name" value="{{ comment.name }}" readonly><br />
-        <textarea title="comment_text" cols="40" rows="5">{{ comment.text }}</textarea><br />
-        <label>Date of Creation: </label>
-        <input type="datetime" title="date_of_creation" value="{{ comment.date_created }}" readonly><br />
-        <a href="{% url 'poll_commentEdit' poll.url comment.id %}"> Edit </a>
-        <a href="{% url 'poll_commentDelete' poll.url comment.id %}"> Delete </a>
-    {% endfor %}
+        <br /><br/>
+        <!-- TODO function new comment -->
+        {% if request.user.is_authenticated %}
+            <label>Name: </label>
+            <input type="text" title="Name" name="newComName" value="{{ request.user.get_username }}" readonly />
+        {% else %}
+            <label>Name: </label>
+            <input type="text" title="Name" name="newComName" />
+        {% endif %}
+        <br />
+        <label>Comment: </label>
+        <textarea title="new Comment" name="newCom" cols="40" rows="5"></textarea>
+
+        <input type="submit" title="Comment" value="Comment">
+
+        <br /><br />
+        {% for comment in poll.comment_set.all %}
+            <label>Name: </label>
+            <input type="text" title="name" value="{{ comment.name }}" readonly><br />
+            <textarea title="comment_text" cols="40" rows="5">{{ comment.text }}</textarea><br />
+            <label>Date of Creation: </label>
+            <input type="datetime" title="date_of_creation" value="{{ comment.date_created }}" readonly><br />
+            <a href="{% url 'poll_editComment' poll.url comment.id %}"> Edit </a>
+            <a href="{% url 'poll_deleteComment' poll.url comment.id %}"> Delete </a>
+            <br />
+        {% endfor %}
+    </form>
 {% endblock %}

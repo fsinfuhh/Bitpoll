@@ -67,8 +67,9 @@ class Comment(models.Model):
     text = models.TextField()
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    # TODO allow null for user -> comment creation possible
 
     def __str__(self):
         return u'CommentID {} by {}'.format(self.id, self.name)
@@ -89,7 +90,8 @@ class Vote(models.Model):
     comment = models.TextField()
     assigned_by_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='assigning')
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    # TODO allow null for user -> vote creation possible
 
     def __str__(self):
         return u'Vote {}'.format(self.name)
@@ -101,7 +103,8 @@ class VoteChoice(models.Model):
     vote_id = models.ForeignKey(Vote, on_delete=models.CASCADE)
     choice_id = models.ForeignKey(Choice, on_delete=models.CASCADE)
 
-    # TODO (vote_id, choice_id) should be unique
+    class Meta:
+        unique_together = ('vote_id', 'choice_id')
 
     def __str__(self):
         return u'VoteChoice {}'.format(self.id)

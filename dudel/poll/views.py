@@ -1,7 +1,8 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 # from django.http import HttpResponseRedirect
-from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, DTChoiceCreationDateForm, DTChoiceCreationTimeForm
+from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
+    DTChoiceCreationDateForm, DTChoiceCreationTimeForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment
 from datetime import datetime
 
@@ -13,9 +14,18 @@ def poll(request, poll_url):
     :param request
     :param poll_url: url of poll
 
-    Displays for a given poll its fields along with all possible choices.
+    Displays for a given poll its fields along with all possible choices, all votes and all its comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    if request.method == 'POST':
+        new_comment = Comment(text=request.POST['newCom'],
+                              date_created=datetime.now(),
+                              name=request.POST['newComName'],
+                              poll=current_poll,
+                              user=request.user)
+        new_comment.save()
+        # return redirect('poll', poll_url)
+
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
     })
@@ -99,7 +109,7 @@ def delete_comment(request, poll_url, comment_id):
         else:
             return redirect('poll', poll_url)
 
-    return TemplateResponse(request, 'poll/VoteDelete.html', {
+    return TemplateResponse(request, 'poll/CommentDelete.html', {
         'poll': current_poll,
         'comment': current_comment,
         'error': error_msg,
