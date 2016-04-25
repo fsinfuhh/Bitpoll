@@ -208,11 +208,7 @@ def edit_dt_choice_time(request, poll_url):
                 'time': form,
                 'poll_url': current_poll.url,
             })
-        else:
-            return redirect('poll_editDTChoiceDate', current_poll.url)
-
-    else:
-        return redirect('poll_editDTChoiceDate', current_poll.url)
+    return redirect('poll_editDTChoiceDate', current_poll.url)
 
 
 def edit_dt_choice_combinations(request, poll_url):
