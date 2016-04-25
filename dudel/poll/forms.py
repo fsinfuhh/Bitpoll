@@ -16,7 +16,7 @@ class PollCopyForm(ModelForm):
 
 
 class DateChoiceCreationForm(Form):
-    fields = CharField()
+    dates = CharField()
 
 
 class UniversalChoiceCreationForm(ModelForm):

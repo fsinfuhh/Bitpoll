@@ -142,7 +142,7 @@ def edit_date_choice(request, poll_url):
     if request.method == 'POST':
         form = DateChoiceCreationForm(request.POST)
         if form.is_valid():
-            for datum in form.cleaned_data['date'].split(";"):
+            for datum in form.cleaned_data['dates'].split(";"):
                 choice = Choice(text="", date=datum, poll=current_poll)
                 choice.save()
             return redirect('poll', poll_url)
