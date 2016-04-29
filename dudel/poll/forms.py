@@ -26,7 +26,7 @@ class UniversalChoiceCreationForm(ModelForm):
 
 
 class DTChoiceCreationDateForm(Form):
-    date = CharField()
+    dates = CharField()
 
 
 class DTChoiceCreationTimeForm(Form):
@@ -34,5 +34,5 @@ class DTChoiceCreationTimeForm(Form):
         super(DTChoiceCreationTimeForm, self).__init__(*args, **kwargs)
         self.date.initial = date"""
 
-    date = CharField()
-    time = CharField()
+    dates = CharField()
+    times = CharField()

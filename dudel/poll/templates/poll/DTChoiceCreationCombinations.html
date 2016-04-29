@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Dudel Index{% endblock %}
+
+{% block content %}
+  <form action="{% url 'poll_editDTChoiceCombinations' poll_url %}" method="POST">
+    {% csrf_token %}
+
+    <table>
+      <tr>
+        <th></th>
+        {% for time in times %}
+          <th>{{ time }}</th>
+        {% endfor %}
+      </tr>
+      {% for day in dates %}
+        <tr>
+          <th>{{ day }}</th>
+          {% for time in times %}
+            <td><input type="checkbox" name="datetimes[]" value="{{ day }} {{ time }}" /></td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+
+    {{ form }}
+
+    <input type="submit" value="Create" />
+  </form>
+
+
+{% endblock %}

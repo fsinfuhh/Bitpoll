@@ -1,6 +1,5 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
-# from django.http import HttpResponseRedirect
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment
@@ -171,7 +170,7 @@ def edit_dt_choice_date(request, poll_url):
     if request.method == 'POST':
         form = DTChoiceCreationDateForm(request.POST)
         if form.is_valid():
-            time = DTChoiceCreationTimeForm({'date': form.cleaned_data['date']})
+            time = DTChoiceCreationTimeForm({'dates': form.cleaned_data['dates']})
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': time,
                 'poll_url': current_poll.url,
@@ -198,11 +197,14 @@ def edit_dt_choice_time(request, poll_url):
     if request.method == 'POST':
         form = DTChoiceCreationTimeForm(request.POST)
         if form.is_valid():
-            times = form.cleaned_data['time'].split(',')
-            dates = form.cleaned_data['data'].split(';')
-            for time in times:
-                for date in dates:
-                    pass  # TODO pass data to combination
+            times = form.cleaned_data['times'].split(',')
+            dates = form.cleaned_data['dates'].split(';')
+
+            return TemplateResponse(request, "poll/DTChoiceCreationCombinations.html", {
+                'times': times,
+                'dates': dates,
+                'poll_url': current_poll.url,
+            })
         elif form.cleaned_data['date'] != "":
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': form,
@@ -212,7 +214,25 @@ def edit_dt_choice_time(request, poll_url):
 
 
 def edit_dt_choice_combinations(request, poll_url):
-    pass
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    if request.method == 'POST':
+        # getlist does not raise an exception if datetimes[] is not in request.POST
+        chosen_combinations = request.POST.getlist('datetimes[]')
+
+        # parse datetime objects of chosen combinations
+        choices = []
+        for combination in chosen_combinations:
+            try:
+                choices.append(datetime.strptime(combination, '%Y-%m-%d %H:%M:%S'))
+            except ValueError:
+                # at least one invalid time/date has been specified. Redirect to first step
+                return redirect('poll_editDTChoiceDate', current_poll.url)
+
+        # all combinations have been valid. save choices to database.
+        for choice in choices:
+            Choice(date=choice, poll=current_poll).save()
+        return redirect('poll', current_poll.url)
+    return redirect('poll_editDTChoiceDate', current_poll.url)
 
 
 def edit_universal_choice(request, poll_url):
