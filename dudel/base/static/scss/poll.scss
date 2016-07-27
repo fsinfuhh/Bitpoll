@@ -1,0 +1,388 @@
+@import "vars";
+
+#poll-container {
+    &.fullscreen {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: white;
+        z-index: 11000;
+        overflow: auto;
+
+        #fullscreen-header {
+            display: block;
+        }
+
+        .table-padding {
+            margin: 20px;
+        }
+    }
+
+    #fullscreen-header {
+        display: none;
+        margin-bottom: 20px;
+        padding: 20px;
+        background: #EEE;
+
+        h1 {
+            margin: 0;
+        }
+    }
+}
+
+table.poll td, table.poll th, table.poll tr {
+    border: none !important;
+}
+
+table.poll {
+    border-collapse: separate !important;
+    border-spacing: 3px !important;
+}
+
+.poll, .vote {
+    font-size: 9pt;
+}
+
+table.vote label {
+    margin-top: 8px;
+}
+
+
+.poll .choice-text,
+.poll .choice-sum,
+.vote .choice-text {
+    white-space: nowrap;
+    font-weight: bold;
+    background: #EEE;
+}
+
+.poll .choice-sum {
+    white-space: nowrap !important;
+}
+
+.vote .choice-text {
+    text-align: right;
+}
+
+.poll .choice-group,
+.poll .author,
+.poll .vote-actions,
+.vote .choice-group {
+    font-weight: bold;
+    white-space: nowrap;
+    background: #EEE;
+    vertical-align: middle;
+}
+
+.poll .info {
+    background: #EEE;
+    text-align: center;
+}
+
+.poll .mine .author {
+    background: #444;
+    color: #FFF;
+}
+
+.poll .author {
+    padding: 0 2em;
+    text-align: right;
+}
+
+.poll .choice-group,
+.poll .choice-sum,
+.poll .choice-text {
+    text-align: center;
+    white-space: inherit;
+    max-width: 10em;
+}
+
+.vote .choice-group {
+    text-align: right;
+}
+
+.poll .choice-sum.maximum {
+    background: #AAA;
+    color: #FFF;
+}
+
+.choice-sum-value-label {
+    display: inline-block;
+    width: 24px;
+    margin-right: 4px;
+    text-align: center;
+    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.7);
+
+    &.large {
+        font-size: inherit;
+        width: 48px;
+        height: 32px;
+        line-height: 32px;
+        padding: 0;
+    }
+}
+
+.vote-choice {
+    /*border: 5px solid white;*/
+    color: white;
+    font-size: 16px;
+    min-width: 4em;
+    max-width: 10em;
+    text-align: center;
+}
+
+.vote .vote-choice {
+    width: 4em !important;
+}
+
+.vote-choice.comment {
+    background-image: url("../gfx/comment-background.png");
+}
+
+
+.no { background: #F96; }
+.yes { background: #9C6; }
+.maybe { background: #FF6; }
+
+.yes, .no, .maybe,
+td.vote-choice span,
+td.control {
+    text-shadow: 0px 1px 6px rgba(0, 0, 0, 0.7);
+}
+
+.vote-choice-radio {
+    padding: 0;
+    list-style: none;
+}
+
+.vote-choice-radio li {
+    display: inline;
+    padding: 0;
+    margin-right: 1em;
+}
+
+td.off {
+    background-color: #D6D6D6 !important;
+}
+
+td.off, td.none {
+    text-shadow: none;
+}
+
+table.poll td.none {
+    border: 1px solid #DDD !important;
+    color: #DDD;
+}
+
+table.poll td.numeric {
+    background: #F9F9F9;
+    color: #333;
+    font-size: 9pt;
+}
+
+.vote-comment span:hover {
+    color: black;
+}
+
+.vote-comment input {
+    width: 30em;
+    vertical-align: center;
+}
+
+.choice.deleted,
+.choice.deleted .color {
+    color: #AAA;
+    background: #F9F9F9;
+}
+
+tr.choice td {
+    vertical-align: middle !important;
+}
+
+.table > tbody > tr.header {
+    background: #FFF;
+    // font-weight: bold;
+    // font-size: 1.2em;
+    font-weight: bold;
+    color: #888;
+    border-top: 0;
+
+    > td, > th {
+        padding-top: 32px;
+        border-top: 0;
+    }
+}
+
+.poll-details {
+    list-style: none;
+    margin: 4px -8px;
+    margin-bottom: 8px;
+    padding: 0;
+
+    li {
+        display: block;
+        color: #666;
+        padding: 4px 8px;
+
+        .title {
+            display: inline-block;
+        }
+
+        .content {
+            font-weight: bold;
+        }
+
+        i {
+            display: inline-block;
+            width: 16px;
+            text-align: center;
+        }
+    }
+}
+
+@media(min-width: 786px) {
+    .poll-details li {
+        display: inline-block;
+    }
+}
+
+.comments {
+    .comment {
+        padding: 10px;
+        min-height: 68px;
+        border: 1px solid #F6F6F6;
+        border-width: 0 2px;
+
+        &:nth-child(2n+1) {
+            background-color: #F6F6F6;
+        }
+
+        &:nth-child(2n):last-child {
+            border-bottom-width: 2px;
+        }
+
+        .meta {
+            font-size: 0.8em;
+
+            > div {
+                display: inline;
+            }
+
+            .author {
+                font-weight: bold;
+            }
+
+            .edit {
+                float: right;
+            }
+        }
+
+        .text > *:last-child {
+            margin-bottom: 0;
+        }
+
+        .avatar {
+            float: left;
+
+            img {
+                border: 1px solid #DDD;
+                padding: 2px;
+                background: #FFF;
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        .meta,
+        .text {
+            margin-left: 58px;
+        }
+    }
+}
+
+header.poll {
+    background: #F6F6F6;
+    margin: 0;
+    margin-bottom: 20px;
+    padding-top: 30px;
+
+    h1 {
+        margin: 0;
+    }
+
+    .poll-actions {
+        float: right;
+    }
+}
+
+.poll-tabs {
+    display: flex;
+    margin: 16px -4px 0 -4px;
+    padding: 0;
+    list-style: none;
+    align-items: flex-end;
+
+    li {
+        flex: 1 1 auto;
+        margin: 0 4px;
+        padding: 0;
+
+        &.vote a {
+            background: #7FDA7F;
+            color: white;
+
+            &:hover {
+                background: #4FBA4F;
+            }
+        }
+
+        a {
+            text-align: center;
+            padding: 12px;
+            display: block;
+            color: #666;
+            text-decoration: none;
+            position: relative;
+            background: #EEE;
+            transition: all 0.15s;
+
+            i {
+                font-size: 14px;
+                vertical-align: center;
+                margin-right: 4px;
+            }
+
+            &:hover {
+                background: #DDD;
+            }
+
+            b {
+                float: right;
+                border-radius: 100px !important;
+                font-size: 9pt;
+            }
+        }
+
+        &.active a, &.active a:hover {
+            background: #FFF;
+            color: #666;
+        }
+    }
+}
+
+@media #{$media-phone} {
+    .poll-tabs li a {
+        text-align: center;
+        padding: 8px 0;
+
+        i.fa {
+            margin: 0;
+        }
+
+        span {
+            display: none;
+        }
+    }
+}

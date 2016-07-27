@@ -1,0 +1,398 @@
+@import "vars";
+
+//@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,300,100,900);
+
+.form-control, .btn, .input-addon, .input-addon-btn, .alert {
+    border-radius: 0;
+}
+
+.btn {
+    border: 1px solid #d5d5d5;
+    background: -webkit-gradient(linear, left top, left bottom, from(#FCFCFC), to(#EEE));
+    color: #333;
+    font-weight: 600;
+    font-size: 9pt;
+    text-shadow: 0 1px 0 #FFF;
+
+    &:hover {
+        background: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#DDD));
+        color: #333;
+        border-color: #d0d0d0;
+    }
+}
+
+.btn-lg {
+    margin: 0 auto;
+    padding: 16px 32px;
+}
+
+html,
+body {
+    margin:0;
+    padding:0;
+    height:100%;
+}
+#wrapper {
+    min-height:100%;
+    position:relative;
+}
+#main-content {
+    padding-bottom: 150px;
+}
+
+.btn-xs .fa {
+    font-size: 14px;
+    margin: -1px;
+    vertical-align: -1px;
+}
+
+.btn-block {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.filtered {
+    display: none;
+}
+
+.or {
+    $size: 32px;
+    display: block;
+    width: $size;
+    height: $size;
+    line-height: $size - 2px;
+    background: #EEE;
+    margin: 0 auto;
+    border: 1px solid #DDD;
+    border-radius: 100px !important;
+    color: #AAA;
+    text-align: center;
+}
+
+.alert {
+    padding: 0.7em 0em;
+}
+
+.alert .fa {
+    font-size: 20px;
+    vertical-align: middle;
+    margin: -1em 0.2em -0.9em 0;
+}
+
+.popover-title {
+    font-weight: bold;
+}
+
+.popover-content {
+    .comment {
+        color: #888;
+        font-size: 0.8em;
+        margin-top: 0.5em;
+    }
+}
+
+.choice-separator {
+    font-size: 0.8em;
+    color: #888;
+    margin: 0 0.4em;
+}
+
+
+.auto-width {
+    width: auto;
+}
+
+h1.inline {
+    display: inline-block;
+}
+
+.page-header {
+    margin-top: 0;
+}
+
+.page-header.secondary {
+    margin-top: 3em;
+}
+
+h1 { font-size: 2em; }
+h2 { font-size: 1.7em; margin-top: 20px; }
+h3 { font-size: 1.5em; }
+h1 small { font-size: 0.6em; margin-left: 1em; }
+
+.page-header .pull-right {
+    margin: 20px 0;
+}
+
+.input-group {
+    border-spacing: 0 !important;
+}
+
+.table {
+    margin-bottom: 0;
+    overflow: visible;
+}
+
+.checkbox-cell {
+    background-color: #F6F6F6;
+    text-align: center;
+}
+
+.checkbox-cell.on {
+    background-color: #9C6;
+}
+
+.checkbox-cell.off {
+    background-color: #F96 !important;
+}
+
+td.not-padded {
+    padding: 0 !important;
+}
+
+td.vote-comment {
+    display: block;
+    max-width: 300px;
+    padding: 4px !important;
+}
+
+.btn-link:focus {
+    outline: none;
+}
+
+
+.script-only {
+    display: none;
+}
+
+footer {
+    width:100%;
+    position:absolute;
+    bottom:0;
+    left:0;
+    margin: 0;
+    padding: 30px 0;
+    box-sizing: border-box;
+    border-top: 1px solid #DDD;
+    color: #888;
+
+    a, .btn-link {
+        &, &:hover, &:focus, &:active {
+            // color: inherit;
+            padding: 0;
+        }
+    }
+
+    .separator {
+        margin: 5px;
+        &:before {
+            content: "-";
+        }
+    }
+
+    .footer-warning {
+        display: inline-block;
+        color: #FF9900;
+        float: right;
+    }
+}
+
+.color {
+    &.red {
+        color: red;
+    }
+
+    &.orange {
+        color: #F90;
+    }
+
+    &.green {
+        color: #0A0;
+    }
+}
+
+.table-padding, .table-scroll-x, .table-noscroll-y {
+    overflow: visible !important;
+}
+
+.table-padding, .table-scroll-x, .table-noscroll-y {
+    overflow-x: auto !important;
+}
+
+.steps {
+    width: 100%;
+    list-style: none;
+    margin: 1em 0;
+    background: #F6F6F6;
+    border-radius: 4px;
+    border: 1px solid #DDD;
+    display: table;
+    padding: 0;
+}
+
+.steps li {
+    display: table-cell;
+    width: 25%;
+    padding: 0.5em 1em;
+    border-right: 1px solid #DDD;
+    border-left: 1px solid #FFF;
+    background: -webkit-gradient(linear, left top, left bottom, from(#F6F6F6), to(#EEE));
+    color: #888;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.6);
+}
+
+.steps li.current {
+    background: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#F6F6F6));
+    font-weight: bold;
+}
+
+.steps li:last-child {
+    border-right: 0;
+}
+
+.steps li:first-child {
+    border-left: 0;
+}
+
+.steps li span {
+    display: block;
+    color: rgba(0, 0, 0, 0.3);
+    vertical-align: middle;
+    font-size: 1.2em;
+}
+
+.monospace {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.print-only {
+    display: none;
+}
+
+.current-user {
+    // background: #AAA;
+    // display: inline-block;
+    // padding: 0;
+    vertical-align: top;
+    color: white;
+    // line-height: 50px;
+    position: relative;
+    padding-left: 40px !important;
+
+    img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+    }
+}
+
+.navbar .btn {
+    border: none !important;
+
+    &.btn-default {
+        background: rgba(255, 255, 255, 0.2);
+        color: #FFF;
+        transition: background 0.3s;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    }
+}
+
+.red {
+    color: red;
+}
+
+.danger-zone {
+    border: 10px solid #A00;
+    border-width: 10px 0;
+    background: $silver;
+    padding: 32px;
+    max-width: 500px;
+    margin: 64px auto;
+
+    & > :first-child {
+        margin-top: 0;
+    }
+
+    & > :last-child {
+        margin-bottom: 0;
+    }
+
+    h2 {
+        i.fa {
+            margin-right: 10px;
+        }
+    }
+
+    hr {
+        border-color: #BBB;
+    }
+}
+
+.nobr {
+    white-space: nowrap;
+}
+
+
+#error-page {
+    max-width: 360px;
+    text-align: center;
+    margin: 100px auto;
+
+    .fa {
+        font-size: 100px;
+    }
+
+    h1 {
+
+    }
+
+    p {
+        color: #777;
+    }
+}
+
+.container-full {
+    margin: 0 40px;
+}
+
+.container.small {
+    max-width: 720px;
+}
+
+.page-header {
+    margin-top: 40px;
+}
+
+.poll-overview .fa {
+    margin-right: 4px;
+}
+
+.halfsize {
+    max-width: 585px;
+    margin: 0 auto;
+}
+
+.initial-hidden {
+    opacity: 0;
+}
+.help-block {
+    transition: opacity 0.3s;
+}
+
+.padded-cells > * {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+section.flashes .alert:last-child {
+    margin-bottom: 1px;
+}
+
+
+table tr.highlight td {
+    background: #CDF;
+}

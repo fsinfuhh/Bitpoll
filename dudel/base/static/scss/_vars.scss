@@ -1,0 +1,16 @@
+$primary-color: #09F; // #1F721F;
+$secondary-color: #008300;
+$silver: #F6F5FA;
+
+$header-height: 0px;
+$nav-height: 50px;
+
+$break-small: 768px;
+$break-large: 1024px;
+
+$media-phone: "only screen and (max-device-width: #{$break-small})";
+$media-tablet: "only screen and (min-device-width: #{$break-small + 1}) and (max-device-width: #{$break-large})";
+$media-phone-tablet: "only screen and (max-device-width: #{$break-large})";
+$media-desktop: "only screen and (min-device-width: #{$break-large + 1})";
+$media-tablet-desktop: "only screen and (min-device-width: #{$break-small + 1})";
+

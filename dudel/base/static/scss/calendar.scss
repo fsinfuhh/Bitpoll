@@ -1,0 +1,62 @@
+.calendar {
+    display: inline-block;
+
+    table {
+        margin: 0.5em;
+        display: inline-block;
+
+        tr:first-child {
+            background: #F6F6F6;
+        }
+
+        tr:nth-child(2) {
+            font-size: 0.8em;
+        }
+
+        td {
+            text-align: center;
+            padding: 4pt !important;
+
+            &.left {
+                border-right: 1px solid #DDD;
+                border-bottom: 0;
+                border-top: 0;
+            }
+
+            .btn {
+                display: inline-block;
+                width: 2.5em;
+                text-align: center;
+            }
+        }
+    }
+
+    .title {
+        text-align: center;
+    }
+}
+
+
+
+.calendar-list {
+    display: inline-block;
+    padding: 1em 0;
+    vertical-align: top;
+    white-space: normal;
+
+    ul {
+        padding: 0;
+        list-style: none;
+
+        li {
+            display: block;
+            margin-bottom: 4px;
+        }
+    }
+}
+
+.time-buttons .btn {
+    display: inline-block;
+    width: 2.5em;
+    text-align: center;
+}

@@ -1,0 +1,271 @@
+@import "vars";
+
+form.navbar-form {
+    margin: 0;
+}
+
+.form-errors {
+    margin: 0.5em 0;
+}
+
+.datetime-input-suggest {
+    font-size: 0.8em;
+    .date, .time {
+        font-weight: bold;
+    }
+}
+
+#dateoffset-preview {
+    color: #888 !important;
+
+    .from, .to {
+        display: inline;
+        font-weight: bold;
+    }
+}
+
+.help-inline {
+    color: #737373;
+}
+
+label + .help-inline {
+    margin-left: 1em;
+}
+
+ul.help-list {
+    color: #737373;
+    font-size: 0.8em;
+    margin: 0.5em 0;
+    padding: 0;
+
+    li {
+        margin-left: 1.2em;
+        list-style: none;
+
+        &:before {
+            content: "\2713";
+            margin-left: -1.2em;
+            width: 1.2em;
+            display: inline-block;
+            font-family: "entypo";
+        }
+    }
+}
+
+form.form-inline {
+    display: inline-block;
+}
+
+.form-actions {
+    padding: 20px;
+    background: #EEE;
+    border-top: 1px solid #CCC;
+    text-align: right;
+}
+
+.form.login {
+    max-width: 400px;
+}
+
+section.login {
+    // background: #4588D8;
+    padding: 32px 0;
+    color: white;
+    // background: $secondary-color;
+    background: $primary-color;
+
+    // form {
+    //     border: 8px double $secondary-color;
+    //     border-width: 8px 0;
+    //     padding: 16px;
+    // }
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+
+    > * {
+        margin-right: 16px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+.create-poll {
+    background: #F6F6F6;
+    box-sizing: border-box;
+}
+
+section.section {
+    padding: 16px 0;
+}
+
+@media #{$media-tablet-desktop} {
+    section.section {
+        padding: 32px 0;
+    }
+}
+
+.type-choices {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    align-items: stretch;
+    border: 1px solid #CCC;
+    background: #FFF;
+
+    > li {
+        background: none;
+        cursor: pointer;
+        transition: background 0.2s, border 0.2s;
+
+        border-bottom: 1px solid #CCC;
+        &:last-child {
+            border: 0;
+        }
+
+        // mobile
+        display: flex;
+        align-items: center;
+        // text-align: center;
+        text-align: left;
+
+        &:hover {
+            background: #F6F6F6;
+
+        }
+
+        &.current {
+            color: $primary-color;
+
+            // mobile
+            // .title {
+            //     background: $primary-color;
+            //     color: white;
+            // }
+
+            // mobile
+            .fa {
+                background: $primary-color;
+                color: white;
+            }
+        }
+
+        .title {
+            display: block;
+            font-weight: bold;
+            transition: all 0.2s;
+
+            // mobile
+            // border-radius: 8px;
+            // margin: 0 8px;
+            // padding: 8px;
+        }
+
+        .icon {
+            display: block;
+            padding: 8px;
+            color: inherit;
+            font-size: 14px * 2;
+
+            // mobile
+            margin-right: 8px;
+
+            .fa {
+                // mobile
+                $size: 14px*2;
+                width: $size;
+                height: $size;
+                line-height: $size;
+                box-sizing: content-box;
+                text-align: center;
+                display: inline-block;
+                padding: 8px;
+                border-radius: 2px;
+            }
+        }
+
+        .description {
+            font-size: 0.9em;
+
+            // mobile
+            // padding: 8px;
+        }
+    }
+}
+
+@media #{$media-desktop} {
+    .type-choices {
+        display: flex;
+
+        > li {
+            flex: 1 1 100px;
+
+            border-bottom: 0;
+            border-right: 1px solid #CCC;
+
+            display: block;
+            text-align: center;
+
+            &.current {
+                .title {
+                    background: $primary-color;
+                    color: white;
+                }
+
+                .fa {
+                    background: none;
+                    color: inherit;
+                }
+            }
+
+            .title {
+                border-radius: 2px;
+                margin: 0 8px;
+                padding: 8px;
+            }
+
+            .icon {
+                // mobile
+                margin-right: 0;
+            }
+
+            .description {
+                height: 60px;
+                padding: 8px;
+            }
+        }
+
+    }
+
+}
+
+.form-step {
+    $color: #CCC;
+
+    text-align: center;
+    color: $color;
+    margin: 32px 0 16px 0;
+
+    font-weight: bold;
+    font-size: 0.8em;
+
+    .number, .title {
+        display: inline;
+    }
+
+    .number {
+    }
+
+    &:before, &:after {
+        display: inline-block;
+        width: 48px;
+        height: 1px;
+        background: $color;
+        content: " ";
+        vertical-align: middle;
+    }
+}

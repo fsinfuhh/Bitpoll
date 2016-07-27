@@ -1,0 +1,75 @@
+.slider {
+    width: 400px;
+    margin: 50px;
+
+    .bar {
+        position: relative;
+        border-bottom: 1px solid #DDD;
+
+        .handle {
+            $color: #08F;
+            $size: 10px;
+            width: $size;
+            height: $size;
+            margin-left: -$size/2;
+            z-index: 10000;
+
+            display: block;
+            position: absolute;
+            background: #FFF;
+            border: 2px solid $color;
+            bottom: 2px;
+            border-radius: 50% !important;
+            cursor: pointer;
+            transition: all 0.1s;
+
+            &:after {
+                position: absolute;
+                left: 50%;
+                margin-left: -3px;
+                border: 3px solid transparent;
+                bottom: -7px;
+                border-top-color: $color;
+                content: " ";
+            }
+
+            &:hover, &.dragging {
+                $size: 20px;
+                width: $size;
+                height: $size;
+                margin-left: -$size/2;
+                border-width: 4px;
+                bottom: -$size/2;
+
+                &:after {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
+    .ticks {
+        position: relative;
+
+        .tick {
+            position: absolute;
+            width: 100px;
+            text-align: center;
+            margin-left: -50px;
+
+            .marker {
+                width: 1px;
+                height: 10px;
+                margin: 2px 0;
+                background: #DDD;
+                display: block;
+                margin: 0 auto;
+            }
+
+            .text {
+                font-size: 8pt;
+                color: #AAA;
+            }
+        }
+    }
+}

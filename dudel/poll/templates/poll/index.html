@@ -1,13 +1,184 @@
 {% extends "base.html" %}
 
-{% block title %}Dudel Index{% endblock %}
+{% load widget_tweaks %}
+{% load settings_value %}
+{% block title %}Create Poll{% endblock %}
+
+
 
 {% block content %}
-    <form action="{%  url 'index' %}" method="post">
-        {% csrf_token %}
-        {{ new_Poll }}
-        <input type="submit" value="Create" />
-    </form>
-
+    <section class="section create-poll">
+        <div class="container">
+            <div class="halfsize">
+                <h1>Create a poll</h1>
+                <hr/>
+                <form method="POST" class="form" action="{% url 'index' %}">
+                    <div style="display:none;">
+                        {% csrf_token %}
+                    </div>
+                    <div class="form-step">
+                        <div class="number">Step 1</div>
+                        <div class="title">Select Type</div>
+                    </div>
+                    <div class="form-group"><select class="form-control script-hidden" id="create-type-field"
+                                                    name="{{ new_Poll.type.name }}">
+                        <option value="date">Date and Time</option> {# TODO dynamisch, inklusive data-values unten #}
+                        <option value="day">Date</option>
+                        <option value="normal">Normal Poll</option>
+                        <option value="numeric">Numeric</option>
+                    </select>
+                        <div class="script-only">
+                            <ul id="create-type-list" class="type-choices">
+                                <li data-value="date">
+                                    <div class="icon"><i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <div class="text">
+                                        <div class="title">Date and Time</div>
+                                        <div class="description">Schedule date and time for an event</div>
+                                    </div>
+                                </li>
+                                <li data-value="day">
+                                    <div class="icon"><i class="fa fa-calendar"></i>
+                                    </div>
+                                    <div class="text">
+                                        <div class="title">Date</div>
+                                        <div class="description">Schedule an all-day event</div>
+                                    </div>
+                                </li>
+                                <li data-value="normal">
+                                    <div class="icon"><i class="fa fa-list"></i>
+                                    </div>
+                                    <div class="text">
+                                        <div class="title">Normal Poll</div>
+                                        <div class="description">Retrieve opinions on various choices</div>
+                                    </div>
+                                </li>
+                                <li data-value="numeric">
+                                    <div class="icon"><i class="fa fa-sliders"></i>
+                                    </div>
+                                    <div class="text">
+                                        <div class="title">Numeric</div>
+                                        <div class="description">Rate each choice in a numeric range</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-step">
+                        <div class="number">Step 2</div>
+                        <div class="title">Enter Title</div>
+                    </div>
+                    <div class="form-group">
+                        <input autocomplete="off" class="form-control" id="title-input" name="{{ new_Poll.title.name }}"
+                                                   placeholder="Title" type="text" value="" />
+                        {% if new_Poll.title.errors %}
+                            <div class="form-errors">
+                                <div class="alert alert-danger">
+                                    <div class="container">
+                                    <i class="fa fa-times"></i>{{ new_Poll.title.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div id="advanced-open" class="hidden">
+                        <div class="form-step">
+                            <div class="number">Step 3</div>
+                            <div class="title">Advanced Settings</div>
+                        </div>
+                        <script>var RANDOM_SLUGS = false;</script>
+                        <div id="slug" class="form-group">
+                            <div style="float: right;">
+                                <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>Randomize</span>
+                                </button>
+                            </div>
+                            <label for="slug" style="margin-top: 2px;">URL name</label>
+                            <div class="input-group"><span class="input-group-addon">http://127.0.0.1:5000/poll/</span>
+                                <input class="form-control" id="slug-input" name="slug" type="text" value="">
+                                {% if new_Poll.slug.errors %}
+                                    <div class="form-errors">
+                                        <div class="alert alert-danger">
+                                            <div class="container">
+                                            <i class="fa fa-times"></i>{{ new_Poll.slug.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <a id="advanced-toggle" href="#" class="action">
+                            <span class="more"><i class="fa fa-plus-square-o"></i>
+                                <span>More options</span>
+                            </span>
+                            <span class="less hidden"><i class="fa fa-minus-square-o"></i>
+                                <span>Less options</span>
+                            </span>
+                        </a>
+                        <input type="submit" value="Create" class="action primary"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <section class="section login">
+        <div class="container">
+            <div class="halfsize">
+                <form method="POST" action="/login" class="form">
+                    <h1>Log in</h1>
+                    <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden"
+                                                      value="1469467374##4d69a23fdbd4dd16af59c2d4e8def7e453059ac5"><input
+                            id="form_name" name="form_name" type="hidden" value="LoginForm"></div>
+                    <div class="form-group"><label for="username">Username</label><input class="form-control"
+                                                                                         id="username" name="username"
+                                                                                         type="text" value="">
+                    </div>
+                    <div class="form-group"><label for="password">Password</label><input class="form-control"
+                                                                                         id="password" name="password"
+                                                                                         type="password" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="pull-right action secondary"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row padded-cells">
+            <div class="col-md-4">
+                <h4>Register for more</h4>
+                <p>Registered users have access to the full width of features available.
+                </p>
+                <a href="/register" class="action"><i class="fa fa-pencil"></i><span>Register</span></a>
+                <a href="/login" class="action primary"><i class="fa fa-sign-in"></i> Login</a>
+            </div>
+            <div class="col-md-4">
+                <h4>Dudel statistics</h4>
+                <table class="table">
+                    <tr>
+                        <th>Polls created</th>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <th>Votes cast</th>
+                        <td>68</td>
+                    </tr>
+                    <tr>
+                        <th>Users</th>
+                        <td>2</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-4">
+                <h4>Public polls</h4>
+                <div class="alert alert-info">
+                    <div class="container"><i class="fa fa-exclamation-circle"></i>There are currently no public polls.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
