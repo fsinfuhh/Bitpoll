@@ -1,13 +1,83 @@
 {% extends "base.html" %}
+{% load compile_static %}
+{% load static %}
 
 {% block title %}Dudel Index{% endblock %}
 
+{% block css %}
+<link href="{% static 'scss/calendar.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
+{% endblock %}
+
 {% block content %}
-    <form action="{{ request.url }}" method="POST">
-        {% csrf_token %}
-        {{ new_Choice }}
-        <input type="submit" value="Create" />
-    </form>
+    {% include "poll/poll_haeder.html" %}
+
+    <div class="container">
+        {% include  "poll/DTChoiceHaeder.html" %}
+
+        <form action="{{ request.url }}" method="POST" id="date-time-form">
+            {% csrf_token %}
+            <div id="date-time-form-content">
+                <div class="form-group">
+                    <label for="{{ new_Choice.dates.label_for }}">Dates</label>
+                    <input type="text" value="" name="{{ new_Choice.dates.name }}" id="dates" class="form-control">
+                </div>
+            </div>
+            <div class="alert alert-info">
+                <div class="container"><i class="fa fa-exclamation-circle"></i>Please select the days that you want to
+                    be able to choose. In the next step, you will select time slots.
+                </div>
+            </div>
+            <div class="script-only" style="display: block;">
+                <div class="calendar" data-calendar-field="#date" id="calendar">
+                    <table class="table auto-width">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <button class="action icon" id="calendar-prev-month"><i class="fa fa-caret-left"></i>
+                                    </button>
+                                </th>
+                                <th class="title" colspan="6">MONTHNAME</th>
+                                <th>
+                                    <button class="action icon" id="calendar-next-month"><i class="fa fa-caret-right"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Mo</td>
+                                <td>Tu</td>
+                                <td>We</td>
+                                <td>Th</td>
+                                <td>Fr</td>
+                                <td>Sa</td>
+                                <td>Su</td>
+                            </tr>
+
+                            {% for i in "12345" %}
+                                <tr class="week">
+                                    <td></td>
+                                    {% for j in "1234567" %}
+                                        <td>{{ j }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="calendar-list">
+                    <ul id="calendar-list"></ul>
+                </div>
+            </div>
+            <div class="form-actions">
+                <a class="action" href="javascript: history.back();">Back</a>
+                <input type="submit" class="action primary" value="Next">
+            </div>
+        </form>
+    </div>
 
 
+{% endblock %}
+
+{% block additionalJS %}
+<script lang="javascript" type="text/javascript" src="{% static 'js/poll_edit_choices.js' %}"></script>
 {% endblock %}

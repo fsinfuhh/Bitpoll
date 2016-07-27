@@ -48,6 +48,7 @@ def index(request):
             ChoiceValue(title="yes", icon="", color="#9C6", weight=1, poll=current_poll).save()
             ChoiceValue(title="no", icon="", color="#F96", weight=0, poll=current_poll).save()
             ChoiceValue(title="maybe", icon="", color="#FF6", weight=0.5, poll=current_poll).save()
+            ChoiceValue(title="don't know yet", icon="", color="#FF6", weight=0.5, poll=current_poll).save()
 
             if current_poll.type == 'universal':
                 return redirect('poll_editUniversalChoice', current_poll.url)
@@ -178,7 +179,8 @@ def edit_dt_choice_date(request, poll_url):
     else:
         form = DTChoiceCreationDateForm()
     return TemplateResponse(request, "poll/DTChoiceCreationDate.html", {
-        'new_Choice': form
+        'new_Choice': form,
+        'poll': current_poll,
     })
 
 
@@ -203,12 +205,12 @@ def edit_dt_choice_time(request, poll_url):
             return TemplateResponse(request, "poll/DTChoiceCreationCombinations.html", {
                 'times': times,
                 'dates': dates,
-                'poll_url': current_poll.url,
+                'poll': current_poll,
             })
         elif form.cleaned_data['date'] != "":
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': form,
-                'poll_url': current_poll.url,
+                'poll': current_poll,
             })
     return redirect('poll_editDTChoiceDate', current_poll.url)
 

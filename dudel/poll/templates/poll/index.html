@@ -22,14 +22,14 @@
                     </div>
                     <div class="form-group"><select class="form-control script-hidden" id="create-type-field"
                                                     name="{{ new_Poll.type.name }}">
-                        <option value="date">Date and Time</option> {# TODO dynamisch, inklusive data-values unten #}
-                        <option value="day">Date</option>
-                        <option value="normal">Normal Poll</option>
+                        <option value="datetime">Date and Time</option> {# TODO dynamisch, inklusive data-values unten #}
+                        <option value="date">Date</option>
+                        <option value="universal">Normal Poll</option>
                         <option value="numeric">Numeric</option>
                     </select>
                         <div class="script-only">
                             <ul id="create-type-list" class="type-choices">
-                                <li data-value="date">
+                                <li data-value="datetime">
                                     <div class="icon"><i class="fa fa-clock-o"></i>
                                     </div>
                                     <div class="text">
@@ -37,7 +37,7 @@
                                         <div class="description">Schedule date and time for an event</div>
                                     </div>
                                 </li>
-                                <li data-value="day">
+                                <li data-value="date">
                                     <div class="icon"><i class="fa fa-calendar"></i>
                                     </div>
                                     <div class="text">
@@ -45,7 +45,7 @@
                                         <div class="description">Schedule an all-day event</div>
                                     </div>
                                 </li>
-                                <li data-value="normal">
+                                <li data-value="universal">
                                     <div class="icon"><i class="fa fa-list"></i>
                                     </div>
                                     <div class="text">

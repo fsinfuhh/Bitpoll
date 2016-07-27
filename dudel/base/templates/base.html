@@ -7,6 +7,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Dudel{% endblock %}</title>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="{% static 'css/jquery-ui-timepicker-addon.css' %}" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="{% static 'css/jquery-range.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/main.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/menu.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/form.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
@@ -15,12 +21,6 @@
     <link href="{% static 'scss/poll.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/slider.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/timeinput.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="{% static 'css/jquery-ui-timepicker-addon.css' %}" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="{% static 'css/jquery-range.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link media="print" rel="stylesheet" href="{% static 'css/print.css' %}">
 
 
@@ -87,7 +87,6 @@
     <script src="{% static 'js/main.js' %}"  type="text/javascript" ></script>
     <script src="{% static 'js/util.js' %}"  type="text/javascript" ></script>
     <script src="{% static 'js/custom-select.jquery.js' %}"  type="text/javascript" ></script>
-    <script src="{% static 'js/poll_edit_choices.js' %}"  type="text/javascript" ></script>
 
     <script src="{% static 'coffee/common.coffee'|compile %}"  type="text/javascript" ></script>
     <script src="{% static 'coffee/create.coffee'|compile %}"  type="text/javascript" ></script>
@@ -97,5 +96,8 @@
     <script src="{% static 'coffee/vote.coffee'|compile %}"  type="text/javascript" ></script>
     <script src="{% static 'coffee/votefilter.coffee'|compile %}"  type="text/javascript" ></script>
     <script src="{% static 'coffee/gettext.coffee'|compile %}"  type="text/javascript" ></script>
+
+    {% block additionalJS %}
+    {% endblock %}
 </body>
 </html>
