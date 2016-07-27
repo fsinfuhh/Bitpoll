@@ -86,6 +86,7 @@
                             <div class="number">Step 3</div>
                             <div class="title">Advanced Settings</div>
                         </div>
+                    {# TODO: due date, public? #}
                         <script>var RANDOM_SLUGS = false;</script>
                         <div id="slug" class="form-group">
                             <div style="float: right;">
@@ -94,12 +95,12 @@
                             </div>
                             <label for="slug" style="margin-top: 2px;">URL name</label>
                             <div class="input-group"><span class="input-group-addon">http://127.0.0.1:5000/poll/</span>
-                                <input class="form-control" id="slug-input" name="slug" type="text" value="">
-                                {% if new_Poll.slug.errors %}
+                                <input class="form-control" id="slug-input" name="{{ new_Poll.url.name }}" type="text" value="">
+                                {% if new_Poll.url.errors %}
                                     <div class="form-errors">
                                         <div class="alert alert-danger">
                                             <div class="container">
-                                            <i class="fa fa-times"></i>{{ new_Poll.slug.errors }}
+                                            <i class="fa fa-times"></i>{{ new_Poll.url.errors }}
                                             </div>
                                         </div>
                                     </div>
@@ -127,9 +128,9 @@
             <div class="halfsize">
                 <form method="POST" action="/login" class="form">
                     <h1>Log in</h1>
-                    <div style="display:none;"><input id="csrf_token" name="csrf_token" type="hidden"
-                                                      value="1469467374##4d69a23fdbd4dd16af59c2d4e8def7e453059ac5"><input
-                            id="form_name" name="form_name" type="hidden" value="LoginForm"></div>
+                    <div style="display:none;">
+                        {% csrf_token %}
+                    </div>
                     <div class="form-group"><label for="username">Username</label><input class="form-control"
                                                                                          id="username" name="username"
                                                                                          type="text" value="">
