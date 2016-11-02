@@ -10,7 +10,7 @@
 
         <label>Choices: </label>
         {% for choice in poll.choice_set.all %}
-            {{ choice.date }}
+            {{ choice }}
         {% endfor %}
         <br />
 

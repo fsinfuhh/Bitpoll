@@ -45,11 +45,14 @@ class Poll(models.Model):
 
 class Choice(models.Model):
     text = models.CharField(max_length=80)
-    date = models.DateTimeField()
+    date = models.DateTimeField(null=True, blank=True)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
 
     def __str__(self):
-        return u'Choice {}'.format(self.text)
+        if self.poll.type == 'universal':
+            return self.text
+        else:
+            return self.text
 
 
 class ChoiceValue(models.Model):

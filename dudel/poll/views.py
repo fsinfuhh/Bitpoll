@@ -254,7 +254,7 @@ def edit_universal_choice(request, poll_url):
     :param poll_url: url of poll
 
     Takes the text of a choice as the user's input and checks its validity.
-    If the input is valid, the choice is saved (with 01.01.1970 as date) and the user is directed to the poll's site.
+    If the input is valid, the choice is saved and the user is directed to the poll's site.
 
     If the input is not valid, the user is directed back for correction.
     """
@@ -262,7 +262,7 @@ def edit_universal_choice(request, poll_url):
     if request.method == 'POST':
         form = UniversalChoiceCreationForm(request.POST)
         if form.is_valid():
-            choice = Choice(text=form.cleaned_data['text'], date='1970-01-01', poll=current_poll)
+            choice = Choice(text=form.cleaned_data['text'], poll=current_poll)
             choice.save()
             return redirect('poll', poll_url)
     else:
