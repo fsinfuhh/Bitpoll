@@ -3,24 +3,14 @@
 {% block title %}Dudel Index{% endblock %}
 
 {% block content %}
-    <form action="{% url 'poll' poll.url %}" method="POST">{% csrf_token %}
-        <label>Title: </label> {{ poll.title }}<br />
-        <label>Due-Date: </label> {{ poll.due_date }}<br />
-        <label>Anonymous votes allowed: </label> {{ poll.anonymous_allowed }}<br />
-        <label>Description: </label> <textarea title="description" cols="40" rows="5" readonly>{{ poll.description }}</textarea><br /><br /><br />
+    {% include 'poll/poll_haeder.html' %}
 
-        <a href="{% url 'poll_copy' poll.url %}"> Copy </a>
-        <a href="{% url 'poll_delete' poll.url %}"> Delete </a>
-
-        <br /><br />
-
-        <a href="{% url 'poll_vote' poll.url %}"> Vote </a>
-
-        <br /><br />
+    <form action="{% url 'poll' poll.url %}" method="POST">
+        {% csrf_token %}
 
         <label>Choices: </label>
         {% for choice in poll.choice_set.all %}
-            {{ choice }}
+            {{ choice.date }}
         {% endfor %}
         <br />
 

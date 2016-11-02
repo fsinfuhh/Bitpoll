@@ -1,32 +1,79 @@
 {% extends "base.html" %}
+{% load compile_static %}
+{% load static %}
 
 {% block title %}Dudel Index{% endblock %}
 
+{% block css %}
+    <link href="{% static 'scss/calendar.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
+{% endblock %}
+
 {% block content %}
-  <form action="{% url 'poll_editDTChoiceCombinations' poll_url %}" method="POST">
-    {% csrf_token %}
+    {% include "poll/poll_haeder.html" %}
 
-    <table>
-      <tr>
-        <th></th>
-        {% for time in times %}
-          <th>{{ time }}</th>
-        {% endfor %}
-      </tr>
-      {% for day in dates %}
-        <tr>
-          <th>{{ day }}</th>
-          {% for time in times %}
-            <td><input type="checkbox" name="datetimes[]" value="{{ day }} {{ time }}" /></td>
-          {% endfor %}
-        </tr>
-      {% endfor %}
-    </table>
+    <div class="alert alert-info">
+        <div class="container"><i class="fa fa-exclamation-circle"></i>Here you can select which day/time combinations
+            are available for voting.
+        </div>
+    </div>
+    <form class="form form-inline" action="{% url 'poll_editDTChoiceCombinations' poll.url %}" method="POST">
+        {% csrf_token %}
+        {# TODO: maybe we need the imput data fields to this view here for recreation on error #}
+        <div class="table-responsive" style="margin-bottom: 1em;">
+            <table class="table auto-width poll">
+                <tbody>
+                <tr>
+                    <th></th>
+                    {% for time in times %}
+                        <th class="choice-text">{{ time }}</th>
+                    {% endfor %}
+                </tr>
+                    {% for day in dates %}
+                        <tr>
+                        <th class="author">{{ day }}</th>
+                        {% for time in times %}
+                            <td class="checkbox-cell on">
+                                <input type="checkbox" checked="[]" value="{{ day }} {{ time }}" name="datetimes[]"> {# TODO: autofill from database if checked! #}
+                            </td>
+                        {% endfor %}
+                        <td class="choice-text">
+                            <button class="action icon toggle toggle-select toggle-row"><i class="fa fa-check-square-o"></i>
+                            </button>
+                            <button class="action icon toggle toggle-deselect toggle-row"><i class="fa fa-square-o"></i>
+                            </button>
+                        </td>
+                        </tr>
+                    {% endfor %}
 
-    {{ form }}
+                <tr>
+                    <td></td>
+                    {% for time in times %}
+                    <td class="choice-text">
+                        <button class="action icon toggle toggle-select toggle-column"><i class="fa fa-check-square-o"></i>
+                        </button>
+                        <button class="action icon toggle toggle-deselect toggle-column"><i class="fa fa-square-o"></i>
+                        </button>
+                    </td>
+                    {% endfor %}
+                    <td class="choice-text">
+                        <button class="action icon toggle toggle-select toggle-all"><i class="fa fa-check-square-o"></i>
+                        </button>
+                        <button class="action icon toggle toggle-deselect toggle-all"><i class="fa fa-square-o"></i>
+                        </button>
+                    </td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-actions"><a class="action" href="javascript: history.back();">Back</a>
+            <input type="submit" class="action primary" value="Next">
+        </div>
+    </form>
 
-    <input type="submit" value="Create" />
-  </form>
+{% endblock %}
 
 
+{% block additionalJS %}
+<script lang="javascript" type="text/javascript" src="{% static 'js/poll_edit_choices.js' %}"></script>
 {% endblock %}

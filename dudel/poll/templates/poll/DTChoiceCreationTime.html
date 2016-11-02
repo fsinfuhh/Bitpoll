@@ -1,14 +1,61 @@
 {% extends "base.html" %}
+{% load compile_static %}
+{% load static %}
 
 {% block title %}Dudel Index{% endblock %}
 
+{% block css %}
+    <link href="{% static 'scss/calendar.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
+{% endblock %}
+
 {% block content %}
-    <form action="{% url 'poll_editDTChoiceTime' poll_url %}" method="POST">
-        {% csrf_token %}
+    {% include "poll/poll_haeder.html" %}
 
-        {{ time }}
-        <input type="submit" value="Create" />
-    </form>
+    <div class="container">
+        {% include  "poll/DTChoiceHaeder.html" %}
 
+        <form action="{% url 'poll_editDTChoiceTime' poll.url %}" method="POST" id="date-time-form">
+            <div id="date-time-form-content">
+                 {% csrf_token %}
+                <div class="form-group"><label for="{{ time.dates.label_for }}">Dates</label>
+                    <input type="text" value="{{ time.dates.value }}" name="{{ time.dates.name }}" id="dates"
+                                                                               class="form-control">
+                </div>
+                <div class="form-group"><label for="{{ time.times.label_for }}">Times</label>
+                    <input type="text" value="" name="{{ time.times.name }}" id="times" class="form-control">
+                </div>
+            </div>
+            <div class="script-only" style="display: block;">
+                <div class="alert alert-info">
+                    <div class="container"><i class="fa fa-exclamation-circle"></i>Please select the time slots that you
+                        want to be able to choose. In the next step, you will match them against the selected days.
+                    </div>
+                </div>
+                <div class="time-input">
+                    <div id="time-slider">
+                        <div id="time-slider-knob" style="left: 200px;"></div>
+                    </div>
+                    <div class="time-slider-display">
+                        <div class="hour animated" style="transform: rotate(360deg);"></div>
+                        <div class="minute animated" style="transform: rotate(4320deg);"></div>
+                    </div>
+                    <div class="form-inline" id="time-slider-form">
+                        <input type="text" class="form-control" placeholder="HH" id="time-hour">
+                        <input type="text" class="form-control" placeholder="MM" id="time-minute">
+                        <input type="button" class="action" style="height: 3.4em;" value="Add" id="time-add-button">
+                    </div>
+                </div>
+                <div class="calendar-list">
+                    <ul class="time-slots"></ul>
+                </div>
+            </div>
+            <div class="form-actions"><a class="action" href="javascript: history.back();">Back</a>
+                <input type="submit" class="action primary" value="Next">
+            </div>
+        </form>
+    </div>
+{% endblock %}
 
+{% block additionalJS %}
+<script lang="javascript" type="text/javascript" src="{% static 'js/poll_edit_choices.js' %}"></script>
 {% endblock %}

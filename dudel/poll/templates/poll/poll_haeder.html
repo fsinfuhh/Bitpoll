@@ -6,27 +6,29 @@
             <small>Choices</small>
         </h1>
         <ul class="poll-details">
-            <li title="Creation date: Wed, 27 Jul, 19:30"><i class="fa fa-calendar"></i><span class="content">Wed, 27 Jul</span>
+            <li title="Creation date: {{ poll.created }}"><i class="fa fa-calendar"></i><span class="content">Wed, 27 Jul</span>
             </li>
-            <li title="Poll type"><i class="fa fa-clock-o"></i><span class="content">Date and Time</span>
+            <li title="Poll type">
+                {# TODO: type dynamisch #}
+                <i class="fa fa-clock-o"></i><span class="content">Date and Time</span>
             </li>
             <li title="Anonymous voting allowed"><i class="fa fa-question-circle"></i><span class="content">anonymous voting</span>
             </li>
         </ul>
         <nav>
             <ul class="poll-tabs">
-                <li class=""><a data-shortcut="g o" href="{% url 'poll' poll.title %}"><i class="fa fa-table"></i>
+                <li class=""><a data-shortcut="g o" href="{% url 'poll' poll.url %}"><i class="fa fa-table"></i>
                     <span>Overview</span></a>
                 </li>
                 <li class=""><a data-shortcut="g a" href="{# TODO #}"><i
                         class="fa fa-comments-o"></i><span>Activity</span></a>
                 </li>
-                <li class=""><a data-shortcut="g s" href="{% url 'poll_edit' poll.title %}"><i class="fa fa-wrench"></i><span>Settings</span></a>
+                <li class=""><a data-shortcut="g s" href="{% url 'poll_edit' poll.url %}"><i class="fa fa-wrench"></i><span>Settings</span></a>
                 </li>
-                <li class="active"><a data-shortcut="g c" href="{% url 'poll_editChoice' poll.title %}"><i
+                <li class="active"><a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
                         class="fa fa-list"></i><span>Choices</span></a>
                 </li>
-                <li class="vote "><a data-shortcut="g v" href="{% url 'poll_vote' poll.title %}"><i
+                <li class="vote "><a data-shortcut="g v" href="{% url 'poll_vote' poll.url %}"><i
                         class="fa fa-check"></i><span>Vote</span></a>
                 </li>
             </ul>

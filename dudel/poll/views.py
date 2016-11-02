@@ -45,6 +45,7 @@ def index(request):
         form = PollCreationForm(request.POST)
         if form.is_valid():
             current_poll = form.save()
+            # TODO: lazy translation
             ChoiceValue(title="yes", icon="", color="#9C6", weight=1, poll=current_poll).save()
             ChoiceValue(title="no", icon="", color="#F96", weight=0, poll=current_poll).save()
             ChoiceValue(title="maybe", icon="", color="#FF6", weight=0.5, poll=current_poll).save()
@@ -125,6 +126,14 @@ def watch(request, poll_url):
 
 
 def edit_choice(request, poll_url):
+    #TODO: doppelung mit oben im index, muss das?
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    if current_poll.type == 'universal':
+        return redirect('poll_editUniversalChoice', current_poll.url)
+    elif current_poll.type == 'date':
+        return redirect('poll_editDateChoice', current_poll.url)
+    else:
+        return redirect('poll_editDTChoiceDate', current_poll.url)
     pass
 
 
@@ -174,13 +183,15 @@ def edit_dt_choice_date(request, poll_url):
             time = DTChoiceCreationTimeForm({'dates': form.cleaned_data['dates']})
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': time,
-                'poll_url': current_poll.url,
+                'poll': current_poll,
+                'step': 2,
             })
     else:
         form = DTChoiceCreationDateForm()
     return TemplateResponse(request, "poll/DTChoiceCreationDate.html", {
         'new_Choice': form,
         'poll': current_poll,
+        'step': 1,
     })
 
 
@@ -200,7 +211,7 @@ def edit_dt_choice_time(request, poll_url):
         form = DTChoiceCreationTimeForm(request.POST)
         if form.is_valid():
             times = form.cleaned_data['times'].split(',')
-            dates = form.cleaned_data['dates'].split(';')
+            dates = form.cleaned_data['dates'].split(',')
 
             return TemplateResponse(request, "poll/DTChoiceCreationCombinations.html", {
                 'times': times,
@@ -225,7 +236,7 @@ def edit_dt_choice_combinations(request, poll_url):
         choices = []
         for combination in chosen_combinations:
             try:
-                choices.append(datetime.strptime(combination, '%Y-%m-%d %H:%M:%S'))
+                choices.append(datetime.strptime(combination, '%Y-%m-%d %H:%M'))
             except ValueError:
                 # at least one invalid time/date has been specified. Redirect to first step
                 return redirect('poll_editDTChoiceDate', current_poll.url)

@@ -1,21 +1,21 @@
 
     <div class="visible-xs visible-sm">
         <ul class="steps">
-            <li class="current"><span>Step 1</span>Days
+            <li class="{% ifequal step 1  %}current{% endifequal %}"><span>Step 1</span>Days
             </li>
-            <li class=""><span>Step 2</span>Times
+            <li class="{% ifequal step 2  %}current{% endifequal %}"><span>Step 2</span>Times
             </li>
-            <li class=""><span>Step 3</span>Combine
+            <li class="{% ifequal step 3  %}current{% endifequal %}"><span>Step 3</span>Combine
             </li>
         </ul>
     </div>
     <div class="hidden-xs hidden-sm">
         <ul class="steps">
-            <li class="current"><span>Step 1</span>Select days
+            <li class="{% ifequal step 1  %}current{% endifequal %}"><span>Step 1</span>Select days
             </li>
-            <li class=""><span>Step 2</span>Select time slots
+            <li class="{% ifequal step 2  %}current{% endifequal %}"><span>Step 2</span>Select time slots
             </li>
-            <li class=""><span>Step 3</span>Choose combinations
+            <li class="{% ifequal step 3  %}current{% endifequal %}"><span>Step 3</span>Choose combinations
             </li>
         </ul>
     </div>

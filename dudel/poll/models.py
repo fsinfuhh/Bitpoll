@@ -27,7 +27,7 @@ class Poll(models.Model):
     """owner_id = models.ForeignKey(Member)"""
 
     # === Extra settings ==
-    due_date = models.DateTimeField()
+    due_date = models.DateTimeField(null=True, blank=True)
     anonymous_allowed = models.BooleanField(default=True)
     public_listening = models.BooleanField(default=False)
     require_login = models.BooleanField(default=False)
