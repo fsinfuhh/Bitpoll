@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
@@ -260,15 +261,32 @@ def edit_universal_choice(request, poll_url):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     if request.method == 'POST':
-        form = UniversalChoiceCreationForm(request.POST)
-        if form.is_valid():
-            choice = Choice(text=form.cleaned_data['text'], poll=current_poll)
+        # save new choices
+        choice_texts = request.POST.getlist('choice_text')
+        for choice_text in choice_texts:
+            choice_text = choice_text.strip()
+            if choice_text == '':
+                continue
+            choice = Choice(text=choice_text, poll=current_poll)
             choice.save()
-            return redirect('poll', poll_url)
-    else:
-        form = UniversalChoiceCreationForm()
+
+        # update existing choices
+        pattern = re.compile(r'^choice_text_(\d+)$')
+        for choice_id in request.POST.keys():
+            choice = pattern.match(choice_id)
+            if not choice:
+                continue
+            pk = choice.group(1)
+            db_choice = get_object_or_404(Choice, poll=current_poll, pk=pk)
+            choice_text = request.POST.get(choice_id).strip()
+            if choice_text == '':
+                db_choice.delete()
+            else:
+                db_choice.text = choice_text
+                db_choice.save()
+        return redirect('poll', poll_url)
     return TemplateResponse(request, "poll/UniversalChoiceCreation.html", {
-        'new_Choice': form
+        'choices': current_poll.choice_set.all(),
     })
 
 
