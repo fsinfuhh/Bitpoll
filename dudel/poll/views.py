@@ -332,19 +332,15 @@ def vote(request, poll_url):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     if request.method == 'POST':
+        current_vote = Vote(
+            date_created=datetime.now(), comment=request.POST.get('comment'),
+            poll=current_poll)
         if request.user.is_authenticated():
-            current_vote = Vote(name=request.user.get_username(),
-                                date_created=datetime.now(),
-                                comment=request.POST['comment'],
-                                poll=current_poll,
-                                user=request.user)
+            current_vote.name = request.user.get_username(),
+            current_vote.user = request.user
         else:
-            current_vote = Vote(name=request.POST['name'],
-                                anonymous='anonymous' in request.POST,
-                                date_created=datetime.now(),
-                                comment=request.POST['comment'],
-                                poll=current_poll,
-                                user=request.user)
+            current_vote.name = request.POST.get('name')
+            current_vote.anonymous = 'anonymous' in request.POST
         current_vote.save()
 
         for choice in current_poll.choice_set.all():
