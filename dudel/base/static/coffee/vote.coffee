@@ -23,9 +23,9 @@ $ ->
     $(".vote-choice-form").hide();
 
     # Apply checked radio states to table cells
-    $(".vote-choice-radio:checked").each ->
-        val = $(this).val()
-        $(this).closest("tr").find("[data-choice=\"#{val}\"]").removeClass("off");
+    #$(".vote-choice-radio:checked").each ->
+    #    val = $(this).val()
+    #    $(this).closest("tr").find("[data-choice=\"#{val}\"]").removeClass("off");
 
     # Buttons: "Show comment field"
     $(".vote-choice-edit").click showComment
@@ -40,8 +40,9 @@ $ ->
     # Hide comment fields, but show those that do have input
     $(".vote-comment .vote-choice-comment").hide()
 
-    $(".vote-comment input[value!=\"\"]").each ->
+    $(".vote-comment input[value!=\"\"]").each -> # TODO: hier klapt etwas nicht
         showComment.call($(this).closest(".vote-comment").find(".vote-choice-edit"))
+        showComment.call($(this).closest(".vote-comment").find(".vote-choice-comment"))
 
     # Button: "all" (selecting the whole column)
     $(".vote-choice-column").click ->

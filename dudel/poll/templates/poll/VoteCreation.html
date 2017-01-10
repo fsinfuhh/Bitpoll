@@ -4,36 +4,78 @@
 
 {% block content %}
     <form action="{% url 'poll_vote' poll.url %}" method="POST">{% csrf_token %}
-        {% for choice in choices.all %}
-            {% if poll.type == universal %}
-                <label> {{ choice.text }}</label>
-            {% elif poll.type == datetime%}
-                <label> {{ choice.date.date }} </label>
-            {% else %}
-                <label> {{ choice.date }} </label>
-            {% endif %}
+        <table class="table poll vote auto-width">
+            {% for choice in choices.all %}
 
-            {% for value in values.all %}
-                <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="" /> {{ value.title }}
+                <tr data-vote-choice="{{ choice.id }}">
+                    <td class="choice-group">
+                        {% if poll.type == universal %}
+                            <label> {{ choice.text }}</label>
+                        {% elif poll.type == datetime %}
+                            <label> {{ choice.date.date }} </label>
+                        {% else %}
+                            <label> {{ choice.date }} </label>
+                        {% endif %}
+                    </td>
+                    <td class="vote-choice-form">
+                        {% for value in values.all %}
+                            <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title=""/>
+                            {{ value.title }}
+                        {% endfor %}</td>
+                    {% for value in values.all %}
+                        <td class="vote-choice control off script-only"
+                            data-choice="{{ value.id }}" title="{{ value.title }}"
+                            style="background-color: {{ value.color }}">
+                            <span class="fa fa-{{ value.icon }}"></span></td>
+                    {% endfor %}
+                    <td class="vote-comment">
+                        <div class="script-only">
+                            <button class="btn btn-sm btn-default vote-choice-edit" title="{{ _('Add a comment') }}"><i
+                                    class="fa fa-comment-o"></i></button>
+                        </div>
+                        <input type="text" class="vote-choice-comment" name="comment_{{ choice.id }}" title=""/>
+                    </td>
+                </tr>
             {% endfor %}
-            <input type="text" name="comment_{{ choice.id }}" title="" />
-            <br />
-        {% endfor %}
+            <tr>
+                <td colspan="6">
+                    <hr/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <label for="name">Your name:</label>
+                </td>
+                <td colspan="4">
+                    {% if request.user.is_authenticated %}
+                        <input type="text" name="name" title="Your name:" value="{{ request.user.username }}" readonly/>
+                    {% else %}
+                        <input type="text" name="name" title="Your name:"/>
+                    {% endif %}
+                    <br>
+                    <input type="checkbox" name="anonymous" title="Post anonymous vote" value="true"/> Post anonymous
+                    vote <br/>
 
-        <label>Your name:</label>
-        {% if request.user.is_authenticated %}
-            <input type="text" name="name" title="Your name:" value="{{ request.user.username }}" readonly />
-        {% else %}
-            <input type="text" name="name" title="Your name:" />
-        {% endif %}
-        <br />
-
-        <input type="checkbox" name="anonymous" title="Post anonymous vote" value="true" /> Post anonymous vote <br />
-
-        <label>Comment:</label>
-        <textarea title="Comment:" name="comment" cols="40" rows="5"></textarea><br />
-        <input type="submit" name="submit" value="Vote" />
-
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <label for="comment">Comment:</label>
+                    <span class="help-inline">(optional)</span>
+                </td>
+                <td colspan="4">
+                    <textarea title="Comment:" name="comment" cols="40" rows="5"></textarea><br/>
+            </tr>
+            <tr>
+                <td colspan="1"></td>
+                <td colspan="4">
+                    <button class="action primary block" type="submit" name="submit" value="Vote">
+                        <i class="fa fa-check"></i>
+                        <span>Save vote</span>
+                    </button>
+                </td>
+            </tr>
+        </table>
     </form>
 
 
