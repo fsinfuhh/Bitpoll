@@ -47,10 +47,11 @@ def index(request):
         if form.is_valid():
             current_poll = form.save()
             # TODO: lazy translation
-            ChoiceValue(title="yes", icon="", color="#9C6", weight=1, poll=current_poll).save()
-            ChoiceValue(title="no", icon="", color="#F96", weight=0, poll=current_poll).save()
-            ChoiceValue(title="maybe", icon="", color="#FF6", weight=0.5, poll=current_poll).save()
-            ChoiceValue(title="don't know yet", icon="", color="#FF6", weight=0.5, poll=current_poll).save()
+            # TODO: load from config
+            ChoiceValue(title="yes", icon="check", color="90db46", weight=1, poll=current_poll).save()
+            ChoiceValue(title="no", icon="ban", color="c43131", weight=0, poll=current_poll).save()
+            ChoiceValue(title="maybe", icon="check", color="ffe800", weight=0.5, poll=current_poll).save()
+            ChoiceValue(title="Only if absolutely necessary", icon="thumbs-down", color="B0E", weight=0.25, poll=current_poll).save()
 
             if current_poll.type == 'universal':
                 return redirect('poll_editUniversalChoice', current_poll.url)
@@ -343,14 +344,16 @@ def vote(request, poll_url):
             current_vote.anonymous = 'anonymous' in request.POST
         current_vote.save()
 
+        new_choices = []
         for choice in current_poll.choice_set.all():
-            choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
-            current_choice = VoteChoice(value_id=choice_value,
-                                        vote_id=current_vote,
-                                        choice_id=choice,
-                                        comment=request.POST['comment_' + str(choice.id)])
-            current_choice.save()
+            if str(choice.id) in request.POST:
 
+                choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+                new_choices.append(VoteChoice(value_id=choice_value,
+                                            vote_id=current_vote,
+                                            choice_id=choice,
+                                            comment=request.POST['comment_' + str(choice.id)]))
+        VoteChoice.objects.bulk_create(new_choices)
         return redirect('poll', poll_url)
 
     else:
