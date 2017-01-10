@@ -28,6 +28,7 @@ def poll(request, poll_url):
 
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
+        'page': '',
     })
 
 
@@ -360,7 +361,8 @@ def vote(request, poll_url):
         return TemplateResponse(request, 'poll/VoteCreation.html', {
             'poll': current_poll,
             'choices': current_poll.choice_set,
-            'values': current_poll.choicevalue_set
+            'values': current_poll.choicevalue_set,
+            'page': 'Vote'
         })
 
 
@@ -411,7 +413,8 @@ def vote_edit(request, poll_url, vote_id):
             'choices': current_poll.choice_set,
             'values': current_poll.choicevalue_set,
             'vote': current_vote,
-            'vote_choices': vote_choices
+            'vote_choices': vote_choices,
+            'page': 'Vote',
         })
 
 

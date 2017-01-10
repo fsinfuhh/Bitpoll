@@ -2,8 +2,8 @@
     <div class="container">
         <div class="poll-actions">
         </div>
-        <h1>fdd
-            <small>Choices</small>
+        <h1>{{ poll.title }}
+            <small>{{ page }}</small>
         </h1>
         <ul class="poll-details">
             <li title="Creation date: {{ poll.created }}"><i class="fa fa-calendar"></i><span class="content">Wed, 27 Jul</span>
@@ -17,18 +17,20 @@
         </ul>
         <nav>
             <ul class="poll-tabs">
-                <li class=""><a data-shortcut="g o" href="{% url 'poll' poll.url %}"><i class="fa fa-table"></i>
+                <li class="{% if page == "" %}active{% endif %}"><a data-shortcut="g o" href="{% url 'poll' poll.url %}"><i class="fa fa-table"></i>
                     <span>Overview</span></a>
                 </li>
-                <li class=""><a data-shortcut="g a" href="{# TODO #}"><i
+                <li class="{% if page == "Activity" %}active{% endif %}"><a data-shortcut="g a" href="{# TODO #}"><i
                         class="fa fa-comments-o"></i><span>Activity</span></a>
                 </li>
-                <li class=""><a data-shortcut="g s" href="{% url 'poll_edit' poll.url %}"><i class="fa fa-wrench"></i><span>Settings</span></a>
+                <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s" href="{% url 'poll_edit' poll.url %}">
+                    <i class="fa fa-wrench"></i><span>Settings</span></a>
                 </li>
-                <li class="active"><a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
+                <li class="{% if page == "Choices" %}active{% endif %}">
+                    <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
                         class="fa fa-list"></i><span>Choices</span></a>
                 </li>
-                <li class="vote "><a data-shortcut="g v" href="{% url 'poll_vote' poll.url %}"><i
+                <li class="vote {% if page == "Choices" %}active{% endif %}"><a data-shortcut="g v" href="{% url 'poll_vote' poll.url %}"><i
                         class="fa fa-check"></i><span>Vote</span></a>
                 </li>
             </ul>

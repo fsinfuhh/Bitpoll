@@ -3,10 +3,19 @@
 {% block title %}Dudel Index{% endblock %}
 
 {% block content %}
+    {% include 'poll/poll_haeder.html' %}
     <form action="{% url 'poll_vote' poll.url %}" method="POST">{% csrf_token %}
         <table class="table poll vote auto-width">
-            {% for choice in choices.all %}
+            <tr>
+                <td colspan="1"></td>
 
+                {% for value in values.all %}
+                    <td>
+                        <span class="vote-header">{{ value.title }}</span>
+                    </td>
+                {% endfor %}
+            </tr>
+            {% for choice in choices.all %}
                 <tr data-vote-choice="{{ choice.id }}">
                     <td class="choice-group">
                         {% if poll.type == universal %}
