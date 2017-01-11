@@ -34,20 +34,20 @@
                         {# TODO: {% if show_votes or (not current_user.is_anonymous() and vote.user == current_user) #}
                         <tr class="vote {% if not request.user.is_anonymous and vote.user == request.user %} mine{% endif %}"
                                 {# TODO: is_annonymos #}
-                            data-author="{{ vote.displayname|force_escape|force_escape }}">
+                            data-author="{{ vote.name|force_escape|force_escape }}">
                             <td class="author"
                                 data-toggle="popover"
                                 data-trigger="hover"
                                 data-container="body"
-                                data-title="{{ vote.displayname|force_escape|force_escape }}"
+                                data-title="{{ vote.name|force_escape|force_escape }}"
                                 data-content="
-                                    {{ vote.created|date }}
+                                    {{ vote.date_created|date }}
                                     {% if vote.comment %}
                                         <div class='comment'>{{ vote.comment|force_escape|force_escape }}</div>
                                     {% endif %}
                                     {% if vote.assigned %}
                                     <div class='assigned'>
-                                        {% blocktrans %}Assigned after voting by {{ vote.assigned_by.displayname|force_escape|force_escape }} {% endblocktrans %}</div>
+                                        {% blocktrans %}Assigned after voting by {{ vote.assigned_by.name|force_escape|force_escape }} {% endblocktrans %}</div>
                                     {% endif %}">
                                 {% if vote.comment or vote.assigned %}
                                     <div class="pull-left" style="margin-right: 0.4em;">
@@ -69,15 +69,11 @@
                                     data-toggle="popover"
                                     data-trigger="hover"
                                     data-container="body"
-                                    data-title="{{ choice.title|force_escape|force_escape }}"
+                                    data-title="{{ vote_choice.choice|force_escape|force_escape }}"
                                     data-content="
-
-
-
-                                            {{ vote.displayname|force_escape|force_escape }}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
+                                            {{ vote.name|force_escape|force_escape }}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
                                     data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
-                                    <span class="fa fa-{% if vote_choice.value %}
-                                        {{ vote_choice.value }}{% else %}question{% endif %}"></span>
+                                    <span class="fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
                                 </td>
                             {% endfor %}
                             <td class="noprint vote-actions">

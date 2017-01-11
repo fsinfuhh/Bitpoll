@@ -100,7 +100,7 @@ class Choice(models.Model):
         if self.poll.type == 'universal':
             return self.text
         else:
-            return self.text
+            return str(self.date)
 
     def get_hierarchy(self):
         if self.date:
