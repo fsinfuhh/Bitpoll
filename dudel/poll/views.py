@@ -6,8 +6,6 @@ from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, Unive
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment
 from datetime import datetime
 
-# Create your views here.
-
 
 def poll(request, poll_url):
     """
@@ -155,7 +153,7 @@ def edit_date_choice(request, poll_url):
         form = DateChoiceCreationForm(request.POST)
         if form.is_valid():
             for i, datum in enumerate(sorted(form.cleaned_data['dates'].split(";"))):
-                choice = Choice(text="", date=datum, poll=current_poll, sort_id=i)
+                choice = Choice(text="", date=datum, poll=current_poll, sort_key=i)
                 choice.save()
             return redirect('poll', poll_url)
     else:
@@ -250,7 +248,7 @@ def edit_dt_choice_combinations(request, poll_url):
         # all combinations have been valid. save choices to database.
         for i, choice in enumerate(sorted(choices)):
             Choice.objects.create(
-                date=choice, poll=current_poll, sort_id=i)
+                date=choice, poll=current_poll, sort_key=i)
         return redirect('poll', current_poll.url)
     return redirect('poll_editDTChoiceDate', current_poll.url)
 
@@ -356,9 +354,9 @@ def vote(request, poll_url):
             if str(choice.id) in request.POST:
 
                 choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
-                new_choices.append(VoteChoice(value_id=choice_value,
-                                            vote_id=current_vote,
-                                            choice_id=choice,
+                new_choices.append(VoteChoice(value=choice_value,
+                                            vote=current_vote,
+                                            choice=choice,
                                             comment=request.POST['comment_' + str(choice.id)]))
         VoteChoice.objects.bulk_create(new_choices)
         return redirect('poll', poll_url)
@@ -401,9 +399,9 @@ def vote_edit(request, poll_url, vote_id):
         current_vote.save()
 
         for choice in current_poll.choice_set.all():
-            current_choice = get_object_or_404(VoteChoice, vote_id=vote_id, choice_id=choice.id)
+            current_choice = get_object_or_404(VoteChoice, vote=vote_id, choice=choice.id)
             value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
-            current_choice.value_id = value
+            current_choice.value = value
             current_choice.comment = request.POST['comment_' + str(choice.id)]
 
             current_choice.save()
@@ -413,8 +411,8 @@ def vote_edit(request, poll_url, vote_id):
     else:
         vote_choices = []
         for choice in current_poll.choice_set.all():
-            vote_choice = get_object_or_404(VoteChoice, vote_id=vote_id, choice_id=choice.id)
-            vote_choices.append((choice, current_poll.choicevalue_set.all(), vote_choice.comment, vote_choice.value_id))
+            vote_choice = get_object_or_404(VoteChoice, vote=vote_id, choice=choice.id)
+            vote_choices.append((choice, current_poll.choicevalue_set.all(), vote_choice.comment, vote_choice.value))
 
         return TemplateResponse(request, 'poll/VoteEdit.html', {
             'poll': current_poll,
@@ -515,3 +513,7 @@ def copy(request, poll_url):
         'new_Poll': form,
         'poll': poll_url
     })
+
+
+def transpose(matrix):
+    return [list(i) for i in zip(*matrix)]

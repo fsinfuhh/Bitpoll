@@ -54,7 +54,7 @@ class Poll(models.Model):
     def get_choice_group_matrix(self):
         matrix = [
             choice.get_hierarchy() for choice in self.choice_set.all().order_by(
-                'sort_id')]
+                'sort_key')]
         matrix = [[[item, 1, 1] for item in row] for row in matrix]
         width = max(len(row) for row in matrix)
 
@@ -89,12 +89,12 @@ class Poll(models.Model):
 
 class Choice(models.Model):
     class Meta:
-        unique_together = [('poll', 'sort_id')]
+        unique_together = [('poll', 'sort_key')]
 
     text = models.CharField(max_length=80)
     date = models.DateTimeField(null=True, blank=True)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    sort_id = models.IntegerField()
+    sort_key = models.IntegerField()
 
     def __str__(self):
         if self.poll.type == 'universal':
@@ -146,7 +146,7 @@ class Vote(models.Model):
     anonymous = models.BooleanField(default=False)
     date_created = models.DateTimeField()
     comment = models.TextField()
-    assigned_by_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='assigning')
+    assigned_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='assigning')
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     # TODO allow null for user -> vote creation possible
@@ -156,13 +156,13 @@ class Vote(models.Model):
 
 
 class VoteChoice(models.Model):
-    comment = models.TextField()
-    value_id = models.ForeignKey(ChoiceValue, on_delete=models.CASCADE)
-    vote_id = models.ForeignKey(Vote, on_delete=models.CASCADE)
-    choice_id = models.ForeignKey(Choice, on_delete=models.CASCADE)
-
     class Meta:
-        unique_together = ('vote_id', 'choice_id')
+        unique_together = ('vote', 'choice')
+
+    comment = models.TextField()
+    value = models.ForeignKey(ChoiceValue, on_delete=models.CASCADE)
+    vote = models.ForeignKey(Vote, on_delete=models.CASCADE)
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
 
     def __str__(self):
         return u'VoteChoice {}'.format(self.id)
