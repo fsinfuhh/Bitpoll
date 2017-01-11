@@ -6,6 +6,7 @@ from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, Unive
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment
 from datetime import datetime
 
+
 # Create your views here.
 
 
@@ -26,9 +27,14 @@ def poll(request, poll_url):
         new_comment.save()
         # return redirect('poll', poll_url)
 
+    poll_votes = Vote.objects.filter(poll=current_poll).order_by(
+        'name').select_related()
+        # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
+
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
         'page': '',
+        'votes': poll_votes,
     })
 
 
@@ -52,7 +58,8 @@ def index(request):
             ChoiceValue(title="yes", icon="check", color="90db46", weight=1, poll=current_poll).save()
             ChoiceValue(title="no", icon="ban", color="c43131", weight=0, poll=current_poll).save()
             ChoiceValue(title="maybe", icon="check", color="ffe800", weight=0.5, poll=current_poll).save()
-            ChoiceValue(title="Only if absolutely necessary", icon="thumbs-down", color="B0E", weight=0.25, poll=current_poll).save()
+            ChoiceValue(title="Only if absolutely necessary", icon="thumbs-down", color="B0E", weight=0.25,
+                        poll=current_poll).save()
 
             if current_poll.type == 'universal':
                 return redirect('poll_editUniversalChoice', current_poll.url)
@@ -129,7 +136,7 @@ def watch(request, poll_url):
 
 
 def edit_choice(request, poll_url):
-    #TODO: doppelung mit oben im index, muss das?
+    # TODO: doppelung mit oben im index, muss das?
     current_poll = get_object_or_404(Poll, url=poll_url)
     if current_poll.type == 'universal':
         return redirect('poll_editUniversalChoice', current_poll.url)
@@ -353,12 +360,11 @@ def vote(request, poll_url):
         new_choices = []
         for choice in current_poll.choice_set.all():
             if str(choice.id) in request.POST:
-
                 choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
                 new_choices.append(VoteChoice(value_id=choice_value,
-                                            vote_id=current_vote,
-                                            choice_id=choice,
-                                            comment=request.POST['comment_' + str(choice.id)]))
+                                              vote_id=current_vote,
+                                              choice_id=choice,
+                                              comment=request.POST['comment_' + str(choice.id)]))
         VoteChoice.objects.bulk_create(new_choices)
         return redirect('poll', poll_url)
 
