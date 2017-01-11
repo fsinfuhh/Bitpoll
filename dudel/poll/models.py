@@ -160,7 +160,7 @@ class VoteChoice(models.Model):
         unique_together = ('vote', 'choice')
 
     comment = models.TextField()
-    value = models.ForeignKey(ChoiceValue, on_delete=models.CASCADE)
+    value = models.ForeignKey(ChoiceValue, on_delete=models.CASCADE, null=True, blank=True)
     vote = models.ForeignKey(Vote, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
 
