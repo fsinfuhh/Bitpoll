@@ -362,10 +362,12 @@ def vote(request, poll_url):
         for choice in current_poll.choice_set.all():
             if str(choice.id) in request.POST:
                 choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
-                new_choices.append(VoteChoice(value=choice_value,
-                                              vote=current_vote,
-                                              choice=choice,
-                                              comment=request.POST['comment_' + str(choice.id)]))
+            else:
+                choice_value = None
+            new_choices.append(VoteChoice(value=choice_value,
+                                          vote=current_vote,
+                                          choice=choice,
+                                          comment=request.POST['comment_' + str(choice.id)]))
         VoteChoice.objects.bulk_create(new_choices)
         return redirect('poll', poll_url)
 

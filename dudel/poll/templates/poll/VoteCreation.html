@@ -32,7 +32,7 @@
                     {% for value in values.all %}
                         <td class="vote-choice control off script-only"
                             data-choice="{{ value.id }}" title="{{ value.title }}"
-                            style="background-color: {{ value.color }}">
+                            style="background-color: #{{ value.color }}">
                             <span class="fa fa-{{ value.icon }}"></span></td>
                     {% endfor %}
                     <td class="vote-comment">
