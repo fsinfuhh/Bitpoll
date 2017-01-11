@@ -22,8 +22,8 @@ class PartialDateTime(object):
 
     def format(self):
         if self.part == DateTimePart.date:
-            return date_format(self.datetime, format='N j. n. Y')
+            return date_format(self.datetime, format='D, j. N Y')
         elif self.part == DateTimePart.time:
             return date_format(self.datetime, format='H:i')
         elif self.part == DateTimePart.datetime:
-            return date_format(self.datetime, format='N j. n. Y H:i')
+            return date_format(self.datetime, format='D, j. N Y H:i')
