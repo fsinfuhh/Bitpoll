@@ -2,12 +2,14 @@
 {% load i18n %}
 {% load poll_filter %}
 
-{% block title %}Dudel Index{% endblock %}
+{% block title %}Dudel - Poll {{ poll.title }}{% endblock %}
 
 {% block content %}
+    <div class="container">
+
     {% include 'poll/poll_haeder.html' %}
 
-    <form action="{% url 'poll' poll.url %}" method="POST">
+    <form action="{% url 'poll' poll.url %}" method="POST" class="form-inline">
         {% csrf_token %}
 
         <!-- TODO efficiency of listing of all votes by real sql-statement -->
@@ -166,4 +168,5 @@
             <br/>
         {% endfor %}
     </form>
+    </div>
 {% endblock %}
