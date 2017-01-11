@@ -4,3 +4,4 @@ db.sqlite3
 *.pyc
 .gen
 **.sass-cache
+**.swp

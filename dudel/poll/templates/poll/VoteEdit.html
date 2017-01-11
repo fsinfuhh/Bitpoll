@@ -6,7 +6,7 @@
      vote: current vote to be edited
      choices: list of all possible choices
      values: list of all possible ChoiceValues of the current poll
-     vote_choices: dictionary (choice_id, VoteChoice) of all voteChoices belonging to the current vote -->
+     vote_choices: dictionary (choice, VoteChoice) of all voteChoices belonging to the current vote -->
 {% block content %}
     <form action="{% url 'poll_voteEdit' poll.url vote.id %}" method="POST">{% csrf_token %}
         <!--{% for choice in choices.all %}
@@ -20,7 +20,7 @@
 
             {% with choice as key %}
                 {% for value in values.all %}
-                    {% if value.id == vote_choices.key.value_id %}
+                    {% if value.id == vote_choices.key.value %}
                         <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="" checked /> {{ value.title }}
                     {% else %}
                         <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title="" /> {{ value.title }}
