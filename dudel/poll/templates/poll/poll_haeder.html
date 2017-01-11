@@ -6,31 +6,48 @@
             <small>{{ page }}</small>
         </h1>
         <ul class="poll-details">
-            <li title="Creation date: {{ poll.created }}"><i class="fa fa-calendar"></i><span class="content">Wed, 27 Jul</span>
+            <li title="Creation date: {{ poll.created }}">
+                <i class="fa fa-calendar"></i>
+                <span class="content">{{ poll.created }}</span>
             </li>
+            {% if poll.due_date %}
+                <li title="Due Date">
+                <i class="fa fa-clock-o"></i>
+                <span class="content">poll.due_date</span>
+                </li>
+            {% endif %}
             <li title="Poll type">
-                {# TODO: type dynamisch #}
-                <i class="fa fa-clock-o"></i><span class="content">Date and Time</span>
+                <i class="fa fa-{{ poll.get_icon }}"></i>
+                <span class="content">{{ poll.get_type_display }}</span>
             </li>
-            <li title="Anonymous voting allowed"><i class="fa fa-question-circle"></i><span class="content">anonymous voting</span>
+        <!-- TODO: Owner -->
+            {% if poll.anonymous_allowed %}
+                <li title="Anonymous voting allowed"><i class="fa fa-question-circle"></i>
+                <span class="content">anonymous voting</span>
+            {% endif %}
             </li>
+        <!-- TODO: require_invitation, require_login, watching_poll -->
         </ul>
         <nav>
             <ul class="poll-tabs">
-                <li class="{% if page == "" %}active{% endif %}"><a data-shortcut="g o" href="{% url 'poll' poll.url %}"><i class="fa fa-table"></i>
+                <li class="{% if page == "" %}active{% endif %}"><a data-shortcut="g o"
+                                                                    href="{% url 'poll' poll.url %}"><i
+                        class="fa fa-table"></i>
                     <span>Overview</span></a>
                 </li>
                 <li class="{% if page == "Activity" %}active{% endif %}"><a data-shortcut="g a" href="{# TODO #}"><i
                         class="fa fa-comments-o"></i><span>Activity</span></a>
                 </li>
-                <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s" href="{% url 'poll_edit' poll.url %}">
+                <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s"
+                                                                            href="{% url 'poll_edit' poll.url %}">
                     <i class="fa fa-wrench"></i><span>Settings</span></a>
                 </li>
                 <li class="{% if page == "Choices" %}active{% endif %}">
                     <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
-                        class="fa fa-list"></i><span>Choices</span></a>
+                            class="fa fa-list"></i><span>Choices</span></a>
                 </li>
-                <li class="vote {% if page == "Choices" %}active{% endif %}"><a data-shortcut="g v" href="{% url 'poll_vote' poll.url %}"><i
+                <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
+                                                                             href="{% url 'poll_vote' poll.url %}"><i
                         class="fa fa-check"></i><span>Vote</span></a>
                 </li>
             </ul>

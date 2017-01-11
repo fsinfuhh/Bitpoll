@@ -42,6 +42,15 @@ class Poll(models.Model):
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
+    def get_icon(self):
+        if self.type == 'universal':
+            return 'list'
+        if self.type == 'datetime':
+            return 'clock-o'
+        if self.type == 'date':
+            return 'calendar'
+
+
 
 class Choice(models.Model):
     text = models.CharField(max_length=80)

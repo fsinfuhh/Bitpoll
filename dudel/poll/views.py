@@ -161,7 +161,9 @@ def edit_date_choice(request, poll_url):
     else:
         form = DateChoiceCreationForm()
     return TemplateResponse(request, "poll/DateChoiceCreation.html", {
-        'new_Choice': form
+        'poll': current_poll,
+        'new_Choice': form,
+        'page': 'Choices',
     })
 
 
@@ -195,6 +197,7 @@ def edit_dt_choice_date(request, poll_url):
         'new_Choice': form,
         'poll': current_poll,
         'step': 1,
+        'page': 'Choices',
     })
 
 
@@ -289,6 +292,8 @@ def edit_universal_choice(request, poll_url):
         return redirect('poll', poll_url)
     return TemplateResponse(request, "poll/UniversalChoiceCreation.html", {
         'choices': current_poll.choice_set.all(),
+        'poll': current_poll,
+        'page': 'Choices',
     })
 
 
