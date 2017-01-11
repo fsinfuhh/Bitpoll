@@ -154,8 +154,8 @@ def edit_date_choice(request, poll_url):
     if request.method == 'POST':
         form = DateChoiceCreationForm(request.POST)
         if form.is_valid():
-            for datum in form.cleaned_data['dates'].split(";"):
-                choice = Choice(text="", date=datum, poll=current_poll)
+            for i, datum in enumerate(sorted(form.cleaned_data['dates'].split(";"))):
+                choice = Choice(text="", date=datum, poll=current_poll, sort_id=i)
                 choice.save()
             return redirect('poll', poll_url)
     else:
@@ -248,8 +248,9 @@ def edit_dt_choice_combinations(request, poll_url):
                 return redirect('poll_editDTChoiceDate', current_poll.url)
 
         # all combinations have been valid. save choices to database.
-        for choice in choices:
-            Choice(date=choice, poll=current_poll).save()
+        for i, choice in enumerate(sorted(choices)):
+            Choice.objects.create(
+                date=choice, poll=current_poll, sort_id=i)
         return redirect('poll', current_poll.url)
     return redirect('poll_editDTChoiceDate', current_poll.url)
 
@@ -365,9 +366,11 @@ def vote(request, poll_url):
     else:
         return TemplateResponse(request, 'poll/VoteCreation.html', {
             'poll': current_poll,
-            'choices': current_poll.choice_set,
-            'values': current_poll.choicevalue_set,
-            'page': 'Vote'
+            'matrix': current_poll.get_choice_group_matrix(),
+            'choices_matrix': zip(current_poll.get_choice_group_matrix(), current_poll.choice_set.all()),
+            'choices': current_poll.choice_set.all(),
+            'values': current_poll.choicevalue_set.all(),
+            'page': 'Vote',
         })
 
 

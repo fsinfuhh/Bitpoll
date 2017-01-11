@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import Group, User
 
-# Create your models here.
+from dudel.poll.util import DateTimePart, PartialDateTime
+
 
 POLL_TYPES = (
     ('universal', 'Universal'),
@@ -50,18 +51,63 @@ class Poll(models.Model):
         if self.type == 'date':
             return 'calendar'
 
+    def get_choice_group_matrix(self):
+        matrix = [
+            choice.get_hierarchy() for choice in self.choice_set.all().order_by(
+                'sort_id')]
+        matrix = [[[item, 1, 1] for item in row] for row in matrix]
+        width = max(len(row) for row in matrix)
+
+        def fill(row, length):
+            if len(row) >= length: return
+            row.append([None, 1, 1])
+            fill(row, length)
+
+        for row in matrix:
+            fill(row, width)
+
+        # Merge None left to determine depth
+        for i in range(width-1, 0, -1):
+            for row in matrix:
+                if row[i][0] is None:
+                    row[i-1][1] = row[i][1] + 1
+
+        # Merge items up and replace by None
+        for i in range(len(matrix)-1, 0, -1):
+            for j in range(width):
+                if matrix[i][j][0] == matrix[i-1][j][0] and matrix[i][j][1] == matrix[i-1][j][1]:
+                    matrix[i-1][j][2] = matrix[i][j][2] + 1
+                    matrix[i][j][0] = None
+
+        # cut off time column in day mode, only use date field
+        if self.type == 'date':
+            matrix = [[row[0]] for row in matrix]
+
+        return matrix
+
 
 
 class Choice(models.Model):
+    class Meta:
+        unique_together = [('poll', 'sort_id')]
+
     text = models.CharField(max_length=80)
     date = models.DateTimeField(null=True, blank=True)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    sort_id = models.IntegerField()
 
     def __str__(self):
         if self.poll.type == 'universal':
             return self.text
         else:
             return self.text
+
+    def get_hierarchy(self):
+        if self.date:
+            return [PartialDateTime(self.date, DateTimePart.date),
+                    PartialDateTime(self.date, DateTimePart.time)]
+        else:
+            return [part.strip() for part in self.text.split("/") if part]
 
 
 class ChoiceValue(models.Model):

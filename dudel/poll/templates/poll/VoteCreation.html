@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load poll_filter %}
 
 {% block title %}Dudel Index{% endblock %}
 
@@ -7,25 +8,22 @@
     <form action="{% url 'poll_vote' poll.url %}" method="POST">{% csrf_token %}
         <table class="table poll vote auto-width">
             <tr>
-                <td colspan="1"></td>
-
+              <td colspan="{% if matrix %}{{ matrix.0|length }}{% else %}1{% endif %}"></td>
                 {% for value in values.all %}
                     <td>
                         <span class="vote-header">{{ value.title }}</span>
                     </td>
                 {% endfor %}
             </tr>
-            {% for choice in choices.all %}
+            {% for row, choice in choices_matrix %}
                 <tr data-vote-choice="{{ choice.id }}">
-                    <td class="choice-group">
-                        {% if poll.type == universal %}
-                            <label> {{ choice.text }}</label>
-                        {% elif poll.type == datetime %}
-                            <label> {{ choice.date.date }} </label>
-                        {% else %}
-                            <label> {{ choice.date }} </label>
-                        {% endif %}
-                    </td>
+                    {% for item in row %}
+                      {% if item.0 != None  %}
+                        <td class="choice-group" colspan="{{ item.1 }}" rowspan="{{ item.2 }}">
+                          {{ item.0|group_title }}
+                        </td>
+                      {% endif %}
+                    {% endfor %}
                     <td class="vote-choice-form">
                         {% for value in values.all %}
                             <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title=""/>
