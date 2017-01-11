@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load poll_filter %}
 
 {% block title %}Dudel Index{% endblock %}
 
@@ -20,7 +21,7 @@
                             {% for item in row %}
                                 {% if item.0 != None %}
                                     <th colspan="{{ item.2 }}" rowspan="{{ item.1 }}" class="choice-group">
-                                        {{ item.0 }}{# |group_title(poll)#}
+                                      {{ item.0|group_title }}
                                     </th>
                                 {% endif %}
                             {% endfor %}
