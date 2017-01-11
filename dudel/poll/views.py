@@ -1,10 +1,12 @@
 import re
 from django.shortcuts import redirect, get_object_or_404
+from django.db.models import F, Sum
 from django.template.response import TemplateResponse
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment
 from datetime import datetime
+from decimal import Decimal
 
 
 def poll(request, poll_url):
@@ -28,12 +30,25 @@ def poll(request, poll_url):
         'name').select_related()
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
+    matrix = transpose(current_poll.get_choice_group_matrix())
+    
+    # aggregate stats for all columns
+    stats = Choice.objects.filter(poll=current_poll).order_by('sort_key').annotate(score=Sum('votechoice__value__weight')).values('score')
+    votes_count = poll_votes.count()
+    
+    # use average for stats
+    stats = [{
+        'score': stat['score'] / Decimal(votes_count) if votes_count > 0 else None,
+        } for stat in stats]
+
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
-        'matrix': transpose(current_poll.get_choice_group_matrix()),
-        'choices_matrix': zip(transpose(current_poll.get_choice_group_matrix()), current_poll.choice_set.all()),
+        'matrix': matrix,
+        'choices_matrix': zip(matrix, current_poll.choice_set.all()),
         'page': '',
         'votes': poll_votes,
+        'stats': stats,
+        'max_score': max(val['score'] for val in stats),
     })
 
 

@@ -11,3 +11,8 @@ def group_title(value):
         return value.format()
     else:
         return value
+
+
+@register.filter
+def percentage(value: int) -> str:
+    return '{0:.1f}%'.format(value * 100)

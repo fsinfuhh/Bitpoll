@@ -105,31 +105,32 @@
 
                     <tfoot>
                     <tr id="scores">
-                        {% comment %} <!-- TODO: -->
-                            {% set total = poll.votes.count() %}
                             <th>
                                 <span class="print-only">
-                                    <b>{{ _("Percent") }}<br/>{{ _("Score") }}</b>
+                                  <b>{% trans 'Percent' %} }}<br />
+                                    {% trans 'Score' %}</b>
                                 </span>
                             </th>
-                            {% set scores, counts, totals, max_score = poll.get_stats() %}
-                            {% for choice in choices %}
-                                <th class="choice-sum {% if scores[choice] == max_score %}maximum{% endif %}"
+                            {#                            {% set scores, counts, totals, max_score = poll.get_stats() %}#}
+                            {% for vote in stats %}
+                                <th class="choice-sum {% if vote.score == max_score %}maximum{% endif %}"
                                     data-toggle="popover" data-trigger="hover" data-container="body"
-                                    data-title="{{ choice.title|forceescape|forceescape }}"
-                                    data-content="{% for choice_value in poll.get_choice_values() %}<div class='value'>{{ counts[choice][choice_value]|forceescape|forceescape }}<i class='fa fa-times'></i><span class='label choice-sum-value-label' style='background-color: #{{ choice_value.color }};'><span class='fa fa-{{ choice_value.icon }}'></span></span>{{ choice_value.title|forceescape|forceescape }}</div>{% endfor %}<div class='score'>{{ _('Score') }}: {{ '%.f' % scores[choice] }}</div>"
+                                    data-title="{{ choice.title|force_escape|force_escape }}"
+                                    {% comment %}TODO:                                    data-content="{% for choice_value in poll.get_choice_values() %}<div class='value'>{{ counts[choice][choice_value]|forceescape|forceescape }}<i class='fa fa-times'></i><span class='label choice-sum-value-label' style='background-color: #{{ choice_value.color }};'><span class='fa fa-{{ choice_value.icon }}'></span></span>{{ choice_value.title|forceescape|forceescape }}</div>{% endfor %}<div class='score'>{% trans 'Score' %}: {{ vote.weight__sum }} {{ '%.f' % scores[choice] }}</div>"
                                     data-placement="top"
-                                    data-score="{{ scores[choice]*1.0/totals[choice] if totals[choice] != 0 else 1 }}">
-
-                                    {% if totals[choice] != 0 %}
-                                        {{ "%.f %%" % (scores[choice]*100.0/totals[choice]) }}
-                                    {% else %}
-                                        N/A
-                                    {% endif %}
-                                    <span class="print-only">{{ '%.f' % scores[choice] }}</span>
+                                                                        data-score="{{ scores[choice]*1.0/totals[choice] if totals[choice] != 0 else 1 }}">
+ {% endcomment %}
+                    {% if vote.score %}
+                      {{ vote.score }}
+                                                                        {% comment %}
+                                                                        {#                      {{ "%.f %%" % (scores[choice]*100.0/totals[choice]) }}#}
+                                                                        {% endcomment %}
+                    {% else %}
+                      N/A
+                                                                          {% endif %}
+                                                                          <span class="print-only">{{ vote.score|percentage }}{# {{ '%.f' % scores[choice] }} #}</span>
                                 </th>
                             {% endfor %}
-                        {% endcomment %}
                         <th class="noprint"></th>
                     </tr>
                     </tfoot>
