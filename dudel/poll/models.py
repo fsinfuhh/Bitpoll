@@ -156,11 +156,6 @@ class Vote(models.Model):
 
 
 class VoteChoice(models.Model):
-    comment = models.TextField()
-    value_id = models.ForeignKey(ChoiceValue, on_delete=models.CASCADE, null=True, blank=True)
-    vote_id = models.ForeignKey(Vote, on_delete=models.CASCADE)
-    choice_id = models.ForeignKey(Choice, on_delete=models.CASCADE)
-
     class Meta:
         unique_together = ('vote', 'choice')
 
