@@ -30,6 +30,8 @@ def poll(request, poll_url):
 
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
+        'matrix': transpose(current_poll.get_choice_group_matrix()),
+        'choices_matrix': zip(transpose(current_poll.get_choice_group_matrix()), current_poll.choice_set.all()),
         'page': '',
         'votes': poll_votes,
     })
@@ -273,11 +275,12 @@ def edit_universal_choice(request, poll_url):
     if request.method == 'POST':
         # save new choices
         choice_texts = request.POST.getlist('choice_text')
-        for choice_text in choice_texts:
+        # TODO: frontend based sorting by user
+        for i, choice_text in enumerate(sorted(choice_texts)):
             choice_text = choice_text.strip()
             if choice_text == '':
                 continue
-            choice = Choice(text=choice_text, poll=current_poll)
+            choice = Choice(text=choice_text, poll=current_poll, sort_key=i)
             choice.save()
 
         # update existing choices
