@@ -1,6 +1,6 @@
 import re
 from django.shortcuts import redirect, get_object_or_404
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Count
 from django.template.response import TemplateResponse
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm
@@ -31,15 +31,24 @@ def poll(request, poll_url):
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
     matrix = transpose(current_poll.get_choice_group_matrix())
-    
+
     # aggregate stats for all columns
-    stats = Choice.objects.filter(poll=current_poll).order_by('sort_key').annotate(score=Sum('votechoice__value__weight')).values('score')
+    stats = Choice.objects.filter(poll=current_poll).order_by('sort_key').annotate(
+        score=Sum('votechoice__value__weight')).values('score', 'id')
     votes_count = poll_votes.count()
-    
+    stats2 = Choice.objects.filter(poll=current_poll).order_by('sort_key').annotate(
+        count=Count('votechoice__value__color')).values('count', 'id', 'votechoice__value__icon',
+                                                        'votechoice__value__color', 'votechoice__value__title')
+    #
     # use average for stats
     stats = [{
-        'score': stat['score'] / Decimal(votes_count) if votes_count > 0 else None,
-        } for stat in stats]
+                 'score': stat['score'] / Decimal(votes_count) if votes_count > 0 else None,
+                 'count': stat['score'],
+                 'choices': [{'count': stat2['count'], 'color': stat2['votechoice__value__color'],
+                              'icon': stat2['votechoice__value__icon'], 'title': stat2['votechoice__value__title']} for
+                             stat2 in stats2 if
+                             stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
+             } for stat in stats]
 
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
