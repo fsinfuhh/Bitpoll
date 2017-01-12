@@ -34,16 +34,18 @@ def poll(request, poll_url):
 
     # aggregate stats for all columns
     stats = Choice.objects.filter(poll=current_poll).order_by('sort_key').annotate(
-        score=Sum('votechoice__value__weight')).values('score', 'id')
+        score=Sum('votechoice__value__weight')).values('score', 'id', 'text')
     votes_count = poll_votes.count()
+    # aggregate stats for the different Choice_Values per column
     stats2 = Choice.objects.filter(poll=current_poll).order_by('sort_key').annotate(
         count=Count('votechoice__value__color')).values('count', 'id', 'votechoice__value__icon',
                                                         'votechoice__value__color', 'votechoice__value__title')
     #
     # use average for stats
     stats = [{
-                 'score': stat['score'] / Decimal(votes_count) if votes_count > 0 else None,
+                 'score': stat['score'] / Decimal(votes_count) if votes_count > 0 else 0,
                  'count': stat['score'],
+                 'text': stat,
                  'choices': [{'count': stat2['count'], 'color': stat2['votechoice__value__color'],
                               'icon': stat2['votechoice__value__icon'], 'title': stat2['votechoice__value__title']} for
                              stat2 in stats2 if
@@ -184,16 +186,17 @@ def edit_date_choice(request, poll_url):
     if request.method == 'POST':
         form = DateChoiceCreationForm(request.POST)
         if form.is_valid():
-            for i, datum in enumerate(sorted(form.cleaned_data['dates'].split(";"))):
+            for i, datum in enumerate(sorted(form.cleaned_data['dates'].split(","))):
                 choice = Choice(text="", date=datum, poll=current_poll, sort_key=i)
                 choice.save()
             return redirect('poll', poll_url)
     else:
         form = DateChoiceCreationForm()
-    return TemplateResponse(request, "poll/DateChoiceCreation.html", {
+    return TemplateResponse(request, "poll/ChoiceCreationDate.html", {
         'poll': current_poll,
         'new_Choice': form,
         'page': 'Choices',
+        'is_dt_choice': False,
     })
 
 
@@ -223,11 +226,12 @@ def edit_dt_choice_date(request, poll_url):
             })
     else:
         form = DTChoiceCreationDateForm()
-    return TemplateResponse(request, "poll/DTChoiceCreationDate.html", {
+    return TemplateResponse(request, "poll/ChoiceCreationDate.html", {
         'new_Choice': form,
         'poll': current_poll,
         'step': 1,
         'page': 'Choices',
+        'is_dt_choice': True,
     })
 
 

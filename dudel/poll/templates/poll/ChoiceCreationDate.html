@@ -12,7 +12,9 @@
     {% include "poll/poll_haeder.html" %}
 
     <div class="container">
-        {% include  "poll/DTChoiceHaeder.html" %}
+        {% if is_dt_choice %}
+            {% include  "poll/DTChoiceHaeder.html" %}
+        {% endif %}
 
         <form action="{{ request.url }}" method="POST" id="date-time-form">
             {% csrf_token %}
