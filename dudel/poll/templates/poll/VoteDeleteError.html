@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Dudel Index{% endblock %}
+{% block title %}{%  value_from_settings SITE_NAME %}{% endblock %}
 
 {% block content %}
     <div class="alert alert-danger"> Deletion not allowed. You are not authenticated. </div>

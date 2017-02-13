@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Dudel{% endblock %}</title>
+    <title>{% block title %}{%  value_from_settings SITE_NAME %}{% endblock %}</title>
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css" media="screen"/>

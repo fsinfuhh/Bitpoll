@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load poll_filter %}
 
-{% block title %}Dudel Index{% endblock %}
+{% block title %}{%  value_from_settings SITE_NAME %}{% endblock %}
 
 {% block content %}
     {% include 'poll/poll_haeder.html' %}

@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load poll_filter %}
 
-{% block title %}Dudel - Poll {{ poll.title }}{% endblock %}
+{% block title %}{{ poll.title }} - {%  value_from_settings SITE_NAME %}{% endblock %}
 
 {% block content %}
     <div class="container">

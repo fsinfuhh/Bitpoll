@@ -2,7 +2,7 @@
 {% load compile_static %}
 {% load static %}
 
-{% block title %}Dudel Index{% endblock %}
+{% block title %}{%  value_from_settings SITE_NAME %}{% endblock %}
 
 {% block css %}
     <link href="{% static 'scss/calendar.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
