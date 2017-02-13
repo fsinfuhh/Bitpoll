@@ -159,8 +159,12 @@
                     kommentierte am
                     <div class="date">{{ comment.date_created }}</div>
 
-                    <div class="edit">
-                        <a href="" title="Kommentar löschen" class="btn btn-default btn-xs"><i class="fa fa-trash-o"></i></a> {# TODO: make it an form#}
+                    <div class="edit">{# TODO: edit #}
+                        {% if not request.user.is_anonymous and request.user == comment.user %}{# TODO: wenn der user admin/owner ist #}
+                        <a href="{% url 'poll_deleteComment' poll.url comment.id %}" title="Kommentar löschen" class="btn btn-default btn-xs">
+                                <i class="fa fa-trash-o"></i>
+                        </a>
+                        {% endif %}
                     </div>
 
                 </div>
