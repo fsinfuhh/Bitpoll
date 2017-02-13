@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{%  value_from_settings SITE_NAME %}{% endblock %}
+{% block title %}Copy poll{% endblock %}
 
 {% block content %}
     <form action="{%  url 'poll_copy' poll %}" method="post">

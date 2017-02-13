@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
+    'ALLOW_CUSTOM_SLUGS',
+    'SITE_NAME',
+]
+
 SITE_NAME = 'Dudel'
 
 # Application definition

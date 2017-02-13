@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{%  value_from_settings SITE_NAME %}{% endblock %}
+{% block title %}Delete {{ poll.title }}{% endblock %}
 
 {% block content %}
     {% if error != "" %}
