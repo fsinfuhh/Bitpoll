@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_NAME = 'Dudel'
 
 # Application definition
 

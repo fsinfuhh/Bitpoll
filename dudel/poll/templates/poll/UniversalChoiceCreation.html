@@ -2,7 +2,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}Dudel Index{% endblock %}
+{% block title %}{%  value_from_settings SITE_NAME %}{% endblock %}
 
 {% block content %}
     <form action="{{ request.url }}" method="POST">
