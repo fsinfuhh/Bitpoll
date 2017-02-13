@@ -3,6 +3,7 @@
 {% load settings_value %}
 
 {%  value_from_settings SITE_NAME as site_name %}
+{%  value_from_settings DEBUG as debug %}
 
 <!DOCTYPE html>
 <html>
@@ -39,7 +40,7 @@
                     <li><a href="/"><i class="fa fa-bars"></i><span>Menu</span></a>
                         <ul class="submenu">
                             <li><a href="https://example.com/" target="_blank"><i class="fa fa-home"></i>Home</a></li>
-                            <li><a href="/"><i class="fa fa-plus"></i>Create poll</a></li>
+                            <li><a href="{% url 'index' %}"><i class="fa fa-plus"></i>Create poll</a></li>
                             <li><a href="/about"><i class="fa fa-question-circle"></i>About</a></li>
                         </ul>
                     </li>
@@ -47,7 +48,7 @@
                     <li><a href="/user/settings"><i class="fa fa-user"></i><span>Account</span></a>
                         <ul class="submenu right">
                             <li><a href="/register"><i class="fa fa-pencil"></i>Register</a></li>
-                            <li><a href="/login"><i class="fa fa-sign-in"></i>Login</a></li>
+                            <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>Login</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -64,11 +65,11 @@
         <div class="container"><a href="/about">About</a><span class="separator"></span><a href="link[1]"
                                                                                            target="_blank">Imprint</a><span
                 class="separator"></span>Current timezone is Europe/Berlin.
-            {% if not DEBUG %} {# TODO #}
-            <div class="footer-warning"><b>Warning!</b> Dudel is configured with <code>DEBUG = True</code> or <code>TESTING
-                = True</code>.
+            {% if debug %}
+                <div class="footer-warning">
+                    <b>Warning!</b> {{ site_name }} is configured with <code>DEBUG = True</code>.
+                </div>
             {% endif %}
-            </div>
         </div>
     </footer>
 </div>

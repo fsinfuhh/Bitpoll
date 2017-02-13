@@ -121,10 +121,11 @@
             </div>
         </div>
     </section>
+    {% if request.user.is_anonymous %}
     <section class="section login">
         <div class="container">
             <div class="halfsize">
-                <form method="POST" action="/login" class="form">
+                <form method="POST" action="{% url 'login' %}" class="form">
                     <h1>Log in</h1>
                     <div style="display:none;">
                         {% csrf_token %}
@@ -144,6 +145,7 @@
             </div>
         </div>
     </section>
+    {% endif %}
     <div class="container">
         <div class="row padded-cells">
             <div class="col-md-4">
