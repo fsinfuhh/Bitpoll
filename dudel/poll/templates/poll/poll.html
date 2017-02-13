@@ -7,10 +7,7 @@
 {% block content %}
     <div class="container">
 
-    {% include 'poll/poll_haeder.html' %}
-
-    <form action="{% url 'poll' poll.url %}" method="POST" class="form-inline">
-        {% csrf_token %}
+        {% include 'poll/poll_haeder.html' %}
 
         <!-- TODO efficiency of listing of all votes by real sql-statement -->
         <div class="table-noscroll-y">
@@ -23,7 +20,7 @@
                             {% for item in row %}
                                 {% if item.0 != None %}
                                     <th colspan="{{ item.2 }}" rowspan="{{ item.1 }}" class="choice-group">
-                                      {{ item.0|group_title }}
+                                        {{ item.0|group_title }}
                                     </th>
                                 {% endif %}
                             {% endfor %}
@@ -35,12 +32,13 @@
                     {% for vote in votes %}
                         {# TODO: {% if show_votes or (not current_user.is_anonymous() and vote.user == current_user) #}
                         <tr class="vote {% if not request.user.is_anonymous and vote.user == request.user %} mine{% endif %}"
-                            {# data-author="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"#}>
+                                {# data-author="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"#}>
                             <td class="author"
                                 data-toggle="popover"
                                 data-trigger="hover"
                                 data-container="body"
-                                data-title="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"
+                                data-title="
+                                        {% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"
                                 data-content="
                                     {{ vote.date_created|date }}
                                     {% if vote.comment %}
@@ -71,8 +69,7 @@
                                     data-trigger="hover"
                                     data-container="body"
                                     data-title="{{ vote_choice.choice|force_escape|force_escape }}"
-                                    data-content="
-                                            {% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
+                                    data-content="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
                                     data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
                                     <span class="fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
                                 </td>
@@ -102,19 +99,19 @@
 
                     <tfoot>
                     <tr id="scores">
-                            <th>
+                        <th>
                                 <span class="print-only">
-                                  <b>{% trans 'Percent' %} }}<br />
-                                    {% trans 'Score' %}</b>
+                                  <b>{% trans 'Percent' %} }}<br/>
+                                      {% trans 'Score' %}</b>
                                 </span>
-                            </th>
-                            {#                            {% set scores, counts, totals, max_score = poll.get_stats() %}#}
-                            {% for choice in stats %}
-                                <th class="choice-sum {% if choice.score == max_score %}maximum{% endif %}"
-                                    data-toggle="popover" data-trigger="hover" data-container="body"
-                                    data-title="{{ choice.text.text|force_escape|force_escape }}"
-                                    data-content="{% for choice_value in choice.choices %}
-                                        <div class='value'>{{choice_value.count|force_escape|force_escape }}
+                        </th>
+                        {#                            {% set scores, counts, totals, max_score = poll.get_stats() %}#}
+                        {% for choice in stats %}
+                            <th class="choice-sum {% if choice.score == max_score %}maximum{% endif %}"
+                                data-toggle="popover" data-trigger="hover" data-container="body"
+                                data-title="{{ choice.text.text|force_escape|force_escape }}"
+                                data-content="{% for choice_value in choice.choices %}
+                                        <div class='value'>{{ choice_value.count|force_escape|force_escape }}
                                             <i class='fa fa-times'></i>
                                             <span class='label choice-sum-value-label'
                                                     style='background-color: #{{ choice_value.color }};'>
@@ -123,59 +120,63 @@
                                         </div>{% endfor %}
                                         <div class='score'>
                                         {% trans 'Score' %}: {{ choice.count }}</div>"
-                                    data-placement="top"
-                                    data-score="{{ choice.score|percentage }}">{# if vote.score != 0 else 1  TODO: das if soll glaube ich ob da übrhaupt was da ist #}
-                                    {% if choice.score %}
-                                        {{ choice.score|percentage }}
-                                        {% comment %}
+                                data-placement="top"
+                                data-score="{{ choice.score|percentage }}">
+                                {# if vote.score != 0 else 1  TODO: das if soll glaube ich ob da übrhaupt was da ist #}
+                                {% if choice.score %}
+                                    {{ choice.score|percentage }}
+                                    {% comment %}
                                         {{ "%.f %%" % (scores[choice]*100.0/totals[choice]) }}#}
-                                        {% endcomment %}
-                                    {% else %}
-                                        N/A
-                                    {% endif %}
-                                    <span class="print-only">{{ choice.score|percentage }}</span>
-                                </th>
-                            {% endfor %}
+                                    {% endcomment %}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                                <span class="print-only">{{ choice.score|percentage }}</span>
+                            </th>
+                        {% endfor %}
                         <th class="noprint"></th>
                     </tr>
                     </tfoot>
 
                 </table>
             </div>
+
+            {# TODO: Add legend for choice values #}
         </div>
 
-    {# TODO: Add legend for choice values #}
         {#<a href="{% url 'poll_voteEdit' poll.url vote.id %}"> Edit </a> #}
         {#<a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a> #}
 
         <br/><br/>
-        <!-- TODO function new comment -->
-        {% if request.user.is_authenticated %}
-            <label>Name: </label>
-            <input type="text" title="Name" name="newComName" value="{{ request.user.get_username }}"
-                   readonly/>
-        {% else %}
-            <label>Name: </label>
-            <input type="text" title="Name" name="newComName"/>
-        {% endif %}
-        <br/>
-        <label>Comment: </label>
-        <textarea title="new Comment" name="newCom" cols="40" rows="5"></textarea>
-
-        <input type="submit" title="Comment" value="Comment">
-
-        <br/><br/>
-        {% for comment in poll.comment_set.all %}
-            <label>Name: </label>
-            <input type="text" title="name" value="{{ comment.name }}" readonly><br/>
-            <textarea title="comment_text" cols="40" rows="5">{{ comment.text }}</textarea><br/>
-            <label>Date of Creation: </label>
-            <input type="datetime" title="date_of_creation" value="{{ comment.date_created }}" readonly>
+        <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form-inline">
+            {% csrf_token %}
+            <!-- TODO function new comment -->
+            {% if request.user.is_authenticated %}
+                <label>Name: </label>
+                <input type="text" title="Name" name="newComName" value="{{ request.user.get_username }}"
+                       readonly/>
+            {% else %}
+                <label>Name: </label>
+                <input type="text" title="Name" name="newComName"/>
+            {% endif %}
             <br/>
-            <a href="{% url 'poll_editComment' poll.url comment.id %}"> Edit </a>
-            <a href="{% url 'poll_deleteComment' poll.url comment.id %}"> Delete </a>
-            <br/>
-        {% endfor %}
-    </form>
+            <label>Comment: </label>
+            <textarea title="new Comment" name="newCom" cols="40" rows="5"></textarea>
+
+            <input type="submit" title="Comment" value="Comment">
+
+            <br/><br/>
+            {% for comment in poll.comment_set.all %}
+                <label>Name: </label>
+                <input type="text" title="name" value="{{ comment.name }}" readonly><br/>
+                <textarea title="comment_text" cols="40" rows="5">{{ comment.text }}</textarea><br/>
+                <label>Date of Creation: </label>
+                <input type="datetime" title="date_of_creation" value="{{ comment.date_created }}" readonly>
+                <br/>
+                <a href="{% url 'poll_editComment' poll.url comment.id %}"> Edit </a>
+                <a href="{% url 'poll_deleteComment' poll.url comment.id %}"> Delete </a>
+                <br/>
+            {% endfor %}
+        </form>
     </div>
 {% endblock %}

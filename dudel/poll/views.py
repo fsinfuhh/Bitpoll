@@ -17,14 +17,6 @@ def poll(request, poll_url):
     Displays for a given poll its fields along with all possible choices, all votes and all its comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if request.method == 'POST':
-        new_comment = Comment(text=request.POST['newCom'],
-                              date_created=datetime.now(),
-                              name=request.POST['newComName'],
-                              poll=current_poll,
-                              user=request.user)
-        new_comment.save()
-        # return redirect('poll', poll_url)
 
     poll_votes = Vote.objects.filter(poll=current_poll).order_by(
         'name').select_related()
@@ -100,7 +92,19 @@ def index(request):
 
 
 def comment(request, poll_url):
-    pass
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    if request.method == 'POST':
+        user = None
+        if not request.user.is_anonymous:
+            user = request.user
+        new_comment = Comment(text=request.POST['newCom'],
+                              date_created=datetime.now(),
+                              name=request.POST['newComName'],
+                              poll=current_poll,
+                              user=user)
+        new_comment.save()
+        return redirect('poll', poll_url)
+    pass  # todo errorhandling
 
 
 def edit_comment(request, poll_url, comment_id):
