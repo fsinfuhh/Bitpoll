@@ -3,20 +3,30 @@
 {% block title %}Delete comment{% endblock %}
 
 {% block content %}
+    <div class="container">
+    <br>
     {% if error != "" %}
         <div class="alert alert-danger">{{ error }}</div>
         <br /><br />
     {% endif %}
-    <div class="alert alert-danger"> Shall the following comment be deleted? </div><br />
-    <label>Name: </label>
-    <input type="text" title="name" value="{{ comment.name }}" readonly><br />
-    <textarea title="comment_text" cols="40" rows="5" readonly>{{ comment.text }}</textarea><br />
-    <label>Date of Creation:</label>
-    <input type="datetime" title="date_of_creation" value="{{ comment.date_created }}" readonly >
-
-    <br /><br />
+    <div class="alert alert-warning"> Shall the following comment be deleted? </div>
+    <div class="comments">
+    <div class="comment">
+        <div class="avatar">
+            <img src="https://secure.gravatar.com/avatar/b1c328a4d689f21f3299987027b83480?s=48&amp;d=identicon&amp;r=g">{# TODO: #}
+        </div>
+        <div class="meta">
+            <div class="author">{% if comment.user %}{{ comment.user.name }}{% else %}{{ comment.name }}{% endif %}</div>
+            kommentierte am
+            <div class="date">{{ comment.date_created }}</div>
+        </div>
+        <div class="text"><p>{{ comment.text }}</p></div> {# TODO:  #}
+    </div>
+    </div>
+        <br /><br />
     <form action="{% url 'poll_deleteComment' poll.url comment.id %}" method="POST">{% csrf_token %}
-        <input type="submit" name="Cancel" value="Cancel" />
-        <input type="submit" name="Delete" value="Delete" />
+        <input class="action" type="submit" name="Cancel" value="Cancel" />
+        <input class="action danger" type="submit" name="Delete" value="Delete" />
     </form>
+    </div>
 {% endblock %}
