@@ -35,13 +35,12 @@
                     {% for vote in votes %}
                         {# TODO: {% if show_votes or (not current_user.is_anonymous() and vote.user == current_user) #}
                         <tr class="vote {% if not request.user.is_anonymous and vote.user == request.user %} mine{% endif %}"
-                                {# TODO: is_annonymos #}
-                            data-author="{{ vote.name|force_escape|force_escape }}">
+                            {# data-author="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"#}>
                             <td class="author"
                                 data-toggle="popover"
                                 data-trigger="hover"
                                 data-container="body"
-                                data-title="{{ vote.name|force_escape|force_escape }}"
+                                data-title="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"
                                 data-content="
                                     {{ vote.date_created|date }}
                                     {% if vote.comment %}
@@ -61,7 +60,7 @@
                                         {% endif %}
                                     </div>
                                 {% endif %}
-                                {{ vote.name }}
+                                {% if not vote.anonymous %}{{ vote.name }}{% else %}Anonymous{% endif %}
                             </td>
                             {% for vote_choice in vote.votechoice_set.all %}
                                 <td class="vote-choice text-center
@@ -73,7 +72,7 @@
                                     data-container="body"
                                     data-title="{{ vote_choice.choice|force_escape|force_escape }}"
                                     data-content="
-                                            {{ vote.name|force_escape|force_escape }}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
+                                            {% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
                                     data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
                                     <span class="fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
                                 </td>
@@ -110,11 +109,11 @@
                                 </span>
                             </th>
                             {#                            {% set scores, counts, totals, max_score = poll.get_stats() %}#}
-                            {% for vote in stats %}
-                                <th class="choice-sum {% if vote.score == max_score %}maximum{% endif %}"
+                            {% for choice in stats %}
+                                <th class="choice-sum {% if choice.score == max_score %}maximum{% endif %}"
                                     data-toggle="popover" data-trigger="hover" data-container="body"
-                                    data-title="{{ choice.title|force_escape|force_escape }}"
-                                    data-content="{% for choice_value in vote.choices %}
+                                    data-title="{{ choice.text.text|force_escape|force_escape }}"
+                                    data-content="{% for choice_value in choice.choices %}
                                         <div class='value'>{{choice_value.count|force_escape|force_escape }}
                                             <i class='fa fa-times'></i>
                                             <span class='label choice-sum-value-label'
@@ -123,18 +122,18 @@
                                             </span>{{ choice_value.title|force_escape|force_escape }}
                                         </div>{% endfor %}
                                         <div class='score'>
-                                        {% trans 'Score' %}: {{ vote.count }}</div>"
+                                        {% trans 'Score' %}: {{ choice.count }}</div>"
                                     data-placement="top"
-                                    data-score="{{ vote.score|percentage }}">{# if vote.score != 0 else 1  TODO: das if soll glaube ich ob da übrhaupt was da ist #}
-                                    {% if vote.score %}
-                                        {{ vote.score|percentage }}
+                                    data-score="{{ choice.score|percentage }}">{# if vote.score != 0 else 1  TODO: das if soll glaube ich ob da übrhaupt was da ist #}
+                                    {% if choice.score %}
+                                        {{ choice.score|percentage }}
                                         {% comment %}
                                         {{ "%.f %%" % (scores[choice]*100.0/totals[choice]) }}#}
                                         {% endcomment %}
                                     {% else %}
                                         N/A
                                     {% endif %}
-                                    <span class="print-only">{{ vote.score|percentage }}</span>
+                                    <span class="print-only">{{ choice.score|percentage }}</span>
                                 </th>
                             {% endfor %}
                         <th class="noprint"></th>
@@ -145,6 +144,7 @@
             </div>
         </div>
 
+    {# TODO: Add legend for choice values #}
         {#<a href="{% url 'poll_voteEdit' poll.url vote.id %}"> Edit </a> #}
         {#<a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a> #}
 
