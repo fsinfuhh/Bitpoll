@@ -148,6 +148,28 @@
         {#<a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a> #}
 
         <br/><br/>
+        <div class="comments">
+            {% for comment in poll.comment_set.all %}
+            <div class="comment">
+                <div class="avatar">
+                    <img src="https://secure.gravatar.com/avatar/b1c328a4d689f21f3299987027b83480?s=48&amp;d=identicon&amp;r=g">{# TODO: #}
+                </div>
+                <div class="meta">
+                    <div class="author">{% if comment.user %}{{ comment.user.name }}{% else %}{{ comment.name }}{% endif %}</div>
+                    kommentierte am
+                    <div class="date">{{ comment.date_created }}</div>
+
+                    <div class="edit">
+                        <a href="" title="Kommentar löschen" class="btn btn-default btn-xs"><i class="fa fa-trash-o"></i></a> {# TODO: #}
+                    </div>
+
+                </div>
+                <div class="text"><p>{{ comment.text }}</p></div> {# TODO:  #}
+            </div>
+            {% endfor %}
+
+        </div>
+        <br><br>
         <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form-inline">
             {% csrf_token %}
             <!-- TODO function new comment -->
@@ -164,19 +186,6 @@
             <textarea title="new Comment" name="newCom" cols="40" rows="5"></textarea>
 
             <input type="submit" title="Comment" value="Comment">
-
-            <br/><br/>
-            {% for comment in poll.comment_set.all %}
-                <label>Name: </label>
-                <input type="text" title="name" value="{{ comment.name }}" readonly><br/>
-                <textarea title="comment_text" cols="40" rows="5">{{ comment.text }}</textarea><br/>
-                <label>Date of Creation: </label>
-                <input type="datetime" title="date_of_creation" value="{{ comment.date_created }}" readonly>
-                <br/>
-                <a href="{% url 'poll_editComment' poll.url comment.id %}"> Edit </a>
-                <a href="{% url 'poll_deleteComment' poll.url comment.id %}"> Delete </a>
-                <br/>
-            {% endfor %}
         </form>
     </div>
 {% endblock %}
