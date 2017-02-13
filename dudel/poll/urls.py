@@ -3,7 +3,6 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
     # url(r'^create', views.create, name='poll_create'),
     url(r'^([a-zA-Z0-9_\-]+)/$', views.poll, name='poll'),
     url(r'^([a-zA-Z0-9_\-]+)/comment/$', views.comment, name='poll_comment'),
