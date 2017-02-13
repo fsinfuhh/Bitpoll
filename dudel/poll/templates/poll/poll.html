@@ -160,7 +160,7 @@
                     <div class="date">{{ comment.date_created }}</div>
 
                     <div class="edit">
-                        <a href="" title="Kommentar löschen" class="btn btn-default btn-xs"><i class="fa fa-trash-o"></i></a> {# TODO: #}
+                        <a href="" title="Kommentar löschen" class="btn btn-default btn-xs"><i class="fa fa-trash-o"></i></a> {# TODO: make it an form#}
                     </div>
 
                 </div>
@@ -169,23 +169,38 @@
             {% endfor %}
 
         </div>
-        <br><br>
-        <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form-inline">
-            {% csrf_token %}
-            <!-- TODO function new comment -->
-            {% if request.user.is_authenticated %}
-                <label>Name: </label>
-                <input type="text" title="Name" name="newComName" value="{{ request.user.get_username }}"
-                       readonly/>
-            {% else %}
-                <label>Name: </label>
-                <input type="text" title="Name" name="newComName"/>
-            {% endif %}
-            <br/>
-            <label>Comment: </label>
-            <textarea title="new Comment" name="newCom" cols="40" rows="5"></textarea>
-
-            <input type="submit" title="Comment" value="Comment">
-        </form>
+        <hr>
+        <div class="noprint">
+            <h3>Schreibe einen Kommentar</h3>
+            <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="row">
+                    <div class="col-sm-4">
+                        {% if request.user.is_authenticated %}
+                            <label>Name</label>
+                            <input class="form-control" type="text" title="Name" name="newComName" value="{{ request.user.get_username }}"
+                                   readonly/>
+                        {% else %}
+                            <label>Name</label>
+                            <input class="form-control" type="text" title="Name" name="newComName"/>
+                        {% endif %}
+                    </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                <label>Comment</label>
+                <textarea title="new Comment" name="newCom" class="form-control" rows="6"></textarea>
+                    <p class="help-block">
+                        Du kannst deinen Text in
+                        <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
+                        formatieren.
+                        </p> {# TODO: das geht (noch) nicht #}
+                </div>
+                <div class="form-group">
+                    <input class="action primary" type="submit" title="Save Comment" value="Save Comment">
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock %}
