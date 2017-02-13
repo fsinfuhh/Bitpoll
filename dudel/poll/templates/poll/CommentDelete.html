@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}{%  value_from_settings SITE_NAME %}{% endblock %}
+{% block title %}Delete comment{% endblock %}
 
 {% block content %}
     {% if error != "" %}
         <div class="alert alert-danger">{{ error }}</div>
         <br /><br />
     {% endif %}
-    <div class="alert alert-danger"> Shall the following Comment be deleted? </div><br />
+    <div class="alert alert-danger"> Shall the following comment be deleted? </div><br />
     <label>Name: </label>
     <input type="text" title="name" value="{{ comment.name }}" readonly><br />
     <textarea title="comment_text" cols="40" rows="5" readonly>{{ comment.text }}</textarea><br />
