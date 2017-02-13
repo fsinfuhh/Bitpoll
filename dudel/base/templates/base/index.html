@@ -148,6 +148,7 @@
     {% endif %}
     <div class="container">
         <div class="row padded-cells">
+            {% if request.user.is_anonymous %}
             <div class="col-md-4">
                 <h4>Register for more</h4>
                 <p>Registered users have access to the full width of features available.
@@ -155,6 +156,8 @@
                 <a href="/register" class="action"><i class="fa fa-pencil"></i><span>Register</span></a>
                 <a href="/login" class="action primary"><i class="fa fa-sign-in"></i> Login</a>
             </div>
+            {% endif %}
+        {# TODO: own polls? #}
             <div class="col-md-4">
                 <h4>Statistics</h4>
                 <table class="table">
