@@ -347,7 +347,7 @@ def vote(request, poll_url):
             date_created=datetime.now(), comment=request.POST.get('comment'),
             poll=current_poll)
         if request.user.is_authenticated():
-            current_vote.name = request.user.get_username(),
+            current_vote.name = request.user.get_username()
             current_vote.user = request.user
         else:
             current_vote.name = request.POST.get('name')
