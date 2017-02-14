@@ -155,7 +155,7 @@
                     <img src="https://secure.gravatar.com/avatar/b1c328a4d689f21f3299987027b83480?s=48&amp;d=identicon&amp;r=g">{# TODO: #}
                 </div>
                 <div class="meta">
-                    <div class="author">{% if comment.user %}{{ comment.user.name }}{% else %}{{ comment.name }}{% endif %}</div>
+                    <div class="author">{% if comment.user %}{{ request.user.get_username }}{% else %}{{ comment.name }}{% endif %}</div>
                     kommentierte am
                     <div class="date">{{ comment.date_created }}</div>
 

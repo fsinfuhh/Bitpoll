@@ -71,15 +71,15 @@
                     <td colspan="4">
                         {% if request.user.is_authenticated %}
                             <input type="text" name="name" title="Your name:" value="{{ request.user.username }}"
-                                   readonly/>
+                                   class="form-control" readonly="readonly"/>
                         {% else %}
-                            <input type="text" name="name" title="Your name:"/>
+                            <input class="form-control" type="text" name="name" title="Your name:"/>
                         {% endif %}
                         <br>
-                        <input type="checkbox" name="anonymous" title="Post anonymous vote" value="true"/> Post
-                        anonymous
-                        vote <br/>
 
+                        <input type="checkbox" name="anonymous" id="anonymous"
+                               title="Post anonymous vote" value="true"/>
+                        <label for="anonymous">Post anonymous vote</label> <br/>
                     </td>
                 </tr>
                 <tr>
