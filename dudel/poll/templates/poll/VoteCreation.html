@@ -29,7 +29,7 @@
                         </td>
                     {% endfor %}
                 </tr>
-                {% for row, choice in choices_matrix %}
+                {% for row, choice, comment, vote in choices_matrix %}
                     <tr data-vote-choice="{{ choice.id }}">
                         {% for item in row %}
                             {% if item.0 != None %}
@@ -40,11 +40,15 @@
                         {% endfor %}
                         <td class="vote-choice-form">
                             {% for value in values.all %}
-                                <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title=""/>
+                                <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title=""
+                                    {% if value == vote %}
+                                        checked
+                                    {% endif %}
+                                />
                                 {{ value.title }}
                             {% endfor %}</td>
                         {% for value in values.all %}
-                            <td class="vote-choice control off script-only"
+                            <td class="vote-choice control {% if value != vote %}off{% endif %} script-only"
                                 data-choice="{{ value.id }}" title="{{ value.title }}"
                                 style="background-color: #{{ value.color }}">
                                 <span class="fa fa-{{ value.icon }}"></span></td>
@@ -55,12 +59,13 @@
                                         title="{{ _('Add a comment') }}"><i
                                         class="fa fa-comment-o"></i></button>
                             </div>
-                            <input type="text" class="vote-choice-comment" name="comment_{{ choice.id }}" title=""/>
+                            <input type="text" class="vote-choice-comment" name="comment_{{ choice.id }}" title=""
+                                   value="{{ comment }}"/>
                         </td>
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td colspan="{{ matrix_len|add:values.count }}">
+                    <td colspan="{{ matrix_len|add:choices_matrix_len }}">
                         <hr/>
                     </td>
                 </tr>
@@ -69,16 +74,21 @@
                         <label for="name">Your name:</label>
                     </td>
                     <td colspan="4">
-                        {% if request.user.is_authenticated %}
-                            <input type="text" name="name" title="Your name" value="{{ request.user.get_username }}"
-                                   class="form-control" readonly="readonly" id="name"/>
-                        {% else %}
-                            <input class="form-control" type="text" name="name" title="Your name" id="name"/>
-                        {% endif %}
+                        <input type="text" name="name" title="Your name"
+                            {% if current_vote.name %}
+                                value="{{ current_vote.name }}" readonly="readonly"
+                            {% elif request.user.is_authenticated %}
+                                value="{{ request.user.get_username }}" readonly="readonly"
+                            {%  endif %}
+                            class="form-control" id="name"/>
                         <br>
 
                         <input type="checkbox" name="anonymous" id="anonymous"
-                               title="Post anonymous vote" value="true"/>
+                               title="Post anonymous vote" value="true"
+                               {% if current_vote.anonymous %}
+                                    checked
+                               {% endif %}
+                        />
                         <label for="anonymous">Post anonymous vote</label> <br/>
                     </td>
                 </tr>
@@ -88,7 +98,7 @@
                         <span class="help-inline">(optional)</span>
                     </td>
                     <td colspan="4">
-                        <textarea title="Comment:" name="comment" id="comment" cols="40" rows="5"></textarea><br/>
+                        <textarea title="Comment:" name="comment" id="comment" cols="40" rows="5">{{ current_vote.comment }}</textarea><br/>
                 </tr>
                 <tr>
                     <td colspan="{{ matrix_len }}"></td>
@@ -99,6 +109,9 @@
                         </button>
                     </td>
                 </tr>
+                {% if current_vote.pk %}
+                    <input type="hidden" name="vote_id" value="{{ current_vote.pk }}" >
+                {% endif %}
             </table>
         </form>
     </div>

@@ -1,4 +1,6 @@
 import re
+
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
 from django.db.models import F, Sum, Count
 from django.template.response import TemplateResponse
@@ -333,25 +335,37 @@ def delete(request, poll_url):
     })
 
 
-def vote(request, poll_url):
+def vote(request, poll_url, vote_id=None):
     """
     :param request:
     :param poll_url: Url of poll
+    :param vote_id: Optional the voteID to edit
     :return:
 
     Takes vote with comments as input and saves the vote along with all comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     if request.method == 'POST':
-        current_vote = Vote(
-            date_created=datetime.now(), comment=request.POST.get('comment'),
-            poll=current_poll)
-        if request.user.is_authenticated:
+        vote_id = request.POST.get('vote_id', None)
+        if vote_id:
+            current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
+            if not (not current_vote.user or (request.user.is_authenticated and current_vote.user == request.user)):
+                # TODO: nochmal auf richtigkeit prüfen
+                # the vote belongs to an user and it is not the authenticated user
+                return HttpResponseForbidden()
+        else:
+            current_vote = Vote(poll=current_poll)
+        current_vote.date_created = datetime.now()
+        current_vote.comment = request.POST.get('comment')
+        if vote_id:
+            # leave the name as it was
+            pass
+        elif request.user.is_authenticated:
             current_vote.name = request.user.get_username()
             current_vote.user = request.user
         else:
             current_vote.name = request.POST.get('name')
-            current_vote.anonymous = 'anonymous' in request.POST
+        current_vote.anonymous = 'anonymous' in request.POST
         current_vote.save()
 
         new_choices = []
@@ -364,72 +378,48 @@ def vote(request, poll_url):
                                           vote=current_vote,
                                           choice=choice,
                                           comment=request.POST['comment_' + str(choice.id)]))
+        if vote_id:
+            VoteChoice.objects.filter(vote=current_vote).delete()
+            #todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
+            #todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
         VoteChoice.objects.bulk_create(new_choices)
         return redirect('poll', poll_url)
 
-    else:
+    else:  # no POST: show the dialog
         matrix = current_poll.get_choice_group_matrix()
+        choices = []
+        comments = []
+        choice_votes = []
+        if vote_id:
+            current_vote = get_object_or_404(Vote, pk=vote_id)
+        else:
+            current_vote = Vote()
+        for choice in current_poll.choice_set.all():
+            cur_comment = ""
+            value = None
+            if vote_id:  # If wee want to edit an vote find the selected fields
+                vote_choice = VoteChoice.objects.filter(vote=vote_id, choice=choice.id)
+                if vote_choice:  # append the found values
+                    cur_comment = vote_choice[0].comment
+                    value = vote_choice[0].value
+            choices.append(choice)
+            comments.append(cur_comment)
+            choice_votes.append(value)
         return TemplateResponse(request, 'poll/VoteCreation.html', {
             'poll': current_poll,
             'matrix': matrix,
             'matrix_len': len(matrix[0]),
-            'choices_matrix': zip(matrix, current_poll.choice_set.all()),
+            'choices_matrix': zip(matrix, choices, comments, choice_votes),
             'choices': current_poll.choice_set.all(),
+            'choices_matrix_len': len(choices),
             'values': current_poll.choicevalue_set.all(),
             'page': 'Vote',
+            'current_vote': current_vote,
         })
 
 
 def vote_assign(request, poll_url, vote_id):
     pass
-
-
-def vote_edit(request, poll_url, vote_id):
-    """
-    :param request:
-    :param poll_url: Url of Poll belonging to vote
-    :param vote_id: ID of vote to be edited
-    :return:
-
-    All changes in the given vote are saved.
-
-    """
-    current_poll = get_object_or_404(Poll, url=poll_url)
-    current_vote = get_object_or_404(Vote, id=vote_id)
-
-    if request.method == 'POST':
-        # TODO authentication check
-        if request.user.is_anonymous:
-            current_vote.name = request.POST['name']
-        current_vote.anonymous = 'anonymous' in request.POST
-        current_vote.comment = request.POST['comment']
-
-        current_vote.save()
-
-        for choice in current_poll.choice_set.all():
-            current_choice = get_object_or_404(VoteChoice, vote=vote_id, choice=choice.id)
-            value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
-            current_choice.value = value
-            current_choice.comment = request.POST['comment_' + str(choice.id)]
-
-            current_choice.save()
-
-        return redirect('poll', poll_url)
-
-    else:
-        vote_choices = []
-        for choice in current_poll.choice_set.all():
-            vote_choice = get_object_or_404(VoteChoice, vote=vote_id, choice=choice.id)
-            vote_choices.append((choice, current_poll.choicevalue_set.all(), vote_choice.comment, vote_choice.value))
-
-        return TemplateResponse(request, 'poll/VoteEdit.html', {
-            'poll': current_poll,
-            'choices': current_poll.choice_set,
-            'values': current_poll.choicevalue_set,
-            'vote': current_vote,
-            'vote_choices': vote_choices,
-            'page': 'Vote',
-        })
 
 
 def vote_delete(request, poll_url, vote_id):
