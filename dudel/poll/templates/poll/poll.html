@@ -12,6 +12,9 @@
         <!-- TODO efficiency of listing of all votes by real sql-statement -->
         <div class="table-noscroll-y">
             <div class="table-scroll-x" style="padding-bottom: 100px;">
+            {% if not matrix %}
+                <p class="alert alert-warning">This Poll does not contain anny Choices, you can create some at the Choices Tab</p>
+            {% endif %}
                 <table class="table poll auto-width" id="poll">
                     <thead>
                     {% for row in matrix %}

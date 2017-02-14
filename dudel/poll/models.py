@@ -56,6 +56,8 @@ class Poll(models.Model):
             choice.get_hierarchy() for choice in self.choice_set.all().order_by(
                 'sort_key')]
         matrix = [[[item, 1, 1] for item in row] for row in matrix]
+        if not matrix:
+            return [[]]
         width = max(len(row) for row in matrix)
 
         def fill(row, length):

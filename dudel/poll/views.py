@@ -51,7 +51,7 @@ def poll(request, poll_url):
         'page': '',
         'votes': poll_votes,
         'stats': stats,
-        'max_score': max(val['score'] for val in stats),
+        'max_score': max(val['score'] for val in stats) if stats else 0,
     })
 
 
@@ -226,7 +226,7 @@ def edit_dt_choice_time(request, poll_url):
                 'dates': dates,
                 'poll': current_poll,
             })
-        elif form.cleaned_data['date'] != "":
+        elif form.cleaned_data['dates'] != "":
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': form,
                 'poll': current_poll,
