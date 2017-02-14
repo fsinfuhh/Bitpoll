@@ -101,7 +101,7 @@ def delete_comment(request, poll_url, comment_id):
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 # TODO additional possibilities of deleting
                 if request.user == current_comment.user:
                     current_comment.delete()
@@ -319,7 +319,7 @@ def delete(request, poll_url):
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 # TODO restriction for deletion
                 return redirect('index')
             else:
@@ -346,7 +346,7 @@ def vote(request, poll_url):
         current_vote = Vote(
             date_created=datetime.now(), comment=request.POST.get('comment'),
             poll=current_poll)
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             current_vote.name = request.user.get_username()
             current_vote.user = request.user
         else:
@@ -399,7 +399,7 @@ def vote_edit(request, poll_url, vote_id):
 
     if request.method == 'POST':
         # TODO authentication check
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             current_vote.name = request.POST['name']
         current_vote.anonymous = 'anonymous' in request.POST
         current_vote.comment = request.POST['comment']
@@ -458,7 +458,7 @@ def vote_delete(request, poll_url, vote_id):
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 # TODO additional possibilities of deleting
                 if request.user == current_vote.user:
                     current_vote.delete()
