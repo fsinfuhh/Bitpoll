@@ -368,10 +368,12 @@ def vote(request, poll_url):
         return redirect('poll', poll_url)
 
     else:
+        matrix = current_poll.get_choice_group_matrix()
         return TemplateResponse(request, 'poll/VoteCreation.html', {
             'poll': current_poll,
-            'matrix': current_poll.get_choice_group_matrix(),
-            'choices_matrix': zip(current_poll.get_choice_group_matrix(), current_poll.choice_set.all()),
+            'matrix': matrix,
+            'matrix_len': len(matrix[0]),
+            'choices_matrix': zip(matrix, current_poll.choice_set.all()),
             'choices': current_poll.choice_set.all(),
             'values': current_poll.choicevalue_set.all(),
             'page': 'Vote',
