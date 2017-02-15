@@ -449,7 +449,7 @@ def vote_delete(request, poll_url, vote_id):
         if 'Delete' in request.POST:
             if request.user.is_authenticated:
                 # TODO additional possibilities of deleting
-                if request.user == current_vote.user:
+                if current_vote.can_delete(request.user):
                     current_vote.delete()
                     return redirect('poll', poll_url)
                 else:

@@ -152,7 +152,7 @@ class Vote(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
-    def can_edit(self, user):
+    def can_edit(self, user: User) -> bool:
         """
         Determine if the user can edit the Vote
 
@@ -164,6 +164,19 @@ class Vote(models.Model):
         if not self.user:
             return True
         return False
+
+    def can_delete(self, user: User) -> bool:
+        """
+        Determine if the user can delete the Vote
+
+        :param user:
+        :return:
+        """
+        #if self.poll.owner == user:  # TODO: gruppen, owner algemein
+        #    return True
+        if user.is_anonymous:
+            return False
+        return self.can_edit(user)
 
     def __str__(self):
         return u'Vote {}'.format(self.name)
