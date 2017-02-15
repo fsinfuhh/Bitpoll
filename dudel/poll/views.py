@@ -1,9 +1,13 @@
 import re
+from django.contrib import messages
+from django.db import transaction
 
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
 from django.db.models import F, Sum, Count
 from django.template.response import TemplateResponse
+from django.utils.translation import ugettext_lazy as _
+
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment
@@ -363,58 +367,74 @@ def vote(request, poll_url, vote_id=None):
             current_vote.name = request.user.get_username()
             current_vote.user = request.user
         else:
-            current_vote.name = request.POST.get('name')
+            current_vote.name = request.POST.get('name').strip()
         current_vote.anonymous = 'anonymous' in request.POST
-        current_vote.save()
 
-        new_choices = []
-        for choice in current_poll.choice_set.all():
-            if str(choice.id) in request.POST:
-                choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
-            else:
-                choice_value = None
-            new_choices.append(VoteChoice(value=choice_value,
-                                          vote=current_vote,
-                                          choice=choice,
-                                          comment=request.POST['comment_' + str(choice.id)]))
-        if vote_id:
-            VoteChoice.objects.filter(vote=current_vote).delete()
-            #todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
-            #todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
-        VoteChoice.objects.bulk_create(new_choices)
-        return redirect('poll', poll_url)
+        if current_vote.anonymous or current_vote.name:
+            # prevent non-anonymous vote without name
 
-    else:  # no POST: show the dialog
-        matrix = current_poll.get_choice_group_matrix()
-        choices = []
-        comments = []
-        choice_votes = []
-        if vote_id:
-            current_vote = get_object_or_404(Vote, pk=vote_id)
+            with transaction.atomic():
+                new_choices = []
+
+                current_vote.save()
+
+                for choice in current_poll.choice_set.all():
+                    if str(choice.id) in request.POST:
+                        choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+                    else:
+                        choice_value = None
+                    new_choices.append(VoteChoice(value=choice_value,
+                                                  vote=current_vote,
+                                                  choice=choice,
+                                                  comment=request.POST.get('comment_{}'.format(choice.id)) or ''))
+                if vote_id:
+                    VoteChoice.objects.filter(vote=current_vote).delete()
+                    #todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
+                    #todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
+                VoteChoice.objects.bulk_create(new_choices)
+
+                return redirect('poll', poll_url)
         else:
-            current_vote = Vote()
-        for choice in current_poll.choice_set.all():
-            cur_comment = ""
-            value = None
-            if vote_id:  # If wee want to edit an vote find the selected fields
-                vote_choice = VoteChoice.objects.filter(vote=vote_id, choice=choice.id)
-                if vote_choice:  # append the found values
-                    cur_comment = vote_choice[0].comment
-                    value = vote_choice[0].value
-            choices.append(choice)
-            comments.append(cur_comment)
-            choice_votes.append(value)
-        return TemplateResponse(request, 'poll/VoteCreation.html', {
-            'poll': current_poll,
-            'matrix': matrix,
-            'matrix_len': len(matrix[0]),
-            'choices_matrix': zip(matrix, choices, comments, choice_votes),
-            'choices': current_poll.choice_set.all(),
-            'choices_matrix_len': len(choices),
-            'values': current_poll.choicevalue_set.all(),
-            'page': 'Vote',
-            'current_vote': current_vote,
-        })
+            messages.error(
+                request, _('You need to either provide a name or post an anonymous vote.'))
+
+    # no/invalid POST: show the dialog
+    matrix = current_poll.get_choice_group_matrix()
+    choices = []
+    comments = []
+    choice_votes = []
+    if vote_id:
+        current_vote = get_object_or_404(Vote, pk=vote_id)
+    else:
+        current_vote = Vote()
+    for choice in current_poll.choice_set.all():
+        cur_comment = ""
+        value = None
+        if request.method == 'POST':
+            if str(choice.id) in request.POST:
+                value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+            else:
+                value = None
+            cur_comment = request.POST.get('comment_{}'.format(choice.id)) or ''
+        elif vote_id:  # If we want to edit an vote find the selected fields
+            vote_choice = VoteChoice.objects.filter(vote=vote_id, choice=choice.id)
+            if vote_choice:  # append the found values
+                cur_comment = vote_choice[0].comment
+                value = vote_choice[0].value
+        choices.append(choice)
+        comments.append(cur_comment)
+        choice_votes.append(value)
+    return TemplateResponse(request, 'poll/VoteCreation.html', {
+        'poll': current_poll,
+        'matrix': matrix,
+        'matrix_len': len(matrix[0]),
+        'choices_matrix': zip(matrix, choices, comments, choice_votes),
+        'choices': current_poll.choice_set.all(),
+        'choices_matrix_len': len(choices),
+        'values': current_poll.choicevalue_set.all(),
+        'page': 'Vote',
+        'current_vote': current_vote,
+    })
 
 
 def vote_assign(request, poll_url, vote_id):
