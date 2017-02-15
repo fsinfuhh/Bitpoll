@@ -45,12 +45,21 @@
                         </ul>
                     </li>
                     <li class="spacing"></li>
-                    <li><a href="/user/settings"><i class="fa fa-user"></i><span>Account</span></a>
-                        <ul class="submenu right">
-                            <li><a href="/register"><i class="fa fa-pencil"></i>Register</a></li>
-                            <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>Login</a></li>
-                        </ul>
-                    </li>
+                    {% if request.user.is_anonymous %}
+                        <li><a href="{% url 'login' %}"><i class="fa fa-user"></i><span>Login</span></a>
+                            <ul class="submenu right">
+                                <li><a href="/register"><i class="fa fa-pencil"></i>Register</a></li>{# TODO #}
+                                <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>Login</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href=""><i class="fa fa-user"></i><span>{{ request.user.get_username }}</span></a>
+                            <ul class="submenu right">{# TODO: usersettings #}
+                                <li><a href=""><i class="fa fa-pencil"></i>Settings</a></li>
+                                <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>Logout</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
