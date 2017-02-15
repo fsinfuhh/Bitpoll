@@ -349,10 +349,9 @@ def vote(request, poll_url, vote_id=None):
         vote_id = request.POST.get('vote_id', None)
         if vote_id:
             current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
-            if not (not current_vote.user or (request.user.is_authenticated and current_vote.user == request.user)):
-                # TODO: nochmal auf richtigkeit prüfen
+            if not current_vote.can_edit(request.user):
                 # the vote belongs to an user and it is not the authenticated user
-                return HttpResponseForbidden()
+                return HttpResponseForbidden()  # todo: better errorpage?
         else:
             current_vote = Vote(poll=current_poll)
         current_vote.date_created = datetime.now()

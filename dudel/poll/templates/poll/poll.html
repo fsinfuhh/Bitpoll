@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load poll_filter %}
+{% load poll_filter vote_permisions %}
 
 {% block title %}{{ poll.title }}{% endblock %}
 
@@ -78,11 +78,12 @@
                                 </td>
                             {% endfor %}
                             <td class="noprint vote-actions">
-                                {% comment %} <!-- TODO: --> {% if vote.user_can_edit(current_user) %}
-                                    <a href="{{ url_for('poll_vote_edit', slug=poll.slug, vote_id=vote.id) }}"
+                                {% if vote|vote_can_edit:request.user %}
+                                    <a href="{% url 'poll_voteEdit' poll.url vote.id %}"
                                        class="btn btn-xs btn-default" title="{{ _('Edit vote') }}"><i
                                             class="fa fa-pencil"></i></a>
                                 {% endif %}
+                                {% comment %}
                                     {% if vote.user_can_delete(current_user) %}
                                         <a href="{{ url_for('poll_vote_delete', slug=poll.slug, vote_id=vote.id, _csrf_token=CSRF) }}"
                                            class="btn btn-xs btn-default" title="{{ _('Delete vote') }}"><i

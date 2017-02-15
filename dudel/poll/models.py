@@ -151,7 +151,19 @@ class Vote(models.Model):
     assigned_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='assigning')
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    # TODO allow null for user -> vote creation possible
+
+    def can_edit(self, user):
+        """
+        Determine if the user can edit the Vote
+
+        :param user: is this user allowed to edit the vote
+        :return:
+        """
+        if user.is_authenticated and self.user == user:
+            return True
+        if not self.user:
+            return True
+        return False
 
     def __str__(self):
         return u'Vote {}'.format(self.name)
