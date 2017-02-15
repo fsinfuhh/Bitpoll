@@ -17,7 +17,7 @@ def group_title(value):
 
 @register.filter
 def percentage(value: Number) -> str:
-    if value == 0 or value:
+    if value is not None:
         return '{0:.1f}%'.format(value * 100)
     return 'n/a'
 

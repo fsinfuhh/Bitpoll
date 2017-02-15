@@ -37,7 +37,7 @@ def poll(request, poll_url):
     #
     # use average for stats
     stats = [{
-                 'score': (stat['score'] if stat['score'] else 0) / Decimal(votes_count) if votes_count > 0 else 0,
+                 'score': (stat['score'] / Decimal(votes_count) if votes_count > 0 else 0) if stat['score'] is not None else None,
                  'count': stat['score'],
                  'text': stat,
                  'choices': [{'count': stat2['count'], 'color': stat2['votechoice__value__color'],
@@ -53,7 +53,7 @@ def poll(request, poll_url):
         'page': '',
         'votes': poll_votes,
         'stats': stats,
-        'max_score': max(val['score'] for val in stats) if stats else None,
+        'max_score': max(val['score'] for val in stats if val['score'] is not None) if stats else None,
     })
 
 
