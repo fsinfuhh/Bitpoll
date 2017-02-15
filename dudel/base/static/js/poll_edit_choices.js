@@ -2,7 +2,7 @@ var times = [];
 var dates = [];
 var calendar;
 
-//$(document).ready(function() {
+$(function() {
     calendar = $("#calendar");
 
     // Checkbox stuff
@@ -63,7 +63,7 @@ var calendar;
     dates.sort();
     updateDateTimeList();
 
-//});
+});
 
 /* ========================================================================== */
 /* Checkbox stuff */

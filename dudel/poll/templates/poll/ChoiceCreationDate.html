@@ -20,8 +20,8 @@
             {% csrf_token %}
             <div id="date-time-form-content">
                 <div class="form-group">
-                    <label for="{{ new_Choice.dates.label_for }}">Dates</label>
-                    <input type="text" value="" name="{{ new_Choice.dates.name }}" id="dates" class="form-control">
+                    <label for="{{ new_choice.dates.id }}">Dates</label>
+                  {{ new_choice.dates }}
                 </div>
             </div>
             <div class="alert alert-info">

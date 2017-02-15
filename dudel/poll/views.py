@@ -189,8 +189,15 @@ def edit_dt_choice_date(request, poll_url):
     If the data is not valid, the user is directed back for correction.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    initial = {
+        'dates': ','.join(
+            c.date.strftime('%Y-%m-%d')
+            for c in current_poll.choice_set.order_by('sort_key')),
+    }
+    form = DTChoiceCreationDateForm(initial=initial)
     if request.method == 'POST':
-        form = DTChoiceCreationDateForm(request.POST)
+        form = DTChoiceCreationDateForm(
+            request.POST, initial=initial)
         if form.is_valid():
             time = DTChoiceCreationTimeForm({'dates': form.cleaned_data['dates']})
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
@@ -198,10 +205,8 @@ def edit_dt_choice_date(request, poll_url):
                 'poll': current_poll,
                 'step': 2,
             })
-    else:
-        form = DTChoiceCreationDateForm()
     return TemplateResponse(request, "poll/ChoiceCreationDate.html", {
-        'new_Choice': form,
+        'new_choice': form,
         'poll': current_poll,
         'step': 1,
         'page': 'Choices',
@@ -221,8 +226,13 @@ def edit_dt_choice_time(request, poll_url):
     If the times are missing, the user is directed back to the time-input-site.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    initial = {
+        'times': list(set(','.join(
+            c.date.strftime('%H:%M')
+            for c in current_poll.choice_set.order_by('sort_key')))),
+    }
     if request.method == 'POST':
-        form = DTChoiceCreationTimeForm(request.POST)
+        form = DTChoiceCreationTimeForm(request.POST, initial=initial)
         if form.is_valid():
             times = form.cleaned_data['times'].split(',')
             dates = form.cleaned_data['dates'].split(',')
