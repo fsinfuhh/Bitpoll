@@ -57,8 +57,8 @@ $(function() {
     $("#date-time-form-content").hide();
 
     // Load data
-    if($("#times").val()) times = $("#times").val().split(",");
-    if($("#dates").val()) dates = $("#dates").val().split(",");
+    if($("#id_times").val()) times = $("#id_times").val().split(",");
+    if($("#id_dates").val()) dates = $("#id_dates").val().split(",");
     times.sort();
     dates.sort();
     updateDateTimeList();
@@ -76,8 +76,8 @@ function updateCheckbox(e) {
 /* Time and date stuff */
 
 function updateDateTimeList() {
-    $("#times").val(times.join());
-    $("#dates").val(dates.join());
+    $("#id_times").val(times.join());
+    $("#id_dates").val(dates.join());
 
     $(".time-slots").html("");
     times.forEach(function(time) {
