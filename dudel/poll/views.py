@@ -57,7 +57,7 @@ def poll(request, poll_url):
         'page': '',
         'votes': poll_votes,
         'stats': stats,
-        'max_score': max(val['score'] for val in stats if val['score'] is not None) if stats else None,
+        'max_score': max(val['score'] for val in stats if val['score'] is not None) if stats and votes_count > 0 else None,
     })
 
 
@@ -202,7 +202,7 @@ def edit_dt_choice_date(request, poll_url):
         form = DTChoiceCreationDateForm(
             request.POST, initial=initial)
         if form.is_valid():
-            time = DTChoiceCreationTimeForm(initial=initial)
+            time = DTChoiceCreationTimeForm(request.POST, initial=initial)
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': time,
                 'poll': current_poll,
