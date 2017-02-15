@@ -123,18 +123,11 @@
                                             </span>{{ choice_value.title|force_escape|force_escape }}
                                         </div>{% endfor %}
                                         <div class='score'>
-                                        {% trans 'Score' %}: {{ choice.count }}</div>"
+                                        {% trans 'Score' %}: {{ choice.count|or_none }}</div>"
                                 data-placement="top"
                                 data-score="{{ choice.score|percentage }}">
                                 {# if vote.score != 0 else 1  TODO: das if soll glaube ich ob da übrhaupt was da ist #}
-                                {% if choice.score %}
-                                    {{ choice.score|percentage }}
-                                    {% comment %}
-                                        {{ "%.f %%" % (scores[choice]*100.0/totals[choice]) }}#}
-                                    {% endcomment %}
-                                {% else %}
-                                    N/A
-                                {% endif %}
+                                {{ choice.score|percentage }}
                                 <span class="print-only">{{ choice.score|percentage }}</span>
                             </th>
                         {% endfor %}

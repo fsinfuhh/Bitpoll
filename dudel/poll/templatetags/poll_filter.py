@@ -1,3 +1,5 @@
+from numbers import Number
+
 from django import template
 
 from dudel.poll.util import PartialDateTime
@@ -14,5 +16,14 @@ def group_title(value):
 
 
 @register.filter
-def percentage(value: int) -> str:
-    return '{0:.1f}%'.format(value * 100)
+def percentage(value: Number) -> str:
+    if value == 0 or value:
+        return '{0:.1f}%'.format(value * 100)
+    return 'n/a'
+
+
+@register.filter
+def or_none(value: object) -> object:
+    if value:
+        return value
+    return 'n/a'

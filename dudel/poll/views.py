@@ -53,7 +53,7 @@ def poll(request, poll_url):
         'page': '',
         'votes': poll_votes,
         'stats': stats,
-        'max_score': max(val['score'] for val in stats) if stats else 0,
+        'max_score': max(val['score'] for val in stats) if stats else None,
     })
 
 
