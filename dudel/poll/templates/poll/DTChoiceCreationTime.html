@@ -18,11 +18,10 @@
             <div id="date-time-form-content">
                  {% csrf_token %}
                 <div class="form-group"><label for="{{ time.dates.label_for }}">Dates</label>
-                    <input type="text" value="{{ time.dates.value }}" name="{{ time.dates.name }}" id="dates"
-                                                                               class="form-control">
+                  {{ time.dates }}
                 </div>
                 <div class="form-group"><label for="{{ time.times.label_for }}">Times</label>
-                    <input type="text" value="" name="{{ time.times.name }}" id="times" class="form-control">
+                  {{ time.times }}
                 </div>
             </div>
             <div class="script-only" style="display: block;">
