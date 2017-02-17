@@ -293,8 +293,9 @@ def edit_universal_choice(request, poll_url):
     if request.method == 'POST':
         # save new choices
         choice_texts = request.POST.getlist('choice_text')
+        choice_sort_keys = request.POST.getlist('choice_sort_key')  # TODO: errorhandling
         # TODO: frontend based sorting by user
-        for i, choice_text in enumerate(sorted(choice_texts)):
+        for i, choice_text in zip(choice_sort_keys, choice_texts):
             choice_text = choice_text.strip()
             if choice_text == '':
                 continue
@@ -303,23 +304,30 @@ def edit_universal_choice(request, poll_url):
 
         # update existing choices
         pattern = re.compile(r'^choice_text_(\d+)$')
-        for choice_id in request.POST.keys():
-            choice = pattern.match(choice_id)
-            if not choice:
-                continue
-            pk = choice.group(1)
-            db_choice = get_object_or_404(Choice, poll=current_poll, pk=pk)
-            choice_text = request.POST.get(choice_id).strip()
-            if choice_text == '':
-                db_choice.delete()
-            else:
-                db_choice.text = choice_text
-                db_choice.save()
-        return redirect('poll', poll_url)
+        with transaction.atomic():
+            for choice_id in request.POST.keys():
+                choice = pattern.match(choice_id)
+                if not choice:
+                    continue
+                pk = choice.group(1)
+                db_choice = get_object_or_404(Choice, poll=current_poll, pk=pk)
+                choice_text = request.POST.get(choice_id).strip()
+                if choice_text == '':
+                    db_choice.delete()  # TODO: nur als gelöscht markieren weil wenn es schon votes gibt, und lehr ignorieren?
+                else:
+                    db_choice.text = choice_text
+                    sort_key = request.POST.get('choice_sort_key_{}'.format(pk), -1)
+                    if sort_key == -1:
+                        sort_key = current_poll.choice_set.count() + 1  # TODO: unter umständen hier max nemen?
+                    db_choice.sort_key = sort_key
+                    db_choice.save()
+        if 'next' in request.POST:
+            return redirect('poll', poll_url)
     return TemplateResponse(request, "poll/UniversalChoiceCreation.html", {
-        'choices': current_poll.choice_set.all(),
+        'choices': current_poll.choice_set.all().order_by('sort_key'),
         'poll': current_poll,
         'page': 'Choices',
+        'next_sort_key': current_poll.choice_set.count() + 1,  # TODO: unter umständen hier max nemen?
     })
 
 

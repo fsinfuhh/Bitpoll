@@ -5,25 +5,97 @@
 {% block title %}Create choice{% endblock %}
 
 {% block content %}
-    <form action="{{ request.url }}" method="POST">
-        {% csrf_token %}
+    {% include 'poll/poll_haeder.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <form action="{{ request.url }}" class="form form-inline" method="POST">
+                    {% csrf_token %}
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th class="nobr">Wahlmöglichkeit</th>
+                            <th class="nobr">Stimmen</th>
+                            <th class="nobr">Aktionen</th>
+                        </tr>
+                        {% for choice in choices %}
+                            <tr>
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input class="form-control" name="choice_text_{{ choice.pk }}"
+                                               placeholder="{% trans 'Choice text ...' %}" value="{{ choice.text }}"/>
+                                        <input name="choice_sort_key_{{ choice.pk }}" class="choice-sort-key"
+                                               type="hidden" value="{{ choice.sort_key }}">
+                                    </div>
+                                </td>
+                                <td class="color green">
+                                    <strong>{{ choice.votes_all.count }}</strong> / 0
+                                </td>
+                                <td>
+                                    <button href="" class="btn btn-default btn-xs">
+                                        <i class="fa fa-arrow-up"></i>
+                                    </button>
+                                    <button href="" class="btn btn-default btn-xs">
+                                        <i class="fa fa-arrow-down"></i>
+                                    </button>
+                                    <button href="" class="btn btn-default btn-xs">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input name="choice_text" placeholder="{% trans 'Choice text ...' %}"/>
+                                    <input name="choice_sort_key" class="choice-sort-key" type="hidden"
+                                           value="{{ next_sort_key }}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"><i
+                                                class="fa fa-plus"></i></button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>{% comment %}
+                        <tr>
+                            <td> <button class="action" id="choice_add">{% trans 'Add choice field' %}</button> TODO: mit JS wieder anbieten?
+                            </td>
+                        </tr> {% endcomment %}
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td>
+                                <button class="action" name="Save">{% trans 'Save' %}</button>
+                                <button class="action primary" name="next">{% trans 'Save & Next' %}</button>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </form>
+            </div>
+            <div class="col-md-7">
+                <div class="well">
+                    <h3>Help</h3>
+                    <h4>Gelöschte Wahlmöglichkeiten</h4>
+                    <p>Entfernte Antworten verbleiben in dieser Liste, so dass Stimmen, die bereits abgegeben wurden,
+                        nicht verloren gehen.</p>
 
-        <div id="choice_texts">
-            {% for choice in choices %}
-              <input name="choice_text_{{ choice.pk }}" placeholder="{% trans 'Choice text ...' %}" value="{{ choice.text }}" />
-            {% endfor %}
-
-            <input name="choice_text" placeholder="{% trans 'Choice text ...' %}" />
+                    <h4>Gruppieren</h4>
+                    <p>
+                        Du kannst Wahlmöglichkeiten gruppieren, indem du sie mit '/' in Teile zerlegst.
+                    </p>
+                    <ul>
+                        <li>Some-Choice</li>
+                        <li>Some-Group/Another-Choice</li>
+                        <li>Some-Group/Third-Choice</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
-        <button id="choice_add">{% trans 'Add choice field' %}</button>
-
-        <input type="submit" value="{% trans 'Create/update choices' %}" />
-    </form>
-
+    </div>
 
 {% endblock %}
 
 {% block additionalJS %}
-  <script src="{% static 'js/poll_edit_universal_choices.js' %}"  type="text/javascript" ></script>
+    <script src="{% static 'js/poll_edit_universal_choices.js' %}" type="text/javascript"></script>
 {% endblock additionalJS %}
