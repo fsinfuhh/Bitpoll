@@ -88,11 +88,7 @@ class Poll(models.Model):
         return matrix
 
 
-
 class Choice(models.Model):
-    class Meta:
-        unique_together = [('poll', 'sort_key')]
-
     text = models.CharField(max_length=80)
     date = models.DateTimeField(null=True, blank=True)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
