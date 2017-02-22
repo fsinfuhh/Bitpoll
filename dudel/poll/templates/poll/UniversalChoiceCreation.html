@@ -19,7 +19,7 @@
                             <th class="nobr">Aktionen</th>
                         </tr>
                         {% for choice in choices %}
-                            <tr>
+                            <tr class="choice-row">
                                 <td>
                                     <div class="input-group input-group-sm">
                                         <input class="form-control" name="choice_text_{{ choice.pk }}"
@@ -32,12 +32,12 @@
                                     <strong>{{ choice.votes_all.count }}</strong> / 0
                                 </td>
                                 <td>
-                                    <button href="" class="btn btn-default btn-xs">
+                                    <a href="#" class="btn btn-default btn-xs choice-move-up">
                                         <i class="fa fa-arrow-up"></i>
-                                    </button>
-                                    <button href="" class="btn btn-default btn-xs">
+                                    </a>
+                                    <a href="#" class="btn btn-default btn-xs choice-move-down">
                                         <i class="fa fa-arrow-down"></i>
-                                    </button>
+                                    </a>
                                     <button href="" class="btn btn-default btn-xs">
                                         <i class="fa fa-trash-o"></i>
                                     </button>

@@ -1,6 +1,6 @@
 import re
 from django.contrib import messages
-from django.db import transaction
+from django.db import transaction, connection
 
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
@@ -294,7 +294,6 @@ def edit_universal_choice(request, poll_url):
         # save new choices
         choice_texts = request.POST.getlist('choice_text')
         choice_sort_keys = request.POST.getlist('choice_sort_key')  # TODO: errorhandling
-        # TODO: frontend based sorting by user
         for i, choice_text in zip(choice_sort_keys, choice_texts):
             choice_text = choice_text.strip()
             if choice_text == '':
