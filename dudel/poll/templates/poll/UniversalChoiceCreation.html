@@ -19,14 +19,18 @@
                             <th class="nobr">Aktionen</th>
                         </tr>
                         {% for choice in choices %}
-                            <tr class="choice-row">
-                                <td>
-                                    <div class="input-group input-group-sm">
-                                        <input class="form-control" name="choice_text_{{ choice.pk }}"
-                                               placeholder="{% trans 'Choice text ...' %}" value="{{ choice.text }}"/>
-                                        <input name="choice_sort_key_{{ choice.pk }}" class="choice-sort-key"
-                                               type="hidden" value="{{ choice.sort_key }}">
-                                    </div>
+                            <tr class="choice-row {% if choice.deleted %}deleted{% endif %}">
+                                <td class="choice">
+                                    {% if not choice.deleted %}
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control" name="choice_text_{{ choice.pk }}"
+                                                   placeholder="{% trans 'Choice text ...' %}" value="{{ choice.text }}"/>
+                                            <input name="choice_sort_key_{{ choice.pk }}" class="choice-sort-key"
+                                                   type="hidden" value="{{ choice.sort_key }}">
+                                        </div>
+                                    {% else %}
+                                        {{ choice.text }}
+                                    {% endif %}
                                 </td>
                                 <td class="color green">
                                     <strong>{{ choice.votes_all.count }}</strong> / 0
@@ -38,14 +42,18 @@
                                     <a href="#" class="btn btn-default btn-xs choice-move-down">
                                         <i class="fa fa-arrow-down"></i>
                                     </a>
-                                    <button href="" class="btn btn-default btn-xs">
-                                        <i class="fa fa-trash-o"></i>
+                                    <button name="delete" value="{{ choice.pk }}" class="btn btn-default btn-xs">
+                                        {% if not choice.deleted %}
+                                            <i class="fa fa-trash-o"></i>
+                                        {% else %}
+                                            <i class="fa fa-undo"></i>
+                                        {% endif %}
                                     </button>
                                 </td>
                             </tr>
                         {% endfor %}
-                        <tr>
-                            <td>
+                        <tr class="choice-row">
+                            <td class="choice">
                                 <div class="input-group input-group-sm">
                                     <input name="choice_text" placeholder="{% trans 'Choice text ...' %}"/>
                                     <input name="choice_sort_key" class="choice-sort-key" type="hidden"
@@ -56,10 +64,13 @@
                                     </span>
                                 </div>
                             </td>
+                            <td></td>
+                            <td></td>
                         </tr>{% comment %}
-                        <tr>
-                            <td> <button class="action" id="choice_add">{% trans 'Add choice field' %}</button> TODO: mit JS wieder anbieten?
+                        <tr class="choice-row">
+                            <td class="choice"> <button class="action" id="choice_add">{% trans 'Add choice field' %}</button> TODO: mit JS wieder anbieten?
                             </td>
+                            <td></td><td></td>
                         </tr> {% endcomment %}
                         </tbody>
                         <tfoot>
@@ -67,7 +78,7 @@
                             <td>
                                 <button class="action" name="Save">{% trans 'Save' %}</button>
                                 <button class="action primary" name="next">{% trans 'Save & Next' %}</button>
-                            </td>
+                            </td><td></td><td></td>
                         </tr>
                         </tfoot>
                     </table>

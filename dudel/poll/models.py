@@ -53,7 +53,7 @@ class Poll(models.Model):
 
     def get_choice_group_matrix(self):
         matrix = [
-            choice.get_hierarchy() for choice in self.choice_set.all().order_by(
+            choice.get_hierarchy() for choice in self.choice_set.filter(deleted=False).order_by(
                 'sort_key')]
         matrix = [[[item, 1, 1] for item in row] for row in matrix]
         if not matrix:
@@ -93,6 +93,7 @@ class Choice(models.Model):
     date = models.DateTimeField(null=True, blank=True)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     sort_key = models.IntegerField()
+    deleted = models.BooleanField(default=False)
 
     def __str__(self):
         if self.poll.type == 'universal':

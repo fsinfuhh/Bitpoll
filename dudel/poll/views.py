@@ -31,11 +31,11 @@ def poll(request, poll_url):
     matrix = transpose(current_poll.get_choice_group_matrix())
 
     # aggregate stats for all columns
-    stats = Choice.objects.filter(poll=current_poll).order_by('sort_key').annotate(
+    stats = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
         score=Sum('votechoice__value__weight')).values('score', 'id', 'text')
     votes_count = poll_votes.count()
     # aggregate stats for the different Choice_Values per column
-    stats2 = Choice.objects.filter(poll=current_poll).order_by('sort_key').annotate(
+    stats2 = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
         count=Count('votechoice__value__color')).values('count', 'id', 'votechoice__value__icon',
                                                         'votechoice__value__color', 'votechoice__value__title')
     #
@@ -312,16 +312,21 @@ def edit_universal_choice(request, poll_url):
                 db_choice = get_object_or_404(Choice, poll=current_poll, pk=pk)
                 choice_text = request.POST.get(choice_id).strip()
                 if choice_text == '':
-                    db_choice.delete()  # TODO: nur als gelöscht markieren weil wenn es schon votes gibt, und lehr ignorieren?
+                    db_choice.deleted = True
                 else:
                     db_choice.text = choice_text
                     sort_key = request.POST.get('choice_sort_key_{}'.format(pk), -1)
-                    if sort_key == -1:
+                    if sort_key == -1 or sort_key == "":
                         sort_key = current_poll.choice_set.count() + 1  # TODO: unter umständen hier max nemen?
                     db_choice.sort_key = sort_key
                     db_choice.save()
         if 'next' in request.POST:
             return redirect('poll', poll_url)
+        if 'delete' in request.POST:
+            db_choice = get_object_or_404(Choice, poll=current_poll, pk=request.POST.get('delete'))
+            db_choice.deleted = not db_choice.deleted
+            db_choice.save()
+
     return TemplateResponse(request, "poll/UniversalChoiceCreation.html", {
         'choices': current_poll.choice_set.all().order_by('sort_key'),
         'poll': current_poll,
@@ -431,9 +436,9 @@ def vote(request, poll_url, vote_id=None):
     else:
         current_vote = Vote()
     if current_poll.type == 'normal':
-        choices_orig = current_poll.choice_set.all().order_by('sort_key')
+        choices_orig = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
     else:
-        choices_orig = current_poll.choice_set.all()
+        choices_orig = current_poll.choice_set.filter(deleted=False)
     for choice in choices_orig:
         cur_comment = ""
         value = None
