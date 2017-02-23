@@ -10,6 +10,8 @@
         <div class="row">
             <div class="col-md-5">
                 <form action="{{ request.url }}" class="form form-inline" method="POST">
+                    {# This button gets activated if the user press enter (browsers should use the first button)#}
+                    <input type="submit" class="hidden" name="Save" value="{% trans 'Save' %}" />
                     {% csrf_token %}
                     <table class="table">
                         <tbody>
@@ -30,6 +32,10 @@
                                         </div>
                                     {% else %}
                                         {{ choice.text }}
+                                        <input class="form-control" name="choice_text_{{ choice.pk }}"
+                                                   type="hidden" placeholder="{% trans 'Choice text ...' %}" value="{{ choice.text }}"/>
+                                        <input name="choice_sort_key_{{ choice.pk }}" class="choice-sort-key"
+                                               type="hidden" value="{{ choice.sort_key }}">
                                     {% endif %}
                                 </td>
                                 <td class="color green">
@@ -59,7 +65,7 @@
                                     <input name="choice_sort_key" class="choice-sort-key" type="hidden"
                                            value="{{ next_sort_key }}">
                                     <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-primary"><i
+                                        <button type="submit" class="btn btn-primary" name="submit"><i
                                                 class="fa fa-plus"></i></button>
                                     </span>
                                 </div>
@@ -68,7 +74,7 @@
                             <td></td>
                         </tr>{% comment %}
                         <tr class="choice-row">
-                            <td class="choice"> <button class="action" id="choice_add">{% trans 'Add choice field' %}</button> TODO: mit JS wieder anbieten?
+                            <td class="choice"> <button type="button" class="action" id="choice_add">{% trans 'Add choice field' %}</button> TODO: mit JS wieder anbieten?
                             </td>
                             <td></td><td></td>
                         </tr> {% endcomment %}
@@ -76,7 +82,7 @@
                         <tfoot>
                         <tr>
                             <td>
-                                <button class="action" name="Save">{% trans 'Save' %}</button>
+                                <input type="submit" class="action" name="Save" value="{% trans 'Save' %}" />
                                 <button class="action primary" name="next">{% trans 'Save & Next' %}</button>
                             </td><td></td><td></td>
                         </tr>
