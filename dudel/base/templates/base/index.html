@@ -20,10 +20,19 @@
                     </div>
                     <div class="form-group"><select class="form-control script-hidden" id="create-type-field"
                                                     name="{{ new_Poll.type.name }}">
-                        <option value="datetime">Date and Time</option> {# TODO dynamisch, inklusive data-values unten #}
-                        <option value="date">Date</option>
-                        <option value="universal">Normal Poll</option>
-                        <option value="numeric">Numeric</option>
+                        {# TODO dynamisch, inklusive data-values unten #}
+                        <option value="datetime" {% if new_Poll.type.value == "datetime" %}selected="selected"{% endif %}>
+                            Date and Time
+                        </option>
+                        <option value="date" {% if new_Poll.type.value == "date" %}selected="selected"{% endif %}>
+                            Date
+                        </option>
+                        <option value="universal" {% if new_Poll.type.value == "universal" %}selected="selected"{% endif %}>
+                            Normal Poll
+                        </option>
+                        <option value="numeric" {% if new_Poll.type.value == "numeric" %}selected="selected"{% endif %}>
+                            Numeric
+                        </option>
                     </select>
                         <div class="script-only">
                             <ul id="create-type-list" class="type-choices">
@@ -68,7 +77,7 @@
                     </div>
                     <div class="form-group">
                         <input autocomplete="off" class="form-control" id="title-input" name="{{ new_Poll.title.name }}"
-                                                   placeholder="Title" type="text" value="" />
+                                                   placeholder="Title" type="text" value="{{ new_Poll.title.value|default_if_none:'' }}" />
                         {% if new_Poll.title.errors %}
                             <div class="form-errors">
                                 <div class="alert alert-danger">
@@ -79,7 +88,7 @@
                             </div>
                         {% endif %}
                     </div>
-                    <div id="advanced-open" class="hidden">
+                    <div id="advanced-open" class="{% if not new_Poll.url.errors %}hidden{% endif %}">
                         <div class="form-step">
                             <div class="number">Step 3</div>
                             <div class="title">Advanced Settings</div>
@@ -93,7 +102,7 @@
                             </div>
                             <label for="slug" style="margin-top: 2px;">URL name</label>
                             <div class="input-group"><span class="input-group-addon">http://127.0.0.1:5000/poll/</span>
-                                <input class="form-control" id="slug-input" name="{{ new_Poll.url.name }}" type="text" value="">
+                                <input class="form-control" id="slug-input" name="{{ new_Poll.url.name }}" type="text" value="{{ new_Poll.url.value }}">
                                 {% if new_Poll.url.errors %}
                                     <div class="form-errors">
                                         <div class="alert alert-danger">
