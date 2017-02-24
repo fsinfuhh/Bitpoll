@@ -1,0 +1,30 @@
+# Dudel
+
+
+This is a new version of the Dudel from opatut (https://github.com/opatut/dudel) used at mafiasi.de, rewritten using the Django framework
+as a backend.
+
+# Install
+
+Install the System Dependencies:
+
+    apt install coffeescript ruby-sass python3-dev
+
+Generate a Python Virtualenviroment and install dependencies:
+
+    virtualenv -p /usr/bin/python3 .pyenv
+    source .pyenv/bin/activate
+    pip install -p requirements.txt
+
+Copy the example Settings:
+
+    cp dudel/settings.py.example dudel/settings.py
+
+Initiallise Database:
+
+    ./manage.py migrate
+
+Run Testserver:
+
+    ./manage.py runserver
+

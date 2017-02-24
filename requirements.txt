@@ -1,6 +1,5 @@
 django
 django-widget-tweaks
-psycopg2
 libsass
 django-compressor
 django-static-precompiler
