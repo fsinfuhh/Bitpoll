@@ -25,6 +25,9 @@ def index(request):
         form = PollCreationForm(request.POST)
         if form.is_valid():
             current_poll = form.save()
+            if request.user.is_authenticated():
+                current_poll.user = request.user
+                current_poll.save()
             # TODO: lazy translation
             # TODO: load from config
             ChoiceValue(title="yes", icon="check", color="90db46", weight=1, poll=current_poll).save()

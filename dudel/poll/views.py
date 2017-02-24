@@ -4,7 +4,7 @@ from django.db import transaction, connection
 
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
-from django.db.models import F, Sum, Count
+from django.db.models import F, Sum, Count, Q
 from django.template.response import TemplateResponse
 from django.utils.translation import ugettext_lazy as _
 
@@ -13,6 +13,15 @@ from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, Unive
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment
 from datetime import datetime
 from decimal import Decimal
+
+
+def list_polls(request):
+    if request.user.is_authenticated():
+        # TODO add polls belonging group of user
+        polls = Poll.objects.filter(Q(user=request.user) | Q(vote__user=request.user)).distinct().order_by('created')  # | Q(group__user_set=request.user))
+        return TemplateResponse(request, 'poll/list_polls.html', {
+            'polls': polls
+        })
 
 
 def poll(request, poll_url):

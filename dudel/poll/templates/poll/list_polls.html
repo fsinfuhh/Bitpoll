@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Show Polls{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1> Poll overview</h1>
+        <small>
+            This list shows all the polls you have participated in, either by owning them, voting on them, being invited, or watching.
+        </small>
+        <table>
+            <tr>
+                <td>
+                    Poll title
+                </td>
+                <td>
+                    Date of creation
+                </td>
+                <td>
+                    Tags
+                </td>
+            </tr>
+            {% for poll in polls %}
+                <tr>
+                    <td>
+                        <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
+                    </td>
+                    <td>
+                        {{ poll.created }}
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
