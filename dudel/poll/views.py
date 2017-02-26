@@ -199,9 +199,9 @@ def edit_dt_choice_date(request, poll_url):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     initial = {
-        'dates': ','.join(
+        'dates': ','.join(set(list(
             c.date.strftime('%Y-%m-%d')
-            for c in current_poll.choice_set.order_by('sort_key')),
+            for c in current_poll.choice_set.order_by('sort_key')))),
         'times': ','.join(set(list(
             c.date.strftime('%H:%M')
             for c in current_poll.choice_set.order_by('sort_key')))),
@@ -211,7 +211,8 @@ def edit_dt_choice_date(request, poll_url):
         form = DTChoiceCreationDateForm(
             request.POST, initial=initial)
         if form.is_valid():
-            time = DTChoiceCreationTimeForm(request.POST, initial=initial)
+            initial['dates'] = form.cleaned_data.get('dates')
+            time = DTChoiceCreationTimeForm(initial=initial)
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': time,
                 'poll': current_poll,
@@ -243,7 +244,7 @@ def edit_dt_choice_time(request, poll_url):
         'dates': ','.join(
             c.date.strftime('%Y-%m-%d')
             for c in current_poll.choice_set.order_by('sort_key')),
-        'times': list(set(','.join(
+        'times': ','.join(set(list(
             c.date.strftime('%H:%M')
             for c in current_poll.choice_set.order_by('sort_key')))),
     }
