@@ -277,20 +277,37 @@ def edit_dt_choice_combinations(request, poll_url):
         # getlist does not raise an exception if datetimes[] is not in request.POST
         chosen_combinations = request.POST.getlist('datetimes[]')
 
+        chosen_times = []
+        new_choices = []
+        old_choices = []
+        choices = current_poll.choice_set.all()
+        # List of the Old Ids, used for detection what has to be deleted
+        old_choices_ids = [c.pk for c in choices]
         # parse datetime objects of chosen combinations
-        choices = []
         for combination in chosen_combinations:
             try:
-                choices.append(datetime.strptime(combination, '%Y-%m-%d %H:%M'))
+                chosen_times.append(datetime.strptime(combination, '%Y-%m-%d %H:%M'))
             except ValueError:
                 # at least one invalid time/date has been specified. Redirect to first step
                 return redirect('poll_editDTChoiceDate', current_poll.url)
-
-        # all combinations have been valid. save choices to database.
-        for i, choice in enumerate(sorted(choices)):
-            Choice.objects.create(
-                date=choice, poll=current_poll, sort_key=i)
-            # TODO: vorhandene choices?
+        # Search for already existing Choices
+        for i, date_time in enumerate(sorted(chosen_times)):
+            choice_obj = current_poll.choice_set.filter(date=date_time)
+            if choice_obj:
+                old_choices_ids.remove(choice_obj[0].pk)
+                choice_obj[0].sort_key = i
+                choice_obj[0].deleted = False  # Mark as not deleted
+                old_choices.append(choice_obj[0])
+            else:
+                new_choices.append(Choice(
+                    date=date_time, poll=current_poll, sort_key=i))
+        # Save new choices to database, Update/Delete old ones
+        with transaction.atomic():
+            # Save the new Choices
+            Choice.objects.bulk_create(new_choices)
+            for choice in old_choices:
+                choice.save()
+            Choice.objects.filter(pk__in=old_choices_ids).update(deleted=True)
         return redirect('poll', current_poll.url)
     return redirect('poll_editDTChoiceDate', current_poll.url)
 
