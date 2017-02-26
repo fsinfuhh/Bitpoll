@@ -10,7 +10,8 @@
 
 {% block content %}
     {% include "poll/poll_haeder.html" %}
-
+    <div class="container">
+        {% include  "poll/DTChoiceHaeder.html" %}
     <div class="alert alert-info">
         <div class="container"><i class="fa fa-exclamation-circle"></i>Here you can select which day/time combinations
             are available for voting.
@@ -69,7 +70,7 @@
         <div class="form-actions"><a class="action" href="javascript: history.back();">Back</a>
             <input type="submit" class="action primary" value="Next">
         </div>
-    </form>
+    </form></div>
 
 {% endblock %}
 

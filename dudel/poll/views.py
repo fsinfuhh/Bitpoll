@@ -215,6 +215,7 @@ def edit_dt_choice_date(request, poll_url):
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': time,
                 'poll': current_poll,
+                'page': 'Choices',
                 'step': 2,
             })
     return TemplateResponse(request, "poll/ChoiceCreationDate.html", {
@@ -256,11 +257,15 @@ def edit_dt_choice_time(request, poll_url):
                 'times': times,
                 'dates': dates,
                 'poll': current_poll,
+                'page': 'Choices',
+                'step': 3,
             })
         elif form.cleaned_data['dates'] != "":
             return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
                 'time': form,
                 'poll': current_poll,
+                'page': 'Choices',
+                'step': 2,
             })
     return redirect('poll_editDTChoiceDate', current_poll.url)
 
@@ -284,6 +289,7 @@ def edit_dt_choice_combinations(request, poll_url):
         for i, choice in enumerate(sorted(choices)):
             Choice.objects.create(
                 date=choice, poll=current_poll, sort_key=i)
+            # TODO: vorhandene choices?
         return redirect('poll', current_poll.url)
     return redirect('poll_editDTChoiceDate', current_poll.url)
 
