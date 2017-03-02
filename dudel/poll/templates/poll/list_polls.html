@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 
+{% load widget_tweaks %}
+{% load settings_value %}
+{% load i18n %}
+
 {% block title %}Show Polls{% endblock %}
 
 {% block content %}
     <div class="container">
+
         <h1> Poll overview</h1>
         <small>
             This list shows all the polls you have participated in, either by owning them, voting on them, being invited, or watching.

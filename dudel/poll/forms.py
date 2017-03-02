@@ -36,3 +36,11 @@ class DTChoiceCreationTimeForm(Form):
 
     dates = CharField()
     times = CharField()
+
+
+class PollSettingsForm(ModelForm):
+    class Meta:
+        model = Poll
+        fields = ['title', 'due_date', 'show_results', 'timezone_name', 'description', 'allow_comments',
+                  'anonymous_allowed', 'require_login', 'require_invitation', 'one_vote_per_user', 'show_invitations',
+                  'group', 'public_listening']

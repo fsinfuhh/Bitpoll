@@ -1,5 +1,6 @@
 import re
 from django.contrib import messages
+from django.contrib.auth.models import Group, User
 from django.db import transaction, connection
 
 from django.http import HttpResponseForbidden
@@ -9,16 +10,17 @@ from django.template.response import TemplateResponse
 from django.utils.translation import ugettext_lazy as _
 
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
-    DTChoiceCreationDateForm, DTChoiceCreationTimeForm
-from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment
+    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm
+from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS
 from datetime import datetime
 from decimal import Decimal
+from pytz import all_timezones
 
 
 def list_polls(request):
     if request.user.is_authenticated():
-        # TODO add polls belonging group of user
-        polls = Poll.objects.filter(Q(user=request.user) | Q(vote__user=request.user)).distinct().order_by('created')  # | Q(group__user_set=request.user))
+        polls = Poll.objects.filter(Q(user=request.user) | Q(vote__user=request.user)|
+                                    Q(group__user=request.user)).distinct().order_by('created')
         return TemplateResponse(request, 'poll/list_polls.html', {
             'polls': polls
         })
@@ -594,6 +596,51 @@ def copy(request, poll_url):
     return TemplateResponse(request, 'poll/Copy.html', {
         'new_Poll': form,
         'poll': poll_url
+    })
+
+
+def settings(request, poll_url):
+    """
+
+    :param request:
+    :param poll_url:
+    :return:
+    """
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    groups = Group.objects.filter(user=request.user)
+    user_error = ""
+    user = current_poll.user.username if current_poll.user else ""
+    if request.method == 'POST':
+        form = PollSettingsForm(request.POST, instance=current_poll)
+        if form.is_valid():
+            new_poll = form.save(commit=False)
+            user = form.data.get('user', '')
+            print('gzui:', user)
+            if user:
+                try:
+                    user_obj = User.objects.get(username=user)
+                    new_poll.user = user_obj
+                except: #TODO: correct exeption
+                    user_error = "User not Found"
+            if not user_error:
+                new_poll.save()
+                return redirect('poll_settings', current_poll.url)
+        else:
+            user = form.cleaned_data.get('user', '')
+            print(form.errors)
+
+    else:
+        form = PollSettingsForm(instance=current_poll)
+
+    return TemplateResponse(request, 'poll/Settings.html', {
+        'form': form,
+        'poll': current_poll,
+        'page': 'Settings',
+        'groups': groups,
+        'results': POLL_RESULTS,
+        'timezones': all_timezones,
+        'user_error': user_error,
+        'user': user,
     })
 
 

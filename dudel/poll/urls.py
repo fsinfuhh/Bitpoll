@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/delete/$', views.delete_comment, name='poll_deleteComment'),
     url(r'^([a-zA-Z0-9_\-]+)/edit/$', views.edit, name='poll_edit'),
     url(r'^([a-zA-Z0-9_\-]+)/watch/$', views.watch, name='poll_watch'),
+    url(r'^([a-zA-Z0-9_\-]+)/settings/$', views.settings, name='poll_settings'),
 
 
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices/$', views.edit_choice, name='poll_editChoice'),
