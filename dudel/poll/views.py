@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 from pytz import all_timezones
 
@@ -564,10 +564,20 @@ def copy(request, poll_url):
     The new Poll is saved and the user is directed to its page.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    date_shift = 0
 
     if request.method == 'POST':
         form = PollCopyForm(request.POST)
+        randomize = form.data.get('randomize', '')
+
         if form.is_valid():
+            copy_choices = form.data.get('copy_choices', '')
+            copy_invitations = form.data.get('copy_invitations', '')  # TODO
+            create_invitations_from_votes = form.data.get('create_invitations_from_votes')  # TODO
+            copy_answer_values = form.data.get('copy_ans_values', '')
+            reset_ownership = form.data.get('reset_ownership', '')
+            date_shift = int(form.data.get('date_shift', ''))
+
             choice_values = current_poll.choicevalue_set.all()
             choices = current_poll.choice_set.all()
 
@@ -576,26 +586,37 @@ def copy(request, poll_url):
             current_poll.url = form.cleaned_data['url']
             current_poll.due_date = form.cleaned_data['due_date']
 
+            if date_shift:
+                current_poll.due_date += timedelta(days=date_shift)
+                print(current_poll.due_date)
+
+            if reset_ownership:
+                current_poll.user = None
+                current_poll.group = None
+
             current_poll.save()
 
-            for value in choice_values:
-                value.pk = None
-                value.poll = current_poll
-                value.save()
+            if copy_choices:
+                for choice in choices:
+                    choice.pk = None
+                    choice.poll = current_poll
+                    choice.save()
 
-            for choice in choices:
-                choice.pk = None
-                choice.poll = current_poll
-                choice.save()
+            if copy_answer_values:
+                for value in choice_values:
+                    value.pk = None
+                    value.poll = current_poll
+                    value.save()
 
             return redirect('poll', current_poll.url)
 
     else:
-        form = PollCopyForm({'title': "Copy of" + current_poll.title})
+        form = PollCopyForm({'title': "Copy of " + current_poll.title, 'due_date': current_poll.due_date})
 
     return TemplateResponse(request, 'poll/Copy.html', {
-        'new_Poll': form,
-        'poll': poll_url
+        'form': form,
+        'poll': current_poll,
+        'date_shift': date_shift,
     })
 
 
@@ -615,7 +636,6 @@ def settings(request, poll_url):
         if form.is_valid():
             new_poll = form.save(commit=False)
             user = form.data.get('user', '')
-            print('gzui:', user)
             if user:
                 try:
                     user_obj = User.objects.get(username=user)
