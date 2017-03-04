@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
+from django.db.models import Q
 
 from dudel.poll.forms import PollCreationForm
 from dudel.poll.models import ChoiceValue, Poll, Vote
@@ -50,3 +51,17 @@ def index(request):
         'votes_count': Vote.objects.all().count(),
         'user_count': User.objects.count(),
     })
+
+
+def settings(request):
+    if request.user.is_authenticated():
+        polls = Poll.objects.filter(Q(user=request.user) | Q(vote__user=request.user) |
+                                    Q(group__user=request.user)).distinct().order_by('created')
+
+        if request.method == 'POST':
+            pass  # TODO implement
+
+        return TemplateResponse(request, 'base/settings.html', {
+            'polls': polls,
+            'user': request.user,
+        })

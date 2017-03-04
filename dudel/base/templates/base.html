@@ -55,8 +55,7 @@
                     {% else %}
                         <li><a href=""><i class="fa fa-user"></i><span>{{ request.user.get_username }}</span></a>
                             <ul class="submenu right">{# TODO: usersettings #}
-                                <li><a href="{% url 'list_polls' %}">Show Polls</a></li>
-                                <li><a href=""><i class="fa fa-pencil"></i>Settings</a></li>
+                                <li><a href="/base/settings"><i class="fa fa-pencil"></i>Settings</a></li>
                                 <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>Logout</a></li>
                             </ul>
                         </li>

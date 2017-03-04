@@ -10,20 +10,11 @@ from django.template.response import TemplateResponse
 from django.utils.translation import ugettext_lazy as _
 
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
-    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm
+    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS
 from datetime import datetime, timedelta
 from decimal import Decimal
 from pytz import all_timezones
-
-
-def list_polls(request):
-    if request.user.is_authenticated():
-        polls = Poll.objects.filter(Q(user=request.user) | Q(vote__user=request.user)|
-                                    Q(group__user=request.user)).distinct().order_by('created')
-        return TemplateResponse(request, 'poll/list_polls.html', {
-            'polls': polls
-        })
 
 
 def poll(request, poll_url):
@@ -390,14 +381,19 @@ def delete(request, poll_url):
         if 'Delete' in request.POST:
             if request.user.is_authenticated:
                 # TODO restriction for deletion
+                if not (current_poll.user or current_poll.group) or current_poll.user == request.user or request.user in current_poll.group.user_set:
+                    current_poll.delete()
                 return redirect('index')
             else:
                 error_msg = "Deletion not allowed. You are not authenticated."
         else:
             return redirect('poll', poll_url)
+    else:
+        form = PollDeleteForm(instance=current_poll)
 
     return TemplateResponse(request, 'poll/PollDelete.html', {
         'poll': current_poll,
+        'form': form,
         'error': error_msg,
     })
 
