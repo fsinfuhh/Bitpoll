@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+{% load settings_value %}
+{% load i18n %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-md-8">
+            <h1> Poll overview</h1>
+            <p>
+                This list shows all the polls you have participated in, either by owning them, voting on them, being invited, or watching.
+            </p>
+            <table class="table table-condensed table-striped">
+                <tr>
+                    <th> Poll title </th>
+                    <th> Date of creation </th>
+                    <th colspan="4"> Tags </th>
+                </tr>
+                {% for poll in polls %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
+                        </td>
+                        <td>
+                            {{ poll.created }}
+                        </td>
+                        <td width="10">
+                            {% if user == poll.user %}
+                                <span class="label label-danger form-control"> Owner </span>
+                            {% else %}
+                                <span class="label label-default form-control"> not owner</span>
+                            {% endif %}
+                        </td>
+                        <td width="10">
+                            {% if user in poll.group.user_set %}
+                                <span class="label label-warning form-control">{{ poll.group.name }}</span>
+                            {% else %}
+                                <span class="label label-default form-control">not own group</span>
+                            {% endif %}
+                        </td>
+                        <td width="10">
+                            {% if false %}  {# TODO  #}
+                                <span class="label label-success form-control"> Voted </span>
+                            {% else %}
+                                <span class="label label-default form-control"> not voted </span>
+                            {% endif %}
+                        </td>
+                        <td width="10">
+                            {% if user in poll.pollwatch_set %}
+                                <span class="label label-info form-control"> Watching </span>
+                            {% else %}
+                                <span class="label label-default form-control"> Not watching </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <h1>Settings</h1>
+            <p>You can edit your account settings in the centralized accounts page.</p>
+
+            <form method="post">
+                <div class="form-group">
+                    <label for="preferred-language">Language:</label>
+                    <select id="preferred-language" class="form-control" name="preferred-language">
+                        {# TODO options #}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="timezone">Timezone:</label>
+                    <select id="timezone" class="form-control" name="preferred-language">
+                        {# TODO options #}
+                    </select>
+                </div>
+
+                <label>Various</label>
+                <div class="checkbox">
+                    <input id="autowatch" name="autowatch" type="checkbox">
+                    <label for="autowatch">Auto-watch polls</label>
+                </div>
+                <div class="checkbox">
+                    <input id="allow-invitation-mails" name="allow-invitation-mails" type="checkbox">
+                    <label for="allow-invitation-mails">Allow to receive emails for poll invitations</label>
+                </div>
+
+                <input type="submit" value="Create" class="action primary" name="create"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
