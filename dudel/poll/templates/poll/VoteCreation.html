@@ -99,6 +99,7 @@
                     </td>
                     <td colspan="4">
                         <textarea title="Comment:" name="comment" id="comment" cols="40" rows="5">{{ current_vote.comment }}</textarea><br/>
+                        {% render_field comment class+="form-control"%}
                 </tr>
                 <tr>
                     <td colspan="{{ matrix_len }}"></td>

@@ -1,6 +1,6 @@
 import re
 from django.contrib import messages
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from django.db import transaction, connection
 
 from django.http import HttpResponseForbidden
@@ -12,6 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS
+from dudel.base.models import DudelUser
+
 from datetime import datetime, timedelta
 from decimal import Decimal
 from pytz import all_timezones
@@ -634,7 +636,7 @@ def settings(request, poll_url):
             user = form.data.get('user', '')
             if user:
                 try:
-                    user_obj = User.objects.get(username=user)
+                    user_obj = DudelUser.objects.get(username=user)
                     new_poll.user = user_obj
                 except: #TODO: correct exeption
                     user_error = "User not Found"

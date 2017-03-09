@@ -35,6 +35,7 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'DEBUG',
     'DEFAULT_RANDOM_SLUG',
     'BASE_URL',
+    'HOME_URL',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -125,6 +126,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# User Model
+
+AUTH_USER_MODEL = 'base.DudelUser'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -157,3 +162,5 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',
 }
+
+HOME_URL = "/"

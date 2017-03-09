@@ -4,6 +4,7 @@
 
 {%  value_from_settings SITE_NAME as site_name %}
 {%  value_from_settings DEBUG as debug %}
+{%  value_from_settings HOME_URL as home_url %}
 
 <!DOCTYPE html>
 <html>
@@ -39,7 +40,7 @@
                 <ul class="menu">
                     <li><a href="/"><i class="fa fa-bars"></i><span>Menu</span></a>
                         <ul class="submenu">
-                            <li><a href="https://example.com/" target="_blank"><i class="fa fa-home"></i>Home</a></li>
+                            <li><a href="{{ home_url }}" target="_blank"><i class="fa fa-home"></i>Home</a></li>
                             <li><a href="{% url 'index' %}"><i class="fa fa-plus"></i>Create poll</a></li>
                             <li><a href="/about"><i class="fa fa-question-circle"></i>About</a></li>
                         </ul>

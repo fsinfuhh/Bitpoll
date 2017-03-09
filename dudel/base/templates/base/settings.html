@@ -42,14 +42,14 @@
                             {% endif %}
                         </td>
                         <td width="10">
-                            {% if false %}  {# TODO  #}
+                            {% if user in poll.vote_set.user_set %}  {# TODO korrigieren #}
                                 <span class="label label-success form-control"> Voted </span>
                             {% else %}
                                 <span class="label label-default form-control"> not voted </span>
                             {% endif %}
                         </td>
                         <td width="10">
-                            {% if user in poll.pollwatch_set %}
+                            {% if user in poll.pollwatch_set %}  {# TODO korrigieren #}
                                 <span class="label label-info form-control"> Watching </span>
                             {% else %}
                                 <span class="label label-default form-control"> Not watching </span>
@@ -65,30 +65,44 @@
             <p>You can edit your account settings in the centralized accounts page.</p>
 
             <form method="post">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="preferred-language">Language:</label>
-                    <select id="preferred-language" class="form-control" name="preferred-language">
-                        {# TODO options #}
+                    <select id="preferred-language" class="form-control" name="{{ user_form.language.name }}">
+                        {% for language in languages %}
+                            {% if language.0 == user_form.language.value %}
+                                <option value="{{ language.0 }}" selected="selected"> {{ language.1 }}</option>
+                            {% else %}
+                                <option value="{{ language.0 }}"> {{ language.1 }}</option>
+                            {% endif %}
+                        {% endfor %}
                     </select>
                 </div>
+            {{ user.timezone.value }}
                 <div class="form-group">
                     <label for="timezone">Timezone:</label>
-                    <select id="timezone" class="form-control" name="preferred-language">
-                        {# TODO options #}
+                    <select id="timezone" class="form-control" name="{{ user_form.timezone.name }}">
+                        {% for timezone in timezones %}
+                            {% if timezone == user_form.timezone.value %}
+                                <option value="{{ timezone }}" selected="selected"> {{ timezone }}</option>
+                            {% else %}
+                                <option value="{{ timezone }}"> {{ timezone }}</option>
+                            {% endif %}
+                        {% endfor %}
                     </select>
                 </div>
 
                 <label>Various</label>
                 <div class="checkbox">
-                    <input id="autowatch" name="autowatch" type="checkbox">
+                    <input id="autowatch" name="{{ user_form.auto_watch.name }}" type="checkbox" {% if user_form.auto_watch.value %} checked {% endif %}>
                     <label for="autowatch">Auto-watch polls</label>
                 </div>
                 <div class="checkbox">
-                    <input id="allow-invitation-mails" name="allow-invitation-mails" type="checkbox">
+                    <input id="allow-invitation-mails" name="{{ user_form.email_invitation.name }}" type="checkbox" {% if user_form.email_invitation.value %} checked {% endif %}>
                     <label for="allow-invitation-mails">Allow to receive emails for poll invitations</label>
                 </div>
 
-                <input type="submit" value="Create" class="action primary" name="create"/>
+                <input type="submit" value="Save" class="action primary" name="create"/>
             </form>
         </div>
     </div>
