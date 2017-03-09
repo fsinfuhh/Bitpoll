@@ -1,7 +1,8 @@
-from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.db.models import Q
+
+from dudel.base.models import DudelUser
 
 from dudel.poll.forms import PollCreationForm
 from dudel.poll.models import ChoiceValue, Poll, Vote
@@ -49,7 +50,7 @@ def index(request):
         'new_Poll': form,
         'poll_count': Poll.objects.all().count(),
         'votes_count': Vote.objects.all().count(),
-        'user_count': User.objects.count(),
+        'user_count': DudelUser.objects.count(),
     })
 
 

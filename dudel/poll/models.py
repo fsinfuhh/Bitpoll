@@ -1,8 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 
 from dudel.poll.util import DateTimePart, PartialDateTime
-
+from dudel.base.models import DudelUser
 
 POLL_TYPES = (
     ('universal', 'Universal'),
@@ -25,7 +25,7 @@ class Poll(models.Model):
     url = models.SlugField(max_length=80, unique=True)
     type = models.CharField(max_length=20, choices=POLL_TYPES, default="universal")
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, null=True, blank=True)
+    user = models.ForeignKey(DudelUser, null=True, blank=True)
     group = models.ForeignKey(Group, null=True, blank=True)
     """owner_id = models.ForeignKey(Member)"""
 
@@ -126,7 +126,7 @@ class Comment(models.Model):
     text = models.TextField()
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, blank=True)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     # TODO allow null for user -> comment creation possible
 
@@ -136,7 +136,7 @@ class Comment(models.Model):
 
 class PollWatch(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return u'Pollwatch of Poll {} and User {}'.format(self.poll_id, self.user_id)
@@ -147,11 +147,11 @@ class Vote(models.Model):
     anonymous = models.BooleanField(default=False)
     date_created = models.DateTimeField()
     comment = models.TextField()
-    assigned_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='assigning')
+    assigned_by = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, related_name='assigning')
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, blank=True)
 
-    def can_edit(self, user: User) -> bool:
+    def can_edit(self, user: DudelUser) -> bool:
         """
         Determine if the user can edit the Vote
 
@@ -164,7 +164,7 @@ class Vote(models.Model):
             return True
         return False
 
-    def can_delete(self, user: User) -> bool:
+    def can_delete(self, user: DudelUser) -> bool:
         """
         Determine if the user can delete the Vote
 
