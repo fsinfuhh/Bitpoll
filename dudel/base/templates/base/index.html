@@ -21,18 +21,18 @@
                         <div class="title">Select Type</div>
                     </div>
                     <div class="form-group"><select class="form-control script-hidden" id="create-type-field"
-                                                    name="{{ new_Poll.type.name }}">
+                                                    name="{{ poll_form.type.name }}">
                         {# TODO dynamisch, inklusive data-values unten #}
-                        <option value="datetime" {% if new_Poll.type.value == "datetime" %}selected="selected"{% endif %}>
+                        <option value="datetime" {% if poll_form.type.value == "datetime" %}selected="selected"{% endif %}>
                             Date and Time
                         </option>
-                        <option value="date" {% if new_Poll.type.value == "date" %}selected="selected"{% endif %}>
+                        <option value="date" {% if poll_form.type.value == "date" %}selected="selected"{% endif %}>
                             Date
                         </option>
-                        <option value="universal" {% if new_Poll.type.value == "universal" %}selected="selected"{% endif %}>
+                        <option value="universal" {% if poll_form.type.value == "universal" %}selected="selected"{% endif %}>
                             Normal Poll
                         </option>
-                        <option value="numeric" {% if new_Poll.type.value == "numeric" %}selected="selected"{% endif %}>
+                        <option value="numeric" {% if poll_form.type.value == "numeric" %}selected="selected"{% endif %}>
                             Numeric
                         </option>
                     </select>
@@ -78,45 +78,86 @@
                         <div class="title">Enter Title</div>
                     </div>
                     <div class="form-group">
-                        <input autocomplete="off" class="form-control" id="title-input" name="{{ new_Poll.title.name }}"
-                                                   placeholder="Title" type="text" value="{{ new_Poll.title.value|default_if_none:'' }}" />
-                        {% if new_Poll.title.errors %}
+                        <input autocomplete="off" class="form-control" id="title-input" name="{{ poll_form.title.name }}"
+                                                   placeholder="Title" type="text" value="{{ poll_form.title.value|default_if_none:'' }}" />
+                        {% if poll_form.title.errors %}
                             <div class="form-errors">
                                 <div class="alert alert-danger">
                                     <div class="container">
-                                    <i class="fa fa-times"></i>{{ new_Poll.title.errors }}
+                                    <i class="fa fa-times"></i>{{ poll_form.title.errors }}
                                     </div>
                                 </div>
                             </div>
                         {% endif %}
                     </div>
-                    <div id="advanced-open" class="{% if not new_Poll.url.errors %}hidden{% endif %}">
+                    <div id="advanced-open" class="{% if not poll_form.url.errors %}hidden{% endif %}">
                         <div class="form-step">
                             <div class="number">Step 3</div>
                             <div class="title">Advanced Settings</div>
                         </div>
                     {# TODO: due date, public? #}
-                        <script>var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %}</script>
-                        <div id="slug" class="form-group">
-                            <div style="float: right;">
-                                <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>Randomize</span>
-                                </button>
+                        <script>var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %};</script>
+                        <div class="col-md-12">
+                            <div id="slug" class="form-group">
+                                <div style="float: right;">
+                                    <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>Randomize</span>
+                                    </button>
+                                </div>
+                                <label for="slug" style="margin-top: 2px;">URL name</label>
+                                <div class="input-group"><span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
+                                    <input class="form-control" id="slug-input" name="{{ poll_form.url.name }}" type="text" value="{{ poll_form.url.value }}">
+                                    {% if poll_form.url.errors %}
+                                        <div class="form-errors">
+                                            <div class="alert alert-danger">
+                                                <div class="container">
+                                                <i class="fa fa-times"></i>{{ poll_form.url.errors }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <label for="slug" style="margin-top: 2px;">URL name</label>
-                            <div class="input-group"><span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
-                                <input class="form-control" id="slug-input" name="{{ new_Poll.url.name }}" type="text" value="{{ new_Poll.url.value }}">
-                                {% if new_Poll.url.errors %}
+                        </div>
+                    <div>
+                        <div class="col-md-6">
+                            <label for="due-date-input">Due date</label>
+                            <div class="form-group">
+
+                                {% render_field poll_form.due_date class+="form-control" %}
+                                {% if poll_form.due_date.errors %}
                                     <div class="form-errors">
                                         <div class="alert alert-danger">
                                             <div class="container">
-                                            <i class="fa fa-times"></i>{{ new_Poll.url.errors }}
+                                                <i class="fa fa-times"></i>{{ poll_form.due_date.errors }}
                                             </div>
                                         </div>
                                     </div>
                                 {% endif %}
                             </div>
+                            <label for="description-input">Description</label>
+                            <div class="text " id="description-input">
+                                {% render_field poll_form.description class+="form-control"%}
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-md-offset-1 col-md-5">
+                            <div class="checkbox">
+                                <input type="checkbox" id="anonymous_allowed" name="{{ poll_form.anonymous_allowed.name }}" {% if poll_form.anonymous_allowed.value %} checked {% endif %}>
+                                <label for="anonymous_allowed">allow anonymous votes</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="require_login" name="{{ poll_form.require_login.name }}" {% if poll_form.require_login.value %} checked {% endif %}>
+                                <label for="require_login">login required</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="require_invitation" name="{{ poll_form.require_invitation.name }}" {% if poll_form.require_invitation.value %} checked {% endif %}>
+                                <label for="require_invitation">invitation required to vote</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="one_vote_per_user" name="{{ poll_form.one_vote_per_user.name }}" {% if poll_form.one_vote_per_user.value %} checked {% endif %}>
+                                <label for="one_vote_per_user">one vote per user</label>
+                            </div>
+                        </div>
+                    </div></div>
                     <div class="form-group text-center">
                         <a id="advanced-toggle" href="#" class="action">
                             <span class="more"><i class="fa fa-plus-square-o"></i>

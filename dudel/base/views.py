@@ -51,7 +51,7 @@ def index(request):
     else:
         form = PollCreationForm()
     return TemplateResponse(request, "base/index.html", {
-        'new_Poll': form,
+        'poll_form': form,
         'poll_count': Poll.objects.all().count(),
         'votes_count': Vote.objects.all().count(),
         'user_count': DudelUser.objects.count(),

@@ -29,30 +29,30 @@
                         </td>
                         <td width="10">
                             {% if user == poll.user %}
-                                <span class="label label-danger form-control"> Owner </span>
+                                <span class="label label-danger form-control"><i class="fa fa-user"></i> Owner </span>
                             {% else %}
-                                <span class="label label-default form-control"> not owner</span>
+                                <span class="label label-default form-control"><i class="fa fa-ban"></i> Not owner</span>
                             {% endif %}
                         </td>
                         <td width="10">
                             {% if user in poll.group.user_set %}
-                                <span class="label label-warning form-control">{{ poll.group.name }}</span>
+                                <span class="label label-warning form-control"><i class="fa fa-group"></i>{{ poll.group.name }}</span>
                             {% else %}
-                                <span class="label label-default form-control">not own group</span>
+                                <span class="label label-default form-control"><i class="fa fa-ban"></i> Not own group</span>
                             {% endif %}
                         </td>
                         <td width="10">
                             {% if user in poll.vote_set.user_set %}  {# TODO korrigieren #}
-                                <span class="label label-success form-control"> Voted </span>
+                                <span class="label label-success form-control"><i class="fa fa-check"></i> Voted </span>
                             {% else %}
-                                <span class="label label-default form-control"> not voted </span>
+                                <span class="label label-default form-control"><i class="fa fa-ban"></i> Not voted </span>
                             {% endif %}
                         </td>
                         <td width="10">
                             {% if user in poll.pollwatch_set %}  {# TODO korrigieren #}
-                                <span class="label label-info form-control"> Watching </span>
+                                <span class="label label-info form-control"><i class="fa fa-eye"></i> Watching </span>
                             {% else %}
-                                <span class="label label-default form-control"> Not watching </span>
+                                <span class="label label-default form-control"><i class="fa fa-eye-slash"></i> Not watching </span>
                             {% endif %}
                         </td>
                     </tr>
