@@ -3,9 +3,13 @@ from django.template.response import TemplateResponse
 from django.db.models import Q
 
 from dudel.base.models import DudelUser
+from dudel.base.forms import DudelUserForm
 
 from dudel.poll.forms import PollCreationForm
 from dudel.poll.models import ChoiceValue, Poll, Vote
+
+from dudel.base.models import USER_LANG
+from pytz import all_timezones
 
 
 def login(request):
@@ -60,9 +64,16 @@ def settings(request):
                                     Q(group__user=request.user)).distinct().order_by('created')
 
         if request.method == 'POST':
-            pass  # TODO implement
+            form = DudelUserForm(request.POST, instance=request.user)
+            if form.is_valid():
+                form.save()
+
+        user_form = DudelUserForm(instance=request.user)
 
         return TemplateResponse(request, 'base/settings.html', {
             'polls': polls,
             'user': request.user,
+            'user_form': user_form,
+            'languages': USER_LANG,
+            'timezones': all_timezones,
         })

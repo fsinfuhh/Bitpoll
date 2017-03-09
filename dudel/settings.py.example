@@ -33,6 +33,7 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'ALLOW_CUSTOM_SLUGS',
     'SITE_NAME',
     'DEBUG',
+    'HOME_URL',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -157,3 +158,5 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',
 }
+
+HOME_URL = "/"
