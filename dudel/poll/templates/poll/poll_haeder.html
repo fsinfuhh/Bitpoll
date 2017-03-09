@@ -7,26 +7,48 @@
         </h1>
         <ul class="poll-details">
             <li title="Creation date: {{ poll.created }}">
-                <i class="fa fa-calendar"></i>
+                <i class="fa fa-calendar-plus-o"></i>
                 <span class="content">{{ poll.created }}</span>
             </li>
             {% if poll.due_date %}
-                <li title="Due Date">
-                <i class="fa fa-clock-o"></i>
-                <span class="content">poll.due_date</span>
+                <li title="Due Date: {{ poll.due_date }}">
+                <i class="fa fa-calendar-check-o"></i>
+                <span class="content">{{ poll.due_date }}</span>
                 </li>
             {% endif %}
             <li title="Poll type">
                 <i class="fa fa-{{ poll.get_icon }}"></i>
                 <span class="content">{{ poll.get_type_display }}</span>
             </li>
-        <!-- TODO: Owner -->
+            {% if poll.user %}
+                <li title="Ownership: {{ poll.user.username }}">
+                <i class="fa fa-user"></i>
+                <span class="content">{{ poll.user.username }}</span>
+                </li>
+            {% endif %}
+            {% if poll.group %}
+                <li title="Group: {{ poll.group.name }}">
+                <i class="fa fa-group"></i>
+                <span class="content">{{ poll.group.name }}</span>
+                </li>
+            {% endif %}
             {% if poll.anonymous_allowed %}
-                <li title="Anonymous voting allowed"><i class="fa fa-question-circle"></i>
+                <li title="Anonymous voting allowed"><i class="fa fa-check"></i>
                 <span class="content">anonymous voting</span>
             {% endif %}
             </li>
-        <!-- TODO: require_invitation, require_login, watching_poll -->
+            {% if poll.require_invitation %}
+                <li title="Invitation required"><i class="fa fa-check"></i>
+                <span class="content">invitation required</span>
+            {% endif %}
+            </li>
+            {% if poll.require_login %}
+                <li title="Login required"><i class="fa fa-check"></i>
+                <span class="content">login required</span>
+            {% endif %}
+            </li>
+
+        <!-- TODO: watching_poll -->
         </ul>
         <nav>
             <ul class="poll-tabs">
