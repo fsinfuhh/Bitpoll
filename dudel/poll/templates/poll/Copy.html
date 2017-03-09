@@ -3,7 +3,8 @@
 {% load widget_tweaks %}
 {% load settings_value %}
 {% load i18n %}
-{% load poll_filter vote_permisions %}
+{% load compile_static %}
+{% load static %}
 
 {% block title %}Copy Poll{% endblock %}
 
@@ -32,12 +33,12 @@
             <div class="form-group">
                 <label for="url-input">URL name</label>
                 <div class="pull-right">
-                    <input type="checkbox" checked="checked" id="randomized" name="randomize">
-                    <label for="randomized">randomize</label>
+                    <script>var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %}</script>
+                    <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>Randomize</span></button>
                 </div>
                 <div class="input-group">
-                    <span class="input-group-addon">http://dudel.mafiasi.de/</span>
-                    <input autocomplete="off" class="form-control" id="url-input" name="{{ form.url.name }}"
+                    <span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
+                    <input autocomplete="off" class="form-control" id="slug-input" name="{{ form.url.name }}"
                                                    placeholder="URL" type="text" value="{{ form.url.value|default_if_none:'' }}" />
                 </div>
                     {% if form.url.errors %}
@@ -101,4 +102,9 @@
         </div>
     </form>
     </div>
+{% endblock %}
+
+
+{% block additionalJS %}
+    <script src="{% static 'coffee/slug.coffee'|compile %}"  type="text/javascript" ></script>
 {% endblock %}
