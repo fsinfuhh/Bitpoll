@@ -33,11 +33,14 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'ALLOW_CUSTOM_SLUGS',
     'SITE_NAME',
     'DEBUG',
+    'DEFAULT_RANDOM_SLUG',
+    'BASE_URL',
 ]
 
 LOGIN_REDIRECT_URL = "/"
 
 SITE_NAME = 'Dudel'
+BASE_URL = 'https://dudel.mafiasi.de'
 
 # Application definition
 
@@ -145,6 +148,7 @@ STATIC_PRECOMPILER_ROOT = os.path.join(BASE_DIR, '.gen')
 SASS_PRECISION = 8
 
 ALLOW_CUSTOM_SLUGS = True
+DEFAULT_RANDOM_SLUG = 'true'  # this value is an JS true/false
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load static %}{% load compile_static %}
 {% load widget_tweaks %}
 {% load settings_value %}
 {% load i18n %}
@@ -95,14 +96,14 @@
                             <div class="title">Advanced Settings</div>
                         </div>
                     {# TODO: due date, public? #}
-                        <script>var RANDOM_SLUGS = false;</script>
+                        <script>var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %}</script>
                         <div id="slug" class="form-group">
                             <div style="float: right;">
                                 <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>Randomize</span>
                                 </button>
                             </div>
                             <label for="slug" style="margin-top: 2px;">URL name</label>
-                            <div class="input-group"><span class="input-group-addon">http://127.0.0.1:5000/poll/</span>
+                            <div class="input-group"><span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
                                 <input class="form-control" id="slug-input" name="{{ new_Poll.url.name }}" type="text" value="{{ new_Poll.url.value }}">
                                 {% if new_Poll.url.errors %}
                                     <div class="form-errors">
@@ -202,4 +203,9 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block additionalJS %}
+    <script src="{% static 'coffee/create.coffee'|compile %}"  type="text/javascript" ></script>
+    <script src="{% static 'coffee/slug.coffee'|compile %}"  type="text/javascript" ></script>
 {% endblock %}
