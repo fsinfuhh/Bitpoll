@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+{% load settings_value %}
+{% load i18n %}
+{% load poll_filter vote_permisions %}
+
+{% block title %}{{ poll.title }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% include 'poll/poll_haeder.html' %}
+    <form action="{% url 'poll_settings' poll.url %}" method="post">
+    {% csrf_token %}
+        <div class="col-md-5">
+            <div class="form-group">
+                <label for="title-input">Title</label>
+                <input autocomplete="off" class="form-control" id="title-input" name="{{ form.title.name }}"
+                                                   placeholder="Title" type="text" value="{{ form.title.value|default_if_none:'' }}" />
+                {% if form.title.errors %}
+                    <div class="form-errors">
+                        <div class="alert alert-danger">
+                            <div class="container">
+                                <i class="fa fa-times"></i>{{ form.title.errors }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <label for="due-date-input">Due date</label>
+            <div class="form-group">
+
+                {% render_field form.due_date class+="form-control" %}
+                 {% if form.due_date.errors %}
+                    <div class="form-errors">
+                        <div class="alert alert-danger">
+                            <div class="container">
+                                <i class="fa fa-times"></i>{{ form.due_date.errors }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <label for="show-result-select">Show Results</label><br>
+            <select id="show-result-select" class="form-control" name="{{ form.show_results.name }}">
+                {% for result in results %}
+                    {% if result.0 == form.show_results.value %}
+                        <option value="{{ result.0}}" selected="selected"> {{ result.1 }}</option>
+                    {% else %}
+                        <option value="{{ result.0}}"> {{ result.1 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select><br>
+            <div class="help-block">
+                Owners of this poll and administrators will always see all votes.
+            </div>
+
+            <label for="timezone-select">Timezone</label><br>
+            <select id="timezone-select" class="form-control" name="{{ form.timezone_name.name }}">
+                {% for timezone in timezones %}
+                    {% if timezone == form.timezone_name.value %}
+                        <option value="{{ timezone }}" selected="selected"> {{ timezone }}</option>
+                    {% else %}
+                        <option value="{{ timezone }}"> {{ timezone }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+            <label for="description-input">Description</label> {# TODO: design #}
+            <div class="text " id="description-input">
+                {% render_field form.description class+="form-control"%}
+            </div>
+
+            <a href="{% url 'poll' poll.url %}" class="action">Back to poll</a>
+            <input type="submit" class="action primary" name="Save" value="Save changes">
+        </div>
+
+
+        <div class="col-md-5 col-md-offset-1">
+            <label>additional Settings</label>
+            <div class="checkbox">
+                <input type="checkbox" id="allow_comments" name="{{ form.allow_comments.name }}" {% if form.allow_comments.value %} checked {% endif %}>
+                <label for="allow_comments">allow comments</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="anonymous_allowed" name="{{ form.anonymous_allowed.name }}" {% if form.anonymous_allowed.value %} checked {% endif %}>
+                <label for="anonymous_allowed">allow anonymous votes</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="require_login" name="{{ form.require_login.name }}" {% if form.require_login.value %} checked {% endif %}>
+                <label for="require_login">login required</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="require_invitation" name="{{ form.require_invitation.name }}" {% if form.require_invitation.value %} checked {% endif %}>
+                <label for="require_invitation">invitation required to vote</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="public_listening" name="{{ form.public_listening.name }}" {% if form.public_listening.value %} checked {% endif %}>
+                <label for="public_listening">Show in public poll list</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="one_vote_per_user" name="{{ form.one_vote_per_user.name }}" {% if form.one_vote_per_user.value %} checked {% endif %}>
+                <label for="one_vote_per_user">one vote per user</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="show_invitations" name="{{ form.show_invitations.name }}" {% if form.show_invitations.value %} checked {% endif %}>
+                <label for="show_invitations">show invitations as empty votes</label>
+            </div>
+            <div class="help-block">
+                These settings are not retroactive, meaning that changing them will not modify votes/comments already created.
+            </div>
+
+
+            <div class="form-group">
+                <label for="user-select">User</label>
+                <input autocomplete="off" class="form-control" id="user-select" name="user"
+                                                   placeholder="User" type="text" value="{{ user }}" />
+                {% if user_error %}
+                    <div class="form-errors">
+                        <div class="alert alert-danger">
+                            <div class="container">
+                                <i class="fa fa-times"></i>{{ user_error }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <label for="group-select">Group</label><br>
+            <select id="group-select" class="form-control" name="{{ form.group.name }}">
+                {% if form.group.value == NaN %}
+                    <option value="" selected="selected">-----</option>
+                {% else %}
+                    <option value="">-----</option>
+                {% endif %}
+
+                {% for group in groups %}
+                    {% if group == form.group.value %}
+                        <option value="{{ group.id }}" selected="selected"> {{ group.name }}</option>
+                    {% else %}
+                        <option value="{{ group.id }}"> {{ group.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <div class="help-block">
+                Only the owner of a poll, or a member of the owner group, can edit the settings on this page.
+                If you set this to "Nobody", then anyone may claim exclusive ownership. Most restrictive settings above are useless if you do not claim ownership of this poll.
+            </div>
+
+            <label>Very advanced stuff</label><br>
+            <a href="{% url 'poll_editChoice' poll.url %}">Edit possible answer values</a><br>
+            Manage invitations<br>  {# TODO #}
+            <a href="{% url 'poll_copy' poll.url %}">Copy poll</a><br>
+            <a href="{% url 'poll_delete' poll.url %}">Delete this poll</a>
+        </div></form>
+    </div>
+
+{% endblock %}
