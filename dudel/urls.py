@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^poll/', include('dudel.poll.urls')),
     url(r'^base/', include('dudel.base.urls')),
+    url(r'^invitations/', include('dudel.invitations.urls')),
     url(r'^$', lambda req: redirect('index'), name='home'),
     url(r'^login$', auth_views.login, name='login', ),
     url(r'^logout$', auth_views.logout, {

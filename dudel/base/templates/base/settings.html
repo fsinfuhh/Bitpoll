@@ -42,7 +42,7 @@
                             {% endif %}
                         </td>
                         <td width="10">
-                            {% if user in poll.vote_set.user_set %}  {# TODO korrigieren #}
+                            {% if user in poll.vote_set.user %}  {# TODO korrigieren #}
                                 <span class="label label-success form-control"><i class="fa fa-check"></i> Voted </span>
                             {% else %}
                                 <span class="label label-default form-control"><i class="fa fa-ban"></i> Not voted </span>

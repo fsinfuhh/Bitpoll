@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'static_precompiler',
     'dudel.poll',
     'dudel.base',
+    'dudel.invitations'
 ]
 
 MIDDLEWARE_CLASSES = [

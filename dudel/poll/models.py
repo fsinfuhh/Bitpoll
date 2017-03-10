@@ -4,6 +4,8 @@ from django.contrib.auth.models import Group
 from dudel.poll.util import DateTimePart, PartialDateTime
 from dudel.base.models import DudelUser
 
+from datetime import datetime
+
 POLL_TYPES = (
     ('universal', 'Universal'),
     ('datetime', 'Date-Time'),
@@ -192,16 +194,3 @@ class VoteChoice(models.Model):
 
     def __str__(self):
         return u'VoteChoice {}'.format(self.id)
-
-
-class PollInvitation(models.Model):
-    class Meta:
-        unique_together = ('user', 'poll')
-
-    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    last_invited = models.DateTimeField()
-
-    def __str__(self):
-        return u'PollInvitation {}'.format(self.id)

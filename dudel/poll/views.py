@@ -1,6 +1,7 @@
 import re
 from django.contrib import messages
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction, connection
 
 from django.http import HttpResponseForbidden
@@ -13,6 +14,7 @@ from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, Unive
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS
 from dudel.base.models import DudelUser
+from dudel.invitations.models import Invitation
 
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -638,7 +640,7 @@ def settings(request, poll_url):
                 try:
                     user_obj = DudelUser.objects.get(username=user)
                     new_poll.user = user_obj
-                except: #TODO: correct exeption
+                except ObjectDoesNotExist:  # TODO: correct exception
                     user_error = "User not Found"
             if not user_error:
                 new_poll.save()
@@ -659,14 +661,6 @@ def settings(request, poll_url):
         'timezones': all_timezones,
         'user_error': user_error,
         'user': user,
-    })
-
-
-def invite(request, poll_url):
-    current_poll = get_object_or_404(Poll, url=poll_url)
-
-    return TemplateResponse(request, 'poll/Invitation.html', {
-        'poll': current_poll,
     })
 
 

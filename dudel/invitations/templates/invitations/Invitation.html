@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+{% load settings_value %}
+{% load i18n %}
+{% load compile_static %}
+{% load static %}
+
+{% block title %}Invite to Poll{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% include 'poll/poll_haeder.html' %}
+        <h3>Invitations</h3>
+        <div class="col-md-6">
+            <form method="post" action="{% url 'invitations' poll.url %}">
+                {% csrf_token %}
+                <table class="table table-condensed table-striped">
+                    <tr>
+                        <th> User </th>
+                        <th> Last Invited </th>
+                        <th> Actions </th>
+                    </tr>
+                    {% for invitation in poll.invitation_set.all %}
+                        <tr>
+                            <td><i class="fa fa-check"></i>
+                                {{ invitation.user.username }}
+                            </td>
+                            <td>
+                                {{ invitation.last_invited }}
+                            </td>
+                            <td>
+                                <button class="action default" type="submit" name="resend" value="{{ invitation.id }}"><i class="fa fa-refresh"></i></button>
+                                <button class="action default" type="submit" name="delete" value="{{ invitation.id }}"><i class="fa fa-trash-o"></i></button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% if False %}  {# TODO #}
+                    <input class="action secondary" value="Resend all" name="resend_all" type="submit" style="float: right;">
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form method="post" action="{% url 'invitations_send' poll.url %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="invite">User or Group</label>
+                    <div class="input-group">
+                        <input id="invite" class="form-control" name="invite" value="" type="text">
+                        <div class="input-group-btn">
+                            <input class="action primary" value="Invite" type="submit">
+                        </div>
+                    </div>
+                    <ul class="help-list">
+                        <li>Enter the username or group title of the user or group of users you want to invite.</li>
+                        <li>You can enter multiple users or groups.</li>
+                        <li>Duplicates are ignored automatically.</li>
+                        <li>Group invitations are resolved immediately, so adding more members to a group later will not invite those new members, unless you re-invite the group.</li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <hr>
+        <a href="{% url 'poll_settings' poll.url %}" class="action">Back to poll</a>
+    </div>
+{% endblock %}
+
+
+{% block additionalJS %}
+    <script src="{% static 'coffee/slug.coffee'|compile %}"  type="text/javascript" ></script>
+{% endblock %}
