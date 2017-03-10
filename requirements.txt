@@ -4,4 +4,5 @@ libsass
 django-compressor
 django-static-precompiler
 django-datetime-widget
+django-markdown-app
 pytz

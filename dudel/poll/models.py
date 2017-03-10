@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import Group
+from django_markdown.models import MarkdownField
 
 from dudel.poll.util import DateTimePart, PartialDateTime
 from dudel.base.models import DudelUser
@@ -21,7 +22,7 @@ POLL_RESULTS = (
 
 class Poll(models.Model):
     title = models.CharField(max_length=80)
-    description = models.TextField(blank=True)
+    description = MarkdownField(blank=True)
     url = models.SlugField(max_length=80, unique=True)
     type = models.CharField(max_length=20, choices=POLL_TYPES, default="universal")
     created = models.DateTimeField(auto_now_add=True)
@@ -134,7 +135,7 @@ class ChoiceValue(models.Model):
 
 
 class Comment(models.Model):
-    text = models.TextField()
+    text = MarkdownField()
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, blank=True)

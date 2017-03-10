@@ -3,6 +3,7 @@
 {% load poll_filter vote_permisions %}
 {% load tz %}
 {% block title %}{{ poll.title }}{% endblock %}
+{% load django_markdown django_markdown_static %}
 
 {% block content %}
     <div class="container">
@@ -10,6 +11,14 @@
         {% include 'poll/poll_haeder.html' %}
 
         <!-- TODO efficiency of listing of all votes by real sql-statement -->
+
+        {% if  poll.description %}
+            <div class="description">
+                <h1>{% trans 'Description' %}</h1>
+                {{ poll.description|markdown_safe }}
+            </div>
+        {% endif %}
+
         <div class="table-noscroll-y">
             <div class="table-scroll-x" style="padding-bottom: 100px;">
             {% if not matrix %}
@@ -165,7 +174,7 @@
                     </div>
 
                 </div>
-                <div class="text"><p>{{ comment.text }}</p></div> {# TODO:  #}
+                <div class="text"><p>{{ comment.text|markdown_safe }}</p></div> {# TODO:  #}
             </div>
             {% endfor %}
 

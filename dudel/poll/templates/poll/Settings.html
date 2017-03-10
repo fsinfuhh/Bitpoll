@@ -48,16 +48,8 @@
             </div>
 
             <label for="show-result-select">Show Results</label><br>
-        {% render_field  %}
-            <select id="show-result-select" class="form-control" name="{{ form.show_results.name }}">
-                {% for result in results %}
-                    {% if result.0 == form.show_results.value %}
-                        <option value="{{ result.0}}" selected="selected"> {{ result.1 }}</option>
-                    {% else %}
-                        <option value="{{ result.0}}"> {{ result.1 }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select><br>
+            {% render_field  form.show_results class+='form-control'%}
+            <br>
             <div class="help-block">
                 Owners of this poll and administrators will always see all votes.
             </div>
