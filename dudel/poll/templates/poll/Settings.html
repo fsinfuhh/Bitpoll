@@ -48,6 +48,7 @@
             </div>
 
             <label for="show-result-select">Show Results</label><br>
+        {% render_field  %}
             <select id="show-result-select" class="form-control" name="{{ form.show_results.name }}">
                 {% for result in results %}
                     {% if result.0 == form.show_results.value %}

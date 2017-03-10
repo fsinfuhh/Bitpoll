@@ -15,14 +15,14 @@
 {% block content %}
     <div class="container">
         {% include 'poll/poll_haeder.html' %}
-    <form action="{%  url 'poll_copy' poll.url %}" method="post">
-        {% csrf_token %}
-        <h3>Copy Poll</h3>
-        <div class="col-md-5">
-            <div class="form-group">
+        <form action="{% url 'poll_copy' poll.url %}" method="post">
+            {% csrf_token %}
+            <h3>Copy Poll</h3>
+            <div class="col-md-5">
+                <div class="form-group">
                     <label for="title-input">Title</label>
                     <input autocomplete="off" class="form-control" id="title-input" name="{{ form.title.name }}"
-                                                   placeholder="Title" type="text" value="{{ form.title.value|default_if_none:'' }}" />
+                           placeholder="Title" type="text" value="{{ form.title.value|default_if_none:'' }}"/>
                     {% if form.title.errors %}
                         <div class="form-errors">
                             <div class="alert alert-danger">
@@ -32,19 +32,20 @@
                             </div>
                         </div>
                     {% endif %}
-            </div>
+                </div>
 
-            <div class="form-group">
-                <label for="url-input">URL name</label>
-                <div class="pull-right">
-                    <script>var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %}</script>
-                    <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>Randomize</span></button>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
-                    <input autocomplete="off" class="form-control" id="slug-input" name="{{ form.url.name }}"
-                                                   placeholder="URL" type="text" value="{{ form.url.value|default_if_none:'' }}" />
-                </div>
+                <div class="form-group">
+                    <label for="url-input">URL name</label>
+                    <div class="pull-right">
+                        <script>var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %}</script>
+                        <button id="slug-randomize" class="action small"><i
+                                class="fa fa-random"></i><span>Randomize</span></button>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
+                        <input autocomplete="off" class="form-control" id="slug-input" name="{{ form.url.name }}"
+                               placeholder="URL" type="text" value="{{ form.url.value|default_if_none:'' }}"/>
+                    </div>
                     {% if form.url.errors %}
                         <div class="form-errors">
                             <div class="alert alert-danger">
@@ -54,61 +55,61 @@
                             </div>
                         </div>
                     {% endif %}
-            </div>
+                </div>
 
-            <label for="due-date-input">Due date</label>
-            <div class="form-group">
+                <label for="due-date-input">Due date</label>
+                <div class="form-group">
 
-                {% render_field form.due_date class+="form-control" %}
-                 {% if form.due_date.errors %}
-                    <div class="form-errors">
-                        <div class="alert alert-danger">
-                            <div class="container">
-                                <i class="fa fa-times"></i>{{ form.due_date.errors }}
+                    {% render_field form.due_date class+="form-control" %}
+                    {% if form.due_date.errors %}
+                        <div class="form-errors">
+                            <div class="alert alert-danger">
+                                <div class="container">
+                                    <i class="fa fa-times"></i>{{ form.due_date.errors }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
+
+                <a href="{% url 'poll' poll.url %}" class="action">Back to poll</a>
+                <input type="submit" value="Create" class="action primary" name="create"/>
             </div>
 
-            <a href="{% url 'poll' poll.url %}" class="action">Back to poll</a>
-            <input type="submit" value="Create" class="action primary" name="create"/>
-        </div>
+            <div class="col-md-5 col-md-offset-1">
+                <label>Settings to copy</label>
+                <div class="checkbox">
+                    <input type="checkbox" id="copy_choices" name="copy_choices" checked>
+                    <label for="copy_choices">Copy choices</label>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="copy_invitations" name="copy_invitations" checked>
+                    <label for="copy_invitations">Copy invitations</label>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="create_invitations_from_votes" name="create_invitations_from_votes">
+                    <label for="create_invitations_from_votes">Create invitations from votes</label>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="copy_ans_values" name="copy_ans_values" checked>
+                    <label for="copy_ans_values">Copy possible answer values</label>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="reset_ownership" name="reset_ownership">
+                    <label for="reset_ownership">Reset ownership</label>
+                </div>
 
-        <div class="col-md-5 col-md-offset-1">
-            <label>Settings to copy</label>
-            <div class="checkbox">
-                <input type="checkbox" id="copy_choices" name="copy_choices" checked>
-                <label for="copy_choices">Copy choices</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="copy_invitations" name="copy_invitations" checked>
-                <label for="copy_invitations">Copy invitations</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="create_invitations_from_votes" name="create_invitations_from_votes">
-                <label for="create_invitations_from_votes">Create invitations from votes</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="copy_ans_values" name="copy_ans_values" checked>
-                <label for="copy_ans_values">Copy possible answer values</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="reset_ownership" name="reset_ownership">
-                <label for="reset_ownership">Reset ownership</label>
-            </div>
-
-            <div class="form-group">
+                <div class="form-group">
                     <label for="date-shift">Date shift (days)</label>
                     <input autocomplete="off" class="form-control" id="date-shift" name="date_shift"
-                                                   placeholder="Due Date" type="text" value="{{ date_shift|default_if_none:'0' }}" />
+                           placeholder="Due Date" type="text" value="{{ date_shift|default_if_none:'0' }}"/>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
     </div>
 {% endblock %}
 
 
 {% block additionalJS %}
-    <script src="{% static 'coffee/slug.coffee'|compile %}"  type="text/javascript" ></script>
+    <script src="{% static 'coffee/slug.coffee'|compile %}" type="text/javascript"></script>
 {% endblock %}
