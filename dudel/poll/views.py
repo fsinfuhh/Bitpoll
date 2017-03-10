@@ -455,7 +455,7 @@ def vote(request, poll_url, vote_id=None):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
 
-    if current_poll.due_date < now():
+    if current_poll.due_date and current_poll.due_date < now():
         messages.error(
             request, _("This Poll is past the due date, voting is no longer possible")
         )
