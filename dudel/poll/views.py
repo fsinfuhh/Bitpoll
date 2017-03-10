@@ -9,7 +9,7 @@ from django.db.models import F, Sum, Count, Q
 from django.template.response import TemplateResponse
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
-from django.utils.timezone import activate as tz_activate, localtime
+from django.utils.timezone import activate as tz_activate, localtime, now
 from django.utils.timezone import get_current_timezone
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm
@@ -454,6 +454,12 @@ def vote(request, poll_url, vote_id=None):
     Takes vote with comments as input and saves the vote along with all comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+
+    if current_poll.due_date < now():
+        messages.error(
+            request, _("This Poll is past the due date, voting is no longer possible")
+        )
+        return redirect('poll', poll_url)
 
     tz_activate(current_poll.get_tz_name(request.user))
 
