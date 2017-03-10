@@ -1,6 +1,7 @@
 from enum import Enum
 
 from django.utils.formats import date_format
+from django.utils.timezone import localtime
 
 
 class DateTimePart(str, Enum):
@@ -10,8 +11,8 @@ class DateTimePart(str, Enum):
 
 
 class PartialDateTime(object):
-    def __init__(self, datetime, part):
-        self.datetime = datetime
+    def __init__(self, datetime, part, tz):
+        self.datetime = localtime(datetime, tz)
         self.part = part
 
     def __lt__(self, other):

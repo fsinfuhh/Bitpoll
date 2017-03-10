@@ -53,9 +53,9 @@ class Poll(models.Model):
         if self.type == 'date':
             return 'calendar'
 
-    def get_choice_group_matrix(self):
+    def get_choice_group_matrix(self, tz):
         matrix = [
-            choice.get_hierarchy() for choice in self.choice_set.filter(deleted=False).order_by(
+            choice.get_hierarchy(tz) for choice in self.choice_set.filter(deleted=False).order_by(
                 'sort_key')]
         matrix = [[[item, 1, 1] for item in row] for row in matrix]
         if not matrix:
@@ -103,10 +103,10 @@ class Choice(models.Model):
         else:
             return str(self.date)
 
-    def get_hierarchy(self):
+    def get_hierarchy(self, tz):
         if self.date:
-            return [PartialDateTime(self.date, DateTimePart.date),
-                    PartialDateTime(self.date, DateTimePart.time)]
+            return [PartialDateTime(self.date, DateTimePart.date, tz),
+                    PartialDateTime(self.date, DateTimePart.time, tz)]
         else:
             return [part.strip() for part in self.text.split("/") if part]
 
