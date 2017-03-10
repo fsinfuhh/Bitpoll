@@ -188,6 +188,28 @@ class Vote(models.Model):
             return False
         return self.can_edit(user)
 
+    def get_choices(self):
+        """
+        Helper to get the votechoices with missing fields as None
+        TODO: should be possible to replace it with one database querry
+        :return:
+        """
+        vote_choices = self.votechoice_set.filter(choice__deleted=False).order_by('choice__sort_key')
+        ret = []
+        choices = self.poll.choice_set.filter(deleted=False).order_by('sort_key')
+        i = 0
+        for vote_choice in vote_choices:
+            while vote_choice.choice.pk != choices[i].pk:
+                ret.append(None)  # TODO: was schlaueres einfügen?
+                i += 1
+            ret.append(vote_choice)
+            i += 1
+        while i < len(choices):
+            ret.append(None)
+            i += 1
+        return ret
+
+
     def __str__(self):
         return u'Vote {}'.format(self.name)
 

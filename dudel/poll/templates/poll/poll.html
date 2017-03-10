@@ -63,8 +63,7 @@
                                 {% endif %}
                                 {% if not vote.anonymous %}{{ vote.name }}{% else %}Anonymous{% endif %}
                             </td>
-                            {% for vote_choice in vote.votechoice_set.all %} {# TODO: xxxxxxx das mus in die view zusammen mit deleted!#}
-                                {% if not vote_choice.choice.deleted %}
+                            {% for vote_choice in vote.get_choices %} {# TODO: xxxxxxx das mus in die view zusammen mit deleted!#}
                                 <td class="vote-choice text-center
                                     {% if vote_choice.comment %}comment{% endif %}
                                     {% if not vote_choice.value %}none{% endif %}"
@@ -77,7 +76,6 @@
                                     data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
                                     <span class="fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
                                 </td>
-                                {% endif %}
                             {% endfor %}
                             <td class="noprint vote-actions">
                                 {% if vote|vote_can_edit:request.user %}
