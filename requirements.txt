@@ -2,6 +2,6 @@ django
 django-widget-tweaks
 libsass
 django-compressor
-django-static-precompile
+django-static-precompiler
 django-datetime-widget
 pytz
