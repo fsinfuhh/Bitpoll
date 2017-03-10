@@ -118,6 +118,9 @@ class Choice(models.Model):
         else:
             return [part.strip() for part in self.text.split("/") if part]
 
+    def votechoice_count(self):
+        return self.votechoice_set.filter(value__isnull=False).count()
+
 
 class ChoiceValue(models.Model):
     title = models.CharField(max_length=80)

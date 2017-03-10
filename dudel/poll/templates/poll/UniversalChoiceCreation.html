@@ -41,7 +41,7 @@
                                     {% endif %}
                                 </td>
                                 <td class="color green">
-                                    <strong>{{ choice.votes_all.count }}</strong> / 0
+                                    <strong>{{ choice.votechoice_count }}</strong> / {{ poll.vote_set.count }}
                                 </td>
                                 <td>
                                     <a href="#" class="btn btn-default btn-xs choice-move-up">
