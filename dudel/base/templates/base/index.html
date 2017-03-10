@@ -6,6 +6,10 @@
 {% load i18n %}
 {% block title %}Create poll{% endblock %}
 
+{% block headJS %}
+    {{ poll_form.media }}
+{% endblock %}
+
 {% block content %}
     <section class="section create-poll">
         <div class="container">

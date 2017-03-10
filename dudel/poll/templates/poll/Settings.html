@@ -7,6 +7,10 @@
 
 {% block title %}{{ poll.title }}{% endblock %}
 
+{% block headJS %}
+    {{ form.media }}
+{% endblock %}
+
 {% block content %}
     <div class="container">
         {% include 'poll/poll_haeder.html' %}

@@ -3,3 +3,4 @@ django-widget-tweaks
 libsass
 django-compressor
 django-static-precompiler
+django-datetime-widget

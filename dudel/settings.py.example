@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'static_precompiler',
+    'datetimewidget',
     'dudel.poll',
     'dudel.base',
 ]
