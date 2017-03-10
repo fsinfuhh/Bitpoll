@@ -662,5 +662,13 @@ def settings(request, poll_url):
     })
 
 
+def invite(request, poll_url):
+    current_poll = get_object_or_404(Poll, url=poll_url)
+
+    return TemplateResponse(request, 'poll/Invitation.html', {
+        'poll': current_poll,
+    })
+
+
 def transpose(matrix):
     return [list(i) for i in zip(*matrix)]

@@ -6,3 +6,4 @@ db.sqlite3
 **.sass-cache
 **.swp
 dudel/settings.py
+.pyenv
