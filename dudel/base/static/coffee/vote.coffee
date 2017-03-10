@@ -99,3 +99,5 @@ $ ->
             console.log(val)
             $(this).val(val)
 
+
+    $(".vote-header").rotate(90)

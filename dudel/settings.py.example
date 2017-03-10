@@ -52,8 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_markdown',
     'widget_tweaks',
     'static_precompiler',
+    'datetimewidget',
     'dudel.poll',
     'dudel.base',
     'dudel.invitations'

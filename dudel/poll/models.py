@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import Group
+from django_markdown.models import MarkdownField
 
 from dudel.poll.util import DateTimePart, PartialDateTime
 from dudel.base.models import DudelUser
@@ -23,7 +24,7 @@ POLL_RESULTS = (
 
 class Poll(models.Model):
     title = models.CharField(max_length=80)
-    description = models.TextField(blank=True)
+    description = MarkdownField(blank=True)
     url = models.SlugField(max_length=80, unique=True)
     type = models.CharField(max_length=20, choices=POLL_TYPES, default="universal")
     created = models.DateTimeField(auto_now_add=True)
@@ -55,9 +56,9 @@ class Poll(models.Model):
         if self.type == 'date':
             return 'calendar'
 
-    def get_choice_group_matrix(self):
+    def get_choice_group_matrix(self, tz):
         matrix = [
-            choice.get_hierarchy() for choice in self.choice_set.filter(deleted=False).order_by(
+            choice.get_hierarchy(tz) for choice in self.choice_set.filter(deleted=False).order_by(
                 'sort_key')]
         matrix = [[[item, 1, 1] for item in row] for row in matrix]
         if not matrix:
@@ -91,6 +92,14 @@ class Poll(models.Model):
 
         return matrix
 
+    def get_tz_name(self, user):
+        # TODO: local etc beachten (umrechenn auf user...)
+        tz = self.timezone_name
+        if self.type == 'date':
+            # Datepolls are using UTC as timezone
+            tz = 'UTC'
+        return tz
+
 
 class Choice(models.Model):
     text = models.CharField(max_length=80)
@@ -105,12 +114,15 @@ class Choice(models.Model):
         else:
             return str(self.date)
 
-    def get_hierarchy(self):
+    def get_hierarchy(self, tz):
         if self.date:
-            return [PartialDateTime(self.date, DateTimePart.date),
-                    PartialDateTime(self.date, DateTimePart.time)]
+            return [PartialDateTime(self.date, DateTimePart.date, tz),
+                    PartialDateTime(self.date, DateTimePart.time, tz)]
         else:
             return [part.strip() for part in self.text.split("/") if part]
+
+    def votechoice_count(self):
+        return self.votechoice_set.filter(value__isnull=False).count()
 
 
 class ChoiceValue(models.Model):
@@ -125,7 +137,7 @@ class ChoiceValue(models.Model):
 
 
 class Comment(models.Model):
-    text = models.TextField()
+    text = MarkdownField()
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, blank=True)
@@ -178,6 +190,28 @@ class Vote(models.Model):
         if user.is_anonymous:
             return False
         return self.can_edit(user)
+
+    def get_choices(self):
+        """
+        Helper to get the votechoices with missing fields as None
+        TODO: should be possible to replace it with one database querry
+        :return:
+        """
+        vote_choices = self.votechoice_set.filter(choice__deleted=False).order_by('choice__sort_key')
+        ret = []
+        choices = self.poll.choice_set.filter(deleted=False).order_by('sort_key')
+        i = 0
+        for vote_choice in vote_choices:
+            while vote_choice.choice.pk != choices[i].pk:
+                ret.append(None)  # TODO: was schlaueres einfügen?
+                i += 1
+            ret.append(vote_choice)
+            i += 1
+        while i < len(choices):
+            ret.append(None)
+            i += 1
+        return ret
+
 
     def __str__(self):
         return u'Vote {}'.format(self.name)

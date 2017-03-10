@@ -1,6 +1,7 @@
 from django.forms import ModelForm, CharField, Form
 
 from .models import Poll, Choice
+from datetimewidget.widgets import DateTimeWidget
 
 
 class PollCreationForm(ModelForm):
@@ -8,12 +9,18 @@ class PollCreationForm(ModelForm):
         model = Poll
         fields = ['title', 'type', 'public_listening', 'due_date', 'url', 'description', 'anonymous_allowed',
                   'require_login', 'require_invitation', 'one_vote_per_user']
+        widgets = {
+            'due_date': DateTimeWidget(attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
+        }
 
 
 class PollCopyForm(ModelForm):
     class Meta:
         model = Poll
         fields = ['title', 'due_date', 'url']
+        widgets = {
+            'due_date': DateTimeWidget(attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
+        }
 
 
 class DateChoiceCreationForm(Form):
@@ -45,9 +52,12 @@ class PollSettingsForm(ModelForm):
         fields = ['title', 'due_date', 'show_results', 'timezone_name', 'description', 'allow_comments',
                   'anonymous_allowed', 'require_login', 'require_invitation', 'one_vote_per_user', 'show_invitations',
                   'group', 'public_listening']
+        widgets = {
+            'due_date': DateTimeWidget(attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
+        }
 
 
 class PollDeleteForm(ModelForm):
     class Meta:
         model = Poll
-        fields = ['title', 'due_date', 'description']
+        fields = ['title', 'due_date', 'description'] #TODO: das sollte kein model form sein

@@ -8,8 +8,10 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
 from django.db.models import F, Sum, Count, Q
 from django.template.response import TemplateResponse
+from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.timezone import activate as tz_activate, localtime, now
+from django.utils.timezone import get_current_timezone
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS
@@ -18,7 +20,8 @@ from dudel.invitations.models import Invitation
 
 from datetime import datetime, timedelta
 from decimal import Decimal
-from pytz import all_timezones
+from pytz import all_timezones, timezone
+from django.utils.dateparse import parse_datetime, parse_date
 
 
 def poll(request, poll_url):
@@ -30,11 +33,13 @@ def poll(request, poll_url):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
 
+    tz_activate(current_poll.get_tz_name(request.user))
+
     poll_votes = Vote.objects.filter(poll=current_poll).order_by(
         'name').select_related()
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
-    matrix = transpose(current_poll.get_choice_group_matrix())
+    matrix = transpose(current_poll.get_choice_group_matrix(get_current_timezone()))
 
     # aggregate stats for all columns
     stats = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
@@ -55,7 +60,6 @@ def poll(request, poll_url):
                              stat2 in stats2 if
                              stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
              } for stat in stats]
-
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
         'matrix': matrix,
@@ -163,18 +167,54 @@ def edit_date_choice(request, poll_url):
     If the input is not valid, the user is directed back for correction.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    tz_activate('UTC')
+    initial = {
+        'dates': ','.join(set(list(
+            date_format(localtime(c.date), format='Y-m-d')
+            for c in current_poll.choice_set.order_by('sort_key')))),
+    }
     if request.method == 'POST':
-        form = DateChoiceCreationForm(request.POST)
+        form = DateChoiceCreationForm(request.POST, initial=initial)
         if form.is_valid():
-            for i, datum in enumerate(sorted(form.cleaned_data['dates'].split(","))):
-                choice = Choice(text="", date=datum, poll=current_poll, sort_key=i)
-                choice.save()
-            return redirect('poll', poll_url)
+            choices = current_poll.choice_set.all()
+            # List of the Old Ids, used for detection what has to be deleted
+            old_choices_ids = [c.pk for c in choices]
+            new_choices = []
+            old_choices = []
+            dates = []
+            error = False
+            # clean the data
+            for choice in form.cleaned_data['dates'].split(","):
+                try:
+                    tz = timezone('UTC')
+                    date = tz.localize(parse_datetime('{} 0:0'.format(choice)))
+                    dates.append(date)
+                except ValueError:
+                    # This will most likely only happen with users turning of JS
+                    error = True
+                    # TODO: errormessage
+            if not error:
+                for i, datum in enumerate(sorted(dates)):
+                    choice_objs = Choice.objects.filter(poll=current_poll, date=datum)
+                    if choice_objs:
+                        choice_obj = choice_objs[0]
+                        old_choices_ids.remove(choice_obj.pk)
+                        choice_obj.sort_key = i
+                        choice_obj.deleted = False
+                        old_choices.append(choice_obj)
+                    else:
+                        new_choices.append(Choice(text="", date=datum, poll=current_poll, sort_key=i))
+                with transaction.atomic():
+                    Choice.objects.bulk_create(new_choices)
+                    for choice in old_choices:
+                        choice.save()
+                    Choice.objects.filter(pk__in=old_choices_ids).update(deleted=True)
+                return redirect('poll', poll_url)
     else:
-        form = DateChoiceCreationForm()
+        form = DateChoiceCreationForm(initial=initial)
     return TemplateResponse(request, "poll/ChoiceCreationDate.html", {
         'poll': current_poll,
-        'new_Choice': form,
+        'new_choice': form,
         'page': 'Choices',
         'is_dt_choice': False,
     })
@@ -195,12 +235,13 @@ def edit_dt_choice_date(request, poll_url):
     If the data is not valid, the user is directed back for correction.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    tz_activate(current_poll.timezone_name)
     initial = {
         'dates': ','.join(set(list(
-            c.date.strftime('%Y-%m-%d')
+            date_format(localtime(c.date), format='Y-m-d')
             for c in current_poll.choice_set.order_by('sort_key')))),
         'times': ','.join(set(list(
-            c.date.strftime('%H:%M')
+            date_format(localtime(c.date), format='H:i')
             for c in current_poll.choice_set.order_by('sort_key')))),
     }
     form = DTChoiceCreationDateForm(initial=initial)
@@ -237,12 +278,13 @@ def edit_dt_choice_time(request, poll_url):
     If the times are missing, the user is directed back to the time-input-site.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    tz_activate(current_poll.timezone_name)
     initial = {
         'dates': ','.join(
-            c.date.strftime('%Y-%m-%d')
+            date_format(localtime(c.date), format='Y-m-d')
             for c in current_poll.choice_set.order_by('sort_key')),
         'times': ','.join(set(list(
-            c.date.strftime('%H:%M')
+            date_format(localtime(c.date), format='H:i')
             for c in current_poll.choice_set.order_by('sort_key')))),
     }
     if request.method == 'POST':
@@ -270,6 +312,7 @@ def edit_dt_choice_time(request, poll_url):
 
 def edit_dt_choice_combinations(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
+    tz_activate(current_poll.timezone_name)
     if request.method == 'POST':
         # getlist does not raise an exception if datetimes[] is not in request.POST
         chosen_combinations = request.POST.getlist('datetimes[]')
@@ -283,9 +326,10 @@ def edit_dt_choice_combinations(request, poll_url):
         # parse datetime objects of chosen combinations
         for combination in chosen_combinations:
             try:
-                chosen_times.append(datetime.strptime(combination, '%Y-%m-%d %H:%M'))
+                tz = timezone(current_poll.timezone_name)
+                chosen_times.append(tz.localize(parse_datetime(combination)))
             except ValueError:
-                # at least one invalid time/date has been specified. Redirect to first step
+                # at least one invalid time/date has been specified. Redirect to first step # TODO: error message
                 return redirect('poll_editDTChoiceDate', current_poll.url)
         # Search for already existing Choices
         for i, date_time in enumerate(sorted(chosen_times)):
@@ -412,6 +456,15 @@ def vote(request, poll_url, vote_id=None):
     Takes vote with comments as input and saves the vote along with all comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+
+    if current_poll.due_date and current_poll.due_date < now():
+        messages.error(
+            request, _("This Poll is past the due date, voting is no longer possible")
+        )
+        return redirect('poll', poll_url)
+
+    tz_activate(current_poll.get_tz_name(request.user))
+
     if request.method == 'POST':
         vote_id = request.POST.get('vote_id', None)
         if vote_id:
@@ -462,7 +515,7 @@ def vote(request, poll_url, vote_id=None):
                 request, _('You need to either provide a name or post an anonymous vote.'))
 
     # no/invalid POST: show the dialog
-    matrix = current_poll.get_choice_group_matrix()
+    matrix = current_poll.get_choice_group_matrix(get_current_timezone())
     choices = []
     comments = []
     choice_votes = []

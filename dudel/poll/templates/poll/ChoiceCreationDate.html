@@ -14,6 +14,8 @@
     <div class="container">
         {% if is_dt_choice %}
             {% include  "poll/DTChoiceHaeder.html" %}
+        {% else %}
+            {% include "poll/noscript_date_time.html" %}
         {% endif %}
 
         <form action="{{ request.url }}" method="POST" id="date-time-form">

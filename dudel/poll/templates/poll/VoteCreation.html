@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load poll_filter %}
+{% load widget_tweaks %}
 
 {% block title %}Vote on {{ poll.title }}{% endblock %}
 
@@ -41,9 +42,7 @@
                         <td class="vote-choice-form">
                             {% for value in values.all %}
                                 <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title=""
-                                    {% if value == vote %}
-                                        checked
-                                    {% endif %}
+                                    {% if value == vote %} checked {% endif %}
                                 />
                                 {{ value.title }}
                             {% endfor %}</td>
@@ -99,7 +98,6 @@
                     </td>
                     <td colspan="4">
                         <textarea title="Comment:" name="comment" id="comment" cols="40" rows="5">{{ current_vote.comment }}</textarea><br/>
-                        {% render_field comment class+="form-control"%}
                 </tr>
                 <tr>
                     <td colspan="{{ matrix_len }}"></td>
