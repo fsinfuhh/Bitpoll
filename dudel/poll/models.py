@@ -89,6 +89,14 @@ class Poll(models.Model):
 
         return matrix
 
+    def get_tz_name(self, user):
+        # TODO: local etc beachten (umrechenn auf user...)
+        tz = self.timezone_name
+        if self.type == 'date':
+            # Datepolls are using UTC as timezone
+            tz = 'UTC'
+        return tz
+
 
 class Choice(models.Model):
     text = models.CharField(max_length=80)
