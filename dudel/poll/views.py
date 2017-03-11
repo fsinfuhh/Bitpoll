@@ -119,7 +119,7 @@ def delete_comment(request, poll_url, comment_id):
         if 'Delete' in request.POST:
             if request.user.is_authenticated:
                 # TODO additional possibilities of deleting
-                if request.user == current_comment.user:
+                if current_comment.can_delete(request.user):
                     current_comment.delete()
                     return redirect('poll', poll_url)
                 else:
@@ -625,7 +625,7 @@ def copy(request, poll_url):
 
         if form.is_valid():
             copy_choices = form.data.get('copy_choices', '')
-            copy_invitations = form.data.get('copy_invitations', '')  # TODO
+            copy_invitations = form.data.get('copy_invitations', '')
             create_invitations_from_votes = form.data.get('create_invitations_from_votes')  # TODO
             copy_answer_values = form.data.get('copy_ans_values', '')
             reset_ownership = form.data.get('reset_ownership', '')
@@ -633,6 +633,9 @@ def copy(request, poll_url):
 
             choice_values = current_poll.choicevalue_set.all()
             choices = current_poll.choice_set.all()
+            invitations = current_poll.invitation_set.all()
+            vote_users = current_poll.vote_set.all().values('user')
+            invitation_users = invitations.values('user')
 
             current_poll.pk = None
             current_poll.title = form.cleaned_data['title']
@@ -648,6 +651,23 @@ def copy(request, poll_url):
                 current_poll.group = None
 
             current_poll.save()
+
+            if copy_invitations:
+                for invitation in invitations:
+                    invitation.pk = None
+                    invitation.poll = current_poll
+                    invitation.date_created = datetime.now()
+                    invitation.creator = request.user
+                    invitation.save()
+                    invitation.send()
+
+            if create_invitations_from_votes:
+                for user in vote_users:
+                    if user not in invitation_users:
+                        invitation = Invitation(poll=current_poll, user=user, date_created=datetime.now(),
+                                                creator=request.user)
+                        invitation.save()
+                        invitation.send()
 
             if copy_choices:
                 for choice in choices:
@@ -686,7 +706,9 @@ def settings(request, poll_url):
     user = current_poll.user.username if current_poll.user else ""
     if request.method == 'POST':
         form = PollSettingsForm(request.POST, instance=current_poll)
-        if form.is_valid():
+        if not current_poll.can_edit(request.user):
+            user_error = "Not allowed to edit Poll"
+        elif form.is_valid():
             new_poll = form.save(commit=False)
             user = form.data.get('user', '')
             if user:

@@ -21,5 +21,8 @@ class Invitation(models.Model):
         # TODO implement
         self.last_invited = datetime.now()
 
+    def can_edit(self, user: DudelUser):
+        return self.poll.can_edit(user)
+
     def __str__(self):
         return u'Invitation {}'.format(self.id)
