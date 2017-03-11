@@ -18,9 +18,4 @@ class Migration(migrations.Migration):
             name='text',
             field=django_markdown.models.MarkdownField(),
         ),
-        migrations.AlterField(
-            model_name='poll',
-            name='description',
-            field=django_markdown.models.MarkdownField(blank=True),
-        ),
     ]
