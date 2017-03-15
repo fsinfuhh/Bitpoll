@@ -12,6 +12,8 @@ from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import activate as tz_activate, localtime, now
 from django.utils.timezone import get_current_timezone
+from django.views.decorators.http import require_POST
+
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS
@@ -71,20 +73,25 @@ def poll(request, poll_url):
     })
 
 
+@require_POST
 def comment(request, poll_url):
+    """
+    Post a comment to a poll
+    :param request:
+    :param poll_url: the poll url to post to
+    :return:
+    """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if request.method == 'POST':
-        user = None
-        if not request.user.is_anonymous:
-            user = request.user
-        new_comment = Comment(text=request.POST['newCom'],
-                              date_created=datetime.now(),
-                              name=request.POST['newComName'],
-                              poll=current_poll,
-                              user=user)
-        new_comment.save()
-        return redirect('poll', poll_url)
-    pass  # todo errorhandling
+    user = None
+    if not request.user.is_anonymous:
+        user = request.user
+    new_comment = Comment(text=request.POST['newCom'],
+                          date_created=datetime.now(),
+                          name=request.POST['newComName'],
+                          poll=current_poll,
+                          user=user)
+    new_comment.save()
+    return redirect('poll', poll_url)
 
 
 def edit_comment(request, poll_url, comment_id):
@@ -136,16 +143,11 @@ def delete_comment(request, poll_url, comment_id):
     })
 
 
-def edit(request, poll_url):
-    pass
-
-
 def watch(request, poll_url):
     pass
 
 
 def edit_choice(request, poll_url):
-    # TODO: doppelung mit oben im index, muss das?
     current_poll = get_object_or_404(Poll, url=poll_url)
     if current_poll.type == 'universal':
         return redirect('poll_editUniversalChoice', current_poll.url)
@@ -218,10 +220,6 @@ def edit_date_choice(request, poll_url):
         'page': 'Choices',
         'is_dt_choice': False,
     })
-
-
-def edit_date_time_choice(request, poll_url):
-    pass
 
 
 def edit_dt_choice_date(request, poll_url):
@@ -409,10 +407,6 @@ def edit_universal_choice(request, poll_url):
     })
 
 
-def values(request, poll_url):
-    pass
-
-
 def delete(request, poll_url):
     """
     :param request:
@@ -456,7 +450,7 @@ def vote(request, poll_url, vote_id=None):
     Takes vote with comments as input and saves the vote along with all comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-
+    
     if current_poll.due_date and current_poll.due_date < now():
         messages.error(
             request, _("This Poll is past the due date, voting is no longer possible")
@@ -621,12 +615,11 @@ def copy(request, poll_url):
 
     if request.method == 'POST':
         form = PollCopyForm(request.POST)
-        randomize = form.data.get('randomize', '')
 
         if form.is_valid():
             copy_choices = form.data.get('copy_choices', '')
             copy_invitations = form.data.get('copy_invitations', '')
-            create_invitations_from_votes = form.data.get('create_invitations_from_votes')  # TODO
+            create_invitations_from_votes = form.data.get('create_invitations_from_votes', False)
             copy_answer_values = form.data.get('copy_ans_values', '')
             reset_ownership = form.data.get('reset_ownership', '')
             date_shift = int(form.data.get('date_shift', ''))
@@ -644,7 +637,6 @@ def copy(request, poll_url):
 
             if date_shift:
                 current_poll.due_date += timedelta(days=date_shift)
-                print(current_poll.due_date)
 
             if reset_ownership:
                 current_poll.user = None
@@ -673,6 +665,8 @@ def copy(request, poll_url):
                 for choice in choices:
                     choice.pk = None
                     choice.poll = current_poll
+                    if date_shift and choice.date:
+                        choice.date += timedelta(days=date_shift)
                     choice.save()
 
             if copy_answer_values:
