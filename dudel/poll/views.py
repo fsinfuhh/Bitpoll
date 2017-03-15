@@ -70,6 +70,7 @@ def poll(request, poll_url):
         'votes': poll_votes,
         'stats': stats,
         'max_score': max(val['score'] for val in stats if val['score'] is not None) if stats and votes_count > 0 else None,
+        'invitations': current_poll.invitation_set.filter(vote=None)
     })
 
 

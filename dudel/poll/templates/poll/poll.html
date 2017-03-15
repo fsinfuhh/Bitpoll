@@ -107,9 +107,38 @@
                                 {% endcomment %}
                         </tr>
                     {% endfor %}
+                    {% for invited in invitations %}
+                        <tr class="vote {% if invited.user == request.user %} mine{% endif %}">
+                            <td class="author"
+                                data-toggle="popover"
+                                data-trigger="hover"
+                                data-container="body"
+                                data-title="{{ invited.user.username|force_escape|force_escape }}"
+                                data-content="">
+                                {{ invited.user.username }}
+                            </td>
+                            {% for row in matrix.0 %}
+                                <td class="vote-choice text-center none"
+                                    style="background-color: #{{ vote_choice.value.color }}"
+                                    data-toggle="popover"
+                                    data-trigger="hover"
+                                    data-container="body"
+                                    data-title=""
+                                    data-content="{{ invited.user.username|force_escape|force_escape }}"
+                                    data-placement="bottom" data-choice-value="">
+                                    <span class="fa fa-question"></span>
+                                </td>
+                            {% endfor %}
+                            <td class="noprint vote-actions">
+                                {% if invited.user == request.user %}
+                                    <a href="{% url 'poll_vote' poll.url %}"
+                                       class="btn btn-xs btn-default" title="{{ _('Vote') }}"><i
+                                            class="fa fa-pencil"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
-                    <!-- TODO: Invitation -->
-
                     <tfoot>
                     <tr id="scores">
                         <th>
