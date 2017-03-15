@@ -21,7 +21,7 @@ class Invitation(models.Model):
     creator = models.ForeignKey(DudelUser, on_delete=models.CASCADE, related_name='creator')
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    vote = models.ForeignKey(Vote, on_delete=models.CASCADE, null=True, blank=True)
+    vote = models.ForeignKey(Vote, on_delete=models.SET_NULL, null=True, blank=True)
     last_email = models.DateTimeField(null=True, blank=True)
 
     def send(self, request):

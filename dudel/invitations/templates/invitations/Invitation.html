@@ -18,17 +18,19 @@
                 {% csrf_token %}
                 <table class="table table-condensed table-striped">
                     <tr>
+                        <th></th>
                         <th> User </th>
-                        <th> Last Invited </th>
+                        <th> Invited </th>
                         <th> Actions </th>
                     </tr>
                     {% for invitation in poll.invitation_set.all %}
                         <tr>
-                            <td><i class="fa fa-check"></i>
+                            <td>{% if invitation.vote %}<i class="fa fa-check"></i>{% endif %}</td>
+                            <td>
                                 {{ invitation.user.username }}
                             </td>
                             <td>
-                                {{ invitation.last_invited }}
+                                {{ invitation.date_created }}
                             </td>
                             <td>
                                 <button class="action default" type="submit" name="resend" value="{{ invitation.id }}"><i class="fa fa-refresh"></i></button>

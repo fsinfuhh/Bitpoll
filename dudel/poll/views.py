@@ -488,6 +488,14 @@ def vote(request, poll_url, vote_id=None):
 
                 current_vote.save()
 
+                if request.user.is_authenticated:
+                    # check if this user was invited
+                    invitation = current_poll.invitation_set.filter(user=request.user)
+                    if invitation:
+                        invitation = invitation[0]
+                        invitation.vote = current_vote
+                        invitation.save()
+
                 for choice in current_poll.choice_set.all():
                     if str(choice.id) in request.POST:
                         choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
