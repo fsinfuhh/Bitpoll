@@ -10,10 +10,6 @@ from dudel.invitations.models import Invitation
 from dudel.poll.models import Poll
 
 
-def index(request):
-    pass
-
-
 def invite(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
 
