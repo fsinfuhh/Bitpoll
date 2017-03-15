@@ -48,6 +48,13 @@ class Poll(models.Model):
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
+    def can_edit(self, user: DudelUser):
+        has_owner = self.group or self.user
+        is_owner = user == self.user
+        is_group_member = user in self.group.user_set
+
+        return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated()
+
     def get_icon(self):
         if self.type == 'universal':
             return 'list'
@@ -114,6 +121,9 @@ class Choice(models.Model):
         else:
             return str(self.date)
 
+    def can_edit(self, user):
+        return self.poll.can_edit(user)
+
     def get_hierarchy(self, tz):
         if self.date:
             return [PartialDateTime(self.date, DateTimePart.date, tz),
@@ -135,6 +145,9 @@ class ChoiceValue(models.Model):
     def __str__(self):
         return u'ChoiceValue {}'.format(self.title)
 
+    def can_edit(self, user):
+        return self.poll.can_edit(user)
+
 
 class Comment(models.Model):
     text = MarkdownField()
@@ -142,10 +155,19 @@ class Comment(models.Model):
     name = models.CharField(max_length=80)
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, blank=True)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    # TODO allow null for user -> comment creation possible
 
     def __str__(self):
         return u'CommentID {} by {}'.format(self.id, self.name)
+
+    def can_edit(self, user: DudelUser) -> bool:
+        is_owner = user == self.user
+
+        return user.is_authenticated() and is_owner
+
+    def can_delete(self, user: DudelUser) -> bool:
+        is_poll_owner = self.poll.user == user
+
+        return is_poll_owner or self.can_edit()
 
 
 class PollWatch(models.Model):
@@ -211,7 +233,6 @@ class Vote(models.Model):
             ret.append(None)
             i += 1
         return ret
-
 
     def __str__(self):
         return u'Vote {}'.format(self.name)

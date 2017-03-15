@@ -42,14 +42,14 @@
                             {% endif %}
                         </td>
                         <td width="10">
-                            {% if user in poll.vote_set.user %}  {# TODO korrigieren #}
+                            {% if user in poll.vote_set.all.values %}  {# TODO korrigieren #}
                                 <span class="label label-success form-control"><i class="fa fa-check"></i> Voted </span>
                             {% else %}
                                 <span class="label label-default form-control"><i class="fa fa-ban"></i> Not voted </span>
                             {% endif %}
                         </td>
                         <td width="10">
-                            {% if user in poll.pollwatch_set %}  {# TODO korrigieren #}
+                            {% if user in poll.pollwatch_set.all.values %}  {# TODO korrigieren #}
                                 <span class="label label-info form-control"><i class="fa fa-eye"></i> Watching </span>
                             {% else %}
                                 <span class="label label-default form-control"><i class="fa fa-eye-slash"></i> Not watching </span>
