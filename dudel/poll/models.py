@@ -51,7 +51,10 @@ class Poll(models.Model):
     def can_edit(self, user: DudelUser):
         has_owner = self.group or self.user
         is_owner = user == self.user
-        is_group_member = user in self.group.user_set
+        if self.group:
+            is_group_member = user in self.group.user_set
+        else:
+            is_group_member = False
 
         return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated()
 
