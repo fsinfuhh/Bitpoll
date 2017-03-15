@@ -167,3 +167,6 @@ MESSAGE_TAGS = {
 }
 
 HOME_URL = "/"
+
+# Test mail functionality by printing mails to console:
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

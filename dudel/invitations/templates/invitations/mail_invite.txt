@@ -1,0 +1,12 @@
+{% load i18n settings_value %}{% value_from_settings BASE_URL as base_url%}{% url 'settings' as settings_url %}{% blocktrans %}Hi {{ invitation.user.username }},
+
+you are invited to Participate in a Poll created by {{ ivitation.creater.username }}
+You can vote at {{ base_url }}{{ link }}
+
+Gretings,
+TODO: Appname-team
+
+--
+You recived this notification because you have allowed for E-Mail Invitation in your settings.
+you can change this setting at {{ base_url }}{{ settings_url }} .
+{% endblocktrans %}

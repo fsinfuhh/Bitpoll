@@ -649,9 +649,10 @@ def copy(request, poll_url):
                     invitation.pk = None
                     invitation.poll = current_poll
                     invitation.date_created = datetime.now()
+                    invitation.last_email = None
                     invitation.creator = request.user
                     invitation.save()
-                    invitation.send()
+                    invitation.send(request)
 
             if create_invitations_from_votes:
                 for user in vote_users:
@@ -659,7 +660,7 @@ def copy(request, poll_url):
                         invitation = Invitation(poll=current_poll, user=user, date_created=datetime.now(),
                                                 creator=request.user)
                         invitation.save()
-                        invitation.send()
+                        invitation.send(request)
 
             if copy_choices:
                 for choice in choices:
