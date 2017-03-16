@@ -47,6 +47,32 @@ def poll(request, poll_url):
     stats = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
         score=Sum('votechoice__value__weight')).values('score', 'id', 'text')
     votes_count = poll_votes.count()
+
+    invitations = current_poll.invitation_set.filter(vote=None)
+    # The next block is limiting the visibility of the results
+    summary = True
+    if current_poll.show_results in ("summary", "never"):  # TODO: should the owner see all?
+        if request.user.is_authenticated:
+            poll_votes = poll_votes.filter(user=request.user)
+            invitations = invitations.filter(user=request.user)
+        else:
+            poll_votes = []
+            invitations = []
+            messages.info(request, _("No individual results are shown due to Poll settings"))
+    elif current_poll.show_results in ("summary after vote", "complete after vote") \
+            and (request.user.is_anonymous or request.user not in poll_votes.user_set):
+        poll_votes = []
+        messages.info(request, _("Results are only sown after (authenticated) Voting"))
+        summary = False
+    elif current_poll.show_results == "summary after vote":
+        poll_votes = poll_votes.filter(user=request.user)
+        messages.info(request, _("Only the Summary is shown due to the Poll settings"))
+    if current_poll.show_results == "never":
+        summary = False
+
+    if not summary:
+        messages.info(request, _("The summary is not shown due to the config of the Poll"))
+
     # aggregate stats for the different Choice_Values per column
     stats2 = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
         count=Count('votechoice__value__color')).values('count', 'id', 'votechoice__value__icon',
@@ -70,7 +96,8 @@ def poll(request, poll_url):
         'votes': poll_votes,
         'stats': stats,
         'max_score': max(val['score'] for val in stats if val['score'] is not None) if stats and votes_count > 0 else None,
-        'invitations': current_poll.invitation_set.filter(vote=None)
+        'invitations': invitations,
+        'summary': summary,
     })
 
 

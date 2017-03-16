@@ -42,7 +42,6 @@
                     </thead>
                     <tbody>
                     {% for vote in votes %}
-                        {# TODO: {% if show_votes or (not current_user.is_anonymous() and vote.user == current_user) #}
                         <tr class="vote {% if not request.user.is_anonymous and vote.user == request.user %} mine{% endif %}"
                                 {# data-author="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"#}>
                             <td class="author"
@@ -140,6 +139,7 @@
                     {% endfor %}
                     </tbody>
                     <tfoot>
+                    {% if summary %}
                     <tr id="scores">
                         <th>
                                 <span class="print-only">
@@ -171,6 +171,7 @@
                         {% endfor %}
                         <th class="noprint"></th>
                     </tr>
+                    {% endif %}
                     </tfoot>
 
                 </table>
