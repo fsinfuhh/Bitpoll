@@ -3,7 +3,7 @@ showComment = ->
         .css("width", 0).show()
         .animate({
             width: "100%"
-        }, 400, "easeOutQuart");
+        }, 400, "easeOutQuart").focus();
     return false
 
 setChoiceByCell = (cell) ->
