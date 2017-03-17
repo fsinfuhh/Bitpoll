@@ -28,7 +28,8 @@ class Invitation(models.Model):
         if (not self.last_email) or self.last_email + timedelta(hours=12) < now():  # TODO: TIMEDELTA mit config
             link = reverse('poll_vote', args=(self.poll.url,))  # TODO: hier direkt das poll oder das Vote?
             email_content = render_to_string('invitations/mail_invite.txt', {
-                'invitation': self,
+                'receiver': self.user.username,
+                'creator': self.creator.username,
                 'link': link
             })
             try:

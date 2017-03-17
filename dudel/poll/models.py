@@ -1,6 +1,13 @@
+from smtplib import SMTPRecipientsRefused
+
+from django.contrib import messages
+from django.core.mail import send_mail
 from django.db import models
 from django.contrib.auth.models import Group
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django_markdown.models import MarkdownField
+from django.utils.translation import ugettext_lazy as _
 
 from dudel.poll.util import DateTimePart, PartialDateTime
 from dudel.base.models import DudelUser
@@ -170,15 +177,7 @@ class Comment(models.Model):
     def can_delete(self, user: DudelUser) -> bool:
         is_poll_owner = self.poll.user == user
 
-        return is_poll_owner or self.can_edit()
-
-
-class PollWatch(models.Model):
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return u'Pollwatch of Poll {} and User {}'.format(self.poll_id, self.user_id)
+        return is_poll_owner or self.can_edit(user)
 
 
 class Vote(models.Model):
@@ -252,3 +251,28 @@ class VoteChoice(models.Model):
 
     def __str__(self):
         return u'VoteChoice {}'.format(self.id)
+
+
+class PollWatch(models.Model):
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
+
+    def send(self, request, vote:Vote):
+        link = reverse('poll', args=(self.poll.url,))
+        email_content = render_to_string('poll/mail_watch.txt', {
+            'receiver': self.user.username,
+            'user': vote.user.username,
+            'poll': self.poll.title,
+            'link': link,
+        })
+        try:
+            send_mail("New votes for {}".format(self.poll.title), email_content, None,
+                      [self.user.email])
+        except SMTPRecipientsRefused:
+            messages.error(
+                request, _("The mail server had an error sending the notification to {}".format(
+                    self.user.username))
+            )
+
+    def __str__(self):
+        return u'Pollwatch of Poll {} and User {}'.format(self.poll_id, self.user_id)

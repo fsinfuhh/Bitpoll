@@ -19,6 +19,17 @@
             </div>
         {% endif %}
 
+        {% if request.user.is_authenticated %}
+            <form class="form" action="{% url 'poll_watch' poll.url %}" method="post">
+                {% csrf_token %}
+                {% if watched %}
+                    <button class="action" type="submit"><i class="fa fa-eye-slash"></i> Unwatch Poll</button>
+                {% else %}
+                    <button class="action" type="submit"><i class="fa fa-eye"></i> Watch Poll</button>
+                {% endif %}
+            </form>
+        {% endif %}
+
         <div class="table-noscroll-y">
             <div class="table-scroll-x" style="padding-bottom: 100px;">
             {% if not matrix %}

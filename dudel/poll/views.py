@@ -1,13 +1,18 @@
 import re
+from smtplib import SMTPRecipientsRefused
+
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
 from django.db import transaction, connection
 
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
 from django.db.models import F, Sum, Count, Q
+from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import activate as tz_activate, localtime, now
@@ -16,7 +21,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm
-from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS
+from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS, PollWatch
 from dudel.base.models import DudelUser
 from dudel.invitations.models import Invitation
 
@@ -88,6 +93,15 @@ def poll(request, poll_url):
                              stat2 in stats2 if
                              stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
              } for stat in stats]
+
+    poll_watched = False
+    if request.user.is_authenticated:
+        try:
+            poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
+            poll_watched = bool(poll_watch)
+        except ObjectDoesNotExist:
+            pass
+
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
         'matrix': matrix,
@@ -98,6 +112,7 @@ def poll(request, poll_url):
         'max_score': max(val['score'] for val in stats if val['score'] is not None) if stats and votes_count > 0 else None,
         'invitations': invitations,
         'summary': summary,
+        'watched': poll_watched,
     })
 
 
@@ -114,7 +129,7 @@ def comment(request, poll_url):
     if not request.user.is_anonymous:
         user = request.user
     new_comment = Comment(text=request.POST['newCom'],
-                          date_created=datetime.now(),
+                          date_created=now(),
                           name=request.POST['newComName'],
                           poll=current_poll,
                           user=user)
@@ -171,8 +186,24 @@ def delete_comment(request, poll_url, comment_id):
     })
 
 
+@require_POST
 def watch(request, poll_url):
-    pass
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    poll_watch = None
+
+    try:
+        poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
+    except ObjectDoesNotExist:
+        pass
+
+    if poll_watch:
+        poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
+        poll_watch.delete()
+    else:
+        poll_watch = PollWatch(poll=current_poll, user=request.user)
+        poll_watch.save()
+
+    return redirect('poll', poll_url)
 
 
 def edit_choice(request, poll_url):
@@ -496,7 +527,7 @@ def vote(request, poll_url, vote_id=None):
                 return HttpResponseForbidden()  # todo: better errorpage?
         else:
             current_vote = Vote(poll=current_poll)
-        current_vote.date_created = datetime.now()
+        current_vote.date_created = now()
         current_vote.comment = request.POST.get('comment')
         if vote_id:
             # leave the name as it was
@@ -537,6 +568,10 @@ def vote(request, poll_url, vote_id=None):
                     VoteChoice.objects.filter(vote=current_vote).delete()
                     #todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
                     #todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
+                else:
+                    for current_watch in current_poll.pollwatch_set.all():
+                        current_watch.send(request=request, vote=current_vote)
+
                 VoteChoice.objects.bulk_create(new_choices)
 
                 return redirect('poll', poll_url)
@@ -684,7 +719,7 @@ def copy(request, poll_url):
                 for invitation in invitations:
                     invitation.pk = None
                     invitation.poll = current_poll
-                    invitation.date_created = datetime.now()
+                    invitation.date_created = now()
                     invitation.last_email = None
                     invitation.creator = request.user
                     invitation.save()
@@ -693,7 +728,7 @@ def copy(request, poll_url):
             if create_invitations_from_votes:
                 for user in vote_users:
                     if user not in invitation_users:
-                        invitation = Invitation(poll=current_poll, user=user, date_created=datetime.now(),
+                        invitation = Invitation(poll=current_poll, user=user, date_created=now(),
                                                 creator=request.user)
                         invitation.save()
                         invitation.send(request)

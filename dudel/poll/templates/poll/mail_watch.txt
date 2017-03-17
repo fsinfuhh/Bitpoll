@@ -1,0 +1,13 @@
+{% load i18n settings_value %}{% value_from_settings BASE_URL as base_url%}{% url 'settings' as settings_url %}{% blocktrans %}Hi {{ receiver}},
+
+There was a change made on the poll "{{ poll }}": A new vote has been posted by {{ user }}.
+
+Visit this link to see the poll page: {{ base_url }}{{ link }}
+
+
+Greetings,
+TODO: Appname-team
+
+--
+You receive this mail because you are watching the poll "{{poll}}". Visit the following link to unsubscribe from these notifications: {{ base_url }}{{ link }} .
+{% endblocktrans %}

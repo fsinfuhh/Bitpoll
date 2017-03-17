@@ -12,6 +12,7 @@ from dudel.invitations.models import Invitation
 from dudel.poll.models import Poll
 from django.utils.translation import ugettext_lazy as _
 
+
 def invite(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     error_msg = ""
