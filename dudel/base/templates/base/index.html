@@ -233,13 +233,19 @@
             </div>
             <div class="col-md-4">
                 <h4>Public polls</h4>
-                <div class="alert alert-info">
-                    <div class="container"><i class="fa fa-exclamation-circle"></i>There are currently no public polls.
+                {% if not public_polls %}
+                    <div class="alert alert-info">
+                        <div class="container"><i class="fa fa-exclamation-circle"></i>There are currently no public polls.
+                        </div>
                     </div>
-                </div>
+                {% else %}
+                    {% for poll in public_polls %}
+                        <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
+                    {% endfor %}
+                {% endif %}
             </div>
             {% if request.user.is_authenticated %}
-            <div>
+            <div class="col-md-4">
                 <h4>My Polls</h4>
                 <small>You can find a list of all the polls in which you have participated on your profile page.</small><br>
                 <a href="/base/settings" class="action primary">Show my polls</a>

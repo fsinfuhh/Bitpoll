@@ -27,6 +27,7 @@ def index(request):
 
     If the input is not valid, the user is directed back for correction.
     """
+    public_polls = Poll.objects.filter(public_listening=True)
     if request.method == 'POST':
         form = PollCreationForm(request.POST)
         if form.is_valid():
@@ -55,6 +56,7 @@ def index(request):
         'poll_count': Poll.objects.all().count(),
         'votes_count': Vote.objects.all().count(),
         'user_count': DudelUser.objects.count(),
+        'public_polls': public_polls,
     })
 
 
