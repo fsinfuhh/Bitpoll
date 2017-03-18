@@ -191,6 +191,12 @@ def watch(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     poll_watch = None
 
+    if not current_poll.can_listen(request.user):
+        messages.error(
+            request, _("You are not allowed to listen.")
+        )
+        return redirect('poll', poll_url)
+
     try:
         poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
     except ObjectDoesNotExist:
@@ -208,6 +214,12 @@ def watch(request, poll_url):
 
 def edit_choice(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
+    if not current_poll.can_listen(request.user):
+        messages.error(
+            request, _("You are not allowed to listen.")
+        )
+        return redirect('poll', poll_url)
+
     if current_poll.type == 'universal':
         return redirect('poll_editUniversalChoice', current_poll.url)
     elif current_poll.type == 'date':
@@ -470,6 +482,12 @@ def edit_choicevalues(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     choiceval_select = None
 
+    if not current_poll.can_listen(request.user):
+        messages.error(
+            request, _("You are not allowed to listen.")
+        )
+        return redirect('poll', poll_url)
+
     if request.method == 'POST':
         if not current_poll.can_edit(request.user):
             messages.error(
@@ -539,7 +557,7 @@ def delete(request, poll_url):
         if 'Delete' in request.POST:
             if request.user.is_authenticated:
                 # TODO restriction for deletion
-                if not (current_poll.user or current_poll.group) or current_poll.user == request.user or request.user in current_poll.group.user_set:
+                if current_poll.can_edit(request.user):
                     current_poll.delete()
                 return redirect('index')
             else:
@@ -741,8 +759,11 @@ def copy(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     date_shift = 0
     error_msg = ""
-    if current_poll.can_listen(request.user):
-        error_msg = "You're not allowed to copy this Poll."
+    if not current_poll.can_listen(request.user):
+        messages.error(
+            request, _("You are not allowed to listen.")
+        )
+        return redirect('poll', poll_url)
 
     if request.method == 'POST' and current_poll.can_listen(request.user):
         form = PollCopyForm(request.POST)
@@ -832,6 +853,12 @@ def settings(request, poll_url):
 
     if request.user.is_authenticated:
         groups = Group.objects.filter(user=request.user)
+
+    if not current_poll.can_listen(request.user):
+        messages.error(
+            request, _("You are not allowed to listen.")
+        )
+        return redirect('poll', poll_url)
 
     user_error = ""
     error_msg = ""
