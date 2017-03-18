@@ -16,9 +16,9 @@
                     <table class="table">
                         <tbody>
                         <tr>
-                            <th class="nobr">Wahlmöglichkeit</th>
-                            <th class="nobr">Stimmen</th>
-                            <th class="nobr">Aktionen</th>
+                            <th class="nobr">Choices</th>
+                            <th class="nobr">Votes</th>
+                            <th class="nobr">Actions</th>
                         </tr>
                         {% for choice in choices %}
                             <tr class="choice-row {% if choice.deleted %}deleted{% endif %}">
@@ -63,7 +63,7 @@
                         <tr class="choice-row">
                             <td class="choice">
                                 <div class="input-group input-group-sm">
-                                    <input name="choice_text" placeholder="{% trans 'Choice text ...' %}"/>
+                                    <input class="form-control" name="choice_text" placeholder="{% trans 'Choice text ...' %}"/>
                                     <input name="choice_sort_key" class="choice-sort-key" type="hidden"
                                            value="{{ next_sort_key }}">
                                     <span class="input-group-btn">
@@ -103,13 +103,12 @@
             <div class="col-md-7">
                 <div class="well">
                     <h3>Help</h3>
-                    <h4>Gelöschte Wahlmöglichkeiten</h4>
-                    <p>Entfernte Antworten verbleiben in dieser Liste, so dass Stimmen, die bereits abgegeben wurden,
-                        nicht verloren gehen.</p>
+                    <h4>Deleted Choices</h4>
+                    <p> Deleted choices will stay in this list, so votes that have already been made are not lost.</p>
 
-                    <h4>Gruppieren</h4>
+                    <h4>Grouping</h4>
                     <p>
-                        Du kannst Wahlmöglichkeiten gruppieren, indem du sie mit '/' in Teile zerlegst.
+                        You can sort choices into groups by splitting them into parts with '/'.
                     </p>
                     <ul>
                         <li>Some-Choice</li>
