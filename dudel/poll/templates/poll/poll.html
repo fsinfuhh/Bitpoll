@@ -222,7 +222,7 @@
         </div>
         <hr>
         <div class="noprint">
-            <h3>Schreibe einen Kommentar</h3>
+            <h3>Post a comment</h3>
             <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form">
                 {% csrf_token %}
                 <div class="form-group">
@@ -243,9 +243,9 @@
                 <label>Comment</label>
                 <textarea title="new Comment" name="newCom" class="form-control" rows="6"></textarea>
                     <p class="help-block">
-                        Du kannst deinen Text in
+                        You can use
                         <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
-                        formatieren.
+                        syntax for formatting.
                         </p> {# TODO: das geht (noch) nicht #}
                 </div>
                 <div class="form-group">

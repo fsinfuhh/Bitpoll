@@ -466,6 +466,63 @@ def edit_universal_choice(request, poll_url):
     })
 
 
+def edit_choicevalues(request, poll_url):
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    choiceval_select = None
+
+    if request.method == 'POST':
+        if not current_poll.can_edit(request.user):
+            messages.error(
+                request, _("You are not allowed to edit this Poll")
+            )
+        else:
+            if 'delete' in request.POST:
+                choiceval_id = request.POST.get('delete', None)
+                if choiceval_id:
+                    choiceval = get_object_or_404(ChoiceValue, id=choiceval_id)
+                    choiceval.delete()
+                return redirect('poll_editchoicevalues', current_poll.url)
+            elif 'edit' in request.POST:
+                choiceval_id = request.POST.get('edit', None)
+                if choiceval_id:
+                    choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id)
+
+    return TemplateResponse(request, 'poll/choicevalue.html', {
+        'poll': current_poll,
+        'choiceval_select': choiceval_select,
+    })
+
+
+@require_POST
+def edit_choicevalues_create(request, poll_url):
+    current_poll = get_object_or_404(Poll, url=poll_url)
+
+    if not current_poll.can_edit(request.user):
+        messages.error(
+            request, _("You are not allowed to edit this Poll")
+        )
+    else:  # TODO exception-handling
+        title = request.POST.get('title', None)
+        color = request.POST.get('color', None)
+        icon = request.POST.get('icon', None)
+        weight = request.POST.get('weight', None)
+        current_id = request.POST.get('choiceval_id', None)
+
+        if current_id:
+            current_choiceval = get_object_or_404(ChoiceValue, id=current_id)
+            current_choiceval.title = title
+            current_choiceval.color = color
+            current_choiceval.icon = icon
+            current_choiceval.weight = weight
+
+            current_choiceval.save()
+        else:
+            choice_val = ChoiceValue(title=title, icon=icon, color=color, weight=weight, poll=current_poll)
+            choice_val.save()
+
+    return redirect('poll_editchoicevalues', current_poll.url)
+
+
 def delete(request, poll_url):
     """
     :param request:

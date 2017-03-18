@@ -10,7 +10,6 @@ urlpatterns = [
     url(r'^([a-zA-Z0-9_\-]+)/watch/$', views.watch, name='poll_watch'),
     url(r'^([a-zA-Z0-9_\-]+)/settings/$', views.settings, name='poll_settings'),
 
-
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices/$', views.edit_choice, name='poll_editChoice'),
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices/date/$', views.edit_date_choice, name='poll_editDateChoice'),
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices/dateTime/date/$', views.edit_dt_choice_date, name='poll_editDTChoiceDate'),
@@ -18,6 +17,9 @@ urlpatterns = [
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices/dateTime/combinations/$', views.edit_dt_choice_combinations,
         name='poll_editDTChoiceCombinations'),
     url(r'^([a-zA-Z0-9_\-]+)/edit/choices/universal/$', views.edit_universal_choice, name='poll_editUniversalChoice'),
+    url(r'^([a-zA-Z0-9_\-]+)/edit/choicevalues/', views.edit_choicevalues, name='poll_editchoicevalues'),
+    url(r'^([a-zA-Z0-9_\-]+)/edit/choicevalues_create', views.edit_choicevalues_create,
+        name='poll_editchoicevalues_create'),
 
     url(r'^([a-zA-Z0-9_\-]+)/delete/$', views.delete, name='poll_delete'),
 

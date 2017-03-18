@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load poll_filter vote_permissions %}
+{% load tz %}
+{% block title %}{{ poll.title }}{% endblock %}
+{% load django_markdown django_markdown_static %}
+
+{% block content %}
+    <div class="container">
+        {% include 'poll/poll_haeder.html' %}
+
+        <p>
+        Here you can edit which options the voters have for each choice you give them. By default, <b>yes</b>, <b>no</b> and <b>maybe</b> are always enabled, but you can disable or change any of these. You should have at least one value in this list for the voting to make sense.
+        </p>
+        <p>
+        Weights are factors on how the total score for a choice is calculated. These values are normally somewhere between 0 and 1. The total score is displayed both as a percentage and as the weight sum, so you are allowed to use other values if you want them to "cancel out".
+        </p>
+        <div class="col-md-6">
+            <form method="post">
+                {% csrf_token %}
+                <h2>Available Values</h2>
+
+                <table class="auto-width poll">
+                    <tr>
+                        <th>Title</th>
+                        <th>Color/Icon</th>
+                        <th>Weight</th>
+                        <th>Votes cast</th>
+                        <th>Actions</th>
+                    </tr>
+
+                    {% for choiceval in poll.choicevalue_set.all %}
+                        <tr class="choice">
+                            <td class="author choice">{{ choiceval.title }}</td>
+                            <td class="vote-choice" style="background-color: #{{ choiceval.color }}">
+                                <i class="fa fa-{{ choiceval.icon }}"></i>
+                            </td>
+                            <td class="author">{{ choiceval.weight }}</td>
+                            <td class="author"></td>
+                            <td class="author">
+                                <button class="action default" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa fa-pencil"></i></button>
+                                <button class="action default" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa fa-trash-o"></i></button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </form>
+
+            <a href="{% url 'poll_settings' poll.url %}" class="action"> Back </a>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Add choice value</h2>
+
+            <form method="post" action="{% url 'poll_editchoicevalues_create' poll.url %}">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <label for="title">Title</label>
+                    {% if choiceval_select %}
+                        <input id="title" class="form-control" name="title" type="text" value="{{ choiceval_select.title }}">
+                    {% else %}
+                        <input id="title" class="form-control" name="title" type="text">
+                    {% endif %}
+
+                    <label for="color">Color</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">#</span>
+                        {% if choiceval_select %}
+                            <input id="color" class="form-control" name="color" type="text" value="{{ choiceval_select.color }}">
+                        {% else %}
+                            <input id="color" class="form-control" name="color" type="text" placeholder="RRGGBB">
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="weight">Weight</label>
+                    <span class="help-inline">(usually between 0 and 1)</span>
+                    {% if choiceval_select %}
+                        <input id="weight" class="form-control" name="weight" type="text" value="{{ choiceval_select.weight }}">
+                    {% else %}
+                        <input id="weight" class="form-control" name="weight" type="text" placeholder="0.0">
+                    {% endif %}
+
+                    <label for="icon">Icon</label>
+                    <span class="help-inline">(any FontAwesome icon)</span>
+                    <div class="input-group">
+                        <span class="input-group-addon">fa fa-</span>
+                        {% if choiceval_select %}
+                            <input id="icon" class="form-control" name="icon" type="text" value="{{ choiceval_select.icon }}">
+                        {% else %}
+                            <input id="icon" class="form-control" name="icon" type="text">
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if choiceval_select %}
+                    <input name="choiceval_id" value="{{ choiceval_select.id }}" type="hidden" readonly>
+                {% else %}
+                    <input name="choiceval_id" value="" type="hidden" readonly>
+                {% endif %}
+                <input class="action primary" type="submit" value="Add">
+
+                <h3>Available icons</h3>
+                <p style="display: block;" class="script-only">Click icon to insert it into the form.</p>
+
+            </form>
+        
+            <ul class="icon-preview">
+                <li>
+                    <button style="width: 28px;" data-icon="smile-o">
+                        <i class="fa fa-smile-o fa-2x"></i>
+                        <span style="display: none;">                Smile</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="meh-o">
+                        <i class="fa fa-meh-o fa-2x"></i>
+                        <span style="display: none;">                  Meh</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="frown-o">
+                        <i class="fa fa-frown-o fa-2x"></i>
+                        <span style="display: none;">                Frown</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="star">
+                        <i class="fa fa-star fa-2x"></i>
+                        <span style="display: none;">                   Star</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="star-half-o">
+                        <i class="fa fa-star-half-o fa-2x"></i>
+                        <span style="display: none;">            Half star</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="star-o">
+                        <i class="fa fa-star-o fa-2x"></i>
+                        <span style="display: none;">                 No star</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="thumbs-up">
+                        <i class="fa fa-thumbs-up fa-2x"></i>
+                        <span style="display: none;">              Thumbs up!</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="thumbs-down">
+                        <i class="fa fa-thumbs-down fa-2x"></i>
+                        <span style="display: none;">            Thumbs down</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="adjust">
+                        <i class="fa fa-adjust fa-2x"></i>
+                        <span style="display: none;">                 Adjust</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="asterisk">
+                        <i class="fa fa-asterisk fa-2x"></i>
+                        <span style="display: none;">               Asterisk</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="ban">
+                        <i class="fa fa-ban fa-2x"></i>
+                        <span style="display: none;">                    No</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="beer">
+                        <i class="fa fa-beer fa-2x"></i>
+                        <span style="display: none;">                   Beer!!11elf</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="book">
+                        <i class="fa fa-book fa-2x"></i>
+                        <span style="display: none;">                   Book</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="bolt">
+                        <i class="fa fa-bolt fa-2x"></i>
+                        <span style="display: none;">                   Bolt</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="calendar">
+                        <i class="fa fa-calendar fa-2x"></i>
+                        <span style="display: none;">               Calendar</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="check">
+                        <i class="fa fa-check fa-2x"></i>
+                        <span style="display: none;">                  Yes</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="check-circle">
+                        <i class="fa fa-check-circle fa-2x"></i>
+                        <span style="display: none;">           Check</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="circle">
+                        <i class="fa fa-circle fa-2x"></i>
+                        <span style="display: none;">                 Disk</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="circle-o">
+                        <i class="fa fa-circle-o fa-2x"></i>
+                        <span style="display: none;">               Circle</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="clock-o">
+                        <i class="fa fa-clock-o fa-2x"></i>
+                        <span style="display: none;">                Clock</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="code">
+                        <i class="fa fa-code fa-2x"></i>
+                        <span style="display: none;">                   Code</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="coffee">
+                        <i class="fa fa-coffee fa-2x"></i>
+                        <span style="display: none;">                 Coffe</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="comment">
+                        <i class="fa fa-comment fa-2x"></i>
+                        <span style="display: none;">                Comment</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="comments">
+                        <i class="fa fa-comments fa-2x"></i>
+                        <span style="display: none;">               Comments</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="cutlery">
+                        <i class="fa fa-cutlery fa-2x"></i>
+                        <span style="display: none;">                Mensa</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="dashboard">
+                        <i class="fa fa-dashboard fa-2x"></i>
+                        <span style="display: none;">              Dashboard</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="exclamation-triangle">
+                        <i class="fa fa-exclamation-triangle fa-2x"></i>
+                        <span style="display: none;">   Warning</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="flag">
+                        <i class="fa fa-flag fa-2x"></i>
+                        <span style="display: none;">                   Flag</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="flask">
+                        <i class="fa fa-flask fa-2x"></i>
+                        <span style="display: none;">                  Lab</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="globe">
+                        <i class="fa fa-globe fa-2x"></i>
+                        <span style="display: none;">                  Globe/WWW</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="heart">
+                        <i class="fa fa-heart fa-2x"></i>
+                        <span style="display: none;">                  Heart &amp;lt;3</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="home">
+                        <i class="fa fa-home fa-2x"></i>
+                        <span style="display: none;">                   Home</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="lightbulb-o">
+                        <i class="fa fa-lightbulb-o fa-2x"></i>
+                        <span style="display: none;">            Lightbulb</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="magic">
+                        <i class="fa fa-magic fa-2x"></i>
+                        <span style="display: none;">                  Magic</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="moon-o">
+                        <i class="fa fa-moon-o fa-2x"></i>
+                        <span style="display: none;">                 Moon</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="phone">
+                        <i class="fa fa-phone fa-2x"></i>
+                        <span style="display: none;">                  Phone</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="music">
+                        <i class="fa fa-music fa-2x"></i>
+                        <span style="display: none;">                  Music</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="power-off">
+                        <i class="fa fa-power-off fa-2x"></i>
+                        <span style="display: none;">              Power off</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="rocket">
+                        <i class="fa fa-rocket fa-2x"></i>
+                        <span style="display: none;">                 Rocket</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="sun-o">
+                        <i class="fa fa-sun-o fa-2x"></i>
+                        <span style="display: none;">                  Sun</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="umbrella">
+                        <i class="fa fa-umbrella fa-2x"></i>
+                        <span style="display: none;">               Umbrella</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="android">
+                        <i class="fa fa-android fa-2x"></i>
+                        <span style="display: none;">                Android</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="github">
+                        <i class="fa fa-github fa-2x"></i>
+                        <span style="display: none;">                 Github</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="stack-overflow">
+                        <i class="fa fa-stack-overflow fa-2x"></i>
+                        <span style="display: none;">         StackOverflow</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button style="width: 28px;" data-icon="linux">
+                        <i class="fa fa-linux fa-2x"></i>
+                        <span style="display: none;">                  Linux</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
