@@ -42,7 +42,7 @@ def index(request):
             ChoiceValue(title="Only if absolutely necessary", icon="thumbs-down", color="B0E", weight=0.25,
                         poll=current_poll).save()
 
-            if current_poll.type == 'universal':
+            if current_poll.type == 'universal':  # TODO: heir könnte auch auf die algemeine edit url weitergeleitet werden
                 return redirect('poll_editUniversalChoice', current_poll.url)
             elif current_poll.type == 'date':
                 return redirect('poll_editDateChoice', current_poll.url)

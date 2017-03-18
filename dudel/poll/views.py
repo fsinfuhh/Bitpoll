@@ -173,9 +173,9 @@ def delete_comment(request, poll_url, comment_id):
                     current_comment.delete()
                     return redirect('poll', poll_url)
                 else:
-                    error_msg = "Deletion not allowed. You are not " + str(current_comment.name) + "."
+                    error_msg = _("Deletion not allowed. You are not {}.".format(str(current_comment.name)))
             else:
-                error_msg = "Deletion not allowed. You are not authenticated."
+                error_msg = _("Deletion not allowed. You are not authenticated.")
         else:
             return redirect('poll', poll_url)
 
@@ -543,7 +543,7 @@ def delete(request, poll_url):
                     current_poll.delete()
                 return redirect('index')
             else:
-                error_msg = "Deletion not allowed. You are not authenticated."
+                error_msg = _("Deletion not allowed. You are not authenticated.")
         else:
             return redirect('poll', poll_url)
     else:
@@ -566,7 +566,7 @@ def vote(request, poll_url, vote_id=None):
     Takes vote with comments as input and saves the vote along with all comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    
+
     if current_poll.due_date and current_poll.due_date < now():
         messages.error(
             request, _("This Poll is past the due date, voting is no longer possible")
@@ -630,7 +630,7 @@ def vote(request, poll_url, vote_id=None):
                         current_watch.send(request=request, vote=current_vote)
 
                 VoteChoice.objects.bulk_create(new_choices)
-
+                messages.success(request, _('Vote has been recorded'))
                 return redirect('poll', poll_url)
         else:
             messages.error(
@@ -715,9 +715,9 @@ def vote_delete(request, poll_url, vote_id):
                     current_vote.delete()
                     return redirect('poll', poll_url)
                 else:
-                    error_msg = "Deletion not allowed. You are not " + str(current_vote.name) + "."
+                    error_msg = _("Deletion not allowed. You are not {}.".format(str(current_vote.name)))
             else:
-                error_msg = "Deletion not allowed. You are not authenticated."
+                error_msg = _("Deletion not allowed. You are not authenticated.")
         else:
             return redirect('poll', poll_url)
 
@@ -830,7 +830,7 @@ def settings(request, poll_url):
     if request.method == 'POST':
         form = PollSettingsForm(request.POST, instance=current_poll)
         if not current_poll.can_edit(request.user):
-            user_error = "Not allowed to edit Poll"
+            user_error = _("You are not allowed to edit Poll")
         elif form.is_valid():
             new_poll = form.save(commit=False)
             user = form.data.get('user', '')
@@ -839,7 +839,7 @@ def settings(request, poll_url):
                     user_obj = DudelUser.objects.get(username=user)
                     new_poll.user = user_obj
                 except ObjectDoesNotExist:  # TODO: correct exception
-                    user_error = "User not Found"
+                    user_error = _("User {} not Found".format(user))
             if not user_error:
                 new_poll.save()
                 return redirect('poll_settings', current_poll.url)
