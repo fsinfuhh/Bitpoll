@@ -17,6 +17,16 @@
         {% include 'poll/poll_haeder.html' %}
         <form action="{% url 'poll_copy' poll.url %}" method="post">
             {% csrf_token %}
+            {% if error %}
+                <div class="form-errors">
+                    <div class="alert alert-danger">
+                        <div class="container">
+                            <i class="fa fa-times"></i>{{ error }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <h3>Copy Poll</h3>
             <div class="col-md-5">
                 <div class="form-group">

@@ -96,16 +96,17 @@
 
                 {% if choiceval_select %}
                     <input name="choiceval_id" value="{{ choiceval_select.id }}" type="hidden" readonly>
+                    <input class="action primary" type="submit" value="Edit">
                 {% else %}
                     <input name="choiceval_id" value="" type="hidden" readonly>
+                    <input class="action primary" type="submit" value="Add">
                 {% endif %}
-                <input class="action primary" type="submit" value="Add">
 
                 <h3>Available icons</h3>
                 <p style="display: block;" class="script-only">Click icon to insert it into the form.</p>
 
             </form>
-        
+
             <ul class="icon-preview">
                 <li>
                     <button style="width: 28px;" data-icon="smile-o">

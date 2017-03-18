@@ -14,6 +14,16 @@
 {% block content %}
     <div class="container">
         {% include 'poll/poll_haeder.html' %}
+        {% if perm_error %}
+            <div class="form-errors">
+                <div class="alert alert-danger">
+                    <div class="container">
+                        <i class="fa fa-times"></i>{{ perm_error }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
     <form action="{% url 'poll_settings' poll.url %}" method="post">
     {% csrf_token %}
         <div class="col-md-5">

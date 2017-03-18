@@ -65,6 +65,16 @@ class Poll(models.Model):
 
         return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated()
 
+    def can_listen(self, user: DudelUser):
+        if self.public_listening:
+            return True
+        elif user.is_authenticated and user in self.invitation_set.all().values('user'):
+            return True
+        elif self.can_edit(user):
+            return True
+        else:
+            return False
+
     def get_icon(self):
         if self.type == 'universal':
             return 'list'

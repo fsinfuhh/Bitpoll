@@ -740,8 +740,11 @@ def copy(request, poll_url):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     date_shift = 0
+    error_msg = ""
+    if current_poll.can_listen(request.user):
+        error_msg = "You're not allowed to copy this Poll."
 
-    if request.method == 'POST':
+    if request.method == 'POST' and current_poll.can_listen(request.user):
         form = PollCopyForm(request.POST)
 
         if form.is_valid():
@@ -813,6 +816,7 @@ def copy(request, poll_url):
         'form': form,
         'poll': current_poll,
         'date_shift': date_shift,
+        'error': error_msg,
     })
 
 
@@ -824,13 +828,18 @@ def settings(request, poll_url):
     :return:
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    groups = Group.objects.filter(user=request.user)
+    groups = None
+
+    if request.user.is_authenticated:
+        groups = Group.objects.filter(user=request.user)
+
     user_error = ""
+    error_msg = ""
     user = current_poll.user.username if current_poll.user else ""
     if request.method == 'POST':
         form = PollSettingsForm(request.POST, instance=current_poll)
         if not current_poll.can_edit(request.user):
-            user_error = _("You are not allowed to edit Poll")
+            error_msg = _("You are not allowed to edit this Poll")
         elif form.is_valid():
             new_poll = form.save(commit=False)
             user = form.data.get('user', '')
@@ -851,6 +860,7 @@ def settings(request, poll_url):
         form = PollSettingsForm(instance=current_poll)
 
     return TemplateResponse(request, 'poll/Settings.html', {
+        'perm_error': error_msg,
         'form': form,
         'poll': current_poll,
         'page': 'Settings',
