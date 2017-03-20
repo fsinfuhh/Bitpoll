@@ -5,7 +5,7 @@
 {% load i18n %}
 {% load comment_permissions %}
 
-{% block title %}Delete comment{% endblock %}
+{% block title %}{% trans 'Delete comment' %}{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -14,7 +14,7 @@
         <div class="alert alert-danger">{{ error }}</div>
         <br /><br />
     {% endif %}
-    <div class="alert alert-warning"> Shall the following comment be deleted? </div>
+    <div class="alert alert-warning">{% trans 'Shall the following comment be deleted?' %}</div>
     <div class="comments">
     <div class="comment">
         <div class="avatar">
@@ -22,7 +22,7 @@
         </div>
         <div class="meta">
             <div class="author">{% if comment.user %}{{ comment.user.name }}{% else %}{{ comment.name }}{% endif %}</div>
-            kommentierte am
+            {% trans 'comented at' %}
             <div class="date">{{ comment.date_created }}</div>
         </div>
         <div class="text"><p>{{ comment.text }}</p></div> {# TODO:  #}
@@ -30,8 +30,8 @@
     </div>
         <br /><br />
     <form action="{% url 'poll_deleteComment' poll.url comment.id %}" method="POST">{% csrf_token %}
-        <input class="action" type="submit" name="Cancel" value="Cancel" />
-        <input class="action danger" type="submit" name="Delete" value="Delete" />
+        <input class="action" type="submit" name="Cancel" value="{% trans 'Cancel' %}" />
+        <input class="action danger" type="submit" name="Delete" value="{% trans 'Delete' %}" />
     </form>
     </div>
 {% endblock %}

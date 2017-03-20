@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load compile_static %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}Create choice{% endblock %}
 
@@ -22,13 +23,14 @@
             {% csrf_token %}
             <div id="date-time-form-content">
                 <div class="form-group">
-                    <label for="{{ new_choice.dates.id }}">Dates</label>
+                    <label for="{{ new_choice.dates.id }}">{% trans 'Dates' %}</label>
                   {{ new_choice.dates }}
                 </div>
             </div>
             <div class="alert alert-info">
-                <div class="container"><i class="fa fa-exclamation-circle"></i>Please select the days that you want to
-                    be able to choose. In the next step, you will select time slots.
+                <div class="container"><i class="fa fa-exclamation-circle"></i>
+                    {% blocktrans %}Please select the days that you want to
+                    be able to choose. In the next step, you will select time slots.{% endblocktrans %}
                 </div>
             </div>
             <div class="script-only" style="">
@@ -48,13 +50,13 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td>Mo</td>
-                                <td>Tu</td>
-                                <td>We</td>
-                                <td>Th</td>
-                                <td>Fr</td>
-                                <td>Sa</td>
-                                <td>Su</td>
+                                <td>{% trans 'Mo' %}</td>
+                                <td>{% trans 'Tu' %}</td>
+                                <td>{% trans 'We' %}</td>
+                                <td>{% trans 'Th' %}</td>
+                                <td>{% trans 'Fr' %}</td>
+                                <td>{% trans 'Sa' %}</td>
+                                <td>{% trans 'Su' %}</td>
                             </tr>
 
                             {% for i in "12345" %}
@@ -73,8 +75,8 @@
                 </div>
             </div>
             <div class="form-actions">
-                <a class="action" href="javascript: history.back();">Back</a>
-                <input type="submit" class="action primary" value="Next">
+                <a class="action" href="javascript: history.back();">{% trans 'Back' %}</a>
+                <input type="submit" class="action primary" value="{% trans 'Next' %}">
             </div>
         </form>
     </div>

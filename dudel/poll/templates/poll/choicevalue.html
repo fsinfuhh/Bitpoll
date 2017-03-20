@@ -11,23 +11,27 @@
         {% include 'poll/poll_haeder.html' %}
 
         <p>
-        Here you can edit which options the voters have for each choice you give them. By default, <b>yes</b>, <b>no</b> and <b>maybe</b> are always enabled, but you can disable or change any of these. You should have at least one value in this list for the voting to make sense.
+        {% blocktrans %}Here you can edit which options the voters have for each choice you give them. By default,
+            <b>yes</b>, <b>no</b> and <b>maybe</b> are always enabled, but you can disable or change any of these.
+            You should have at least one value in this list for the voting to make sense.{% endblocktrans %}
         </p>
         <p>
-        Weights are factors on how the total score for a choice is calculated. These values are normally somewhere between 0 and 1. The total score is displayed both as a percentage and as the weight sum, so you are allowed to use other values if you want them to "cancel out".
+        {% blocktrans %}Weights are factors on how the total score for a choice is calculated. These values are normally somewhere
+            between 0 and 1. The total score is displayed both as a percentage and as the weight sum, so you are
+            allowed to use other values if you want them to "cancel out".{% endblocktrans %}
         </p>
         <div class="col-md-6">
             <form method="post">
                 {% csrf_token %}
-                <h2>Available Values</h2>
+                <h2>{% trans 'Available Values' %}</h2>
 
                 <table class="auto-width poll">
                     <tr>
-                        <th>Title</th>
-                        <th>Color/Icon</th>
-                        <th>Weight</th>
-                        <th>Votes cast</th>
-                        <th>Actions</th>
+                        <th>{% trans 'Title' %}</th>
+                        <th>{% trans 'Color/Icon' %}</th>
+                        <th>{% trans 'Weight' %}</th>
+                        <th>V{% trans 'otes cast' %}</th>
+                        <th>{% trans 'Actions' %}</th>
                     </tr>
 
                     {% for choiceval in poll.choicevalue_set.all %}
@@ -47,16 +51,16 @@
                 </table>
             </form>
 
-            <a href="{% url 'poll_settings' poll.url %}" class="action"> Back </a>
+            <a href="{% url 'poll_settings' poll.url %}" class="action">{% trans ' Back' %}</a>
         </div>
 
         <div class="col-md-6">
-            <h2>Add choice value</h2>
+            <h2>{% trans 'Add choice value' %}</h2>
 
             <form method="post" action="{% url 'poll_editchoicevalues_create' poll.url %}">
                 {% csrf_token %}
                 <div class="col-md-6">
-                    <label for="title">Title</label>
+                    <label for="title">{% trans 'Title' %}</label>
                     {% render_field form.title class+="form-control" %}
                         {% if form.title.errors %}
                             <div class="form-errors">
@@ -68,7 +72,7 @@
                         </div>
                         {% endif %}
 
-                    <label for="color">Color</label>
+                    <label for="color">{% trans 'Color' %}</label>
                     <div class="input-group">
                         <span class="input-group-addon">#</span>
                             {% render_field form.color class+="form-control" %}
@@ -85,8 +89,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="weight">Weight</label>
-                    <span class="help-inline">(usually between 0 and 1)</span>
+                    <label for="weight">{% trans 'Weight' %}</label>
+                    <span class="help-inline">{% trans '(usually between 0 and 1)' %}</span>
                         {% render_field form.weight class+="form-control" %}
                         {% if form.weight.errors %}
                             <div class="form-errors">
@@ -98,8 +102,8 @@
                         </div>
                         {% endif %}
 
-                    <label for="icon">Icon</label>
-                    <span class="help-inline">(any FontAwesome icon)</span>
+                    <label for="icon">{% trans 'Icon' %}</label>
+                    <span class="help-inline">{% trans '(any FontAwesome icon)' %}</span>
                     <div class="input-group">
                         <span class="input-group-addon">fa fa-</span>
                         {% render_field form.icon class+="form-control" %}
@@ -117,14 +121,14 @@
 
                 {% if choiceval_select %}
                     <input name="choiceval_id" value="{{ choiceval_select.id }}" type="hidden" readonly>
-                    <input class="action primary" type="submit" value="Edit">
+                    <input class="action primary" type="submit" value="{% trans 'Edit' %}">
                 {% else %}
                     <input name="choiceval_id" value="" type="hidden" readonly>
-                    <input class="action primary" type="submit" value="Add">
+                    <input class="action primary" type="submit" value="{% trans 'Add' %}">
                 {% endif %}
 
                 <h3>Available icons</h3>
-                <p style="display: block;" class="script-only">Click icon to insert it into the form.</p>
+                <p style="display: block;" class="script-only">{% trans 'Click icon to insert it into the form.' %}</p>
 
             </form>
 
