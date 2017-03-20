@@ -102,6 +102,12 @@ def poll(request, poll_url):
         except ObjectDoesNotExist:
             pass
 
+    max_score = None
+    if stats and votes_count > 0:
+        max_score_list = [val['score'] for val in stats if val['score'] is not None]
+        if max_score_list:
+            max_score = max(max_score_list)
+
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
         'matrix': matrix,
@@ -109,7 +115,7 @@ def poll(request, poll_url):
         'page': '',
         'votes': poll_votes,
         'stats': stats,
-        'max_score': max(val['score'] for val in stats if val['score'] is not None) if stats and votes_count > 0 else None,
+        'max_score': max_score,
         'invitations': invitations,
         'summary': summary,
         'watched': poll_watched,
@@ -854,9 +860,9 @@ def settings(request, poll_url):
     if request.user.is_authenticated:
         groups = Group.objects.filter(user=request.user)
 
-    if not current_poll.can_listen(request.user):
+    if not current_poll.can_edit(request.user):
         messages.error(
-            request, _("You are not allowed to listen.")
+            request, _("You are not allowed to edit this Poll.")
         )
         return redirect('poll', poll_url)
 

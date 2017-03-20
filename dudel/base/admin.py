@@ -21,4 +21,4 @@ class DudelUserAdmin(UserAdmin):
     )
     form = DudelUserChangeForm
 
-admin.site.register(DudelUser)
+admin.site.register(DudelUser, DudelUserAdmin)
