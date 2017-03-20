@@ -2,6 +2,7 @@ from smtplib import SMTPRecipientsRefused
 
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import Group
 from django.template.loader import render_to_string
@@ -158,7 +159,8 @@ class Choice(models.Model):
 class ChoiceValue(models.Model):
     title = models.CharField(max_length=80)
     icon = models.CharField(max_length=64)
-    color = models.CharField(max_length=6)
+    color = models.CharField(max_length=6, validators=[RegexValidator('^[a-fA-F0-9]{6}$',
+                                                                      message=_("Give an HTML color without the #"))])
     weight = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
 
