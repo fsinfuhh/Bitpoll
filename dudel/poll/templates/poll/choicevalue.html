@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load poll_filter vote_permissions %}
 {% load tz %}
+{% load widget_tweaks %}
 {% block title %}{{ poll.title }}{% endblock %}
 {% load django_markdown django_markdown_static %}
 
@@ -55,41 +56,60 @@
             <form method="post" action="{% url 'poll_editchoicevalues_create' poll.url %}">
                 {% csrf_token %}
                 <div class="col-md-6">
-                    <label for="title">Title</label>
-                    {% if choiceval_select %}
-                        <input id="title" class="form-control" name="title" type="text" value="{{ choiceval_select.title }}">
-                    {% else %}
-                        <input id="title" class="form-control" name="title" type="text">
-                    {% endif %}
+                    {% render_field form.title class+="form-control" %}
+                        {% if form.title.errors %}
+                            <div class="form-errors">
+                            <div class="alert alert-danger">
+                                <div class="container">
+                                    <i class="fa fa-times"></i>{{ form.title.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
 
                     <label for="color">Color</label>
                     <div class="input-group">
                         <span class="input-group-addon">#</span>
-                        {% if choiceval_select %}
-                            <input id="color" class="form-control" name="color" type="text" value="{{ choiceval_select.color }}">
-                        {% else %}
-                            <input id="color" class="form-control" name="color" type="text" placeholder="RRGGBB">
-                        {% endif %}
+                            {% render_field form.color class+="form-control" %}
+                            {% if form.color.errors %}
+                                <div class="form-errors">
+                                <div class="alert alert-danger">
+                                    <div class="container">
+                                        <i class="fa fa-times"></i>{{ form.color.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <label for="weight">Weight</label>
                     <span class="help-inline">(usually between 0 and 1)</span>
-                    {% if choiceval_select %}
-                        <input id="weight" class="form-control" name="weight" type="text" value="{{ choiceval_select.weight }}">
-                    {% else %}
-                        <input id="weight" class="form-control" name="weight" type="text" placeholder="0.0">
-                    {% endif %}
+                        {% render_field form.weight class+="form-control" %}
+                        {% if form.weight.errors %}
+                            <div class="form-errors">
+                            <div class="alert alert-danger">
+                                <div class="container">
+                                    <i class="fa fa-times"></i>{{ form.weight.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
 
                     <label for="icon">Icon</label>
                     <span class="help-inline">(any FontAwesome icon)</span>
                     <div class="input-group">
                         <span class="input-group-addon">fa fa-</span>
-                        {% if choiceval_select %}
-                            <input id="icon" class="form-control" name="icon" type="text" value="{{ choiceval_select.icon }}">
-                        {% else %}
-                            <input id="icon" class="form-control" name="icon" type="text">
+                        {% render_field form.icon class+="form-control" %}
+                        {% if form.icon.errors %}
+                            <div class="form-errors">
+                                <div class="alert alert-danger">
+                                    <div class="container">
+                                        <i class="fa fa-times"></i>{{ form.icon.errors }}
+                                    </div>
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
                 </div>

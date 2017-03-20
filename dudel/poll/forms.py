@@ -1,6 +1,6 @@
 from django.forms import ModelForm, CharField, Form
 
-from .models import Poll, Choice
+from .models import Poll, Choice, ChoiceValue
 from datetimewidget.widgets import DateTimeWidget
 
 
@@ -61,3 +61,9 @@ class PollDeleteForm(ModelForm):
     class Meta:
         model = Poll
         fields = ['title', 'due_date', 'description'] #TODO: das sollte kein model form sein
+
+
+class ChoiceValueForm(ModelForm):
+    class Meta:
+        model = ChoiceValue
+        fields = ['title', 'icon', 'color', 'weight']

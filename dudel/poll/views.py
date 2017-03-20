@@ -20,7 +20,7 @@ from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST
 
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
-    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm
+    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS, PollWatch
 from dudel.base.models import DudelUser
 from dudel.invitations.models import Invitation
@@ -494,6 +494,7 @@ def edit_choicevalues(request, poll_url):
         )
         return redirect('poll', poll_url)
 
+    form = ChoiceValueForm()
     if request.method == 'POST':
         if not current_poll.can_edit(request.user):
             messages.error(
@@ -510,9 +511,11 @@ def edit_choicevalues(request, poll_url):
                 choiceval_id = request.POST.get('edit', None)
                 if choiceval_id:
                     choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id)
+                    form = ChoiceValueForm(instance=choiceval_select)
 
     return TemplateResponse(request, 'poll/choicevalue.html', {
         'poll': current_poll,
+        'form': form,
         'choiceval_select': choiceval_select,
     })
 
@@ -526,24 +529,36 @@ def edit_choicevalues_create(request, poll_url):
             request, _("You are not allowed to edit this Poll")
         )
     else:  # TODO exception-handling
-        title = request.POST.get('title', None)
-        color = request.POST.get('color', None)
-        icon = request.POST.get('icon', None)
-        weight = request.POST.get('weight', None)
-        current_id = request.POST.get('choiceval_id', None)
+        form = ChoiceValueForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            color = form.cleaned_data['color']
+            icon = form.cleaned_data['icon']
+            weight = form.cleaned_data['weight']
+            current_id = request.POST.get('choiceval_id', None)
 
-        if current_id:
-            current_choiceval = get_object_or_404(ChoiceValue, id=current_id)
-            current_choiceval.title = title
-            current_choiceval.color = color
-            current_choiceval.icon = icon
-            current_choiceval.weight = weight
+            if current_id:
+                current_choiceval = get_object_or_404(ChoiceValue, id=current_id, poll=current_poll)
+                current_choiceval.title = title
+                current_choiceval.color = color
+                current_choiceval.icon = icon
+                current_choiceval.weight = weight
 
-            current_choiceval.save()
+                current_choiceval.save()
+            else:
+                choice_val = ChoiceValue(title=title, icon=icon, color=color, weight=weight, poll=current_poll)
+                choice_val.save()
         else:
-            choice_val = ChoiceValue(title=title, icon=icon, color=color, weight=weight, poll=current_poll)
-            choice_val.save()
-
+            choiceval_id = request.POST.get('choiceval_id', None)
+            if choiceval_id:
+                choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id)
+            else:
+                choiceval_select = None
+            return TemplateResponse(request, 'poll/choicevalue.html', {
+                'poll': current_poll,
+                'form': form,
+                'choiceval_select': choiceval_select,
+            })
     return redirect('poll_editchoicevalues', current_poll.url)
 
 
