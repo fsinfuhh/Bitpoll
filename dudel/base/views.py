@@ -89,3 +89,11 @@ def imprint(request):
         return TemplateResponse(request, 'base/imprint.html', {
 
         })
+
+
+def licenses(request):
+    return TemplateResponse(request, 'base/licenses.html')
+
+
+def tecnical(request):
+    return TemplateResponse(request, 'base/technical_info.html')

@@ -160,7 +160,7 @@
             <a href="{% url 'poll_editchoicevalues' poll.url %}">Edit possible answer values</a><br>
             <a href="{% url 'invitations' poll.url %}">Manage invitations</a><br>
             <a href="{% url 'poll_copy' poll.url %}">Copy poll</a><br>
-            <a href="{% url 'poll_delete' poll.url %}">Delete this poll</a>
+            <a class="red" href="{% url 'poll_delete' poll.url %}">Delete this poll</a>
         </div></form>
     </div>
 

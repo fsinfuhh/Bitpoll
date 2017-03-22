@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block wtitle %}{% block ptitle %}{% trans "Technical Info" %}{% endblock %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <h1>Technical Info</h1>
+<p>
+	<a href="{% url 'base_licenses' %}">{% trans "License overview of third-party components" %}</a>
+</p>
+
+<p>{% trans "This site uses the following software/components:" %}</p>
+<ul class="technical">
+    <li><a href="">TODO: dudel</a></li>
+    <ul class="technical">
+        <li><a href="http://python.org/">Python</a></li>
+        <li><a href="https://www.djangoproject.com/">Django</a></li>
+        <li><a href="http://jquery.com/">jQuery</a></li>
+        <li><a href="http://jqueryui.com/">jQuery UI</a></li>
+        <li><a href="http://getbootstrap.com/">Bootstrap CSS</a></li>
+        <li><a href="http://glyphicons.com/">Glyphicons Halflings icons</a></li>
+        <li><a href="http://www.python-ldap.org/">python-ldap</a></li>
+        <li><a href="https://github.com/jlaine/django-ldapdb">django-ldapdb</a></li>
+        <li><a href="https://pypi.python.org/pypi/django-widget-tweaks">django-widget-tweaks</a></li>
+        <li><a href="https://github.com/getsentry/raven-python">Raven</a></li>
+        <li><a href="http://pytz.sourceforge.net/">pytz</a></li>
+        <li>TODO</li>
+    </ul>
+    <li><a href="http://www.postgresql.org/">PostgreSQL</a></li>
+</ul>
+
+        <p>{% trans "Listed in no particular order." %}</p></div>
+{% endblock %}

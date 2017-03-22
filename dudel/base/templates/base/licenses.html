@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block wtitle %}{% block ptitle %}{% trans "License information" %}{% endblock %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+<h2>Mafiasi.de</h2>
+<p>
+The TODO project is free software and released under the
+<a href="https://tldrlegal.com/license/gnu-general-public-license-v3-%28gpl-3%29">
+GNU General Public License in version 3</a> or later. You can obtain a copy of the source
+code at our <a href="TODO">GitHub project</a>.
+</p>
+<p>Authors:</p>
+<ul>
+	<li>Nils Rokita</li>
+	<li>Mareike Schmidt</li>
+	<li>Pascal Wichmann</li>
+	<li>Paul Bienkowski</li>
+</ul>
+
+<h3>Third party libraries</h3>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Library/component</th>
+			<th>Author/owner</th>
+			<th>License</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a href="https://www.djangoproject.com/">Django</a></td>
+			<td>Django Software Foundation and individual contributors</td>
+			<td><a href="https://www.tldrlegal.com/l/bsd3">BSD License (3-clause)</a></td>
+		</tr>
+		<tr>
+			<td><a href="http://jquery.com/">jQuery</a></td>
+			<td>jQuery Foundation, Inc. and other contributors</td>
+			<td><a href="https://tldrlegal.com/license/mit-license">MIT License</a></td>
+		</tr>
+		<tr>
+			<td><a href="http://jqueryui.com/">jQuery UI</a></td>
+			<td>jQuery Foundation, Inc. and other contributors</td>
+			<td><a href="https://tldrlegal.com/license/mit-license">MIT License</a></td>
+		</tr>
+		<tr>
+			<td><a href="http://getbootstrap.com/">Bootstrap CSS</a></td>
+			<td>Twitter Inc.</td>
+			<td><a href="https://tldrlegal.com/license/mit-license">MIT License</a></td>
+		</tr>
+		<tr>
+			<td><a href="http://www.python-ldap.org/">python-ldap</a></td>
+			<td>python-ldap project</td>
+			<td><a href="https://tldrlegal.com/license/python-license-2.0">Python</a> style</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/kmike/django-widget-tweaks">django-widget-tweaks</a></td>
+			<td>Mikhail Korobov</td>
+			<td><a href="https://tldrlegal.com/license/mit-license">MIT License</a></td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/getsentry/raven-python">Raven</a></td>
+			<td>Functional Software, Inc and <a href="https://github.com/getsentry/raven-python/graphs/contributors">individual contributors</a></td>
+			<td><a href="https://www.tldrlegal.com/l/bsd3">BSD License (3-clause)</a></td>
+		</tr>
+		<tr>
+			<td><a href="https://pythonhosted.org/pytz/">pytz</a></td>
+			<td>Stuart Bishop</td>
+			<td><a href="https://tldrlegal.com/license/mit-license">MIT License</a></td>
+		</tr>
+    TODO: Restliche abhängigkeiten
+	</tbody>
+</table>
+
+<h3>Third-party assets</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Asset</th>
+			<th>Author/owner</th>
+			<th>License</th>
+			<th>Remarks</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a href="http://glyphicons.com/">Glyphicons Halflings</a> (as part of Bootstrap)</td>
+			<td>Jan Kovařík</td>
+			<td>See bootstrap license</td>
+			<td>Dashboard icons for "Dudel", "Mumble", "Jabber"; some icons in buttons</td>
+		</tr>
+		<tr>
+			<td>Fotawesome</td>
+		</tr>
+	</tbody>
+</table></div>
+{% endblock %}
