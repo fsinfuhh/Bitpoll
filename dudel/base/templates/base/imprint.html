@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+{% load settings_value %}
+{% load i18n %}
+
+{% load poll_watched poll_voted %}
+
+{% block title %}{% trans 'Imprint' %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+          {% value_from_settings IMPRINT_TEXT %}
+    </div>
+
+{% endblock %}

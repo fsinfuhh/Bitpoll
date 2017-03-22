@@ -10,6 +10,7 @@ from dudel.poll.models import ChoiceValue, Poll, Vote
 
 from dudel.base.models import USER_LANG
 from pytz import all_timezones
+from dudel.settings import IMPRINT_URL
 
 
 def login(request):
@@ -78,4 +79,13 @@ def settings(request):
             'user_form': user_form,
             'languages': USER_LANG,
             'timezones': all_timezones,
+        })
+
+
+def imprint(request):
+    if IMPRINT_URL:
+        return redirect(IMPRINT_URL)
+    else:
+        return TemplateResponse(request, 'base/imprint.html', {
+
         })
