@@ -11,7 +11,7 @@
 
 {% block content %}
     <div class="container">
-        {% include 'poll/poll_haeder.html' %}
+        {% include 'poll/poll_header.html' %}
         <h3>{% trans 'Invitations' %}</h3>
         <div class="col-md-6">
             <form method="post" action="{% url 'invitations' poll.url %}">
