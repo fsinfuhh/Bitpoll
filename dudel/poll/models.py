@@ -273,7 +273,7 @@ class PollWatch(models.Model):
         link = reverse('poll', args=(self.poll.url,))
         email_content = render_to_string('poll/mail_watch.txt', {
             'receiver': self.user.username,
-            'user': vote.user.username,
+            'user': vote.user.username if self.poll.show_results == "complete" else _("by an user"),
             'poll': self.poll.title,
             'link': link,
         })
