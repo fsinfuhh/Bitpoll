@@ -14,7 +14,7 @@
 
 {% block content %}
     <div class="container">
-        {% include 'poll/poll_haeder.html' %}
+        {% include 'poll/poll_header.html' %}
         <form action="{% url 'poll_copy' poll.url %}" method="post">
             {% csrf_token %}
             {% if error %}
