@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load compile_static %}
 {% load static %}
 
@@ -17,17 +18,17 @@
         <form action="{% url 'poll_editDTChoiceTime' poll.url %}" method="POST" id="date-time-form">
             <div id="date-time-form-content">
                  {% csrf_token %}
-                <div class="form-group"><label for="{{ time.dates.label_for }}">Dates</label>
+                 <div class="form-group"><label for="{{ time.dates.label_for }}">{% trans 'Dates' %}</label>
                   {{ time.dates }}
                 </div>
-                <div class="form-group"><label for="{{ time.times.label_for }}">Times</label>
+                <div class="form-group"><label for="{{ time.times.label_for }}">{% trans 'Times' %}</label>
                   {{ time.times }}
                 </div>
             </div>
             <div class="script-only" style="">
                 <div class="alert alert-info">
-                    <div class="container"><i class="fa fa-exclamation-circle"></i>Please select the time slots that you
-                        want to be able to choose. In the next step, you will match them against the selected days.
+                  <div class="container"><i class="fa fa-exclamation-circle"></i>{% blocktrans %}Please select the time slots that you
+                    want to be able to choose. In the next step, you will match them against the selected days. {% endblocktrans %}
                     </div>
                 </div>
                 <div class="time-input">
@@ -41,15 +42,15 @@
                     <div class="form-inline" id="time-slider-form">
                         <input type="text" class="form-control" placeholder="HH" id="time-hour">
                         <input type="text" class="form-control" placeholder="MM" id="time-minute">
-                        <input type="button" class="action" style="height: 3.4em;" value="Add" id="time-add-button">
+                        <input type="button" class="action" style="height: 3.4em;" value="{% trans 'Add' %}" id="time-add-button">
                     </div>
                 </div>
                 <div class="calendar-list">
                     <ul class="time-slots"></ul>
                 </div>
             </div>
-            <div class="form-actions"><a class="action" href="javascript: history.back();">Back</a>
-                <input type="submit" class="action primary" value="Next">
+            <div class="form-actions"><a class="action" href="javascript: history.back();">{% trans 'Back' %}</a>
+              <input type="submit" class="action primary" value="{% trans 'Next' %}">
             </div>
         </form>
     </div>

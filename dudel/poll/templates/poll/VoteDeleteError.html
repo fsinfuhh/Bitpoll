@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}Error{% endblock %}
 
 {% block content %}
-    <div class="alert alert-danger"> Deletion not allowed. You are not authenticated. </div>
+    <div class="alert alert-danger">{% blocktrans %}Deletion not allowed. You are not authenticated.{% endblocktrans %}</div>
     <br /><br />
 
-    <a href="{% url 'poll' poll_url %}"> Back </a>
+    <a href="{% url 'poll' poll_url %}">{% trans 'Back' %}</a>
 {% endblock %}

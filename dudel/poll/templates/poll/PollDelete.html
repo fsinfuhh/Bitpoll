@@ -5,37 +5,37 @@
 {% load i18n %}
 {% load poll_filter vote_permissions poll_permissions %}
 
-{% block title %}Delete {{ poll.title }}{% endblock %}
+{% block title %}{% trans 'Delete' %} {{ poll.title }}{% endblock %}
 
 {% block content %}
     <div class="container">
         {% include 'poll/poll_haeder.html' %}
         {% csrf_token %}
-        <h3>Delete Poll</h3>
+        <h3>{% trans 'Delete Poll' %}</h3>
 
         {% if error != "" %}
             <div class="alert alert-danger">{{ error }}</div>
             <br /><br />
         {% endif %}
-        <div class="alert alert-danger"> Shall the following Poll be deleted? </div><br />
+        <div class="alert alert-danger">{% trans 'Shall the following Poll be deleted?' %}</div><br />
 
         <div class="form-group">
             <label for="poll_title">Title: </label>
             <input class="form-control" id="poll_title" value="{{ form.title.value }}" readonly><br />
         </div>
         <div class="form-group">
-            <label for="poll_due_date">Due-Date:</label>
+            <label for="poll_due_date">{% trans 'Due-Date:' %}</label>
             <input class="form-control" id="poll_due_date" value="{{ form.due_date.value }}" readonly><br />
         </div>
-        <label for="poll_description">Description</label> {# TODO: design #}
+        <label for="poll_description">{% trans 'Description' %}</label> {# TODO: design #}
         <div class="text " id="poll_description">
             {% render_field form.description class+="form-control"%}
         </div>
 
         <br /><br />
         <form action="{% url 'poll_delete' poll.url %}" method="POST">{% csrf_token %}
-            <input type="submit" name="Cancel" value="Cancel" class="action"/>
-            <input type="submit" name="Delete" value="Delete" class="action primary"/>
+            <input type="submit" name="Cancel" value="{% trans 'Cancel' %}" class="action"/>
+            <input type="submit" name="Delete" value="{% trans 'Delete' %}" class="action primary"/>
         </form>
     </div>
 {% endblock %}

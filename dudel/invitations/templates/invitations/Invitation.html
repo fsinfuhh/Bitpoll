@@ -7,21 +7,21 @@
 {% load static %}
 {% load poll_filter vote_permissions poll_permissions %}
 
-{% block title %}Invite to Poll{% endblock %}
+{% block title %}{% trans 'Invite to Poll' %}{% endblock %}
 
 {% block content %}
     <div class="container">
         {% include 'poll/poll_haeder.html' %}
-        <h3>Invitations</h3>
+        <h3>{% trans 'Invitations' %}</h3>
         <div class="col-md-6">
             <form method="post" action="{% url 'invitations' poll.url %}">
                 {% csrf_token %}
                 <table class="table table-condensed table-striped">
                     <tr>
                         <th></th>
-                        <th> User </th>
-                        <th> Invited </th>
-                        <th> Actions </th>
+                        <th>{% trans 'User' %}</th>
+                        <th>{% trans 'Invited' %}</th>
+                        <th>{% trans 'Actions' %}</th>
                     </tr>
                     {% for invitation in poll.invitation_set.all %}
                         <tr>
@@ -40,7 +40,7 @@
                     {% endfor %}
                 </table>
                 {% if False %}  {# TODO #}
-                    <input class="action secondary" value="Resend all" name="resend_all" type="submit" style="float: right;">
+                    <input class="action secondary" value="{% trans 'Resend all' %}" name="resend_all" type="submit" style="float: right;">
                 {% endif %}
             </form>
         </div>
@@ -48,7 +48,7 @@
             <form method="post" action="{% url 'invitations_send' poll.url %}">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="invite">User or Group</label>
+                  <label for="invite">{% trans 'User or Group' %}</label>
                     <div class="input-group">
                         <input id="invite" class="form-control" name="invite" value="" type="text">
                         <div class="input-group-btn">
@@ -56,16 +56,16 @@
                         </div>
                     </div>
                     <ul class="help-list">
-                        <li>Enter the username or group title of the user or group of users you want to invite.</li>
-                        <li>You can enter multiple users or groups.</li>
-                        <li>Duplicates are ignored automatically.</li>
-                        <li>Group invitations are resolved immediately, so adding more members to a group later will not invite those new members, unless you re-invite the group.</li>
+                        <li>{% trans 'Enter the username or group title of the user or group of users you want to invite.' %}</li>
+                        <li>{% trans 'You can enter multiple users or groups.' %}</li>
+                        <li>{% trans 'Duplicates are ignored automatically.' %}</li>
+                        <li>{% trans 'Group invitations are resolved immediately, so adding more members to a group later will not invite those new members, unless you re-invite the group.' %}</li>
                     </ul>
                 </div>
             </form>
         </div>
         <hr>
-        <a href="{% url 'poll_settings' poll.url %}" class="action">Back to poll</a>
+        <a href="{% url 'poll_settings' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
     </div>
 {% endblock %}
 

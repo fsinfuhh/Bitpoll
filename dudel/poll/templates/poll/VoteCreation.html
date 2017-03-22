@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load poll_filter %}
 {% load widget_tweaks %}
 
@@ -8,7 +9,7 @@
     {% include 'poll/poll_haeder.html' %}
     <div class="container">
         <ul class="help-list">
-            <li>Hold left mouse button and drag mouse to select multiple vote choices.</li>
+          <li>{% trans 'Hold left mouse button and drag mouse to select multiple vote choices.' %}</li>
         </ul>
         <form action="{% url 'poll_vote' poll.url %}" method="POST" class="form-inline">
             {% csrf_token %}
@@ -70,10 +71,10 @@
                 </tr>
                 <tr>
                     <td colspan="{{ matrix_len }}">
-                        <label for="name">Your name:</label>
+                      <label for="name">{% trans 'Your name:' %}</label>
                     </td>
                     <td colspan="4">
-                        <input type="text" name="name" title="Your name"
+                      <input type="text" name="name" title="{% trans 'Your name' %}"
                             {% if current_vote.name %}
                                 value="{{ current_vote.name }}" readonly="readonly"
                             {% elif request.user.is_authenticated %}
@@ -83,18 +84,18 @@
                         <br>
 
                         <input type="checkbox" name="anonymous" id="anonymous"
-                               title="Post anonymous vote" value="true"
+                            title="{% trans 'Post anonymous vote' %}" value="true"
                                {% if current_vote.anonymous %}
                                     checked
                                {% endif %}
                         />
-                        <label for="anonymous">Post anonymous vote</label> <br/>
+                        <label for="anonymous">{% trans 'Post anonymous vote' %}</label> <br/>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="{{ matrix_len }}">
-                        <label for="comment">Comment:</label>
-                        <span class="help-inline">(optional)</span>
+                      <label for="comment">{% trans 'Comment:' %}</label>
+                      <span class="help-inline">{% trans '(optional)' %}</span>
                     </td>
                     <td colspan="4">
                         <textarea title="Comment:" name="comment" class="form-control" id="comment" cols="40" rows="5">{{ current_vote.comment }}</textarea><br/>
@@ -104,7 +105,7 @@
                     <td colspan="4">
                         <button class="action primary block" type="submit" name="submit" value="Vote">
                             <i class="fa fa-check"></i>
-                            <span>Save vote</span>
+                            <span>{% trans 'Save vote' %}</span>
                         </button>
                     </td>
                 </tr>

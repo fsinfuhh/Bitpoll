@@ -1,4 +1,5 @@
 {% load compile_static %}
+{% load i18n %}
 {% load static %}
 {% load settings_value %}
 
@@ -38,26 +39,26 @@
         <nav role="navigation" class="main-menu">
             <div class="container">
                 <ul class="menu">
-                    <li><a href="/"><i class="fa fa-bars"></i><span>Menu</span></a>
+                    <li><a href="/"><i class="fa fa-bars"></i><span>{% trans 'Menu' %}</span></a>
                         <ul class="submenu">
-                            <li><a href="{{ home_url }}"><i class="fa fa-home"></i>Home</a></li>
-                            <li><a href="{% url 'index' %}"><i class="fa fa-plus"></i>Create poll</a></li>
-                            <li><a href="/about"><i class="fa fa-question-circle"></i>About</a></li>
+                            <li><a href="{{ home_url }}"><i class="fa fa-home"></i>{% trans 'Home' %}</a></li>
+                            <li><a href="{% url 'index' %}"><i class="fa fa-plus"></i>{% trans 'Create poll' %}</a></li>
+                            <li><a href="/about"><i class="fa fa-question-circle"></i>{% trans 'About' %}</a></li>
                         </ul>
                     </li>
                     <li class="spacing"></li>
                     {% if request.user.is_anonymous %}
-                        <li><a href="{% url 'login' %}"><i class="fa fa-user"></i><span>Login</span></a>
+                        <li><a href="{% url 'login' %}"><i class="fa fa-user"></i><span>{% trans 'Login' %}</span></a>
                             <ul class="submenu right">
-                                <li><a href="/register"><i class="fa fa-pencil"></i>Register</a></li>{# TODO #}
-                                <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>Login</a></li>
+                                <li><a href="/register"><i class="fa fa-pencil"></i>{% trans 'Register' %}</a></li>{# TODO #}
+                                <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>{% trans 'Login' %}</a></li>
                             </ul>
                         </li>
                     {% else %}
                         <li><a href=""><i class="fa fa-user"></i><span>{{ request.user.get_username }}</span></a>
                             <ul class="submenu right">{# TODO: usersettings #}
-                                <li><a href="/base/settings"><i class="fa fa-pencil"></i>Settings</a></li>
-                                <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>Logout</a></li>
+                                <li><a href="/base/settings"><i class="fa fa-pencil"></i>{% trans 'Settings' %}</a></li>
+                                <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>{% trans 'Logout' %}</a></li>
                             </ul>
                         </li>
                     {% endif %}
@@ -73,12 +74,14 @@
 
     <footer>
         <div class="container"><a href="/about">About</a><span class="separator"></span><a href="{% url 'imprint' %}"
-                                                                                           target="_blank">Imprint</a>
-            <span class="separator"></span><a href="{% url 'tecnical' %}">Technical Info</a><span
-                class="separator"></span>Current timezone is Europe/Berlin.
+            target="_blank">{% trans 'Imprint' %}</a><span
+                    class="separator"></span><a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
+           class="separator"></span{% trans 'Current timezone is Europe/Berlin.' %}>
             {% if debug %}
                 <div class="footer-warning">
+                    {% blocktrans %}
                     <b>Warning!</b> {{ site_name }} is configured with <code>DEBUG = True</code>.
+                    {% endblocktrans %}
                 </div>
             {% endif %}
         </div>

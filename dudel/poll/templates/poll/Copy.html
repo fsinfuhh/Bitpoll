@@ -6,7 +6,7 @@
 {% load compile_static %}
 {% load static %}
 
-{% block title %}Copy Poll{% endblock %}
+{% block title %}{% trans 'Copy Poll' %}{% endblock %}
 
 {% block headJS %}
     {{ form.media }}
@@ -30,7 +30,7 @@
             <h3>Copy Poll</h3>
             <div class="col-md-5">
                 <div class="form-group">
-                    <label for="title-input">Title</label>
+                    <label for="title-input">{% trans 'Title' %}</label>
                     <input autocomplete="off" class="form-control" id="title-input" name="{{ form.title.name }}"
                            placeholder="Title" type="text" value="{{ form.title.value|default_if_none:'' }}"/>
                     {% if form.title.errors %}
@@ -45,11 +45,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="url-input">URL name</label>
+                    <label for="url-input">{% trans 'URL name' %}</label>
                     <div class="pull-right">
                         <script>var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %}</script>
                         <button id="slug-randomize" class="action small"><i
-                                class="fa fa-random"></i><span>Randomize</span></button>
+                            class="fa fa-random"></i><span>{% trans 'Randomize' %}</span></button>
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
@@ -67,7 +67,7 @@
                     {% endif %}
                 </div>
 
-                <label for="due-date-input">Due date</label>
+                <label for="due-date-input">{% trans 'Due date' %}</label>
                 <div class="form-group">
 
                     {% render_field form.due_date class+="form-control" %}
@@ -82,37 +82,37 @@
                     {% endif %}
                 </div>
 
-                <a href="{% url 'poll' poll.url %}" class="action">Back to poll</a>
-                <input type="submit" value="Create" class="action primary" name="create"/>
+                <a href="{% url 'poll' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
+                <input type="submit" value="{% trans 'Create' %}" class="action primary" name="create"/>
             </div>
 
             <div class="col-md-5 col-md-offset-1">
-                <label>Settings to copy</label>
+                <label>{% trans 'Settings to copy' %}</label>
                 <div class="checkbox">
                     <input type="checkbox" id="copy_choices" name="copy_choices" checked>
-                    <label for="copy_choices">Copy choices</label>
+                    <label for="copy_choices">{% trans 'Copy choices' %}</label>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" id="copy_invitations" name="copy_invitations" checked>
-                    <label for="copy_invitations">Copy invitations</label>
+                    <label for="copy_invitations">{% trans 'Copy invitations' %}</label>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" id="create_invitations_from_votes" name="create_invitations_from_votes">
-                    <label for="create_invitations_from_votes">Create invitations from votes</label>
+                    <label for="create_invitations_from_votes">{% trans 'Create invitations from votes' %}</label>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" id="copy_ans_values" name="copy_ans_values" checked>
-                    <label for="copy_ans_values">Copy possible answer values</label>
+                    <label for="copy_ans_values">{% trans 'Copy possible answer values' %}</label>
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" id="reset_ownership" name="reset_ownership">
-                    <label for="reset_ownership">Reset ownership</label>
+                    <label for="reset_ownership">{% trans 'Reset ownership' %}</label>
                 </div>
 
                 <div class="form-group">
-                    <label for="date-shift">Date shift (days)</label>
+                    <label for="date-shift">{% trans 'Date shift (days)' %}</label>
                     <input autocomplete="off" class="form-control" id="date-shift" name="date_shift"
-                           placeholder="Due Date" type="text" value="{{ date_shift|default_if_none:'0' }}"/>
+                       placeholder="{% trans 'Due Date' %}" type="text" value="{{ date_shift|default_if_none:'0' }}"/>
                 </div>
             </div>
         </form>

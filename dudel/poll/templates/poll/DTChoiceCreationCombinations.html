@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load compile_static %}
 {% load static %}
 
@@ -13,8 +14,8 @@
     <div class="container">
         {% include  "poll/DTChoiceHaeder.html" %}
     <div class="alert alert-info">
-        <div class="container"><i class="fa fa-exclamation-circle"></i>Here you can select which day/time combinations
-            are available for voting.
+        <div class="container"><i class="fa fa-exclamation-circle"></i>{% blocktrans %}Here you can select which day/time combinations
+          are available for voting.{% endblocktrans %}
         </div>
     </div>
     <form class="form form-inline" action="{% url 'poll_editDTChoiceCombinations' poll.url %}" method="POST">
@@ -67,8 +68,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="form-actions"><a class="action" href="javascript: history.back();">Back</a>
-            <input type="submit" class="action primary" value="Next">
+        <div class="form-actions"><a class="action" href="javascript: history.back();">{% trans 'Back' %}</a>
+          <input type="submit" class="action primary" value="{% trans 'Next' %}">
         </div>
     </form></div>
 

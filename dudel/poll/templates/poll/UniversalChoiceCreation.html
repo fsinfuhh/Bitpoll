@@ -2,7 +2,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}Create choice{% endblock %}
+{% block title %}{% trans 'Create choice' %}{% endblock %}
 
 {% block content %}
     {% include 'poll/poll_haeder.html' %}
@@ -16,9 +16,9 @@
                     <table class="table">
                         <tbody>
                         <tr>
-                            <th class="nobr">Choices</th>
-                            <th class="nobr">Votes</th>
-                            <th class="nobr">Actions</th>
+                            <th class="nobr">{% trans 'Choices' %}</th>
+                            <th class="nobr">{% trans 'Votes' %}</th>
+                            <th class="nobr">{% trans 'Actions' %}</th>
                         </tr>
                         {% for choice in choices %}
                             <tr class="choice-row {% if choice.deleted %}deleted{% endif %}">
@@ -102,18 +102,18 @@
             </div>
             <div class="col-md-7">
                 <div class="well">
-                    <h3>Help</h3>
-                    <h4>Deleted Choices</h4>
-                    <p> Deleted choices will stay in this list, so votes that have already been made are not lost.</p>
+                    <h3>{% trans 'Help' %}</h3>
+                    <h4>{% trans 'Deleted Choices' %}</h4>
+                    <p>{% blocktrans %}Deleted choices will stay in this list, so votes that have already been made are not lost.{% endblocktrans %}</p>
 
-                    <h4>Grouping</h4>
+                    <h4>{% trans 'Grouping' %}</h4>
                     <p>
-                        You can sort choices into groups by splitting them into parts with '/'.
+                      {% blocktrans %}You can sort choices into groups by splitting them into parts with '/'.{% endblocktrans %}
                     </p>
                     <ul>
-                        <li>Some-Choice</li>
-                        <li>Some-Group/Another-Choice</li>
-                        <li>Some-Group/Third-Choice</li>
+                        <li>{% trans 'Some-Choice' %}</li>
+                        <li>{% trans 'Some-Group/Another-Choice' %}</li>
+                        <li>{% trans 'Some-Group/Third-Choice' %}</li>
                     </ul>
                 </div>
             </div>

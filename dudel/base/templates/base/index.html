@@ -4,7 +4,7 @@
 {% load widget_tweaks %}
 {% load settings_value %}
 {% load i18n %}
-{% block title %}Create poll{% endblock %}
+{% block title %}{% trans 'Create poll' %}{% endblock %}
 
 {% block headJS %}
     {{ poll_form.media }}
@@ -14,30 +14,30 @@
     <section class="section create-poll">
         <div class="container">
             <div class="halfsize">
-                <h1>Create a poll</h1>
+                <h1>{% trans 'Create a poll' %}</h1>
                 <hr/>
                 <form method="POST" class="form" action="{% url 'index' %}">
                     <div style="display:none;">
                         {% csrf_token %}
                     </div>
                     <div class="form-step">
-                        <div class="number">Step 1</div>
-                        <div class="title">Select Type</div>
+                        <div class="number">{% trans 'Step 1' %}</div>
+                        <div class="title">{% trans 'Select Type' %}</div>
                     </div>
                     <div class="form-group"><select class="form-control script-hidden" id="create-type-field"
                                                     name="{{ poll_form.type.name }}">
                         {# TODO dynamisch, inklusive data-values unten #}
                         <option value="datetime" {% if poll_form.type.value == "datetime" %}selected="selected"{% endif %}>
-                            Date and Time
+                          {% trans 'Date and Time' %} 
                         </option>
                         <option value="date" {% if poll_form.type.value == "date" %}selected="selected"{% endif %}>
-                            Date
+                          {% trans 'Date' %} 
                         </option>
                         <option value="universal" {% if poll_form.type.value == "universal" %}selected="selected"{% endif %}>
-                            Normal Poll
+                          {% trans 'Normal Poll' %} 
                         </option>
                         <option value="numeric" {% if poll_form.type.value == "numeric" %}selected="selected"{% endif %}>
-                            Numeric
+                          {% trans 'Numeric' %} 
                         </option>
                     </select>
                         <div class="script-only">
@@ -46,44 +46,44 @@
                                     <div class="icon"><i class="fa fa-clock-o"></i>
                                     </div>
                                     <div class="text">
-                                        <div class="title">Date and Time</div>
-                                        <div class="description">Schedule date and time for an event</div>
+                                        <div class="title">{% trans 'Date and Time' %}</div>
+                                        <div class="description">{% trans 'Schedule date and time for an event' %}</div>
                                     </div>
                                 </li>
                                 <li data-value="date">
                                     <div class="icon"><i class="fa fa-calendar"></i>
                                     </div>
                                     <div class="text">
-                                        <div class="title">Date</div>
-                                        <div class="description">Schedule an all-day event</div>
+                                      <div class="title">{% trans 'Date' %}</div>
+                                      <div class="description">{% trans 'Schedule an all-day event' %}</div>
                                     </div>
                                 </li>
                                 <li data-value="universal">
                                     <div class="icon"><i class="fa fa-list"></i>
                                     </div>
                                     <div class="text">
-                                        <div class="title">Normal Poll</div>
-                                        <div class="description">Retrieve opinions on various choices</div>
+                                        <div class="title">{% trans 'Normal Poll' %}</div>
+                                        <div class="description">{% trans 'Retrieve opinions on various choices' %}</div>
                                     </div>
                                 </li>
                                 <li data-value="numeric">
                                     <div class="icon"><i class="fa fa-sliders"></i>
                                     </div>
                                     <div class="text">
-                                        <div class="title">Numeric</div>
-                                        <div class="description">Rate each choice in a numeric range</div>
+                                        <div class="title">{% trans 'Numeric' %}</div>
+                                        <div class="description">{% trans 'Rate each choice in a numeric range' %}</div>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="form-step">
-                        <div class="number">Step 2</div>
-                        <div class="title">Enter Title</div>
+                        <div class="number">{% trans 'Step 2' %}</div>
+                        <div class="title">{% trans 'Enter Title' %}</div>
                     </div>
                     <div class="form-group">
                         <input autocomplete="off" class="form-control" id="title-input" name="{{ poll_form.title.name }}"
-                                                   placeholder="Title" type="text" value="{{ poll_form.title.value|default_if_none:'' }}" />
+                            placeholder="{% trans 'Title' %}" type="text" value="{{ poll_form.title.value|default_if_none:'' }}" />
                         {% if poll_form.title.errors %}
                             <div class="form-errors">
                                 <div class="alert alert-danger">
@@ -96,15 +96,15 @@
                     </div>
                     <div id="advanced-open" class="{% if not poll_form.errors %}hidden{% endif %}">
                         <div class="form-step">
-                            <div class="number">Step 3</div>
-                            <div class="title">Advanced Settings</div>
+                            <div class="number">{% trans 'Step 3' %}</div>
+                            <div class="title">{% trans 'Advanced Settings' %}</div>
                         </div>
                     {# TODO: due date, public? #}
                         <script>var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %};</script>
                         <div class="col-md-12">
                             <div id="slug" class="form-group">
                                 <div style="float: right;">
-                                    <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>Randomize</span>
+                                    <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>{% trans 'Randomize' %}</span>
                                     </button>
                                 </div>
                                 <label for="slug" style="margin-top: 2px;">URL name</label>
@@ -124,7 +124,7 @@
                         </div>
                     <div>
                         <div class="col-md-6">
-                            <label for="due-date-input">Due date</label>
+                            <label for="due-date-input">{% trans 'Due date' %}</label>
                             <div class="form-group">
 
                                 {% render_field poll_form.due_date class+="form-control" %}
@@ -138,7 +138,7 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            <label for="description-input">Description</label>
+                            <label for="description-input">{% trans 'Description' %}</label>
                             <div class="text " id="description-input">
                                 {% render_field poll_form.description class+="form-control"%}
                             </div>
@@ -146,32 +146,32 @@
                         <div class="col-md-offset-1 col-md-5">
                             <div class="checkbox">
                                 <input type="checkbox" id="anonymous_allowed" name="{{ poll_form.anonymous_allowed.name }}" {% if poll_form.anonymous_allowed.value %} checked {% endif %}>
-                                <label for="anonymous_allowed">allow anonymous votes</label>
+                                <label for="anonymous_allowed">{% trans 'allow anonymous votes' %}</label>
                             </div>
                             <div class="checkbox">
                                 <input type="checkbox" id="require_login" name="{{ poll_form.require_login.name }}" {% if poll_form.require_login.value %} checked {% endif %}>
-                                <label for="require_login">login required</label>
+                                <label for="require_login">{% trans 'login required' %}</label>
                             </div>
                             <div class="checkbox">
                                 <input type="checkbox" id="require_invitation" name="{{ poll_form.require_invitation.name }}" {% if poll_form.require_invitation.value %} checked {% endif %}>
-                                <label for="require_invitation">invitation required to vote</label>
+                                <label for="require_invitation">{% trans 'invitation required to vote' %}</label>
                             </div>
                             <div class="checkbox">
                                 <input type="checkbox" id="one_vote_per_user" name="{{ poll_form.one_vote_per_user.name }}" {% if poll_form.one_vote_per_user.value %} checked {% endif %}>
-                                <label for="one_vote_per_user">one vote per user</label>
+                                <label for="one_vote_per_user">{% trans 'one vote per user' %}</label>
                             </div>
                         </div>
                     </div></div>
                     <div class="form-group text-center">
                         <a id="advanced-toggle" href="#" class="action">
                             <span class="more"><i class="fa fa-plus-square-o"></i>
-                                <span>More options</span>
+                                <span>{% trans 'More options' %}</span>
                             </span>
                             <span class="less hidden"><i class="fa fa-minus-square-o"></i>
-                                <span>Less options</span>
+                                <span>{% trans 'Less options' %}</span>
                             </span>
                         </a>
-                        <input type="submit" value="Create" class="action primary"/>
+                        <input type="submit" value="{% trans 'Create' %}" class="action primary"/>
                     </div>
                 </form>
             </div>
@@ -182,20 +182,20 @@
         <div class="container">
             <div class="halfsize">
                 <form method="POST" action="{% url 'login' %}" class="form">
-                    <h1>Log in</h1>
+                    <h1>{% trans 'Log in' %}</h1>
                     <div style="display:none;">
                         {% csrf_token %}
                     </div>
-                    <div class="form-group"><label for="username">Username</label><input class="form-control"
+                    <div class="form-group"><label for="username">{% trans 'Username' %}</label><input class="form-control"
                                                                                          id="username" name="username"
                                                                                          type="text" value="">
                     </div>
-                    <div class="form-group"><label for="password">Password</label><input class="form-control"
+                    <div class="form-group"><label for="password">{% trans 'Password' %}</label><input class="form-control"
                                                                                          id="password" name="password"
                                                                                          type="password" value="">
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Login" class="pull-right action secondary"/>
+                      <input type="submit" value="{% trans 'Login' %}" class="pull-right action secondary"/>
                     </div>
                 </form>
             </div>
@@ -206,36 +206,36 @@
         <div class="row padded-cells">
             {% if request.user.is_anonymous %}
             <div class="col-md-4">
-                <h4>Register for more</h4>
-                <p>Registered users have access to the full width of features available.
+                <h4>{% trans 'Register for more' %}</h4>
+                <p>{% blocktrans %}Registered users have access to the full width of features available.{% endblocktrans %}
                 </p>
-                <a href="/register" class="action"><i class="fa fa-pencil"></i><span>Register</span></a>
-                <a href="/login" class="action primary"><i class="fa fa-sign-in"></i> Login</a>
+                <a href="/register" class="action"><i class="fa fa-pencil"></i><span>{% trans 'Register' %}</span></a>
+                <a href="/login" class="action primary"><i class="fa fa-sign-in"></i> {% trans 'Login' %}</a>
             </div>
             {% endif %}
         {# TODO: own polls? #}
             <div class="col-md-4">
-                <h4>Statistics</h4>
+                <h4>{% trans 'Statistics' %}</h4>
                 <table class="table">
                     <tr>
-                        <th>Polls created</th>
+                        <th>{% trans 'Polls created' %}</th>
                         <td>{{ poll_count }}</td>
                     </tr>
                     <tr>
-                        <th>Votes cast</th>
+                        <th>{% trans 'Votes cast' %}</th>
                         <td>{{ votes_count }}</td>
                     </tr>
                     <tr>
-                        <th>Users</th>
+                        <th>{% trans 'Users' %}</th>
                         <td>{{ user_count }}</td>
                     </tr>
                 </table>
             </div>
             <div class="col-md-4">
-                <h4>Public polls</h4>
+                <h4>{% trans 'Public polls' %}</h4>
                 {% if not public_polls %}
                     <div class="alert alert-info">
-                        <div class="container"><i class="fa fa-exclamation-circle"></i>There are currently no public polls.
+                        <div class="container"><i class="fa fa-exclamation-circle"></i{% trans 'There are currently no public polls.' %}>
                         </div>
                     </div>
                 {% else %}
@@ -246,9 +246,9 @@
             </div>
             {% if request.user.is_authenticated %}
             <div class="col-md-4">
-                <h4>My Polls</h4>
-                <small>You can find a list of all the polls in which you have participated on your profile page.</small><br>
-                <a href="/base/settings" class="action primary">Show my polls</a>
+                <h4>{% trans 'My Polls' %}</h4>
+                <small>{% trans 'You can find a list of all the polls in which you have participated on your profile page.' %}</small><br>
+                <a href="/base/settings" class="action primary">{% trans 'Show my polls' %}</a>
             </div>
             {% endif %}
         </div>
