@@ -6,20 +6,20 @@
 
 {% load poll_watched poll_voted %}
 
-{% block title %}Settings{% endblock %}
+{% block title %}{% trans 'Settings' %}{% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="col-md-8">
-            <h1> Poll overview</h1>
+            <h1>{% trans 'Poll overview' %}</h1>
             <p>
-                This list shows all the polls you have participated in, either by owning them, voting on them, being invited, or watching.
+              {% blocktrans %}This list shows all the polls you have participated in, either by owning them, voting on them, being invited, or watching.{% endblocktrans %}
             </p>
             <table class="table table-condensed table-striped">
                 <tr>
-                    <th> Poll title </th>
-                    <th> Date of creation </th>
-                    <th colspan="4"> Tags </th>
+                    <th>{% trans 'Poll title' %}</th>
+                    <th>{% trans 'Date of creation' %}</th>
+                    <th colspan="4">{% trans 'Tags' %}</th>
                 </tr>
                 {% for poll in polls %}
                     <tr>
@@ -31,30 +31,30 @@
                         </td>
                         <td width="10">
                             {% if user == poll.user %}
-                                <span class="label label-danger form-control"><i class="fa fa-user"></i> Owner </span>
+                              <span class="label label-danger form-control"><i class="fa fa-user"></i> {% trans 'Owner' %} </span>
                             {% else %}
-                                <span class="label label-default form-control"><i class="fa fa-ban"></i> Not owner</span>
+                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not owner' %}</span>
                             {% endif %}
                         </td>
                         <td width="10">
                             {% if user in poll.group.user_set %}
                                 <span class="label label-warning form-control"><i class="fa fa-group"></i>{{ poll.group.name }}</span>
                             {% else %}
-                                <span class="label label-default form-control"><i class="fa fa-ban"></i> Not own group</span>
+                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not own group' %}</span>
                             {% endif %}
                         </td>
                         <td width="10">
                             {% if user|has_voted:poll %}  {# TODO korrigieren #}
-                                <span class="label label-success form-control"><i class="fa fa-check"></i> Voted </span>
+                              <span class="label label-success form-control"><i class="fa fa-check"></i> {% trans 'Voted' %} </span>
                             {% else %}
-                                <span class="label label-default form-control"><i class="fa fa-ban"></i> Not voted </span>
+                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not voted' %} </span>
                             {% endif %}
                         </td>
                         <td width="10">
                             {% if user|is_watching:poll %}  {# TODO korrigieren #}
-                                <span class="label label-info form-control"><i class="fa fa-eye"></i> Watching </span>
+                              <span class="label label-info form-control"><i class="fa fa-eye"></i> {% trans 'Watching' %} </span>
                             {% else %}
-                                <span class="label label-default form-control"><i class="fa fa-eye-slash"></i> Not watching </span>
+                              <span class="label label-default form-control"><i class="fa fa-eye-slash"></i> {% trans 'Not watching' %} </span>
                             {% endif %}
                         </td>
                     </tr>
@@ -63,13 +63,13 @@
         </div>
 
         <div class="col-md-4">
-            <h1>Settings</h1>
-            <p>You can edit your account settings in the centralized accounts page.</p>
+            <h1>{% trans 'Settings' %}</h1>
+            <p>{% blocktrans %}You can edit your account settings in the centralized accounts page{% endblocktrans %}.</p>
 
             <form method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="preferred-language">Language:</label>
+                    <label for="preferred-language">{% trans 'Language:' %}</label>
                     <select id="preferred-language" class="form-control" name="{{ user_form.language.name }}">
                         {% for language in languages %}
                             {% if language.0 == user_form.language.value %}
@@ -82,7 +82,7 @@
                 </div>
             {{ user.timezone.value }}
                 <div class="form-group">
-                    <label for="timezone">Timezone:</label>
+                    <label for="timezone">{% trans 'Timezone:' %}</label>
                     <select id="timezone" class="form-control" name="{{ user_form.timezone.name }}">
                         {% for timezone in timezones %}
                             {% if timezone == user_form.timezone.value %}
@@ -94,17 +94,17 @@
                     </select>
                 </div>
 
-                <label>Various</label>
+                <label>{% trans 'Various' %}</label>
                 <div class="checkbox">
                     <input id="autowatch" name="{{ user_form.auto_watch.name }}" type="checkbox" {% if user_form.auto_watch.value %} checked {% endif %}>
-                    <label for="autowatch">Auto-watch polls</label>
+                    <label for="autowatch">{% trans 'Auto-watch polls' %}</label>
                 </div>
                 <div class="checkbox">
                     <input id="allow-invitation-mails" name="{{ user_form.email_invitation.name }}" type="checkbox" {% if user_form.email_invitation.value %} checked {% endif %}>
-                    <label for="allow-invitation-mails">Allow to receive emails for poll invitations</label>
+                    <label for="allow-invitation-mails">{% trans 'Allow to receive emails for poll invitations' %}</label>
                 </div>
 
-                <input type="submit" value="Save" class="action primary" name="create"/>
+                <input type="submit" value="{% trans 'Save' %}" class="action primary" name="create"/>
             </form>
         </div>
     </div>

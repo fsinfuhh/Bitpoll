@@ -23,9 +23,9 @@
             <form class="form" action="{% url 'poll_watch' poll.url %}" method="post">
                 {% csrf_token %}
                 {% if watched %}
-                    <button class="action" type="submit"><i class="fa fa-eye-slash"></i> Unwatch Poll</button>
+                    <button class="action" type="submit"><i class="fa fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
                 {% else %}
-                    <button class="action" type="submit"><i class="fa fa-eye"></i> Watch Poll</button>
+                    <button class="action" type="submit"><i class="fa fa-eye"></i> {% trans 'Watch Poll' %}</button>
                 {% endif %}
             </form>
         {% endif %}
@@ -33,7 +33,11 @@
         <div class="table-noscroll-y">
             <div class="table-scroll-x" style="padding-bottom: 100px;">
             {% if not matrix %}
-                <p class="alert alert-warning">This Poll does not contain anny Choices, you can create some at the Choices Tab</p>
+                <p class="alert alert-warning">
+                {% blocktrans %}
+                This Poll does not contain any Choices, you can create some at the Choices tab
+                {% endblocktrans %}
+                </p>
             {% endif %}
                 <table class="table poll auto-width" id="poll">
                     <thead>
@@ -80,7 +84,7 @@
                                         {% endif %}
                                     </div>
                                 {% endif %}
-                                {% if not vote.anonymous %}{{ vote.name }}{% else %}Anonymous{% endif %}
+                                {% if not vote.anonymous %}{{ vote.name }}{% else %}{% trans 'Anonymous' %}{% endif %}
                             </td>
                             {% for vote_choice in vote.get_choices %} {# TODO: xxxxxxx das mus in die view zusammen mit deleted!#}
                                 <td class="vote-choice text-center
@@ -91,7 +95,7 @@
                                     data-trigger="hover"
                                     data-container="body"
                                     data-title="{{ vote_choice.choice|force_escape|force_escape }}"
-                                    data-content="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
+                                    data-content="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}{% trans 'Anonymous' %}{% endif %}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
                                     data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
                                     <span class="fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
                                 </td>
@@ -208,7 +212,7 @@
 
                     <div class="edit">{# TODO: edit #}
                         {% if not request.user.is_anonymous and request.user == comment.user %}{# TODO: wenn der user admin/owner ist #}
-                        <a href="{% url 'poll_deleteComment' poll.url comment.id %}" title="Kommentar löschen" class="btn btn-default btn-xs">
+                        <a href="{% url 'poll_deleteComment' poll.url comment.id %}" title="{% trans 'Delete comment' %}" class="btn btn-default btn-xs">
                                 <i class="fa fa-trash-o"></i>
                         </a>
                         {% endif %}
@@ -222,30 +226,32 @@
         </div>
         <hr>
         <div class="noprint">
-            <h3>Post a comment</h3>
+            <h3>{% trans 'Post a comment' %}</h3>
             <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form">
                 {% csrf_token %}
                 <div class="form-group">
                     <div class="row">
                     <div class="col-sm-4">
                         {% if request.user.is_authenticated %}
-                            <label>Name</label>
+                            <label>{% trans 'Name' %}</label>
                             <input class="form-control" type="text" title="Name" name="newComName" value="{{ request.user.get_username }}"
                                    readonly/>
                         {% else %}
-                            <label>Name</label>
+                            <label>{% trans 'Name' %}</label>
                             <input class="form-control" type="text" title="Name" name="newComName"/>
                         {% endif %}
                     </div>
                     </div>
                 </div>
                 <div class="form-group">
-                <label>Comment</label>
+                <label>{% trans 'Comment' %}</label>
                 <textarea title="new Comment" name="newCom" class="form-control" rows="6"></textarea>
                     <p class="help-block">
+                        {% blocktrans %}
                         You can use
                         <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
                         syntax for formatting.
+                        {% endblocktrans %}
                         </p> {# TODO: das geht (noch) nicht #}
                 </div>
                 <div class="form-group">

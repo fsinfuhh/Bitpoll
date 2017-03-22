@@ -1,3 +1,4 @@
+{% load i18n %}
 <header class="poll">
     <div class="container">
         <div class="poll-actions">
@@ -33,18 +34,18 @@
                 </li>
             {% endif %}
             {% if poll.anonymous_allowed %}
-                <li title="Anonymous voting allowed"><i class="fa fa-check"></i>
-                <span class="content">anonymous voting</span>
+                <li title="{% trans 'Anonymous voting allowed' %}"><i class="fa fa-check"></i>
+                <span class="content">{% trans 'anonymous voting' %}</span>
             {% endif %}
             </li>
             {% if poll.require_invitation %}
-                <li title="Invitation required"><i class="fa fa-check"></i>
-                <span class="content">invitation required</span>
+                <li title="{% trans 'Invitation required' %}"><i class="fa fa-check"></i>
+                <span class="content">{% trans 'invitation required' %}</span>
             {% endif %}
             </li>
             {% if poll.require_login %}
                 <li title="Login required"><i class="fa fa-check"></i>
-                <span class="content">login required</span>
+                <span class="content">{% trans 'login required' %}</span>
             {% endif %}
             </li>
 
@@ -55,14 +56,14 @@
                 <li class="{% if page == "" %}active{% endif %}"><a data-shortcut="g o"
                                                                     href="{% url 'poll' poll.url %}"><i
                         class="fa fa-table"></i>
-                    <span>Overview</span></a>
+                    <span>{% trans 'Overview' %}</span></a>
                 </li>
                 <li class="{% if page == "Activity" %}active{% endif %}"><a data-shortcut="g a" href="{# TODO #}"><i
-                        class="fa fa-comments-o"></i><span>Activity</span></a>
+                    class="fa fa-comments-o"></i><span>{% trans 'Activity' %}</span></a>
                 </li>
                 <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s"
                                                                             href="{% url 'poll_settings' poll.url %}">
-                    <i class="fa fa-wrench"></i><span>Settings</span></a>
+                    <i class="fa fa-wrench"></i><span>{% trans 'Settings' %}</span></a>
                 </li>
                 <li class="{% if page == "Choices" %}active{% endif %}">
                     <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
@@ -70,7 +71,7 @@
                 </li>
                 <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
                                                                              href="{% url 'poll_vote' poll.url %}"><i
-                        class="fa fa-check"></i><span>Vote</span></a>
+                    class="fa fa-check"></i><span>{% trans 'Vote' %}</span></a>
                 </li>
             </ul>
         </nav>

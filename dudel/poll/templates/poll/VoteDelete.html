@@ -1,20 +1,21 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Delete vote{% endblock %}
+{% block title %}{% trans 'Delete vote' %}{% endblock %}
 
 {% block content %}
     {% if error != "" %}
         <div class="alert alert-danger">{{ error }}</div>
         <br /><br />
     {% endif %}
-    <div class="alert alert-danger"> Shall the following Vote be deleted? </div><br />
-    <label>Title of Poll: </label> {{ poll.title }}<br />
-    <label>Author of Vote: </label> {{ vote.name }}<br />
-    <label>Comment:</label> {{ vote.comment }}
+    <div class="alert alert-danger">{% trans 'Shall the following Vote be deleted?' %}</div><br />
+    <label>{% trans 'Title of Poll:' %} </label> {{ poll.title }}<br />
+    <label>{% trans 'Author of Vote:' %} </label> {{ vote.name }}<br />
+    <label>{% trans 'Comment:' %}</label> {{ vote.comment }}
 
     <br /><br />
     <form action="{% url 'poll_voteDelete' poll.url vote.id %}" method="POST">{% csrf_token %}
-        <input type="submit" name="Cancel" value="Cancel" />
-        <input type="submit" name="Delete" value="Delete" />
+        <input type="submit" name="Cancel" value="{% trans 'Cancel' %}" />
+        <input type="submit" name="Delete" value="{% trans 'Delete' %}" />
     </form>
 {% endblock %}
