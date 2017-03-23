@@ -1,0 +1,1250 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-22 23:54+0100\n"
+"PO-Revision-Date: 2017-03-23 13:57+0100\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: Nils Rokita <0rokita@informatik.uni-hamburg.de>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: dudel/base/templates/base.html:42
+msgid "Menu"
+msgstr "Menü"
+
+#: dudel/base/templates/base.html:44
+#: dudel/poll/templates/poll/choicevalue.html:356
+msgid "Home"
+msgstr "Home"
+
+#: dudel/base/templates/base.html:45 dudel/base/templates/base/index.html:7
+#: dudel/base/templates/base_old.html:58
+msgid "Create poll"
+msgstr "Umfrage erstellen"
+
+#: dudel/base/templates/base.html:46
+msgid "About"
+msgstr "Über"
+
+#: dudel/base/templates/base.html:51 dudel/base/templates/base.html:54
+#: dudel/base/templates/base/index.html:198
+#: dudel/base/templates/base/index.html:213
+#: dudel/base/templates/base_old.html:72
+#: dudel/base/templates/registration/login.html:4
+#: dudel/base/templates/registration/login.html:39
+msgid "Login"
+msgstr "Login"
+
+#: dudel/base/templates/base.html:53 dudel/base/templates/base/index.html:212
+msgid "Register"
+msgstr "Registrieren"
+
+#: dudel/base/templates/base.html:60 dudel/base/templates/base/settings.html:9
+#: dudel/base/templates/base/settings.html:66
+#: dudel/poll/templates/poll/poll_header.html:66
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: dudel/base/templates/base.html:61
+msgid "Logout"
+msgstr "Abmelden"
+
+#: dudel/base/templates/base.html:77 dudel/base/templates/base/imprint.html:10
+msgid "Imprint"
+msgstr "Impressum"
+
+#: dudel/base/templates/base.html:78
+#: dudel/base/templates/base/technical_info.html:4
+msgid "Technical Info"
+msgstr "Technische Informationen"
+
+#: dudel/base/templates/base.html:79
+msgid "Current timezone is Europe/Berlin."
+msgstr ""
+
+#: dudel/base/templates/base.html:82
+#, python-format
+msgid ""
+"\n"
+"                    <b>Warning!</b> %(site_name)s is configured with "
+"<code>DEBUG = True</code>.\n"
+"                    "
+msgstr ""
+"\n"
+"\t\t<b>Warnung!</b> %(site_name)s ist mit <code>DEBUG = True</code> "
+"Konfiguriert"
+
+#: dudel/base/templates/base/index.html:17
+msgid "Create a poll"
+msgstr "Erstelle eine Umfrage"
+
+#: dudel/base/templates/base/index.html:24
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:4
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:14
+msgid "Step 1"
+msgstr "Schritt 1"
+
+#: dudel/base/templates/base/index.html:25
+msgid "Select Type"
+msgstr "Wähle den Typ"
+
+#: dudel/base/templates/base/index.html:31
+#: dudel/base/templates/base/index.html:49
+msgid "Date and Time"
+msgstr "Datum und Zeit"
+
+#: dudel/base/templates/base/index.html:34
+#: dudel/base/templates/base/index.html:57
+msgid "Date"
+msgstr "Datum"
+
+#: dudel/base/templates/base/index.html:37
+#: dudel/base/templates/base/index.html:65
+msgid "Normal Poll"
+msgstr "Normale Umfrage"
+
+#: dudel/base/templates/base/index.html:40
+#: dudel/base/templates/base/index.html:73
+msgid "Numeric"
+msgstr "Numerisch"
+
+#: dudel/base/templates/base/index.html:50
+msgid "Schedule date and time for an event"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:58
+msgid "Schedule an all-day event"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:66
+msgid "Retrieve opinions on various choices"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:74
+msgid "Rate each choice in a numeric range"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:81
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:6
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:16
+msgid "Step 2"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:82
+msgid "Enter Title"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:86
+#: dudel/poll/templates/poll/Copy.html:33
+#: dudel/poll/templates/poll/Settings.html:33
+#: dudel/poll/templates/poll/choicevalue.html:30
+#: dudel/poll/templates/poll/choicevalue.html:63
+msgid "Title"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:99
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:8
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:18
+msgid "Step 3"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:100
+msgid "Advanced Settings"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:107
+#: dudel/poll/templates/poll/Copy.html:52
+msgid "Randomize"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:127
+#: dudel/poll/templates/poll/Copy.html:70
+msgid "Due date"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:141
+#: dudel/poll/templates/poll/PollDelete.html:30
+#: dudel/poll/templates/poll/Settings.html:80
+#: dudel/poll/templates/poll/poll.html:17
+msgid "Description"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:149
+#: dudel/poll/templates/poll/Settings.html:98
+msgid "allow anonymous votes"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:153
+#: dudel/poll/templates/poll/Settings.html:102
+#: dudel/poll/templates/poll/poll_header.html:48
+msgid "login required"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:157
+#: dudel/poll/templates/poll/Settings.html:106
+msgid "invitation required to vote"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:161
+#: dudel/poll/templates/poll/Settings.html:114
+msgid "one vote per user"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:168
+msgid "More options"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:171
+msgid "Less options"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:174
+#: dudel/poll/templates/poll/Copy.html:86
+msgid "Create"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:185
+msgid "Log in"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:189
+#: dudel/base/templates/registration/login.html:20
+msgid "Username"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:193
+#: dudel/base/templates/registration/login.html:29
+msgid "Password"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:209
+msgid "Register for more"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:210
+msgid "Registered users have access to the full width of features available."
+msgstr ""
+
+#: dudel/base/templates/base/index.html:218
+msgid "Statistics"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:221
+msgid "Polls created"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:225
+#: dudel/poll/templates/poll/choicevalue.html:33
+msgid "Votes cast"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:229
+msgid "Users"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:235
+msgid "Public polls"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:238
+msgid "There are currently no public polls."
+msgstr ""
+
+#: dudel/base/templates/base/index.html:249
+msgid "My Polls"
+msgstr ""
+
+#: dudel/base/templates/base/index.html:250
+msgid ""
+"You can find a list of all the polls in which you have participated on your "
+"profile page."
+msgstr ""
+
+#: dudel/base/templates/base/index.html:251
+msgid "Show my polls"
+msgstr ""
+
+#: dudel/base/templates/base/licenses.html:4
+msgid "License information"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:14
+msgid "Poll overview"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:16
+msgid ""
+"This list shows all the polls you have participated in, either by owning "
+"them, voting on them, being invited, or watching."
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:20
+msgid "Poll title"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:21
+msgid "Date of creation"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:22
+msgid "Tags"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:34
+msgid "Owner"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:36
+msgid "Not owner"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:43
+msgid "Not own group"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:48
+msgid "Voted"
+msgstr "Abgestimmt"
+
+#: dudel/base/templates/base/settings.html:50
+msgid "Not voted"
+msgstr "Nicht Abgestimmt"
+
+#: dudel/base/templates/base/settings.html:55
+msgid "Watching"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:57
+msgid "Not watching"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:67
+msgid "You can edit your account settings in the centralized accounts page"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:72
+msgid "Language:"
+msgstr "Sprache:"
+
+#: dudel/base/templates/base/settings.html:85
+msgid "Timezone:"
+msgstr "Zeitzohne:"
+
+#: dudel/base/templates/base/settings.html:97
+msgid "Various"
+msgstr "Verschiedenes"
+
+#: dudel/base/templates/base/settings.html:100
+msgid "Auto-watch polls"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:104
+msgid "Allow to receive emails for poll invitations"
+msgstr ""
+
+#: dudel/base/templates/base/settings.html:107
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:14
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:94
+msgid "Save"
+msgstr ""
+
+#: dudel/base/templates/base/technical_info.html:10
+msgid "License overview of third-party components"
+msgstr ""
+
+#: dudel/base/templates/base/technical_info.html:13
+msgid "This site uses the following software/components:"
+msgstr ""
+
+#: dudel/base/templates/base/technical_info.html:33
+msgid "Listed in no particular order."
+msgstr ""
+
+#: dudel/base/templates/base_old.html:35
+msgid "Toggle navigation"
+msgstr ""
+
+#: dudel/invitations/models.py:41 dudel/poll/models.py:285
+msgid "The mail server had an error sending the notification to {}"
+msgstr ""
+
+#: dudel/invitations/models.py:45
+msgid "You have send an Email for {} in the last 12 Hours"
+msgstr ""
+
+#: dudel/invitations/templates/invitations/Invitation.html:10
+msgid "Invite to Poll"
+msgstr ""
+
+#: dudel/invitations/templates/invitations/Invitation.html:15
+msgid "Invitations"
+msgstr ""
+
+#: dudel/invitations/templates/invitations/Invitation.html:22
+#: dudel/poll/templates/poll/Settings.html:128
+#: dudel/poll/templates/poll/Settings.html:130
+msgid "User"
+msgstr "User"
+
+#: dudel/invitations/templates/invitations/Invitation.html:23
+msgid "Invited"
+msgstr "Eingeladen"
+
+#: dudel/invitations/templates/invitations/Invitation.html:24
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:21
+#: dudel/poll/templates/poll/choicevalue.html:34
+msgid "Actions"
+msgstr "Aktionen"
+
+#: dudel/invitations/templates/invitations/Invitation.html:43
+msgid "Resend all"
+msgstr "Alle neu Senden"
+
+#: dudel/invitations/templates/invitations/Invitation.html:51
+msgid "User or Group"
+msgstr "User oder Gruppe"
+
+#: dudel/invitations/templates/invitations/Invitation.html:59
+msgid ""
+"Enter the username or group title of the user or group of users you want to "
+"invite."
+msgstr ""
+
+#: dudel/invitations/templates/invitations/Invitation.html:60
+msgid "You can enter multiple users or groups."
+msgstr ""
+
+#: dudel/invitations/templates/invitations/Invitation.html:61
+msgid "Duplicates are ignored automatically."
+msgstr ""
+
+#: dudel/invitations/templates/invitations/Invitation.html:62
+msgid ""
+"Group invitations are resolved immediately, so adding more members to a "
+"group later will not invite those new members, unless you re-invite the "
+"group."
+msgstr ""
+
+#: dudel/invitations/templates/invitations/Invitation.html:68
+#: dudel/poll/templates/poll/Copy.html:85
+#: dudel/poll/templates/poll/Settings.html:85
+msgid "Back to poll"
+msgstr ""
+
+#: dudel/invitations/templates/invitations/mail_invite.txt:1
+#, python-format
+msgid ""
+"Hi %(receiver)s,\n"
+"\n"
+"you are invited to Participate in a Poll created by %(creator)s\n"
+"You can vote at %(base_url)s%(link)s\n"
+"\n"
+"Greetings,\n"
+"TODO: Appname-team\n"
+"\n"
+"--\n"
+"You received this notification because you have allowed for E-Mail "
+"Invitation in your settings.\n"
+"you can change this setting at %(base_url)s%(link)s .\n"
+msgstr ""
+
+#: dudel/invitations/views.py:54 dudel/poll/views.py:501
+#: dudel/poll/views.py:529 dudel/poll/views.py:890
+msgid "You are not allowed to edit this Poll"
+msgstr ""
+
+#: dudel/invitations/views.py:66
+msgid "The user {} was already invited"
+msgstr "Der User {} ist bereits eingeladen"
+
+#: dudel/invitations/views.py:83
+msgid "The following User/Groups could not be found:  {}"
+msgstr "Der folgende User oder Gruppe konnte nicht gefunden werden: {}"
+
+#: dudel/poll/models.py:163
+msgid "Give an HTML color without the #"
+msgstr "Bitte gib eine HTML Farbe ohne das # an"
+
+#: dudel/poll/models.py:276
+msgid "by an user"
+msgstr "von einem User"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:26
+#: dudel/poll/templates/poll/DTChoiceCreationTime.html:21
+msgid "Dates"
+msgstr "Daten"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:32
+msgid ""
+"Please select the days that you want to\n"
+"                    be able to choose. In the next step, you will select "
+"time slots."
+msgstr ""
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:53
+msgid "Mo"
+msgstr "Mo"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:54
+msgid "Tu"
+msgstr "Di"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:55
+msgid "We"
+msgstr "Mi"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:56
+msgid "Th"
+msgstr "Do"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:57
+msgid "Fr"
+msgstr "Fr"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:58
+msgid "Sa"
+msgstr "Sa"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:59
+msgid "Su"
+msgstr "So"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:78
+#: dudel/poll/templates/poll/DTChoiceCreationCombinations.html:71
+#: dudel/poll/templates/poll/DTChoiceCreationTime.html:52
+#: dudel/poll/templates/poll/VoteDeleteError.html:10
+msgid "Back"
+msgstr "Zurück"
+
+#: dudel/poll/templates/poll/ChoiceCreationDate.html:79
+#: dudel/poll/templates/poll/DTChoiceCreationCombinations.html:72
+#: dudel/poll/templates/poll/DTChoiceCreationTime.html:53
+msgid "Next"
+msgstr "Nächste"
+
+#: dudel/poll/templates/poll/CommentDelete.html:8
+#: dudel/poll/templates/poll/poll.html:216
+msgid "Delete comment"
+msgstr "Kommentar löschen"
+
+#: dudel/poll/templates/poll/CommentDelete.html:17
+msgid "Shall the following comment be deleted?"
+msgstr "Soll der folgende Kommentar gelöscht werden?"
+
+#: dudel/poll/templates/poll/CommentDelete.html:25
+msgid "comented at"
+msgstr "Kommentiert am"
+
+#: dudel/poll/templates/poll/CommentDelete.html:33
+#: dudel/poll/templates/poll/PollDelete.html:37
+#: dudel/poll/templates/poll/VoteDelete.html:18
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: dudel/poll/templates/poll/CommentDelete.html:34
+#: dudel/poll/templates/poll/PollDelete.html:8
+#: dudel/poll/templates/poll/PollDelete.html:38
+#: dudel/poll/templates/poll/VoteDelete.html:19
+msgid "Delete"
+msgstr "Löschen"
+
+#: dudel/poll/templates/poll/Copy.html:9
+msgid "Copy Poll"
+msgstr "Umfrage kopieren"
+
+#: dudel/poll/templates/poll/Copy.html:48
+msgid "URL name"
+msgstr "URL Name"
+
+#: dudel/poll/templates/poll/Copy.html:90
+msgid "Settings to copy"
+msgstr "Zu kopierende Einstellungen"
+
+#: dudel/poll/templates/poll/Copy.html:93
+msgid "Copy choices"
+msgstr ""
+
+#: dudel/poll/templates/poll/Copy.html:97
+msgid "Copy invitations"
+msgstr ""
+
+#: dudel/poll/templates/poll/Copy.html:101
+msgid "Create invitations from votes"
+msgstr ""
+
+#: dudel/poll/templates/poll/Copy.html:105
+msgid "Copy possible answer values"
+msgstr ""
+
+#: dudel/poll/templates/poll/Copy.html:109
+msgid "Reset ownership"
+msgstr ""
+
+#: dudel/poll/templates/poll/Copy.html:113
+msgid "Date shift (days)"
+msgstr ""
+
+#: dudel/poll/templates/poll/Copy.html:115
+msgid "Due Date"
+msgstr ""
+
+#: dudel/poll/templates/poll/DTChoiceCreationCombinations.html:17
+msgid ""
+"Here you can select which day/time combinations\n"
+"          are available for voting."
+msgstr ""
+
+#: dudel/poll/templates/poll/DTChoiceCreationTime.html:24
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:6
+msgid "Times"
+msgstr "Zeiten"
+
+#: dudel/poll/templates/poll/DTChoiceCreationTime.html:30
+msgid ""
+"Please select the time slots that you\n"
+"                    want to be able to choose. In the next step, you will "
+"match them against the selected days. "
+msgstr ""
+
+#: dudel/poll/templates/poll/DTChoiceCreationTime.html:45
+#: dudel/poll/templates/poll/choicevalue.html:127
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:4
+msgid "Days"
+msgstr "Tage"
+
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:8
+msgid "Combine"
+msgstr ""
+
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:14
+msgid "Select days"
+msgstr "Wähle die Tage"
+
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:16
+msgid "Select time slots"
+msgstr "Wähle die Zeiten"
+
+#: dudel/poll/templates/poll/DTChoiceHaeder.html:18
+msgid "Choose combinations"
+msgstr "Wähle die Kombinationen"
+
+#: dudel/poll/templates/poll/PollDelete.html:14
+msgid "Delete Poll"
+msgstr "Umfrage Löschen"
+
+#: dudel/poll/templates/poll/PollDelete.html:20
+msgid "Shall the following Poll be deleted?"
+msgstr "Soll die folgende Umfrage gelöscht werden?"
+
+#: dudel/poll/templates/poll/PollDelete.html:27
+msgid "Due-Date:"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:60
+msgid "Show Results"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:64
+msgid ""
+"\n"
+"                Owners of this poll and administrators will always see all "
+"votes.\n"
+"                "
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:69
+msgid "Timezone"
+msgstr "Zeitzohne"
+
+#: dudel/poll/templates/poll/Settings.html:86
+msgid "Save changes"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:91
+msgid "additional Settings"
+msgstr "zusätzliche Einstellungen"
+
+#: dudel/poll/templates/poll/Settings.html:94
+msgid "allow comments"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:110
+msgid "Show in public poll list"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:118
+msgid "show invitations as empty votes"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:121
+msgid ""
+"\n"
+"                These settings are not retroactive, meaning that changing "
+"them will not modify votes/comments already created.\n"
+"                "
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:142
+msgid "Group"
+msgstr "Gruppe"
+
+#: dudel/poll/templates/poll/Settings.html:159
+msgid ""
+"\n"
+"                Only the owner of a poll, or a member of the owner group, "
+"can edit the settings on this page.\n"
+"                If you set this to \"Nobody\", then anyone may claim "
+"exclusive ownership. Most restrictive settings above are useless if you do "
+"not claim ownership of this poll.\n"
+"                "
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:164
+msgid "Very advanced stuff"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:165
+msgid "Edit possible answer values"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:166
+msgid "Manage invitations"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:167
+msgid "Copy poll"
+msgstr ""
+
+#: dudel/poll/templates/poll/Settings.html:168
+msgid "Delete this poll"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:5
+msgid "Create choice"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:19
+msgid "Choices"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:20
+msgid "Votes"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:29
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:37
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:66
+msgid "Choice text ..."
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:95
+msgid "Save & Next"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:106
+msgid "Help"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:107
+msgid "Deleted Choices"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:108
+msgid ""
+"Deleted choices will stay in this list, so votes that have already been made "
+"are not lost."
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:110
+msgid "Grouping"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:112
+msgid "You can sort choices into groups by splitting them into parts with '/'."
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:115
+msgid "Some-Choice"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:116
+msgid "Some-Group/Another-Choice"
+msgstr ""
+
+#: dudel/poll/templates/poll/UniversalChoiceCreation.html:117
+msgid "Some-Group/Third-Choice"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteCreation.html:12
+msgid "Hold left mouse button and drag mouse to select multiple vote choices."
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteCreation.html:59
+msgid "Add a comment"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteCreation.html:74
+msgid "Your name:"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteCreation.html:77
+msgid "Your name"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteCreation.html:87
+#: dudel/poll/templates/poll/VoteCreation.html:92
+msgid "Post anonymous vote"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteCreation.html:97
+#: dudel/poll/templates/poll/VoteDelete.html:14
+msgid "Comment:"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteCreation.html:98
+msgid "(optional)"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteCreation.html:108
+msgid "Save vote"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteDelete.html:4
+#: dudel/poll/templates/poll/poll.html:111
+msgid "Delete vote"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteDelete.html:11
+msgid "Shall the following Vote be deleted?"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteDelete.html:12
+msgid "Title of Poll:"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteDelete.html:13
+msgid "Author of Vote:"
+msgstr ""
+
+#: dudel/poll/templates/poll/VoteDeleteError.html:7 dudel/poll/views.py:184
+#: dudel/poll/views.py:585 dudel/poll/views.py:759
+msgid "Deletion not allowed. You are not authenticated."
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:14
+msgid ""
+"Here you can edit which options the voters have for each choice you give "
+"them. By default,\n"
+"            <b>yes</b>, <b>no</b> and <b>maybe</b> are always enabled, but "
+"you can disable or change any of these.\n"
+"            You should have at least one value in this list for the voting "
+"to make sense."
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:19
+msgid ""
+"Weights are factors on how the total score for a choice is calculated. These "
+"values are normally somewhere\n"
+"            between 0 and 1. The total score is displayed both as a "
+"percentage and as the weight sum, so you are\n"
+"            allowed to use other values if you want them to \"cancel out\"."
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:26
+msgid "Available Values"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:31
+msgid "Color/Icon"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:32
+#: dudel/poll/templates/poll/choicevalue.html:92
+msgid "Weight"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:54
+msgid " Back"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:58
+msgid "Add choice value"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:75
+msgid "Color"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:93
+msgid "(usually between 0 and 1)"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:105
+msgid "Icon"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:106
+msgid "(any FontAwesome icon)"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:124
+msgid "Edit"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:131
+msgid "Click icon to insert it into the form."
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:139
+msgid "Smile"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:146
+msgid "Meh"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:153
+msgid "Frown"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:160
+msgid "Star"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:167
+msgid "Half star"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:174
+msgid "No star"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:181
+msgid "Thumbs up!"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:188
+msgid "Thumbs down"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:195
+msgid "Adjust"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:202
+msgid "Asterisk"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:209
+msgid "No"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:216
+msgid "Beer!!11elf"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:223
+msgid "Book"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:230
+msgid "Bolt"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:237
+msgid "Calendar"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:244
+msgid "Yes"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:251
+msgid "Check"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:258
+msgid "Disk"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:265
+msgid "Circle"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:272
+msgid "Clock"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:279
+msgid "Code"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:286
+msgid "Coffe"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:293
+#: dudel/poll/templates/poll/poll.html:248
+msgid "Comment"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:300
+msgid "Comments"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:307
+msgid "Mensa"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:314
+msgid "Dashboard"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:321
+msgid "Warning"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:328
+msgid "Flag"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:335
+msgid "Lab"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:342
+msgid "Globe/WWW"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:349
+msgid "Heart &amp;lt;3"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:363
+msgid "Lightbulb"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:370
+msgid "Magic"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:377
+msgid "Moon"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:384
+msgid "Phone"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:391
+msgid "Music"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:398
+msgid "Power off"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:405
+msgid "Rocket"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:412
+msgid "Sun"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:419
+msgid "Umbrella"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:426
+msgid "Android"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:433
+msgid "Github"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:440
+msgid "StackOverflow"
+msgstr ""
+
+#: dudel/poll/templates/poll/choicevalue.html:447
+msgid "Linux"
+msgstr ""
+
+#: dudel/poll/templates/poll/mail_watch.txt:1
+#, python-format
+msgid ""
+"Hi %(receiver)s,\n"
+"\n"
+"There was a change made on the poll \"%(poll)s\": A new vote has been posted "
+"by %(user)s.\n"
+"\n"
+"Visit this link to see the poll page: %(base_url)s%(link)s\n"
+"\n"
+"\n"
+"Greetings,\n"
+"TODO: Appname-team\n"
+"\n"
+"--\n"
+"You receive this mail because you are watching the poll \"%(poll)s\". Visit "
+"the following link to unsubscribe from these notifications: %(base_url)s"
+"%(link)s .\n"
+msgstr ""
+
+#: dudel/poll/templates/poll/noscript_date_time.html:4
+msgid ""
+"You don't have <b>JavaScript</b> turned on,\n"
+"            so you'll have to type in comma separated values in the correct "
+"format yourself, no spaces allowed. Or\n"
+"            just enable JavaScript on this site. You'll get a certainly "
+"fancy interface for\n"
+"            date and time input... "
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:26
+msgid "Unwatch Poll"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:28
+msgid "Watch Poll"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:37
+msgid ""
+"\n"
+"                This Poll does not contain any Choices, you can create some "
+"at the Choices tab\n"
+"                "
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:75
+#, python-format
+msgid ""
+"Assigned after voting by %(vote.assigned_by.name|force_escape|force_escape)s "
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:87
+#: dudel/poll/templates/poll/poll.html:98
+msgid "Anonymous"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:106
+msgid "Edit vote"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:150
+#: dudel/poll/templates/poll/poll_header.html:74
+msgid "Vote"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:162
+msgid "Percent"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:163
+#: dudel/poll/templates/poll/poll.html:180
+msgid "Score"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:230
+msgid "Post a comment"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:237
+#: dudel/poll/templates/poll/poll.html:241
+msgid "Name"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll.html:251
+msgid ""
+"\n"
+"                        You can use\n"
+"                        <a href=\"http://daringfireball.net/projects/"
+"markdown/\" target=\"_blank\">Markdown</a>\n"
+"                        syntax for formatting.\n"
+"                        "
+msgstr ""
+
+#: dudel/poll/templates/poll/poll_header.html:37
+msgid "Anonymous voting allowed"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll_header.html:38
+msgid "anonymous voting"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll_header.html:42
+msgid "Invitation required"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll_header.html:43
+msgid "invitation required"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll_header.html:59
+msgid "Overview"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll_header.html:62
+msgid "Activity"
+msgstr ""
+
+#: dudel/poll/views.py:66
+msgid "No individual results are shown due to Poll settings"
+msgstr ""
+
+#: dudel/poll/views.py:70
+msgid "Results are only sown after (authenticated) Voting"
+msgstr ""
+
+#: dudel/poll/views.py:74
+msgid "Only the Summary is shown due to the Poll settings"
+msgstr ""
+
+#: dudel/poll/views.py:79
+msgid "The summary is not shown due to the config of the Poll"
+msgstr ""
+
+#: dudel/poll/views.py:182 dudel/poll/views.py:757
+msgid "Deletion not allowed. You are not {}."
+msgstr ""
+
+#: dudel/poll/views.py:202 dudel/poll/views.py:225 dudel/poll/views.py:493
+#: dudel/poll/views.py:785
+msgid "You are not allowed to listen."
+msgstr ""
+
+#: dudel/poll/views.py:611
+msgid "This Poll is past the due date, voting is no longer possible"
+msgstr ""
+
+#: dudel/poll/views.py:672
+msgid "Vote has been recorded"
+msgstr ""
+
+#: dudel/poll/views.py:676
+msgid "You need to either provide a name or post an anonymous vote."
+msgstr ""
+
+#: dudel/poll/views.py:880
+msgid "You are not allowed to edit this Poll."
+msgstr ""
+
+#: dudel/poll/views.py:899
+msgid "User {} not Found"
+msgstr ""

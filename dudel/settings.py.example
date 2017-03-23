@@ -179,3 +179,11 @@ IMPRINT_TEXT = """
 <h1>Impressum</h1>
 <p>Text goes here</p>
 """
+
+LOCALE_PATHS = (os.path.join(BASE_DIR, '../locale'), )
+
+LANGUAGES = (
+    ('de', 'Deutsch'),
+    ('en', 'English'),
+    #('fr', 'Français'),
+)
