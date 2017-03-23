@@ -226,6 +226,7 @@
         </div>
         <hr>
         <div class="noprint">
+            {% if poll.allow_comments %}
             <h3>{% trans 'Post a comment' %}</h3>
             <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form">
                 {% csrf_token %}
@@ -258,6 +259,9 @@
                     <input class="action primary" type="submit" title="Save Comment" value="Save Comment">
                 </div>
             </form>
+            {% else %}
+                    <p>{% trans 'Comments are disabled for this Poll' %}</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

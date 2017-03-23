@@ -131,6 +131,9 @@ def comment(request, poll_url):
     :return:
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    if not current_poll.allow_comments:
+        messages.error(_("Comments are disabled for this Poll"))
+        return redirect('poll', poll_url)
     user = None
     if not request.user.is_anonymous:
         user = request.user
@@ -404,7 +407,8 @@ def edit_dt_choice_combinations(request, poll_url):
                 tz = timezone(current_poll.timezone_name)
                 chosen_times.append(tz.localize(parse_datetime(combination)))
             except ValueError:
-                # at least one invalid time/date has been specified. Redirect to first step # TODO: error message
+                # at least one invalid time/date has been specified. Redirect to first step # TODO: error message spezifizierne
+                messages.error(_("There was en error interpreting the provided dates and times"))
                 return redirect('poll_editDTChoiceDate', current_poll.url)
         # Search for already existing Choices
         for i, date_time in enumerate(sorted(chosen_times)):
