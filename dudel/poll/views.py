@@ -116,7 +116,7 @@ def poll(request, poll_url):
         'votes': poll_votes,
         'stats': stats,
         'max_score': max_score,
-        'invitations': invitations,
+        'invitations': invitations if current_poll.show_invitations else [],
         'summary': summary,
         'watched': poll_watched,
     })
