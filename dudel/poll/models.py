@@ -64,14 +64,14 @@ class Poll(models.Model):
         :param request:
         :return:
         """
-        if self.one_vote_per_user and user in self.vote_set.all().values('user'):
+        has_voted = Vote.objects.filter(user=user, poll=self).count() > 0
+        if self.one_vote_per_user and has_voted:
             messages.error(request, _("It is only one vote allowed. You have already voted."))
             return False
         elif self.require_login and not user.is_authenticated:
             messages.error(request, _("Login required to vote."))
             return False
-        elif self.require_invitation and not user.is_authenticated or user not in \
-                self.invitation_set.all().values('user'):
+        elif self.require_invitation and (not user.is_authenticated or user not in self.invitation_set.all().values('user')):
             messages.error(request, _("You are not allowed to vote in this poll. You have to be invited"))
             return False
         else:
