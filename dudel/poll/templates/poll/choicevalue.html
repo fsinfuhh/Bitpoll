@@ -41,7 +41,9 @@
                                 <i class="fa fa-{{ choiceval.icon }}"></i>
                             </td>
                             <td class="author">{{ choiceval.weight }}</td>
-                            <td class="author"></td>
+                            <td class="author">
+                                <strong>{{ choiceval.votechoice_count }}</strong> / {{ poll.vote_set.count }}
+                            </td>
                             <td class="author">
                                 <button class="action default" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa fa-pencil"></i></button>
                                 <button class="action default" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa fa-trash-o"></i></button>

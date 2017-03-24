@@ -191,6 +191,9 @@ class ChoiceValue(models.Model):
     def can_edit(self, user):
         return self.poll.can_edit(user)
 
+    def votechoice_count(self):
+        return self.poll.vote_set.filter(votechoice__value=self).count()
+
 
 class Comment(models.Model):
     text = MarkdownField()
