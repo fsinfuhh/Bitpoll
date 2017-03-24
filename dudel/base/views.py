@@ -17,6 +17,23 @@ def login(request):
     pass
 
 
+def register(request):
+    if request.method == 'POST':
+        form = DudelUserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.active = True
+
+            # TODO encode in mail-confirmation
+            return redirect('index')
+
+    else:
+        form = DudelUserForm()
+    return TemplateResponse(request, "registration/register.html", {
+        'user_form': form,
+    })
+
+
 def index(request):
     """
     :param request

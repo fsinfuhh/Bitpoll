@@ -6,6 +6,7 @@
 {%  value_from_settings SITE_NAME as site_name %}
 {%  value_from_settings DEBUG as debug %}
 {%  value_from_settings HOME_URL as home_url %}
+{%  value_from_settings TIME_ZONE as time_zone %}
 
 <!DOCTYPE html>
 <html>
@@ -50,7 +51,7 @@
                     {% if request.user.is_anonymous %}
                         <li><a href="{% url 'login' %}"><i class="fa fa-user"></i><span>{% trans 'Login' %}</span></a>
                             <ul class="submenu right">
-                                <li><a href="/register"><i class="fa fa-pencil"></i>{% trans 'Register' %}</a></li>{# TODO #}
+                                <li><a href="{% url 'register' %}"><i class="fa fa-pencil"></i>{% trans 'Register' %}</a></li>{# TODO #}
                                 <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>{% trans 'Login' %}</a></li>
                             </ul>
                         </li>
@@ -76,7 +77,9 @@
         <div class="container"><a href="{% url 'about' %}">{% trans 'About' %}</a><span class="separator"></span><a href="{% url 'imprint' %}"
             target="_blank">{% trans 'Imprint' %}</a><span
                     class="separator"></span><a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
-           class="separator"></span{% trans 'Current timezone is Europe/Berlin.' %}>
+           class="separator"></span>
+            {% trans 'Current timezone is ' %} {{ time_zone }}
+
             {% if debug %}
                 <div class="footer-warning">
                     {% blocktrans %}

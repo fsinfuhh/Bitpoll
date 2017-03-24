@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^about/$', views.about, name='about'),
     url(r'^licenses/$', views.licenses, name='base_licenses'),
     url(r'^technical_info/$', views.tecnical, name='technical'),
+    url(r'^register/$', views.register, name='register')
 ]

@@ -209,8 +209,8 @@
                 <h4>{% trans 'Register for more' %}</h4>
                 <p>{% blocktrans %}Registered users have access to the full width of features available.{% endblocktrans %}
                 </p>
-                <a href="/register" class="action"><i class="fa fa-pencil"></i><span>{% trans 'Register' %}</span></a>
-                <a href="/login" class="action primary"><i class="fa fa-sign-in"></i> {% trans 'Login' %}</a>
+                <a href="{% url 'register' %}" class="action"><i class="fa fa-pencil"></i><span>{% trans 'Register' %}</span></a>
+                {# <a href="/login" class="action primary"><i class="fa fa-sign-in"></i> {% trans 'Login' %}</a> TODO #}
             </div>
             {% endif %}
         {# TODO: own polls? #}

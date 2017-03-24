@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+{% load settings_value %}
+{% load i18n %}
+
+{% load poll_watched poll_voted %}
+
+{% block title %}{% trans 'Register' %}{% endblock %}
+
+{% block content %}
+    <div class="halfsize">
+        <h1>{% trans 'Register' %}</h1>
+        <form method="POST" class="form" action="{% url 'register' %}">
+            <div class="form-group">
+                <label for="username">{% trans "Username" %}</label>
+                <input id="username" class="form-control" type="text" name="{{ user_form.username.name }}"
+                       value="{{ user_form.username.value|default_if_none:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="first_name">{% trans "First name" %}</label>
+                <input id="first_name" class="form-control" type="text" name="{{ user_form.first_name.name }}"
+                       value="{{ user_form.first_name.value|default_if_none:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="last_name">{% trans "Last name" %}</label>
+                <input id="last_name" class="form-control" type="text" name="{{ user_form.last_name.name }}"
+                       value="{{ user_form.last_name.value|default_if_none:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="email">{% trans "Email" %}</label>
+                <input id="email" class="form-control" type="text" name="{{ user_form.email.name }}"
+                       value="{{ user_form.email.value|default_if_none:'' }}">
+            </div>
+
+            <div class="form-group">
+                <input id="mail_invitation" type="checkbox" name="{{ user_form.email_invitation.name }}">
+                <label for="mail_invitation">{% trans "Allow invitations per mail" %}</label>
+            </div>
+
+            <div class="form-group">
+                <label for="password">{% trans "Password" %}</label>
+                <input class="form-control" id="password" name="password" type="password" value="">
+
+                <label for="confirm">{% trans "Confirm password" %}</label>
+                <input class="form-control" id="confirm" name="password" type="password" value="">
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="action primary">{% trans "Submit" %}</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

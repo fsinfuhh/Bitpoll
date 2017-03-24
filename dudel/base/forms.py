@@ -6,4 +6,5 @@ from .models import DudelUser
 class DudelUserForm(ModelForm):
     class Meta:
         model = DudelUser
-        fields = ['timezone', 'language', 'auto_watch', 'email_invitation']
+        fields = ['username', 'first_name', 'last_name', 'email', 'timezone', 'language', 'auto_watch',
+                  'email_invitation']
