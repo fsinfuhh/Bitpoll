@@ -43,7 +43,7 @@
                         <ul class="submenu">
                             <li><a href="{{ home_url }}"><i class="fa fa-home"></i>{% trans 'Home' %}</a></li>
                             <li><a href="{% url 'index' %}"><i class="fa fa-plus"></i>{% trans 'Create poll' %}</a></li>
-                            <li><a href="/about"><i class="fa fa-question-circle"></i>{% trans 'About' %}</a></li>
+                            <li><a href="{% url 'about' %}"><i class="fa fa-question-circle"></i>{% trans 'About' %}</a></li>
                         </ul>
                     </li>
                     <li class="spacing"></li>
@@ -57,7 +57,7 @@
                     {% else %}
                         <li><a href=""><i class="fa fa-user"></i><span>{{ request.user.get_username }}</span></a>
                             <ul class="submenu right">{# TODO: usersettings #}
-                                <li><a href="/base/settings"><i class="fa fa-pencil"></i>{% trans 'Settings' %}</a></li>
+                                <li><a href="{% url 'settings' %}"><i class="fa fa-pencil"></i>{% trans 'Settings' %}</a></li>
                                 <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>{% trans 'Logout' %}</a></li>
                             </ul>
                         </li>
@@ -73,7 +73,7 @@
     </section>
 
     <footer>
-        <div class="container"><a href="/about">About</a><span class="separator"></span><a href="{% url 'imprint' %}"
+        <div class="container"><a href="{% url 'about' %}">{% trans 'About' %}</a><span class="separator"></span><a href="{% url 'imprint' %}"
             target="_blank">{% trans 'Imprint' %}</a><span
                     class="separator"></span><a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
            class="separator"></span{% trans 'Current timezone is Europe/Berlin.' %}>

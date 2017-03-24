@@ -38,6 +38,8 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'HOME_URL',
     'IMPRINT_TEXT',
     'IMPRINT_URL',
+    'ABOUT_TEXT',
+    'ABOUT_URL',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -178,6 +180,13 @@ IMPRINT_URL = ""
 IMPRINT_TEXT = """
 <h1>Impressum</h1>
 <p>Text goes here</p>
+"""
+
+# if the about URL is not empty use it as a link to the about, else use ABOUT_TEXT
+ABOUT_URL = ""
+ABOUT_TEXT = """
+<h1>About</h1>
+<p>Text goes here </p>
 """
 
 LOCALE_PATHS = (os.path.join(BASE_DIR, '../locale'), )
