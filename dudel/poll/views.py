@@ -907,6 +907,7 @@ def settings(request, poll_url):
                     user_error = _("User {} not Found".format(user))
             if not user_error:
                 new_poll.save()
+                messages.success(request, _('Settings have been changed'))
                 return redirect('poll_settings', current_poll.url)
         else:
             user = form.cleaned_data.get('user', '')
