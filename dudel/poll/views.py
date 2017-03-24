@@ -679,9 +679,9 @@ def vote(request, poll_url, vote_id=None):
                         VoteChoice.objects.bulk_create(new_choices)
                         messages.success(request, _('Vote has been recorded'))
                         return redirect('poll', poll_url)
-        else:
-            messages.error(
-                request, _('You need to either provide a name or post an anonymous vote.'))
+                else:
+                    messages.error(
+                        request, _('You need to either provide a name or post an anonymous vote.'))
 
     # no/invalid POST: show the dialog
     matrix = current_poll.get_choice_group_matrix(get_current_timezone())
