@@ -74,22 +74,24 @@
                       <label for="name">{% trans 'Your name:' %}</label>
                     </td>
                     <td colspan="4">
-                      <input type="text" name="name" title="{% trans 'Your name' %}"
+                        <input type="text" name="name" title="{% trans 'Your name' %}"
                             {% if current_vote.name %}
                                 value="{{ current_vote.name }}" readonly="readonly"
                             {% elif request.user.is_authenticated %}
                                 value="{{ request.user.get_username }}" readonly="readonly"
                             {%  endif %}
                             class="form-control" id="name"/>
-                        <br>
 
-                        <input type="checkbox" name="anonymous" id="anonymous"
-                            title="{% trans 'Post anonymous vote' %}" value="true"
-                               {% if current_vote.anonymous %}
-                                    checked
-                               {% endif %}
-                        />
-                        <label for="anonymous">{% trans 'Post anonymous vote' %}</label> <br/>
+                        {% if poll.anonymous_allowed %}
+                            <br>
+                            <input type="checkbox" name="anonymous" id="anonymous"
+                                title="{% trans 'Post anonymous vote' %}" value="true"
+                                   {% if current_vote.anonymous %}
+                                        checked
+                                   {% endif %}
+                            />
+                            <label for="anonymous">{% trans 'Post anonymous vote' %}</label> <br/>
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>

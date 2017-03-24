@@ -56,6 +56,27 @@ class Poll(models.Model):
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
+    def can_vote(self, user: DudelUser, request) -> bool:
+        """
+        Determine if the user is allowed to vote
+
+        :param user:
+        :param request:
+        :return:
+        """
+        if self.one_vote_per_user and user in self.vote_set.all().values('user'):
+            messages.error(request, _("It is only one vote allowed. You have already voted."))
+            return False
+        elif self.require_login and not user.is_authenticated:
+            messages.error(request, _("Login required to vote."))
+            return False
+        elif self.require_invitation and not user.is_authenticated or user not in \
+                self.invitation_set.all().values('user'):
+            messages.error(request, _("You are not allowed to vote in this poll."))
+            return False
+        else:
+            return True
+
     def can_edit(self, user: DudelUser):
         has_owner = self.group or self.user
         is_owner = user == self.user
