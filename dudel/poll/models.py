@@ -64,7 +64,7 @@ class Poll(models.Model):
         :param request:
         :return:
         """
-        has_voted = Vote.objects.filter(user=user, poll=self).count() > 0
+        has_voted = user.is_authenticated and Vote.objects.filter(user=user, poll=self).count() > 0
         if self.one_vote_per_user and has_voted:
             messages.error(request, _("It is only one vote allowed. You have already voted."))
             return False
