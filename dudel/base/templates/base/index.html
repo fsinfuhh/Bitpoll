@@ -204,12 +204,13 @@
     {% endif %}
     <div class="container">
         <div class="row padded-cells">
-            {% if request.user.is_anonymous %}
+            {% value_from_settings REGISTER_ENABLED as register %}
+            {% if request.user.is_anonymous and register %}
             <div class="col-md-4">
                 <h4>{% trans 'Register for more' %}</h4>
                 <p>{% blocktrans %}Registered users have access to the full width of features available.{% endblocktrans %}
                 </p>
-                <a href="{% url 'register' %}" class="action"><i class="fa fa-pencil"></i><span>{% trans 'Register' %}</span></a>
+                <a href="{% url 'registration_request_account' %}" class="action"><i class="fa fa-pencil"></i><span>{% trans 'Register' %}</span></a>
                 {# <a href="/login" class="action primary"><i class="fa fa-sign-in"></i> {% trans 'Login' %}</a> TODO #}
             </div>
             {% endif %}
@@ -235,7 +236,7 @@
                 <h4>{% trans 'Public polls' %}</h4>
                 {% if not public_polls %}
                     <div class="alert alert-info">
-                        <div class="container"><i class="fa fa-exclamation-circle"></i{% trans 'There are currently no public polls.' %}>
+                        <div class="container"><i class="fa fa-exclamation-circle"></i>{% trans 'There are currently no public polls.' %}>
                         </div>
                     </div>
                 {% else %}

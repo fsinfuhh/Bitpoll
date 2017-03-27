@@ -40,6 +40,8 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'IMPRINT_URL',
     'ABOUT_TEXT',
     'ABOUT_URL',
+    'TIME_ZONE',
+    'REGISTER_ENABLED',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -50,7 +52,6 @@ BASE_URL = 'https://dudel.mafiasi.de'
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -62,7 +63,9 @@ INSTALLED_APPS = [
     'datetimewidget',
     'dudel.poll',
     'dudel.base',
-    'dudel.invitations'
+    'dudel.invitations',
+    'dudel.registration'
+    'django.contrib.admin',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -196,3 +199,5 @@ LANGUAGES = (
     ('en', 'English'),
     #('fr', 'Français'),
 )
+
+REGISTER_ENABLED = True

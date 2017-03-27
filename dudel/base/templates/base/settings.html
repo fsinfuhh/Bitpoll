@@ -64,8 +64,12 @@
 
         <div class="col-md-4">
             <h1>{% trans 'Settings' %}</h1>
+            {% value_from_settings REGISTER_ENABLED as register %}
+            {% if register %}
+                <p>{% trans 'You can change your email and Password' %} <a href="{% url 'registration_account' %}">{% trans 'here' %}</a></p>
+            {% else %}
             <p>{% blocktrans %}You can edit your account settings in the centralized accounts page{% endblocktrans %}.</p>
-
+            {% endif %}
             <form method="post">
                 {% csrf_token %}
                 <div class="form-group">

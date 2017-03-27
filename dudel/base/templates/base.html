@@ -51,7 +51,7 @@
                     {% if request.user.is_anonymous %}
                         <li><a href="{% url 'login' %}"><i class="fa fa-user"></i><span>{% trans 'Login' %}</span></a>
                             <ul class="submenu right">
-                                <li><a href="{% url 'register' %}"><i class="fa fa-pencil"></i>{% trans 'Register' %}</a></li>{# TODO #}
+                                <li><a href="{% url 'registration_request_account' %}"><i class="fa fa-pencil"></i>{% trans 'Register' %}</a></li>{# TODO #}
                                 <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>{% trans 'Login' %}</a></li>
                             </ul>
                         </li>

@@ -14,22 +14,27 @@ Including another URLconf
     2. Import the include() function: from django.conf.urls import url, include
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+import django
 from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.shortcuts import redirect
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
     url(r'^poll/', include('dudel.poll.urls')),
     url(r'^base/', include('dudel.base.urls')),
     url(r'^invitations/', include('dudel.invitations.urls')),
     url(r'^$', lambda req: redirect('index'), name='home'),
-    url(r'^login$', auth_views.login, name='login', ),
-    url(r'^logout$', auth_views.logout, {
+    url(r'^login/$', auth_views.login, name='login', ),
+    url(r'^logout/$', auth_views.logout, {
         'next_page': '/'
     }, name='logout'),
     url('^markdown/', include('django_markdown.urls')),
+    url(r'^registration/', include('dudel.registration.urls')),
+
+    #url(r'^i18n/', include(django.conf.urls.i18n)),
+    url(r'^admin/', admin.site.urls),
+
 ]
 
 """

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block wtitle %}{% block ptitle %}{% trans "Create account" %}{% endblock %}{% endblock %}
+
+{% block content %}
+<div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="control-label">{% trans "Username" %}</label>
+                    <p class="form-control-static">{{ username }}</p>
+                </div>
+                <div class="form-group{% if form.password1.errors %} has-error{% endif %}">
+                    <label class="control-label">{% trans "Password" %}</label>
+                    {% render_field form.password1 class+="form-control" %}
+                    {% if form.password1.errors %}
+                    <span class="help-block">
+                        {% for error in form.password1.errors %}{{ error }} {% endfor %}
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="form-group{% if form.password2.errors %} has-error{% endif %}">
+                    <label class="control-label">{% trans "Password confirmation" %}</label>
+                    {% render_field form.password2 class+="form-control" %}
+                    {% if form.password2.errors %}
+                    <span class="help-block">
+                        {% for error in form.password2.errors %}{{ error }} {% endfor %}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" class="btn btn-default" value="{% trans "Create account" %}" />
+              </div>
+          </form>
+      </div>
+  </div>
+
+
+{% endblock content %}

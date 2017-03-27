@@ -1,37 +1,19 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.db.models import Q
 
 from dudel.base.models import DudelUser
-from dudel.base.forms import DudelUserForm
 
 from dudel.poll.forms import PollCreationForm
 from dudel.poll.models import ChoiceValue, Poll, Vote
 
 from dudel.base.models import USER_LANG
 from pytz import all_timezones
+
+from dudel.registration.forms import RegisterForm
 from dudel.settings import IMPRINT_URL, ABOUT_URL
-
-
-def login(request):
-    pass
-
-
-def register(request):
-    if request.method == 'POST':
-        form = DudelUserForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.active = True
-
-            # TODO encode in mail-confirmation
-            return redirect('index')
-
-    else:
-        form = DudelUserForm()
-    return TemplateResponse(request, "registration/register.html", {
-        'user_form': form,
-    })
+from django.core import signing
 
 
 def index(request):
@@ -78,25 +60,25 @@ def index(request):
     })
 
 
+@login_required
 def settings(request):
-    if request.user.is_authenticated():
-        polls = Poll.objects.filter(Q(user=request.user) | Q(vote__user=request.user) |
-                                    Q(group__user=request.user)).distinct().order_by('created')
+    polls = Poll.objects.filter(Q(user=request.user) | Q(vote__user=request.user) |
+                                Q(group__user=request.user)).distinct().order_by('created')
 
-        if request.method == 'POST':
-            form = DudelUserForm(request.POST, instance=request.user)
-            if form.is_valid():
-                form.save()
+    if request.method == 'POST':
+        form = RegisterForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
 
-        user_form = DudelUserForm(instance=request.user)
+    user_form = RegisterForm(instance=request.user)
 
-        return TemplateResponse(request, 'base/settings.html', {
-            'polls': polls,
-            'user': request.user,
-            'user_form': user_form,
-            'languages': USER_LANG,
-            'timezones': all_timezones,
-        })
+    return TemplateResponse(request, 'base/settings.html', {
+        'polls': polls,
+        'user': request.user,
+        'user_form': user_form,
+        'languages': USER_LANG,
+        'timezones': all_timezones,
+    })
 
 
 def imprint(request):
