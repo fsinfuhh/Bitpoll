@@ -6,7 +6,6 @@
 {% load django_markdown django_markdown_static %}
 
 {% block content %}
-    <div class="container">
 
         {% include 'poll/poll_header.html' %}
 
@@ -263,5 +262,4 @@
                     <p>{% trans 'Comments are disabled for this Poll' %}</p>
             {% endif %}
         </div>
-    </div>
 {% endblock %}

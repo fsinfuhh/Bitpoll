@@ -14,11 +14,11 @@ Including another URLconf
     2. Import the include() function: from django.conf.urls import url, include
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-import django
 from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.shortcuts import redirect
+import django.conf.urls.i18n
 
 urlpatterns = [
     url(r'^poll/', include('dudel.poll.urls')),
@@ -32,7 +32,7 @@ urlpatterns = [
     url('^markdown/', include('django_markdown.urls')),
     url(r'^registration/', include('dudel.registration.urls')),
 
-    #url(r'^i18n/', include(django.conf.urls.i18n)),
+    url(r'^i18n/', include(django.conf.urls.i18n)),
     url(r'^admin/', admin.site.urls),
 
 ]

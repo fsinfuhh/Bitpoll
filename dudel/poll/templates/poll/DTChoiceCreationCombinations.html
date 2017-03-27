@@ -11,7 +11,6 @@
 
 {% block content %}
     {% include "poll/poll_header.html" %}
-    <div class="container">
         {% include  "poll/DTChoiceHaeder.html" %}
     <div class="alert alert-info">
         <div class="container"><i class="fa fa-exclamation-circle"></i>{% blocktrans %}Here you can select which day/time combinations
@@ -71,7 +70,7 @@
         <div class="form-actions"><a class="action" href="javascript: history.back();">{% trans 'Back' %}</a>
           <input type="submit" class="action primary" value="{% trans 'Next' %}">
         </div>
-    </form></div>
+    </form>
 
 {% endblock %}
 

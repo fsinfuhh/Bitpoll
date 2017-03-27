@@ -12,7 +12,6 @@
 {% block content %}
     {% include "poll/poll_header.html" %}
 
-    <div class="container">
         {% include  "poll/DTChoiceHaeder.html" %}
 
         <form action="{% url 'poll_editDTChoiceTime' poll.url %}" method="POST" id="date-time-form">
@@ -53,7 +52,6 @@
               <input type="submit" class="action primary" value="{% trans 'Next' %}">
             </div>
         </form>
-    </div>
 {% endblock %}
 
 {% block additionalJS %}

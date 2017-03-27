@@ -10,7 +10,6 @@
 {% block title %}{% trans 'Invite to Poll' %}{% endblock %}
 
 {% block content %}
-    <div class="container">
         {% include 'poll/poll_header.html' %}
         <h3>{% trans 'Invitations' %}</h3>
         <div class="col-md-6">
@@ -66,7 +65,6 @@
         </div>
         <hr>
         <a href="{% url 'poll_settings' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
-    </div>
 {% endblock %}
 
 

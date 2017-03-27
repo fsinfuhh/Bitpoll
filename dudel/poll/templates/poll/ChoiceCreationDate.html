@@ -12,7 +12,6 @@
 {% block content %}
     {% include "poll/poll_header.html" %}
 
-    <div class="container">
         {% if is_dt_choice %}
             {% include  "poll/DTChoiceHaeder.html" %}
         {% else %}
@@ -79,7 +78,6 @@
                 <input type="submit" class="action primary" value="{% trans 'Next' %}">
             </div>
         </form>
-    </div>
 
 
 {% endblock %}

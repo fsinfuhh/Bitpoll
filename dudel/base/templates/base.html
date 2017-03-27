@@ -68,9 +68,10 @@
         </nav>
     </header>
     <section id="main-content">
-
+        <div class="container">
         {% block content %}
         {% endblock %}
+        </div>
     </section>
 
     <footer>
@@ -79,6 +80,14 @@
                     class="separator"></span><a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
            class="separator"></span>
             {% trans 'Current timezone is ' %} {{ time_zone }}
+        <form class="form-inline" action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <p>
+                <button name="language" value="de" class="btn-link" style="padding: 0;" type="submit">Deutsch</button>
+                &middot;
+                <button name="language" value="en" class="btn-link" style="padding: 0;" type="submit">English</button>
+            </p>
+        </form>
 
             {% if debug %}
                 <div class="footer-warning">

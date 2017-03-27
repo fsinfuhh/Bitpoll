@@ -4,7 +4,6 @@
 {% block wtitle %}{% block ptitle %}{% trans "Technical Info" %}{% endblock %}{% endblock %}
 
 {% block content %}
-    <div class="container">
     <h1>Technical Info</h1>
 <p>
 	<a href="{% url 'base_licenses' %}">{% trans "License overview of third-party components" %}</a>
@@ -30,5 +29,5 @@
     <li><a href="http://www.postgresql.org/">PostgreSQL</a></li>
 </ul>
 
-        <p>{% trans "Listed in no particular order." %}</p></div>
+        <p>{% trans "Listed in no particular order." %}</p>
 {% endblock %}
