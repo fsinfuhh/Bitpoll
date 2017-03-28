@@ -71,6 +71,7 @@
             {% endif %}
             <form method="post">
                 {% csrf_token %}
+                {{ user_form.errors }}
                 <div class="form-group">
                     <label for="preferred-language">{% trans 'Language:' %}</label>
                     <select id="preferred-language" class="form-control" name="{{ user_form.language.name }}">

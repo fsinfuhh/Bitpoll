@@ -21,15 +21,16 @@ class RegisterForm(forms.ModelForm):
                   'email_invitation']
         # TODO for later: 'timezone', 'language',
 
+
 class PasswordForm(forms.Form):
     password1 = forms.CharField(
         label=_("Password"),
         widget=forms.PasswordInput
-    )   
+    )
     password2 = forms.CharField(
         label=_("Password confirmation"),
         widget=forms.PasswordInput
-    )   
+    )
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -49,14 +50,15 @@ class CheckPasswordForm(forms.Form):
     password = forms.CharField(
         label=_("Password"),
         widget=forms.PasswordInput
-    )   
-    
+    )
+
     def clean_password(self):
         password = self.cleaned_data.get('password')
         if password:
             if not self.user.check_password(password):
                 raise forms.ValidationError(_("Wrong password."))
         return password
+
 
 class NickChangeForm(forms.Form):
     def __init__(self, user, *args, **kwargs):
@@ -66,13 +68,13 @@ class NickChangeForm(forms.Form):
             'nickname': nickname
         }
         super(NickChangeForm, self).__init__(*args, **kwargs)
-    
+
     nickname = forms.CharField(max_length=20)
-    
+
     def save(self):
         ldap_user = self.user.get_ldapuser()
         ldap_user.display_name = u"{} ({})".format(
-                self.cleaned_data['nickname'], self.user.username)
+            self.cleaned_data['nickname'], self.user.username)
         ldap_user.save()
 
 

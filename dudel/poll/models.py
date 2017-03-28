@@ -290,6 +290,9 @@ class VoteChoice(models.Model):
 
 
 class PollWatch(models.Model):
+    class Meta:
+        unique_together = ('poll', 'user')
+
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
 

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
-from django.db import transaction, connection
+from django.db import transaction, connection, IntegrityError
 
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
@@ -636,6 +636,13 @@ def vote(request, poll_url, vote_id=None):
             elif request.user.is_authenticated:
                 current_vote.name = request.user.get_username()
                 current_vote.user = request.user
+
+                if request.user.auto_watch:
+                    try:
+                        poll_watch = PollWatch(poll=current_poll, user=request.user)
+                        poll_watch.save()
+                    except IntegrityError:
+                        pass
             else:
                 current_vote.name = request.POST.get('name').strip()
             current_vote.anonymous = 'anonymous' in request.POST

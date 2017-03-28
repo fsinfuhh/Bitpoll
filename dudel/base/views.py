@@ -2,13 +2,15 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.db.models import Q
+from django.db import IntegrityError
 
 from dudel.base.models import DudelUser
 
 from dudel.poll.forms import PollCreationForm
-from dudel.poll.models import ChoiceValue, Poll, Vote
+from dudel.poll.models import ChoiceValue, Poll, Vote, PollWatch
 
 from dudel.base.models import USER_LANG
+from dudel.base.forms import DudelUserSettingsForm
 from pytz import all_timezones
 
 from dudel.registration.forms import RegisterForm
@@ -66,11 +68,19 @@ def settings(request):
                                 Q(group__user=request.user)).distinct().order_by('created')
 
     if request.method == 'POST':
-        form = RegisterForm(request.POST, instance=request.user)
+        form = DudelUserSettingsForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
 
-    user_form = RegisterForm(instance=request.user)
+            if request.user.auto_watch:
+                for poll in polls:
+                    try:
+                        poll_watch = PollWatch(poll=poll, user=request.user)
+                        poll_watch.save()
+                    except IntegrityError:
+                        pass
+
+    user_form = DudelUserSettingsForm(instance=request.user)
 
     return TemplateResponse(request, 'base/settings.html', {
         'polls': polls,
