@@ -65,7 +65,7 @@ def index(request):
 @login_required
 def settings(request):
     polls = Poll.objects.filter(Q(user=request.user) | Q(vote__user=request.user) |
-                                Q(group__user=request.user)).distinct().order_by('created')
+                                Q(group__user=request.user)).distinct().order_by('due_date')
 
     if request.method == 'POST':
         form = DudelUserSettingsForm(request.POST, instance=request.user)

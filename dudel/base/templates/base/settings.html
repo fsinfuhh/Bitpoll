@@ -17,7 +17,7 @@
             <table class="table table-condensed table-striped">
                 <tr>
                     <th>{% trans 'Poll title' %}</th>
-                    <th>{% trans 'Date of creation' %}</th>
+                    <th>{% trans 'Due-Date' %}</th>
                     <th colspan="4">{% trans 'Tags' %}</th>
                 </tr>
                 {% for poll in polls %}
@@ -26,7 +26,7 @@
                             <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
                         </td>
                         <td>
-                            {{ poll.created }}
+                            {{ poll.due_date|default_if_none:'' }}
                         </td>
                         <td width="10">
                             {% if user == poll.user %}
