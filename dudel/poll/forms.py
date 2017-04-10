@@ -1,6 +1,6 @@
 from django.forms import ModelForm, CharField, Form
 
-from .models import Poll, Choice, ChoiceValue
+from .models import Poll, Choice, ChoiceValue, Comment
 from datetimewidget.widgets import DateTimeWidget
 
 
@@ -67,3 +67,9 @@ class ChoiceValueForm(ModelForm):
     class Meta:
         model = ChoiceValue
         fields = ['title', 'icon', 'color', 'weight']
+
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['name', 'text']

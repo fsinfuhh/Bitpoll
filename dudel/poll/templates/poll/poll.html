@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load poll_filter vote_permissions %}
+{% load poll_filter vote_permissions comment_permissions %}
 {% load tz %}
 {% block title %}{{ poll.title }}{% endblock %}
 {% load django_markdown django_markdown_static %}
@@ -209,10 +209,15 @@
                     kommentierte am
                     <div class="date">{{ comment.date_created }}</div>
 
-                    <div class="edit">{# TODO: edit #}
+                    <div class="edit">
                         {% if not request.user.is_anonymous and request.user == comment.user %}{# TODO: wenn der user admin/owner ist #}
                         <a href="{% url 'poll_deleteComment' poll.url comment.id %}" title="{% trans 'Delete comment' %}" class="btn btn-default btn-xs">
                                 <i class="fa fa-trash-o"></i>
+                        </a>
+                        {% endif %}
+                        {% if comment|comment_can_edit:request.user %}
+                            <a href="{% url 'poll_comment_edit' poll.url comment.id %}" title="{% trans 'Edit comment' %}" class="btn btn-default btn-xs">
+                                <i class="fa fa-pencil"></i>
                         </a>
                         {% endif %}
                     </div>
@@ -226,38 +231,8 @@
         <hr>
         <div class="noprint">
             {% if poll.allow_comments %}
-            <h3>{% trans 'Post a comment' %}</h3>
-            <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form">
-                {% csrf_token %}
-                <div class="form-group">
-                    <div class="row">
-                    <div class="col-sm-4">
-                        {% if request.user.is_authenticated %}
-                            <label>{% trans 'Name' %}</label>
-                            <input class="form-control" type="text" title="Name" name="newComName" value="{{ request.user.get_username }}"
-                                   readonly/>
-                        {% else %}
-                            <label>{% trans 'Name' %}</label>
-                            <input class="form-control" type="text" title="Name" name="newComName"/>
-                        {% endif %}
-                    </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                <label>{% trans 'Comment' %}</label>
-                <textarea title="new Comment" name="newCom" class="form-control" rows="6"></textarea>
-                    <p class="help-block">
-                        {% blocktrans %}
-                        You can use
-                        <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
-                        syntax for formatting.
-                        {% endblocktrans %}
-                        </p> {# TODO: das geht (noch) nicht #}
-                </div>
-                <div class="form-group">
-                    <input class="action primary" type="submit" title="Save Comment" value="Save Comment">
-                </div>
-            </form>
+                <h3>{% trans 'Post a comment' %}</h3>
+                {% include 'poll/comment_form.html' %}
             {% else %}
                     <p>{% trans 'Comments are disabled for this Poll' %}</p>
             {% endif %}

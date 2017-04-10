@@ -20,7 +20,7 @@ from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST
 
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
-    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm
+    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, CommentForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS, PollWatch
 from dudel.base.models import DudelUser
 from dudel.invitations.models import Invitation
@@ -119,11 +119,11 @@ def poll(request, poll_url):
         'invitations': invitations if current_poll.show_invitations else [],
         'summary': summary,
         'watched': poll_watched,
+        'comment_form': CommentForm(),
     })
 
 
-@require_POST
-def comment(request, poll_url):
+def comment(request, poll_url, comment_id=None):
     """
     Post a comment to a poll
     :param request:
@@ -137,17 +137,46 @@ def comment(request, poll_url):
     user = None
     if not request.user.is_anonymous:
         user = request.user
-    new_comment = Comment(text=request.POST['newCom'],
-                          date_created=now(),
-                          name=request.POST['newComName'],
-                          poll=current_poll,
-                          user=user)
-    new_comment.save()
-    return redirect('poll', poll_url)
-
-
-def edit_comment(request, poll_url, comment_id):
-    pass
+    if request.POST:
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            text = form.cleaned_data['text']
+            name = form.cleaned_data['name']
+            if not text:
+                messages.error(_("A Comment should have a text"))
+            if not user and not name:
+                messages.error(_("Provide a name"))
+            if comment_id:
+                comment = get_object_or_404(Comment, pk=comment_id)
+                if comment.can_edit(request.user):
+                    comment.text = text
+                    comment.name = name
+                    comment.save()
+                else:
+                    messages.error(request, _("You can't edit this Comment"))
+            else:
+                new_comment = Comment(text=text,
+                                      date_created=now(),
+                                      name=name,
+                                      poll=current_poll,
+                                      user=user)
+                new_comment.save()
+            return redirect('poll', poll_url)
+    else:
+        if comment_id:
+            comment = get_object_or_404 (Comment, pk=comment_id)
+            if comment.can_edit(request.user):
+                form = CommentForm(instance=comment)
+            else:
+                messages.error(request, _("You can't edit this Comment"))
+                return redirect ('poll', poll_url)
+        else:
+            form = CommentForm()
+    return TemplateResponse(request, 'poll/comment_edit.html', {
+        'comment_form': form,
+        'comment_edit_id': comment_id,
+        'poll': current_poll
+    })
 
 
 def delete_comment(request, poll_url, comment_id):

@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     url(r'^([a-zA-Z0-9_\-]+)/$', views.poll, name='poll'),
     url(r'^([a-zA-Z0-9_\-]+)/comment/$', views.comment, name='poll_comment'),
-    url(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/edit/$', views.edit_comment, name='poll_editComment'),
+    url(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/edit/$', views.comment, name='poll_comment_edit'),
     url(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/delete/$', views.delete_comment, name='poll_deleteComment'),
     url(r'^([a-zA-Z0-9_\-]+)/watch/$', views.watch, name='poll_watch'),
     url(r'^([a-zA-Z0-9_\-]+)/settings/$', views.settings, name='poll_settings'),

@@ -1,0 +1,57 @@
+{% load i18n %}
+{% if comment_edit_id %}
+    <form action="{% url 'poll_comment_edit' poll.url comment_edit_id %}" method="POST" class="form">
+{% else %}
+    <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form">
+{%  endif %}
+    {% csrf_token %}
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-4">
+                {% if request.user.is_authenticated %}
+                    <label>{% trans 'Name' %}</label>
+                    <input class="form-control" type="text" title="Name" name="{{ comment_form.name.name }}"
+                           value="{{ request.user.get_username }}"
+                           readonly/>
+                {% else %}
+                    <label>{% trans 'Name' %}</label>
+                    <input class="form-control" type="text" title="Name" name="{{ comment_form.name.name }}"
+                           value="{{ comment_form.name.value|default_if_none:'' }}"/>
+                {% endif %}
+            {% if comment_form.name.errors %}
+                    <div class="form-errors">
+                        <div class="alert alert-danger">
+                            <div class="container">
+                                <i class="fa fa-times"></i>{{ comment_form.name.errors }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="{{ comment_form.text.name }}">{% trans 'Comment' %}</label>
+        <textarea title="new Comment" name="{{ comment_form.text.name }}" class="form-control"
+                  rows="6">{{ comment_form.text.value|default_if_none:'' }}</textarea>
+        <p class="help-block">
+            {% blocktrans %}
+                You can use
+                <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
+                syntax for formatting.
+            {% endblocktrans %}
+            {% if comment_form.text.errors %}
+                    <div class="form-errors">
+                        <div class="alert alert-danger">
+                            <div class="container">
+                                <i class="fa fa-times"></i>{{ comment_form.text.errors }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+        </p> {# TODO: das geht (noch) nicht #}
+    </div>
+    <div class="form-group">
+        <input class="action primary" type="submit" title="Save Comment" value="Save Comment">
+    </div>
+</form>
