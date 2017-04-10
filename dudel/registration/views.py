@@ -171,7 +171,7 @@ def _finish_account_request(request, info):
     email_content = render_to_string('registration/create_email.txt', {
         'activation_link': activation_link
     })
-    return _send_mail_or_error_page(_('Account creation at %s' % settings.SITE_NAME2),
+    return _send_mail_or_error_page(_('Account creation at %s' % settings.SITE_NAME),
                                     email_content, email, request)
 
 
