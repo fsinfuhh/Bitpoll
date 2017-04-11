@@ -66,7 +66,7 @@
                                         <div class="description">{% trans 'Retrieve opinions on various choices' %}</div>
                                     </div>
                                 </li>
-                                <li data-value="numeric">
+                                <li data-value="numeric" class="hidden">
                                     <div class="icon"><i class="fa fa-sliders"></i>
                                     </div>
                                     <div class="text">
@@ -236,7 +236,7 @@
                 <h4>{% trans 'Public polls' %}</h4>
                 {% if not public_polls %}
                     <div class="alert alert-info">
-                        <div class="container"><i class="fa fa-exclamation-circle"></i>{% trans 'There are currently no public polls.' %}>
+                        <div class="container"><i class="fa fa-exclamation-circle"></i>{% trans 'There are currently no public polls.' %}
                         </div>
                     </div>
                 {% else %}
