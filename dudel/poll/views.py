@@ -84,15 +84,21 @@ def poll(request, poll_url):
                                                         'votechoice__value__color', 'votechoice__value__title')
     #
     # use average for stats
-    stats = [{
-                 'score': (stat['score'] / Decimal(votes_count) if votes_count > 0 else 0) if stat['score'] is not None else None,
-                 'count': stat['score'],
-                 'text': stat,
-                 'choices': [{'count': stat2['count'], 'color': stat2['votechoice__value__color'],
-                              'icon': stat2['votechoice__value__icon'], 'title': stat2['votechoice__value__title']} for
-                             stat2 in stats2 if
-                             stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
-             } for stat in stats]
+    stats = [
+        {
+            'score': (stat['score'] / Decimal(votes_count)
+                if votes_count > 0 else 0) if stat['score'] is not None else None,
+            'count': stat['score'],
+            'text': stat,
+            'choices': [
+                {
+                    'count': stat2['count'],
+                    'color': stat2['votechoice__value__color'],
+                    'icon': stat2['votechoice__value__icon'],
+                    'title': stat2['votechoice__value__title']} for
+                        stat2 in stats2 if
+                        stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
+        } for stat in stats]
 
     poll_watched = False
     if request.user.is_authenticated():
@@ -165,12 +171,12 @@ def comment(request, poll_url, comment_id=None):
             return redirect('poll', poll_url)
     else:
         if comment_id:
-            comment = get_object_or_404 (Comment, pk=comment_id)
+            comment = get_object_or_404(Comment, pk=comment_id)
             if comment.can_edit(request.user):
                 form = CommentForm(instance=comment)
             else:
                 messages.error(request, _("You can't edit this Comment"))
-                return redirect ('poll', poll_url)
+                return redirect('poll', poll_url)
         else:
             form = CommentForm()
     return TemplateResponse(request, 'poll/comment_edit.html', {
