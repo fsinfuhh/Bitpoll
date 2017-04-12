@@ -7,6 +7,14 @@
 
 {% block content %}
     {% include 'poll/poll_header.html' %}
+    {% if timezone_warning %}
+      <p class="alert alert-warning">
+      {% blocktrans %}
+      This poll has a different timezone than you.
+      {% endblocktrans %}
+      </p>
+    {% endif %}
+
         <ul class="help-list">
           <li>{% trans 'Hold left mouse button and drag mouse to select multiple vote choices.' %}</li>
         </ul>
