@@ -1,16 +1,27 @@
 from django.forms import ModelForm, CharField, Form
+from datetimewidget.widgets import DateTimeWidget
 
 from .models import Poll, Choice, ChoiceValue, Comment
-from datetimewidget.widgets import DateTimeWidget
 
 
 class PollCreationForm(ModelForm):
     class Meta:
         model = Poll
-        fields = ['title', 'type', 'public_listening', 'due_date', 'url', 'description', 'anonymous_allowed',
-                  'require_login', 'require_invitation', 'one_vote_per_user']
+        fields = [
+            'title',
+            'type',
+            'public_listening',
+            'due_date',
+            'url',
+            'description',
+            'anonymous_allowed',
+            'require_login',
+            'require_invitation',
+            'one_vote_per_user'
+        ]
         widgets = {
-            'due_date': DateTimeWidget(attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
+            'due_date': DateTimeWidget(
+                attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
         }
 
 
@@ -19,7 +30,8 @@ class PollCopyForm(ModelForm):
         model = Poll
         fields = ['title', 'due_date', 'url']
         widgets = {
-            'due_date': DateTimeWidget(attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
+            'due_date': DateTimeWidget(
+                attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
         }
 
 
@@ -49,11 +61,24 @@ class DTChoiceCreationTimeForm(Form):
 class PollSettingsForm(ModelForm):
     class Meta:
         model = Poll
-        fields = ['title', 'due_date', 'show_results', 'timezone_name', 'description', 'allow_comments',
-                  'anonymous_allowed', 'require_login', 'require_invitation', 'one_vote_per_user', 'show_invitations',
-                  'group', 'public_listening']
+        fields = [
+            'title',
+            'due_date',
+            'show_results',
+            'timezone_name',
+            'description',
+            'allow_comments',
+            'anonymous_allowed',
+            'require_login',
+            'require_invitation',
+            'one_vote_per_user',
+            'show_invitations',
+            'group',
+            'public_listening'
+        ]
         widgets = {
-            'due_date': DateTimeWidget(attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
+            'due_date': DateTimeWidget(
+                attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
         }
 
 
