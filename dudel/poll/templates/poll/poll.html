@@ -9,26 +9,6 @@
 
         {% include 'poll/poll_header.html' %}
 
-        <!-- TODO efficiency of listing of all votes by real sql-statement -->
-
-        {% if  poll.description %}
-            <div class="description">
-                <h1>{% trans 'Description' %}</h1>
-                {{ poll.description|markdown_safe }}
-            </div>
-        {% endif %}
-
-        {% if request.user.is_authenticated %}
-            <form class="form" action="{% url 'poll_watch' poll.url %}" method="post">
-                {% csrf_token %}
-                {% if watched %}
-                    <button class="action" type="submit"><i class="fa fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
-                {% else %}
-                    <button class="action" type="submit"><i class="fa fa-eye"></i> {% trans 'Watch Poll' %}</button>
-                {% endif %}
-            </form>
-        {% endif %}
-
         <div class="table-noscroll-y">
             <div class="table-scroll-x" style="padding-bottom: 100px;">
             {% if not matrix %}

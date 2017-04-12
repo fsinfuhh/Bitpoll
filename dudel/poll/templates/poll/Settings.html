@@ -79,8 +79,13 @@
             <label for="description-input">{% trans 'Description' %}</label>
             <div class="text " id="description-input">
                 {% render_field form.description class+="form-control" %}
+                {% blocktrans %}
+                You can use
+                <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
+                syntax for formatting.
+            {% endblocktrans %}
             </div>
-
+            <br>
             <a href="{% url 'poll' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
             <input type="submit" class="action primary" name="Save" value="{% trans 'Save changes' %}">
         </div>

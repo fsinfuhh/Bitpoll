@@ -1,9 +1,20 @@
 {% load i18n %}
+{% load django_markdown django_markdown_static %}
 <header class="poll">
     <div class="container">
         <div class="poll-actions">
         </div>
-        <h1>{{ poll.title }}
+        <h1>{{ poll.title }}{% if request.user.is_authenticated %}
+            <form class="form form-inline pull-right" action="{% url 'poll_watch' poll.url %}" method="post">
+                {% csrf_token %}
+                {% if watched %}
+                    <button class="action" type="submit"><i class="fa fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
+                {% else %}
+                    <button class="action" type="submit"><i class="fa fa-eye"></i> {% trans 'Watch Poll' %}</button>
+                {% endif %}
+            </form>
+        {% endif %}
+
             <small>{{ page }}</small>
         </h1>
         <ul class="poll-details">
@@ -48,9 +59,12 @@
                 <span class="content">{% trans 'login required' %}</span>
             {% endif %}
             </li>
-
-        <!-- TODO: watching_poll -->
         </ul>
+        {% if  poll.description %}
+            <div class="description">
+                {{ poll.description|markdown_safe }}
+            </div>
+        {% endif %}
         <nav>
             <ul class="poll-tabs">
                 <li class="{% if page == "" %}active{% endif %}"><a data-shortcut="g o"
@@ -58,10 +72,12 @@
                         class="fa fa-table"></i>
                     <span>{% trans 'Overview' %}</span></a>
                 </li>
+            {% comment %}
                 <li class="{% if page == "Activity" %}active{% endif %}"><a data-shortcut="g a" href="{# TODO #}"><i
                     class="fa fa-comments-o"></i><span>{% trans 'Activity' %}</span></a>
                 </li>
-                <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s"
+            {%  endcomment %}
+                 <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s"
                                                                             href="{% url 'poll_settings' poll.url %}">
                     <i class="fa fa-wrench"></i><span>{% trans 'Settings' %}</span></a>
                 </li>
