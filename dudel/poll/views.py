@@ -57,7 +57,7 @@ def poll(request, poll_url):
     # The next block is limiting the visibility of the results
     summary = True
     if current_poll.show_results in ("summary", "never"):  # TODO: should the owner see all?
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             poll_votes = poll_votes.filter(user=request.user)
             invitations = invitations.filter(user=request.user)
         else:
@@ -101,7 +101,7 @@ def poll(request, poll_url):
         } for stat in stats]
 
     poll_watched = False
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         try:
             poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
             poll_watched = bool(poll_watch)
@@ -212,7 +212,7 @@ def delete_comment(request, poll_url, comment_id):
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 # TODO additional possibilities of deleting
                 if current_comment.can_delete(request.user):
                     current_comment.delete()
@@ -616,7 +616,7 @@ def delete(request, poll_url):
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 # TODO restriction for deletion
                 if current_poll.can_edit(request.user):
                     current_poll.delete()
@@ -669,7 +669,7 @@ def vote(request, poll_url, vote_id=None):
             if vote_id:
                 # leave the name as it was
                 pass
-            elif request.user.is_authenticated():
+            elif request.user.is_authenticated:
                 current_vote.name = request.user.get_username()
                 current_vote.user = request.user
 
@@ -694,7 +694,7 @@ def vote(request, poll_url, vote_id=None):
 
                         current_vote.save()
 
-                        if request.user.is_authenticated():
+                        if request.user.is_authenticated:
                             # check if this user was invited
                             invitation = current_poll.invitation_set.filter(user=request.user)
                             if invitation:
@@ -800,7 +800,7 @@ def vote_delete(request, poll_url, vote_id):
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 # TODO additional possibilities of deleting
                 if current_vote.can_delete(request.user):
                     current_vote.delete()
@@ -924,7 +924,7 @@ def settings(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     groups = None
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         groups = Group.objects.filter(user=request.user)
 
     if not current_poll.can_edit(request.user):
