@@ -88,7 +88,7 @@ class Poll(models.Model):
         else:
             is_group_member = False
 
-        return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated()
+        return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated() or not has_owner
 
     def can_listen(self, user: DudelUser):
         if self.public_listening:
@@ -259,7 +259,7 @@ class Vote(models.Model):
         TODO: should be possible to replace it with one database querry
         :return:
         """
-        vote_choices = self.votechoice_set.filter(choice__deleted=False).order_by('choice__sort_key')
+        vote_choices = self.votechoice_set.filter(choice__deleted=False).order_by('choice__sort_key').select_related()
         ret = []
         choices = self.poll.choice_set.filter(deleted=False).order_by('sort_key')
         i = 0
