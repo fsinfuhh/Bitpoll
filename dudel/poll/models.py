@@ -64,7 +64,7 @@ class Poll(models.Model):
         :param request:
         :return:
         """
-        has_voted = user.is_authenticated and Vote.objects.filter(user=user, poll=self).count() > 0
+        has_voted = self.has_voted(user)
         if self.one_vote_per_user and has_voted:
             messages.error(request, _("It is only one vote allowed. You have already voted."))
             return False
@@ -76,6 +76,12 @@ class Poll(models.Model):
             return False
         else:
             return True
+
+    def has_voted(self, user: DudelUser) -> bool:
+        return user.is_authenticated and Vote.objects.filter(user=user, poll=self).count() > 0
+
+    def get_own_vote(self, user: DudelUser):
+        return Vote.objects.filter(user=user, poll=self)[0]
 
     def can_edit(self, user: DudelUser):
         has_owner = self.group or self.user

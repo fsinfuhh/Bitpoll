@@ -120,6 +120,7 @@ def poll(request, poll_url):
         'summary': summary,
         'watched': poll_watched,
         'comment_form': CommentForm(),
+        'timezone_warning': current_poll.get_tz_name(request.user) != request.user.timezone,
     })
 
 
@@ -217,7 +218,7 @@ def delete_comment(request, poll_url, comment_id):
         else:
             return redirect('poll', poll_url)
 
-    return TemplateResponse(request, 'poll/CommentDelete.html', {
+    return TemplateResponse(request, 'poll/comment_delete.html', {
         'poll': current_poll,
         'comment': current_comment,
         'error': error_msg,
@@ -323,7 +324,7 @@ def edit_date_choice(request, poll_url):
                 return redirect('poll', poll_url)
     else:
         form = DateChoiceCreationForm(initial=initial)
-    return TemplateResponse(request, "poll/ChoiceCreationDate.html", {
+    return TemplateResponse(request, "poll/choice_creation_date.html", {
         'poll': current_poll,
         'new_choice': form,
         'page': 'Choices',
@@ -358,13 +359,13 @@ def edit_dt_choice_date(request, poll_url):
         if form.is_valid():
             initial['dates'] = form.cleaned_data.get('dates')
             time = DTChoiceCreationTimeForm(initial=initial)
-            return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
+            return TemplateResponse(request, "poll/dt_choice_creation_time.html", {
                 'time': time,
                 'poll': current_poll,
                 'page': 'Choices',
                 'step': 2,
             })
-    return TemplateResponse(request, "poll/ChoiceCreationDate.html", {
+    return TemplateResponse(request, "poll/choice_creation_date.html", {
         'new_choice': form,
         'poll': current_poll,
         'step': 1,
@@ -400,7 +401,7 @@ def edit_dt_choice_time(request, poll_url):
             times = form.cleaned_data['times'].split(',')
             dates = form.cleaned_data['dates'].split(',')
 
-            return TemplateResponse(request, "poll/DTChoiceCreationCombinations.html", {
+            return TemplateResponse(request, "poll/dt_choice_creation_combinations.html", {
                 'times': times,
                 'dates': dates,
                 'poll': current_poll,
@@ -408,7 +409,7 @@ def edit_dt_choice_time(request, poll_url):
                 'step': 3,
             })
         elif form.cleaned_data['dates'] != "":
-            return TemplateResponse(request, "poll/DTChoiceCreationTime.html", {
+            return TemplateResponse(request, "poll/dt_choice_creation_time.html", {
                 'time': form,
                 'poll': current_poll,
                 'page': 'Choices',
@@ -509,7 +510,7 @@ def edit_universal_choice(request, poll_url):
             db_choice.deleted = not db_choice.deleted
             db_choice.save()
 
-    return TemplateResponse(request, "poll/UniversalChoiceCreation.html", {
+    return TemplateResponse(request, "poll/universal_choice_creation.html", {
         'choices': current_poll.choice_set.all().order_by('sort_key'),
         'poll': current_poll,
         'page': 'Choices',
@@ -621,7 +622,7 @@ def delete(request, poll_url):
     else:
         form = PollDeleteForm(instance=current_poll)
 
-    return TemplateResponse(request, 'poll/PollDelete.html', {
+    return TemplateResponse(request, 'poll/poll_delete.html', {
         'poll': current_poll,
         'form': form,
         'error': error_msg,
@@ -749,7 +750,7 @@ def vote(request, poll_url, vote_id=None):
         choices.append(choice)
         comments.append(cur_comment)
         choice_votes.append(value)
-    return TemplateResponse(request, 'poll/VoteCreation.html', {
+    return TemplateResponse(request, 'poll/vote_creation.html', {
         'poll': current_poll,
         'matrix': matrix,
         'matrix_len': len(matrix[0]),
@@ -759,6 +760,7 @@ def vote(request, poll_url, vote_id=None):
         'values': current_poll.choicevalue_set.all(),
         'page': 'Vote',
         'current_vote': current_vote,
+        'timezone_warning': current_poll.get_tz_name(request.user) != request.user.timezone,
     })
 
 
@@ -804,7 +806,7 @@ def vote_delete(request, poll_url, vote_id):
         else:
             return redirect('poll', poll_url)
 
-    return TemplateResponse(request, 'poll/VoteDelete.html', {
+    return TemplateResponse(request, 'poll/vote_delete.html', {
         'poll': current_poll,
         'vote': current_vote,
         'error': error_msg,
@@ -898,7 +900,7 @@ def copy(request, poll_url):
     else:
         form = PollCopyForm({'title': "Copy of " + current_poll.title, 'due_date': current_poll.due_date})
 
-    return TemplateResponse(request, 'poll/Copy.html', {
+    return TemplateResponse(request, 'poll/copy.html', {
         'form': form,
         'poll': current_poll,
         'date_shift': date_shift,
@@ -952,7 +954,7 @@ def settings(request, poll_url):
     else:
         form = PollSettingsForm(instance=current_poll)
 
-    return TemplateResponse(request, 'poll/Settings.html', {
+    return TemplateResponse(request, 'poll/settings.html', {
         'perm_error': error_msg,
         'form': form,
         'poll': current_poll,

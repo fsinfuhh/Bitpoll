@@ -18,6 +18,13 @@
                 {% endblocktrans %}
                 </p>
             {% endif %}
+            {% if timezone_warning %}
+                <p class="alert alert-warning">
+                {% blocktrans %}
+                This poll has a different timezone than you.
+                {% endblocktrans %}
+                </p>
+            {% endif %}
                 <table class="table poll auto-width" id="poll">
                     <thead>
                     {% for row in matrix %}

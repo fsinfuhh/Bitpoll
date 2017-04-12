@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'dudel.poll',
     'dudel.base',
     'dudel.invitations',
-    'dudel.registration'
+    'dudel.registration',
     'django.contrib.admin',
 ]
 
