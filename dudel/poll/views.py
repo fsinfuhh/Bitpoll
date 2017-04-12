@@ -126,7 +126,8 @@ def poll(request, poll_url):
         'summary': summary,
         'watched': poll_watched,
         'comment_form': CommentForm(),
-        'timezone_warning': current_poll.get_tz_name(request.user) != request.user.timezone,
+        'timezone_warning': (request.user.is_authenticated and
+            current_poll.get_tz_name(request.user) != request.user.timezone),
     })
 
 
@@ -766,7 +767,8 @@ def vote(request, poll_url, vote_id=None):
         'values': current_poll.choicevalue_set.all(),
         'page': 'Vote',
         'current_vote': current_vote,
-        'timezone_warning': current_poll.get_tz_name(request.user) != request.user.timezone,
+        'timezone_warning': (request.user.is_authenticated and
+            current_poll.get_tz_name(request.user) != request.user.timezone),
     })
 
 
