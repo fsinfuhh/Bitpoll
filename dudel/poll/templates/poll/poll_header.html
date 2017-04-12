@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load django_markdown django_markdown_static %}
+{% load poll_filter %}
 <header class="poll">
     <div class="container">
         <div class="poll-actions">
@@ -85,10 +86,17 @@
                     <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
                             class="fa fa-list"></i><span>Choices</span></a>
                 </li>
-                <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
-                                                                             href="{% url 'poll_vote' poll.url %}"><i
-                    class="fa fa-check"></i><span>{% trans 'Vote' %}</span></a>
-                </li>
+                {% if poll.one_vote_per_user and poll|has_voted:request.user %}
+                    <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
+                                                                                 href="{% url 'poll_voteEdit' poll.url poll|get_own_vote_pk:request.user %}"><i
+                        class="fa fa-check"></i><span>{% trans 'Edit Vote' %}</span></a>
+                    </li>
+                {% else %}
+                    <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
+                                                                                 href="{% url 'poll_vote' poll.url %}"><i
+                        class="fa fa-check"></i><span>{% trans 'Vote' %}</span></a>
+                    </li>
+                {% endif %}
             </ul>
         </nav>
       {% block messages %}
