@@ -6,7 +6,6 @@
 {%  value_from_settings SITE_NAME as site_name %}
 {%  value_from_settings DEBUG as debug %}
 {%  value_from_settings HOME_URL as home_url %}
-{%  value_from_settings TIME_ZONE as time_zone %}
 
 <!DOCTYPE html>
 <html>
@@ -79,7 +78,7 @@
             target="_blank">{% trans 'Imprint' %}</a><span
                     class="separator"></span><a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
            class="separator"></span>
-            {% trans 'Current timezone is ' %} {{ time_zone }}
+            {% trans 'Current timezone is' %} {{ request.user.timezone }}
         <form class="form-inline" action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
             <p>
