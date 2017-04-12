@@ -1,19 +1,17 @@
 from smtplib import SMTPRecipientsRefused
 
+from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
 from django.db import models
-from django.contrib.auth.models import Group
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django_markdown.models import MarkdownField
 from django.utils.translation import ugettext_lazy as _
+from django_markdown.models import MarkdownField
 
 from dudel.poll.util import DateTimePart, PartialDateTime
 from dudel.base.models import DudelUser
-
-from datetime import datetime
 
 POLL_TYPES = (
     ('universal', 'Universal'),
@@ -74,8 +72,7 @@ class Poll(models.Model):
         elif self.require_invitation and (not user.is_authenticated or user not in self.invitation_set.all().values('user')):
             messages.error(request, _("You are not allowed to vote in this poll. You have to be invited"))
             return False
-        else:
-            return True
+        return True
 
     def has_voted(self, user: DudelUser) -> bool:
         return user.is_authenticated and Vote.objects.filter(user=user, poll=self).count() > 0
@@ -100,8 +97,7 @@ class Poll(models.Model):
             return True
         elif self.can_edit(user):
             return True
-        else:
-            return False
+        return False
 
     def get_icon(self):
         if self.type == 'universal':
@@ -121,7 +117,8 @@ class Poll(models.Model):
         width = max(len(row) for row in matrix)
 
         def fill(row, length):
-            if len(row) >= length: return
+            if len(row) >= length:
+                return
             row.append([None, 1, 1])
             fill(row, length)
 
@@ -176,8 +173,7 @@ class Choice(models.Model):
         if self.date:
             return [PartialDateTime(self.date, DateTimePart.date, tz),
                     PartialDateTime(self.date, DateTimePart.time, tz)]
-        else:
-            return [part.strip() for part in self.text.split("/") if part]
+        return [part.strip() for part in self.text.split("/") if part]
 
     def votechoice_count(self):
         return self.votechoice_set.filter(value__isnull=False).count()
@@ -302,7 +298,7 @@ class PollWatch(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
 
-    def send(self, request, vote:Vote):
+    def send(self, request, vote: Vote):
         link = reverse('poll', args=(self.poll.url,))
         email_content = render_to_string('poll/mail_watch.txt', {
             'receiver': self.user.username,
