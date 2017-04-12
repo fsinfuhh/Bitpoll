@@ -16,7 +16,7 @@ import os
 from django.contrib import messages
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -26,6 +26,25 @@ SECRET_KEY = '0qv9^l2ujm*2g(iyp!h4h0neq@34-9q^y90!#rp!lwo7yz+&0u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# Absolute filesystem path to the directory that will hold user-uploaded files.
+# Example: "/var/www/example.com/media/"
+MEDIA_ROOT = os.path.join(ROOT_DIR, '_media')
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash.
+# Examples: "http://example.com/media/", "http://media.example.com/"
+MEDIA_URL = '/media/'
+
+# Absolute path to the directory static files should be collected to.
+# Don't put anything in this directory yourself; store your static files
+# in apps' "static/" subdirectories and in STATICFILES_DIRS.
+# Example: "/var/www/example.com/static/"
+STATIC_ROOT = os.path.join(ROOT_DIR, '_static')
+
+# URL prefix for static files.
+# Example: "http://example.com/static/", "http://static.example.com/"
+STATIC_URL = '/static/'
 
 ALLOWED_HOSTS = []
 
@@ -160,7 +179,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_PRECOMPILER_ROOT = os.path.join(BASE_DIR, '.gen')
+STATIC_PRECOMPILER_ROOT = STATIC_ROOT
 SASS_PRECISION = 8
 
 ALLOW_CUSTOM_SLUGS = True
@@ -193,7 +212,7 @@ ABOUT_TEXT = """
 <p>Text goes here </p>
 """
 
-LOCALE_PATHS = (os.path.join(BASE_DIR, '../locale'), )
+LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'), )
 
 LANGUAGES = (
     ('de', 'Deutsch'),
