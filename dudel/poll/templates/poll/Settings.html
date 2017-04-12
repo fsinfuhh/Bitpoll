@@ -27,7 +27,7 @@
     {% csrf_token %}
         <div class="col-md-5">
             <div class="form-group">
-                <label for="title-input">Title</label>
+                <label for="title-input">{% trans 'Title' %}</label>
                 <input autocomplete="off" class="form-control" id="title-input" name="{{ form.title.name }}"
                     placeholder="{% trans 'Title' %}" type="text" value="{{ form.title.value|default_if_none:'' }}" />
                 {% if form.title.errors %}
@@ -41,7 +41,7 @@
                 {% endif %}
             </div>
 
-            <label for="due-date-input">Due date</label>
+            <label for="due-date-input">{% trans 'Due date'%}</label>
             <div class="form-group">
 
                 {% render_field form.due_date class+="form-control" %}
@@ -76,6 +76,7 @@
                 {% endfor %}
             </select>
 
+            <br>
             <label for="description-input">{% trans 'Description' %}</label>
             <div class="text " id="description-input">
                 {% render_field form.description class+="form-control" %}

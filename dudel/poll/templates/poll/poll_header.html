@@ -18,28 +18,28 @@
             <small>{{ page }}</small>
         </h1>
         <ul class="poll-details">
-            <li title="Creation date: {{ poll.created }}">
+            <li title="{% trans 'Creation date:' %} {{ poll.created }}">
                 <i class="fa fa-calendar-plus-o"></i>
                 <span class="content">{{ poll.created }}</span>
             </li>
             {% if poll.due_date %}
-                <li title="Due Date: {{ poll.due_date }}">
+                <li title="{% trans 'Due date' %}: {{ poll.due_date }}">
                 <i class="fa fa-calendar-check-o"></i>
                 <span class="content">{{ poll.due_date }}</span>
                 </li>
             {% endif %}
-            <li title="Poll type">
+            <li title="{% trans 'Poll type' %}">
                 <i class="fa fa-{{ poll.get_icon }}"></i>
                 <span class="content">{{ poll.get_type_display }}</span>
             </li>
             {% if poll.user %}
-                <li title="Ownership: {{ poll.user.username }}">
+                <li title="{% trans 'Ownership' %}: {{ poll.user.username }}">
                 <i class="fa fa-user"></i>
                 <span class="content">{{ poll.user.username }}</span>
                 </li>
             {% endif %}
             {% if poll.group %}
-                <li title="Group: {{ poll.group.name }}">
+                <li title="{% trans 'Group' %}: {{ poll.group.name }}">
                 <i class="fa fa-group"></i>
                 <span class="content">{{ poll.group.name }}</span>
                 </li>
@@ -55,7 +55,7 @@
             {% endif %}
             </li>
             {% if poll.require_login %}
-                <li title="Login required"><i class="fa fa-check"></i>
+                <li title="{% trans 'Login required' %}"><i class="fa fa-check"></i>
                 <span class="content">{% trans 'login required' %}</span>
             {% endif %}
             </li>
@@ -83,7 +83,7 @@
                 </li>
                 <li class="{% if page == "Choices" %}active{% endif %}">
                     <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
-                            class="fa fa-list"></i><span>Choices</span></a>
+                            class="fa fa-list"></i><span>{% trans 'Choices' %}</span></a>
                 </li>
                 <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
                                                                              href="{% url 'poll_vote' poll.url %}"><i

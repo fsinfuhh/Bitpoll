@@ -186,7 +186,7 @@
                 </div>
                 <div class="meta">
                     <div class="author">{% if comment.user %}{{ request.user.get_username }}{% else %}{{ comment.name }}{% endif %}</div>
-                    kommentierte am
+                    {% trans 'commented on' %}
                     <div class="date">{{ comment.date_created }}</div>
 
                     <div class="edit">

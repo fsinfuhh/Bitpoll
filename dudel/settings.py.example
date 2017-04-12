@@ -182,7 +182,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # if the imprint URL is not empty use it as an link to the imprint, else use IMPRINT_TEXT
 IMPRINT_URL = ""
 IMPRINT_TEXT = """
-<h1>Impressum</h1>
+<h1>ImpressuXm</h1>
 <p>Text goes here</p>
 """
 

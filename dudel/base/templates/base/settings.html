@@ -65,7 +65,8 @@
             <h1>{% trans 'Settings' %}</h1>
             {% value_from_settings REGISTER_ENABLED as register %}
             {% if register %}
-                <p>{% trans 'You can change your email and Password' %} <a href="{% url 'registration_account' %}">{% trans 'here' %}</a></p>
+               {% url 'registration_acccount' as reg_url %}
+                <p>{% blocktrans %} You can change your email and Password <a href="{{ reg_url }}">here</a> {% endblocktrans %}</p>
             {% else %}
             <p>{% blocktrans %}You can edit your account settings in the centralized accounts page{% endblocktrans %}.</p>
             {% endif %}
