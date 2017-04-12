@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-22 23:54+0100\n"
-"PO-Revision-Date: 2017-03-29 00:51+0200\n"
+"PO-Revision-Date: 2017-04-12 14:57+0200\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,7 +71,7 @@ msgstr "Technische Informationen"
 
 #: dudel/base/templates/base.html:79
 msgid "Current timezone is Europe/Berlin."
-msgstr ""
+msgstr "Aktuelle Zeitzone ist Europa/Berlin."
 
 #: dudel/base/templates/base.html:82
 #, python-format
@@ -133,7 +133,7 @@ msgstr "Erhalte Meinungen zu verschiedenen Möglichkeiten"
 
 #: dudel/base/templates/base/index.html:74
 msgid "Rate each choice in a numeric range"
-msgstr ""
+msgstr "Bewerte jede Option in einem numerischen Intervall"
 
 #: dudel/base/templates/base/index.html:81
 #: dudel/poll/templates/poll/DTChoiceHaeder.html:6
@@ -216,7 +216,7 @@ msgstr "Erstellen"
 
 #: dudel/base/templates/base/index.html:185
 msgid "Log in"
-msgstr ""
+msgstr "Einloggen"
 
 #: dudel/base/templates/base/index.html:189
 #: dudel/base/templates/registration/login.html:20
@@ -348,7 +348,7 @@ msgstr "Sprache:"
 
 #: dudel/base/templates/base/settings.html:85
 msgid "Timezone:"
-msgstr "Zeitzohne:"
+msgstr "Zeitzone:"
 
 #: dudel/base/templates/base/settings.html:97
 msgid "Various"
@@ -370,23 +370,23 @@ msgstr "Speichern"
 
 #: dudel/base/templates/base/technical_info.html:10
 msgid "License overview of third-party components"
-msgstr ""
+msgstr "Lizenzübersicht zu Drittanbieter-Komponenten"
 
 #: dudel/base/templates/base/technical_info.html:13
 msgid "This site uses the following software/components:"
-msgstr ""
+msgstr "Diese Seite nutzt die folgenden Software(-komponenten):"
 
 #: dudel/base/templates/base/technical_info.html:33
 msgid "Listed in no particular order."
-msgstr ""
+msgstr "In keiner bestimmten Reihenfolge aufgelistet."
 
 #: dudel/base/templates/base_old.html:35
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Navigation ein-/ausklappen"
 
 #: dudel/invitations/models.py:41 dudel/poll/models.py:285
 msgid "The mail server had an error sending the notification to {}"
-msgstr ""
+msgstr "Der Mailserver konnte die Benachrichtigung nicht an {} senden"
 
 #: dudel/invitations/models.py:45
 msgid "You have send an Email for {} in the last 12 Hours"
@@ -661,7 +661,7 @@ msgstr "Tage"
 
 #: dudel/poll/templates/poll/DTChoiceHaeder.html:8
 msgid "Combine"
-msgstr ""
+msgstr "Kombinieren"
 
 #: dudel/poll/templates/poll/DTChoiceHaeder.html:14
 msgid "Select days"
@@ -889,7 +889,7 @@ msgstr "Titel der Umfrage:"
 
 #: dudel/poll/templates/poll/VoteDelete.html:13
 msgid "Author of Vote:"
-msgstr ""
+msgstr "Autor der Stimme:"
 
 #: dudel/poll/templates/poll/VoteDeleteError.html:7 dudel/poll/views.py:184
 #: dudel/poll/views.py:585 dudel/poll/views.py:759
@@ -971,11 +971,11 @@ msgstr "Klick auf ein Symbol, um es hinzuzufügen."
 
 #: dudel/poll/templates/poll/choicevalue.html:139
 msgid "Smile"
-msgstr ""
+msgstr "Lächeln"
 
 #: dudel/poll/templates/poll/choicevalue.html:146
 msgid "Meh"
-msgstr ""
+msgstr "Meh"
 
 #: dudel/poll/templates/poll/choicevalue.html:153
 msgid "Frown"
@@ -983,43 +983,43 @@ msgstr ""
 
 #: dudel/poll/templates/poll/choicevalue.html:160
 msgid "Star"
-msgstr ""
+msgstr "Stern"
 
 #: dudel/poll/templates/poll/choicevalue.html:167
 msgid "Half star"
-msgstr ""
+msgstr "Halber Stern"
 
 #: dudel/poll/templates/poll/choicevalue.html:174
 msgid "No star"
-msgstr ""
+msgstr "Kein Stern"
 
 #: dudel/poll/templates/poll/choicevalue.html:181
 msgid "Thumbs up!"
-msgstr ""
+msgstr "Daumen hoch!"
 
 #: dudel/poll/templates/poll/choicevalue.html:188
 msgid "Thumbs down"
-msgstr ""
+msgstr "Daumen runter"
 
 #: dudel/poll/templates/poll/choicevalue.html:195
 msgid "Adjust"
-msgstr ""
+msgstr "Anpassen"
 
 #: dudel/poll/templates/poll/choicevalue.html:202
 msgid "Asterisk"
-msgstr ""
+msgstr "Stern"
 
 #: dudel/poll/templates/poll/choicevalue.html:209
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: dudel/poll/templates/poll/choicevalue.html:216
 msgid "Beer!!11elf"
-msgstr ""
+msgstr "Bier!!11elf"
 
 #: dudel/poll/templates/poll/choicevalue.html:223
 msgid "Book"
-msgstr ""
+msgstr "Buch"
 
 #: dudel/poll/templates/poll/choicevalue.html:230
 msgid "Bolt"
@@ -1027,15 +1027,15 @@ msgstr ""
 
 #: dudel/poll/templates/poll/choicevalue.html:237
 msgid "Calendar"
-msgstr ""
+msgstr "Kalender"
 
 #: dudel/poll/templates/poll/choicevalue.html:244
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: dudel/poll/templates/poll/choicevalue.html:251
 msgid "Check"
-msgstr ""
+msgstr "Prüfen"
 
 #: dudel/poll/templates/poll/choicevalue.html:258
 msgid "Disk"
@@ -1043,56 +1043,56 @@ msgstr ""
 
 #: dudel/poll/templates/poll/choicevalue.html:265
 msgid "Circle"
-msgstr ""
+msgstr "Kreis"
 
 #: dudel/poll/templates/poll/choicevalue.html:272
 msgid "Clock"
-msgstr ""
+msgstr "Uhr"
 
 #: dudel/poll/templates/poll/choicevalue.html:279
 msgid "Code"
-msgstr ""
+msgstr "Code"
 
 #: dudel/poll/templates/poll/choicevalue.html:286
 msgid "Coffe"
-msgstr ""
+msgstr "Kaffee"
 
 #: dudel/poll/templates/poll/choicevalue.html:293
 #: dudel/poll/templates/poll/poll.html:248
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: dudel/poll/templates/poll/choicevalue.html:300
 msgid "Comments"
-msgstr ""
+msgstr "Kommentare"
 
 #: dudel/poll/templates/poll/choicevalue.html:307
 msgid "Mensa"
-msgstr ""
+msgstr "Mensa"
 
 #: dudel/poll/templates/poll/choicevalue.html:314
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #: dudel/poll/templates/poll/choicevalue.html:321
 msgid "Warning"
-msgstr ""
+msgstr "Warnung"
 
 #: dudel/poll/templates/poll/choicevalue.html:328
 msgid "Flag"
-msgstr ""
+msgstr "Flagge"
 
 #: dudel/poll/templates/poll/choicevalue.html:335
 msgid "Lab"
-msgstr ""
+msgstr "Lab"
 
 #: dudel/poll/templates/poll/choicevalue.html:342
 msgid "Globe/WWW"
-msgstr ""
+msgstr "Globus/WWW"
 
 #: dudel/poll/templates/poll/choicevalue.html:349
 msgid "Heart &amp;lt;3"
-msgstr ""
+msgstr "Herz &amp;3"
 
 #: dudel/poll/templates/poll/choicevalue.html:363
 msgid "Lightbulb"
@@ -1100,23 +1100,23 @@ msgstr ""
 
 #: dudel/poll/templates/poll/choicevalue.html:370
 msgid "Magic"
-msgstr ""
+msgstr "Magie"
 
 #: dudel/poll/templates/poll/choicevalue.html:377
 msgid "Moon"
-msgstr ""
+msgstr "Mond"
 
 #: dudel/poll/templates/poll/choicevalue.html:384
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: dudel/poll/templates/poll/choicevalue.html:391
 msgid "Music"
-msgstr ""
+msgstr "Musik"
 
 #: dudel/poll/templates/poll/choicevalue.html:398
 msgid "Power off"
-msgstr ""
+msgstr "Ausschalten"
 
 #: dudel/poll/templates/poll/choicevalue.html:405
 msgid "Rocket"
@@ -1124,27 +1124,27 @@ msgstr ""
 
 #: dudel/poll/templates/poll/choicevalue.html:412
 msgid "Sun"
-msgstr ""
+msgstr "Sonne"
 
 #: dudel/poll/templates/poll/choicevalue.html:419
 msgid "Umbrella"
-msgstr ""
+msgstr "Regenschirm"
 
 #: dudel/poll/templates/poll/choicevalue.html:426
 msgid "Android"
-msgstr ""
+msgstr "Android"
 
 #: dudel/poll/templates/poll/choicevalue.html:433
 msgid "Github"
-msgstr ""
+msgstr "Github"
 
 #: dudel/poll/templates/poll/choicevalue.html:440
 msgid "StackOverflow"
-msgstr ""
+msgstr "StackOverflow"
 
 #: dudel/poll/templates/poll/choicevalue.html:447
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: dudel/poll/templates/poll/mail_watch.txt:1
 #, python-format
@@ -1188,6 +1188,11 @@ msgid ""
 "fancy interface for\n"
 "            date and time input... "
 msgstr ""
+"Du hast <b>JavaScript</b> nicht akviert, von daher musst du selbstständig "
+"kommaseparierte Einträge im korrekten Format vornehmen. Es sind keine "
+"Leerzeichen erlaubt. Oder Du schaltest einfach JavaScript für diese Seite "
+"an. Dann erhältst Du eine sicher ziemlich tolle Oberfläche zur Eingabe von "
+"Daten und Zeiten ..."
 
 #: dudel/poll/templates/poll/poll.html:26
 msgid "Unwatch Poll"
@@ -1213,6 +1218,8 @@ msgstr ""
 msgid ""
 "Assigned after voting by %(vote.assigned_by.name|force_escape|force_escape)s "
 msgstr ""
+"Nach der Abstimmung von %(vote.assigned_by.name|force_escape|force_escape)s "
+"zugewiesen."
 
 #: dudel/poll/templates/poll/poll.html:87
 #: dudel/poll/templates/poll/poll.html:98
