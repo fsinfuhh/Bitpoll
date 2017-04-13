@@ -15,7 +15,7 @@
       </p>
     {% endif %}
 
-        <ul class="help-list">
+        <ul class="help-list script-only">
           <li>{% trans 'Hold left mouse button and drag mouse to select multiple vote choices.' %}</li>
         </ul>
         <form action="{% url 'poll_vote' poll.url %}" method="POST" class="form-inline">
@@ -30,7 +30,7 @@
                         </td>
                     {% endfor %}
                 </tr>
-                <tr>
+                <tr class="script-only">
                     <td colspan="{{ matrix_len }}"></td>
                     {% for value in values.all %}
                         <td>
