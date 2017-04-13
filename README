@@ -28,3 +28,7 @@ Run Testserver:
 
     ./manage.py runserver
 
+
+In production Senty is used for errorreporting:
+
+   pip instal raven

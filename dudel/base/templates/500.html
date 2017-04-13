@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load settings_value %}
+{% load static %}
+{% load raven %} {# TODO: nur wen raven/sentry aktiviert ist #}
+{% block wtitle %}{% block ptitle %}{% trans "Internal server error" %}{% endblock %}{% endblock %}
+{% block headJS %}<script src="{% static 'js/lib/raven.min.js' %}"></script>{% endblock %}
+
+{% block content %}
+<script>Raven.config('{% sentry_public_dsn %}').install()</script>
+{% url 'base_problems' as problems_url %}
+<p>{% blocktrans %}We're sorry, but we didn't expect this to happen. Our error reporting tool should have sent an email to us with some technical details. Please try again later. If the problem persists, see our <a href="{{ problems_url }}">problem reporting page</a>.{% endblocktrans %}</p>
+    {% if request.sentry.id %}
+        {% with request.sentry.id as errorid %}
+            <p>{% blocktrans %}We have recorded the error under the Identifier {{ errorid }}.{% endblocktrans %}</p>
+            <script>
+                Raven.showReportDialog({
+                    eventId: '{{ errorid }}',
+                    dsn: '{% sentry_public_dsn %}'
+                });
+            </script>
+        {% endwith %}
+    {% endif %}
+{% endblock %}
+

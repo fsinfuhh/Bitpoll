@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.http import HttpResponseServerError
 from django.shortcuts import redirect
 import django.conf.urls.i18n
+from django.template import Context, loader
 
 urlpatterns = [
     url(r'^poll/', include('dudel.poll.urls')),
@@ -36,6 +38,20 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
 ]
+
+
+def handler500(request):
+    """500 error handler which includes ``request`` in the context.
+
+    Templates: `500.html`
+    Context: None
+    """
+
+    t = loader.get_template('500.html')  # You need to create a 500.html template.
+    return HttpResponseServerError(t.render(Context({
+        'request': request,
+    })))
+
 
 """
     url(r'^register$', views.index, name='index'),
