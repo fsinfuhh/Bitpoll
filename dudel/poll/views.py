@@ -445,7 +445,7 @@ def edit_dt_choice_combinations(request, poll_url):
                 chosen_times.append(tz.localize(parse_datetime(combination)))
             except ValueError:
                 # at least one invalid time/date has been specified. Redirect to first step # TODO: error message spezifizierne
-                messages.error(_("There was en error interpreting the provided dates and times"))
+                messages.error(request, _("There was en error interpreting the provided dates and times"))
                 return redirect('poll_editDTChoiceDate', current_poll.url)
         # Search for already existing Choices
         for i, date_time in enumerate(sorted(chosen_times)):
