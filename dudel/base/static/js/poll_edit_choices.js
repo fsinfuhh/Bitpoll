@@ -155,7 +155,8 @@ function initTimeSlider() {
         $(".time-slider-display .hour, .time-slider-display .minute").addClass("animated");
     }, 100);
 
-    $("#time-add-button").click(function() {
+    $("#time-add-button").click(function(event) {
+        event.preventDefault();
         var hour = $("#time-hour").val();
         var minute = $("#time-minute").val();
         addTime(hour + ":" + minute);
