@@ -54,16 +54,17 @@ class Poll(models.Model):
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
-    def can_vote(self, user: DudelUser, request) -> bool:
+    def can_vote(self, user: DudelUser, request, is_edit: bool=False) -> bool:
         """
         Determine if the user is allowed to vote
 
+        :param is_edit: if the vote is an edit
         :param user:
         :param request:
         :return:
         """
         has_voted = self.has_voted(user)
-        if self.one_vote_per_user and has_voted:
+        if self.one_vote_per_user and has_voted and not is_edit:
             messages.error(request, _("It is only one vote allowed. You have already voted."))
             return False
         elif self.require_login and not user.is_authenticated:

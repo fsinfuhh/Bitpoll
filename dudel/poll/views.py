@@ -697,7 +697,7 @@ def vote(request, poll_url, vote_id=None):
     tz_activate(current_poll.get_tz_name(request.user))
 
     if request.method == 'POST':
-        if current_poll.can_vote(request.user, request):
+        if current_poll.can_vote(request.user, request, vote_id is not None):
             vote_id = request.POST.get('vote_id', None)
             if vote_id:
                 current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
