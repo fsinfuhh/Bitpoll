@@ -260,7 +260,7 @@ def watch(request, poll_url):
 
 def edit_choice(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if not current_poll.can_listen(request.user):
+    if not current_poll.can_edit(request.user):
         messages.error(
             request, _("You are not allowed to listen.")
         )
@@ -286,6 +286,12 @@ def edit_date_choice(request, poll_url):
     If the input is not valid, the user is directed back for correction.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    if not current_poll.can_edit(request.user):
+        messages.error(
+            request, _("You are not allowed to edit this Poll.")
+        )
+        return redirect('poll', poll_url)
+
     tz_activate('UTC')
     initial = {
         'dates': ','.join(set(list(
@@ -350,6 +356,12 @@ def edit_dt_choice_date(request, poll_url):
     If the data is not valid, the user is directed back for correction.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    if not current_poll.can_edit(request.user):
+        messages.error(
+            request, _("You are not allowed to edit this Poll.")
+        )
+        return redirect('poll', poll_url)
+
     tz_activate(current_poll.timezone_name)
     initial = {
         'dates': ','.join(set(list(
@@ -393,6 +405,12 @@ def edit_dt_choice_time(request, poll_url):
     If the times are missing, the user is directed back to the time-input-site.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    if not current_poll.can_edit(request.user):
+        messages.error(
+            request, _("You are not allowed to edit this Poll.")
+        )
+        return redirect('poll', poll_url)
+
     tz_activate(current_poll.timezone_name)
     initial = {
         'dates': ','.join(
@@ -427,6 +445,12 @@ def edit_dt_choice_time(request, poll_url):
 
 def edit_dt_choice_combinations(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
+    if not current_poll.can_edit(request.user):
+        messages.error(
+            request, _("You are not allowed to edit this Poll.")
+        )
+        return redirect('poll', poll_url)
+
     tz_activate(current_poll.timezone_name)
     if request.method == 'POST':
         # getlist does not raise an exception if datetimes[] is not in request.POST
@@ -480,6 +504,12 @@ def edit_universal_choice(request, poll_url):
     If the input is not valid, the user is directed back for correction.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    if not current_poll.can_edit(request.user):
+        messages.error(
+            request, _("You are not allowed to edit this Poll.")
+        )
+        return redirect('poll', poll_url)
+
     if request.method == 'POST':
         # save new choices
         choice_texts = request.POST.getlist('choice_text')
@@ -528,6 +558,12 @@ def edit_universal_choice(request, poll_url):
 def edit_choicevalues(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     choiceval_select = None
+    if not current_poll.can_edit(request.user):
+        messages.error(
+            request, _("You are not allowed to edit this Poll.")
+        )
+        return redirect('poll', poll_url)
+
 
     if not current_poll.can_listen(request.user):
         messages.error(
@@ -564,6 +600,11 @@ def edit_choicevalues(request, poll_url):
 @require_POST
 def edit_choicevalues_create(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
+    if not current_poll.can_edit(request.user):
+        messages.error(
+            request, _("You are not allowed to edit this Poll.")
+        )
+        return redirect('poll', poll_url)
 
     if not current_poll.can_edit(request.user):
         messages.error(
