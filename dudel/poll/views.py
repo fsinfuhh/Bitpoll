@@ -466,7 +466,12 @@ def edit_dt_choice_combinations(request, poll_url):
         for combination in chosen_combinations:
             try:
                 tz = timezone(current_poll.timezone_name)
-                chosen_times.append(tz.localize(parse_datetime(combination)))
+                timestamp = parse_datetime(combination)
+                if timestamp:
+                    chosen_times.append(tz.localize(timestamp))
+                else:
+                    messages.error(request, _("There was en error interpreting the provided dates and times"))
+                    return redirect('poll_editDTChoiceDate', current_poll.url)
             except ValueError:
                 # at least one invalid time/date has been specified. Redirect to first step # TODO: error message spezifizierne
                 messages.error(request, _("There was en error interpreting the provided dates and times"))
