@@ -252,7 +252,7 @@
                 <h4>{% trans 'My Polls' %}</h4>
                 <small>{% trans 'You can find a list of all the polls in which you have participated on your profile page.' %}</small><br>
                 <br>
-                <a href="/base/settings" class="action primary">{% trans 'Show my polls' %}</a>
+                <a href="{% url 'settings' %}" class="action primary">{% trans 'Show my polls' %}</a>
             </div>
             {% endif %}
         </div>

@@ -24,7 +24,7 @@ from django.template import Context, loader
 
 urlpatterns = [
     url(r'^poll/', include('dudel.poll.urls')),
-    url(r'^base/', include('dudel.base.urls')),
+    url(r'^', include('dudel.base.urls')),
     url(r'^invitations/', include('dudel.invitations.urls')),
     url(r'^$', lambda req: redirect('index'), name='home'),
     url(r'^login/$', auth_views.login, name='login', ),
