@@ -13,6 +13,7 @@
 
 {% block content %}
         {% include 'poll/poll_header.html' %}
+        <div class="container">
         {% if perm_error %}
             <div class="form-errors">
                 <div class="alert alert-danger">
@@ -172,5 +173,5 @@
             <a href="{% url 'poll_copy' poll.url %}">{% trans 'Copy poll' %}</a><br>
             <a class="red" href="{% url 'poll_delete' poll.url %}">{% trans 'Delete this poll' %}</a>
         </div></form>
-
+        </div>
 {% endblock %}

@@ -8,7 +8,8 @@
 {% block title %}{% trans 'Delete' %} {{ poll.title }}{% endblock %}
 
 {% block content %}
-        {% include 'poll/poll_header.html' %}
+    {% include 'poll/poll_header.html' %}
+    <div class="container">
         {% csrf_token %}
         <h3>{% trans 'Delete Poll' %}</h3>
 
@@ -36,4 +37,5 @@
             <input type="submit" name="Cancel" value="{% trans 'Cancel' %}" class="action"/>
             <input type="submit" name="Delete" value="{% trans 'Delete' %}" class="action primary"/>
         </form>
+    </div>
 {% endblock %}

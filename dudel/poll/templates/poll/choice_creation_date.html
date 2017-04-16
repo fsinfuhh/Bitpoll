@@ -17,7 +17,7 @@
         {% else %}
             {% include "poll/noscript_date_time.html" %}
         {% endif %}
-
+        <div class="container">
         <form action="{{ request.url }}" method="POST" id="date-time-form">
             {% csrf_token %}
             <div id="date-time-form-content">
@@ -78,7 +78,7 @@
                 <input type="submit" class="action primary" value="{% trans 'Next' %}">
             </div>
         </form>
-
+        </div>
 
 {% endblock %}
 

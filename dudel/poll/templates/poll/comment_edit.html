@@ -3,5 +3,7 @@
 {% block title %}{{ poll.title }}{% endblock %}
 
 {% block content %}
-{% include 'poll/comment_form.html' %}
+    <div class="container">
+        {% include 'poll/comment_form.html' %}
+    </div>
 {% endblock %}

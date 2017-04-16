@@ -11,7 +11,8 @@
 
 {% block content %}
     {% include "poll/poll_header.html" %}
-        {% include  "poll/dt_choice_header.html" %}
+    {% include  "poll/dt_choice_header.html" %}
+    <div class="container">
     <div class="alert alert-info">
         <div class="container"><i class="fa fa-exclamation-circle"></i>{% blocktrans %}Here you can select which day/time combinations
           are available for voting.{% endblocktrans %}
@@ -71,7 +72,7 @@
           <input type="submit" class="action primary" value="{% trans 'Next' %}">
         </div>
     </form>
-
+    </div>
 {% endblock %}
 
 

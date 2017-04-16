@@ -10,8 +10,9 @@
 {% block title %}{% trans 'Invite to Poll' %}{% endblock %}
 
 {% block content %}
-        {% include 'poll/poll_header.html' %}
-        <h3>{% trans 'Invitations' %}</h3>
+    {% include 'poll/poll_header.html' %}
+    <div class="container">
+    <h3>{% trans 'Invitations' %}</h3>
         <div class="col-md-6">
             <form method="post" action="{% url 'invitations' poll.url %}">
                 {% csrf_token %}
@@ -65,6 +66,7 @@
         </div>
         <hr>
         <a href="{% url 'poll_settings' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
+</div>
 {% endblock %}
 
 

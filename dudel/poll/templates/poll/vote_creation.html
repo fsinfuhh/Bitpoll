@@ -7,6 +7,7 @@
 
 {% block content %}
     {% include 'poll/poll_header.html' %}
+    <div class="container">
     {% if timezone_warning %}
       <p class="alert alert-warning">
       {% blocktrans %}
@@ -127,6 +128,6 @@
                 {% endif %}
             </table>
         </form>
-
+      </div>
 
 {% endblock %}

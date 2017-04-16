@@ -4,6 +4,7 @@
 {% block title %}{% trans 'Delete vote' %}{% endblock %}
 
 {% block content %}
+    <div class="container">
     {% if error != "" %}
         <div class="alert alert-danger">{{ error }}</div>
         <br /><br />
@@ -18,4 +19,5 @@
         <input type="submit" name="Cancel" value="{% trans 'Cancel' %}" />
         <input type="submit" name="Delete" value="{% trans 'Delete' %}" />
     </form>
+    </div>
 {% endblock %}

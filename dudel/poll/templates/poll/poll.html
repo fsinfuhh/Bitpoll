@@ -8,7 +8,7 @@
 {% block content %}
 
         {% include 'poll/poll_header.html' %}
-
+        <div class="container">
         <div class="table-noscroll-y">
             <div class="table-scroll-x" style="padding-bottom: 100px;">
             {% if not matrix %}
@@ -223,5 +223,6 @@
             {% else %}
                     <p>{% trans 'Comments are disabled for this Poll' %}</p>
             {% endif %}
+        </div>
         </div>
 {% endblock %}

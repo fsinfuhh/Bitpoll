@@ -4,8 +4,10 @@
 {% block title %}Error{% endblock %}
 
 {% block content %}
+    <div class="container">
     <div class="alert alert-danger">{% blocktrans %}Deletion not allowed. You are not authenticated.{% endblocktrans %}</div>
     <br /><br />
 
     <a href="{% url 'poll' poll_url %}">{% trans 'Back' %}</a>
+    </div>
 {% endblock %}

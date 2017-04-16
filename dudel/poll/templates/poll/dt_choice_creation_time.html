@@ -11,9 +11,8 @@
 
 {% block content %}
     {% include "poll/poll_header.html" %}
-
-        {% include  "poll/dt_choice_header.html" %}
-
+    {% include  "poll/dt_choice_header.html" %}
+    <div class="container">
         <form action="{% url 'poll_editDTChoiceTime' poll.url %}" method="POST" id="date-time-form">
             <div id="date-time-form-content">
                  {% csrf_token %}
@@ -52,6 +51,7 @@
               <input type="submit" class="action primary" value="{% trans 'Next' %}">
             </div>
         </form>
+    </div>
 {% endblock %}
 
 {% block additionalJS %}
