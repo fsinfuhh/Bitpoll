@@ -27,7 +27,7 @@
             {% csrf_token %}
             <table class="table poll vote auto-width">
 
-                <tr class="script-only"">
+                <tr class="script-only">
                     <td colspan="{{ matrix_len }}"></td>
                     {% for value in values.all %}
                         <td class="text-center">

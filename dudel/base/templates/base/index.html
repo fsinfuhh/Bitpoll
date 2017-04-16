@@ -28,16 +28,16 @@
                                                     name="{{ poll_form.type.name }}">
                         {# TODO dynamisch, inklusive data-values unten #}
                         <option value="datetime" {% if poll_form.type.value == "datetime" %}selected="selected"{% endif %}>
-                          {% trans 'Date and Time' %} 
+                          {% trans 'Date and Time' %}
                         </option>
                         <option value="date" {% if poll_form.type.value == "date" %}selected="selected"{% endif %}>
-                          {% trans 'Date' %} 
+                          {% trans 'Date' %}
                         </option>
                         <option value="universal" {% if poll_form.type.value == "universal" %}selected="selected"{% endif %}>
-                          {% trans 'Normal Poll' %} 
+                          {% trans 'Normal Poll' %}
                         </option>
                         <option value="numeric" {% if poll_form.type.value == "numeric" %}selected="selected"{% endif %}>
-                          {% trans 'Numeric' %} 
+                          {% trans 'Numeric' %}
                         </option>
                     </select>
                         <div class="script-only">
