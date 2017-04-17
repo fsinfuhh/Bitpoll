@@ -312,8 +312,13 @@ def edit_date_choice(request, poll_url):
             for choice in form.cleaned_data['dates'].split(","):
                 try:
                     tz = timezone('UTC')
-                    date = tz.localize(parse_datetime('{} 0:0'.format(choice)))
-                    dates.append(date)
+                    parsed_date = parse_datetime('{} 0:0'.format(choice))
+                    if parsed_date:
+                        date = tz.localize(parsed_date)
+                        dates.append(date)
+                    else:
+                        error = True
+                        messages.error(_("There was en error interpreting the provided dates and times"))
                 except ValueError:
                     # This will most likely only happen with users turning of JS
                     error = True
