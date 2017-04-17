@@ -755,7 +755,7 @@ def vote(request, poll_url, vote_id=None):
                                 invitation.save()
 
                         for choice in current_poll.choice_set.all():
-                            if str(choice.id) in request.POST:
+                            if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
                                 choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
                             else:
                                 choice_value = None
