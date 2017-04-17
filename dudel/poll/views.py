@@ -1008,8 +1008,6 @@ def settings(request, poll_url):
                 return redirect('poll_settings', current_poll.url)
         else:
             user = form.cleaned_data.get('user', '')
-            print(form.errors)
-
     else:
         form = PollSettingsForm(instance=current_poll)
 

@@ -1,7 +1,7 @@
 from smtplib import SMTPRecipientsRefused
 
-from django.contrib.auth.models import Group
 from django.contrib import messages
+from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
 from django.db import models
@@ -10,8 +10,9 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django_markdown.models import MarkdownField
 
-from dudel.poll.util import DateTimePart, PartialDateTime
 from dudel.base.models import DudelUser
+from dudel.base.validators import validate_timezone
+from dudel.poll.util import DateTimePart, PartialDateTime
 
 POLL_TYPES = (
     ('universal', 'Universal'),
@@ -49,7 +50,7 @@ class Poll(models.Model):
     one_vote_per_user = models.BooleanField(default=False)
     allow_comments = models.BooleanField(default=True)
     show_invitations = models.BooleanField(default=True)
-    timezone_name = models.CharField(max_length=40, default="Europe/Berlin")
+    timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
 
     def __str__(self):
         return u'Poll {}'.format(self.title)
