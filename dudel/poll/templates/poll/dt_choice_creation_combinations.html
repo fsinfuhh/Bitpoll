@@ -11,14 +11,14 @@
 
 {% block content %}
     {% include "poll/poll_header.html" %}
-    {% include  "poll/dt_choice_header.html" %}
     <div class="container">
+    {% include  "poll/dt_choice_header.html" %}
     <div class="alert alert-info">
-        <div class="container"><i class="fa fa-exclamation-circle"></i>{% blocktrans %}Here you can select which day/time combinations
+        <i class="fa fa-exclamation-circle"></i>{% blocktrans %}Here you can select which day/time combinations
           are available for voting.{% endblocktrans %}
-        </div>
+
     </div>
-    <form class="form form-inline" action="{% url 'poll_editDTChoiceCombinations' poll.url %}" method="POST">
+    <form class="form" action="{% url 'poll_editDTChoiceCombinations' poll.url %}" method="POST">
         {% csrf_token %}
         {# TODO: maybe we need the imput data fields to this view here for recreation on error #}
         <div class="table-responsive" style="margin-bottom: 1em;">

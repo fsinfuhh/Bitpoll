@@ -12,12 +12,12 @@
 {% block content %}
     {% include "poll/poll_header.html" %}
 
+        <div class="container">
         {% if is_dt_choice %}
             {% include  "poll/dt_choice_header.html" %}
         {% else %}
             {% include "poll/noscript_date_time.html" %}
         {% endif %}
-        <div class="container">
         <form action="{{ request.url }}" method="POST" id="date-time-form">
             {% csrf_token %}
             <div id="date-time-form-content">
@@ -27,10 +27,14 @@
                 </div>
             </div>
             <div class="alert alert-info">
-                <div class="container"><i class="fa fa-exclamation-circle"></i>
+                <i class="fa fa-exclamation-circle"></i>
+                {% if is_dt_choice %}
                     {% blocktrans %}Please select the days that you want to
                     be able to choose. In the next step, you will select time slots.{% endblocktrans %}
-                </div>
+                {% else %}
+                    {% blocktrans %}Please select the days that you want to
+                    be able to choose.{% endblocktrans %}
+                {% endif %}
             </div>
             <div class="script-only" style="">
                 <div class="calendar" data-calendar-field="#date" id="calendar">

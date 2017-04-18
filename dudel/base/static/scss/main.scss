@@ -70,7 +70,7 @@ body {
 }
 
 .alert {
-    padding: 0.7em 0em;
+    padding: .7em .7em;
 }
 
 .alert .fa {
@@ -399,4 +399,8 @@ table tr.highlight td {
 tr.deleted, tr.deleted .color {
     color: #aaa;
     text-decoration: line-through;
+}
+
+#advanced-open {
+    margin: 0 -15px;
 }

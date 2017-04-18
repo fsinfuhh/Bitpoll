@@ -11,8 +11,8 @@
 
 {% block content %}
     {% include "poll/poll_header.html" %}
-    {% include  "poll/dt_choice_header.html" %}
     <div class="container">
+    {% include  "poll/dt_choice_header.html" %}
         <form action="{% url 'poll_editDTChoiceTime' poll.url %}" method="POST" id="date-time-form">
             <div id="date-time-form-content">
                  {% csrf_token %}
