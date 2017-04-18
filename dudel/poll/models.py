@@ -302,9 +302,15 @@ class PollWatch(models.Model):
 
     def send(self, request, vote: Vote):
         link = reverse('poll', args=(self.poll.url,))
+        if vote.anonymous:
+            username = _("Annonymus")
+        elif vote.user:
+            username = vote.user.username
+        else:
+            username = vote.name
         email_content = render_to_string('poll/mail_watch.txt', {
             'receiver': self.user.username,
-            'user': vote.user.username if self.poll.show_results == "complete" else _("by an user"),
+            'user': username if self.poll.show_results == "complete" else _("by an user"),
             'poll': self.poll.title,
             'link': link,
         })
