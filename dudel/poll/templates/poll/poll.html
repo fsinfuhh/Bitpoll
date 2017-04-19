@@ -42,7 +42,7 @@
                     {% endfor %}
                     </thead>
                     <tbody>
-                    {% for vote in votes %}
+                    {% for vote, vote_choices in votes %}
                         <tr class="vote {% if not request.user.is_anonymous and vote.user == request.user %} mine{% endif %}"
                                 {# data-author="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"#}>
                             <td class="author"
@@ -72,7 +72,7 @@
                                 {% endif %}
                                 {% if not vote.anonymous %}{{ vote.name }}{% else %}{% trans 'Anonymous' %}{% endif %}
                             </td>
-                            {% for vote_choice in vote.get_choices %} {# TODO: xxxxxxx das mus in die view zusammen mit deleted!#}
+                            {% for vote_choice in vote_choices %} {# TODO: xxxxxxx das mus in die view zusammen mit deleted!#}
                                 <td class="vote-choice text-center
                                     {% if vote_choice.comment %}comment{% endif %}
                                     {% if not vote_choice.value %}none{% endif %}"
@@ -80,7 +80,7 @@
                                     data-toggle="popover"
                                     data-trigger="hover"
                                     data-container="body"
-                                    data-title="{{ vote_choice.choice|force_escape|force_escape }}"
+                                    data-title="{{ vote_choice.choice.get_title|force_escape|force_escape }}"
                                     data-content="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}{% trans 'Anonymous' %}{% endif %}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
                                     data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
                                     <span class="fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
