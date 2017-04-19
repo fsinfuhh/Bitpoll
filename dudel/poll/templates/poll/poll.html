@@ -43,7 +43,7 @@
                     </thead>
                     <tbody>
                     {% for vote, vote_choices in votes %}
-                        <tr class="vote {% if not request.user.is_anonymous and vote.user == request.user %} mine{% endif %}"
+                        <tr class="vote {% if not request.user.is_anonymous and vote.user_id == request.user.id %} mine{% endif %}"
                                 {# data-author="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"#}>
                             <td class="author"
                                 data-toggle="popover"

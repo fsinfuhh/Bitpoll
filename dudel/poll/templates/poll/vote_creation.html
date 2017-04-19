@@ -29,7 +29,7 @@
 
                 <tr class="script-only">
                     <td colspan="{{ matrix_len }}"></td>
-                    {% for value in values.all %}
+                    {% for value in values %}
                         <td class="text-center">
                             <input value="all" data-choice="{{ value.id }}" class="action small vote-choice-column" type="button">
                         </td>
@@ -37,7 +37,7 @@
                 </tr>
                 <tr class="script-only">
                     <td colspan="{{ matrix_len }}"></td>
-                    {% for value in values.all %}
+                    {% for value in values %}
                         <td>
                             <span class="vote-header">{{ value.title }}</span>
                         </td>
@@ -53,13 +53,13 @@
                             {% endif %}
                         {% endfor %}
                         <td class="vote-choice-form">
-                            {% for value in values.all %}
+                            {% for value in values %}
                                 <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title=""
                                     {% if value == vote %} checked {% endif %}
                                 />
                                 {{ value.title }}
                             {% endfor %}</td>
-                        {% for value in values.all %}
+                        {% for value in values %}
                             <td class="vote-choice control {% if value != vote %}off{% endif %} script-only"
                                 data-choice="{{ value.id }}" title="{{ value.title }}"
                                 style="background-color: #{{ value.color }}">
