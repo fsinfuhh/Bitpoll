@@ -799,10 +799,7 @@ def vote(request, poll_url, vote_id=None):
         current_vote = get_object_or_404(Vote, pk=vote_id)
     else:
         current_vote = Vote()
-    if current_poll.type == 'normal':
-        choices_orig = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
-    else:
-        choices_orig = current_poll.choice_set.filter(deleted=False)
+    choices_orig = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
     for choice in choices_orig:
         cur_comment = ""
         value = None

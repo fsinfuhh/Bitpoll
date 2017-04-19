@@ -159,9 +159,9 @@ class Poll(models.Model):
 class Choice(models.Model):
     text = models.CharField(max_length=80)
     date = models.DateTimeField(null=True, blank=True)
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
     sort_key = models.IntegerField()
-    deleted = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
         if self.poll.type == 'universal':
@@ -209,7 +209,7 @@ class Comment(models.Model):
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, blank=True)
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
 
     def __str__(self):
         return u'CommentID {} by {}'.format(self.id, self.name)
@@ -231,7 +231,7 @@ class Vote(models.Model):
     date_created = models.DateTimeField()
     comment = models.TextField()
     assigned_by = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, related_name='assigning')
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, blank=True)
 
     def can_edit(self, user: DudelUser) -> bool:
@@ -281,7 +281,7 @@ class PollWatch(models.Model):
     class Meta:
         unique_together = ('poll', 'user')
 
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
 
     def send(self, request, vote: Vote):
