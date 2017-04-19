@@ -840,7 +840,7 @@ def vote_assign(request, poll_url, vote_id):
     current_vote = get_object_or_404(Vote, id=vote_id)
 
     if request.method == 'POST':
-        if request.user.is_authenticated and current_poll.can_edit(request.user):
+        if request.user.is_authenticated and current_vote.can_edit(request.user):
             username = request.POST.get('username').strip()
             user = DudelUser.objects.get(username=username)
             current_vote.user = user

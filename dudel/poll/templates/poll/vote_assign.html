@@ -16,13 +16,17 @@
       </p>
     {% endif %}
 
-        You may now assign the vote cast under the name <b>{{ vote.name }}</b> to a user.
+        <p>You may now assign the vote cast under the name <b>{{ vote.name }}</b> to a user.</p>
+
         <form method="post">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="name">New vote owner</label>
                 <div class="input-group">
                     <input type="text" class="form-control" name="username" id="name">
-                    <input class="btn btn-primary" type="submit" value="Assign">
+                    <div class="input-group-btn">
+                        <input class="btn btn-primary" type="submit" value="Assign">
+                    </div>
                 </div>
             </div>
 
@@ -35,7 +39,7 @@
                 <li>You cannot undo your assignment.</li>
             </ul>
 
-            <a href="{% url 'poll' poll.url %}" class="btn btn-default"></a>
+            <a href="{% url 'poll' poll.url %}" class="action">Back to poll</a>
         </form>
 
 {% endblock %}
