@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load poll_filter %}
+{% load widget_tweaks %}
+
+{% block title %}Assign a vote to a user{% endblock %}
+
+{% block content %}
+    {% include 'poll/poll_header.html' %}
+    <div class="container">
+    {% if timezone_warning %}
+      <p class="alert alert-warning">
+      {% blocktrans %}
+      This poll has a different timezone than you.
+      {% endblocktrans %}
+      </p>
+    {% endif %}
+
+        You may now assign the vote cast under the name <b>{{ vote.name }}</b> to a user.
+        <form method="post">
+            <div class="form-group">
+                <label for="name">New vote owner</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="username" id="name">
+                    <input class="btn btn-primary" type="submit" value="Assign">
+                </div>
+            </div>
+
+            <ul class="help-list">
+                <li>Only that user will be able to edit or delete the vote.</li>
+                <li>If the user has been invited, their invitation will be fulfilled.</li>
+                <li>If multiple votes are disabled, you cannot assign a user who has already voted.</li>
+                <li>The name next to the vote will be updated.</li>
+                <li>The vote will be marked as 'assign after voting', so that everyone knows.</li>
+                <li>You cannot undo your assignment.</li>
+            </ul>
+
+            <a href="{% url 'poll' poll.url %}" class="btn btn-default"></a>
+        </form>
+
+{% endblock %}
