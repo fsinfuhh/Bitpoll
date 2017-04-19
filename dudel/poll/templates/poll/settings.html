@@ -147,14 +147,14 @@
 
             <label for="group-select">{% trans 'Group' %}</label><br>
             <select id="group-select" class="form-control" name="{{ form.group.name }}">
-                {% if form.group.value == NaN %}
+                {% if form.group.value == None %}
                     <option value="" selected="selected">-----</option>
                 {% else %}
                     <option value="">-----</option>
                 {% endif %}
 
                 {% for group in groups %}
-                    {% if group == form.group.value %}
+                    {% if group.id == form.group.value %}
                         <option value="{{ group.id }}" selected="selected"> {{ group.name }}</option>
                     {% else %}
                         <option value="{{ group.id }}"> {{ group.name }}</option>

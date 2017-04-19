@@ -87,7 +87,7 @@ class Poll(models.Model):
         has_owner = self.group or self.user
         is_owner = user == self.user
         if self.group:
-            is_group_member = user in self.group.user_set
+            is_group_member = user in self.group.user_set.all()
         else:
             is_group_member = False
 
