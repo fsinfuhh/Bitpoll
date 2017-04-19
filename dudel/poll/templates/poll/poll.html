@@ -97,7 +97,7 @@
                                        class="btn btn-xs btn-default" title="{{ _('Delete vote') }}"><i
                                             class="fa fa-trash-o"></i></a>
                                 {% endif %}
-                                {% if vote|vote_can_edit:request.user %}
+                                {% if vote.user == None and vote|vote_can_edit:request.user %}
                                     <a href="{% url 'poll_voteAssign' poll.url vote.id %}"
                                        class="btn btn-xs btn-default" title="{{ _('Assign user') }}">
                                         <i class="fa fa-user"></i></a>

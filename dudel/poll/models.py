@@ -241,9 +241,9 @@ class Vote(models.Model):
         :param user: is this user allowed to edit the vote
         :return:
         """
-        if user.is_authenticated and self.user == user:
+        if user.is_authenticated and (self.user == user or self.poll.can_edit(user)):
             return True
-        if not self.user:
+        if not self.user and self.poll.can_edit(user):
             return True
         return False
 

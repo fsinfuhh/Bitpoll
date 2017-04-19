@@ -3,7 +3,7 @@
 {% load poll_filter %}
 {% load widget_tweaks %}
 
-{% block title %}Assign a vote to a user{% endblock %}
+{% block title %}{% trans 'Assign a vote to a user' %}{% endblock %}
 
 {% block content %}
     {% include 'poll/poll_header.html' %}
@@ -15,31 +15,37 @@
       {% endblocktrans %}
       </p>
     {% endif %}
-
-        <p>You may now assign the vote cast under the name <b>{{ vote.name }}</b> to a user.</p>
+        <h1>{% trans 'Assign a vote to a user' %}</h1>
+        <br>
+        {% blocktrans %}
+            <p>You may now assign the vote cast under the name <b>{{ vote.name }}</b> to a user.</p>
+        {% endblocktrans %}
+        <br>
 
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label for="name">New vote owner</label>
+                <label for="name">{% trans 'New vote owner' %}</label>
                 <div class="input-group">
                     <input type="text" class="form-control" name="username" id="name">
                     <div class="input-group-btn">
-                        <input class="btn btn-primary" type="submit" value="Assign">
+                        <input class="btn btn-primary" type="submit" value="{% trans 'Assign' %}">
                     </div>
                 </div>
             </div>
 
-            <ul class="help-list">
-                <li>Only that user will be able to edit or delete the vote.</li>
-                <li>If the user has been invited, their invitation will be fulfilled.</li>
-                <li>If multiple votes are disabled, you cannot assign a user who has already voted.</li>
-                <li>The name next to the vote will be updated.</li>
-                <li>The vote will be marked as 'assign after voting', so that everyone knows.</li>
-                <li>You cannot undo your assignment.</li>
-            </ul>
+            {% blocktrans %}
+                <ul class="help-list">
+                    <li>Only that user will be able to edit or delete the vote.</li>
+                    <li>If the user has been invited, their invitation will be fulfilled.</li>
+                    <li>If multiple votes are disabled, you cannot assign a user who has already voted.</li>
+                    <li>The name next to the vote will be updated.</li>
+                    <li>The vote will be marked as 'assign after voting', so that everyone knows.</li>
+                    <li>You cannot undo your assignment.</li>
+                </ul>
+            {% endblocktrans %}
 
-            <a href="{% url 'poll' poll.url %}" class="action">Back to poll</a>
+            <a href="{% url 'poll' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
         </form>
-
+    </div>
 {% endblock %}
