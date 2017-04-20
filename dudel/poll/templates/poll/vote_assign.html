@@ -17,8 +17,8 @@
     {% endif %}
         <h1>{% trans 'Assign a vote to a user' %}</h1>
         <br>
-        {% blocktrans %}
-            <p>You may now assign the vote cast under the name <b>{{ vote.name }}</b> to a user.</p>
+        {% blocktrans with name=vote.name %}
+            <p>You may now assign the vote cast under the name <b>{{ name }}</b> to a user.</p>
         {% endblocktrans %}
         <br>
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-19 13:47+0000\n"
+"POT-Creation-Date: 2017-04-20 07:45+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -486,7 +486,7 @@ msgstr ""
 #: dudel/invitations/templates/invitations/Invitation.html:68
 #: dudel/poll/templates/poll/copy.html:85
 #: dudel/poll/templates/poll/settings.html:91
-#: dudel/poll/templates/poll/vote_assign.html:45
+#: dudel/poll/templates/poll/vote_assign.html:48
 msgid "Back to poll"
 msgstr "Zurück zur Umfrage"
 
@@ -1173,6 +1173,7 @@ msgid "Some-Group/Third-Choice"
 msgstr "Some-Group/Third-Choice"
 
 #: dudel/poll/templates/poll/vote_assign.html:6
+#: dudel/poll/templates/poll/vote_assign.html:18
 msgid "Assign a vote to a user"
 msgstr "Eine Stimme einem Benutzer zuweisen"
 
@@ -1186,27 +1187,27 @@ msgstr ""
 "\n"
 "\tDiese Umfrage hat eine andere Zeitzone als du."
 
-#: dudel/poll/templates/poll/vote_assign.html:18
+#: dudel/poll/templates/poll/vote_assign.html:20
 #, python-format
 msgid ""
 "\n"
-"            <p>You may now assign the vote cast under the name <b>"
-"%(vote.name)s</b> to a user.</p>\n"
+"            <p>You may now assign the vote cast under the name <b>%(name)s</"
+"b> to a user.</p>\n"
 "        "
 msgstr ""
 "\n"
-"            <p>Hier kannst du der unter dem Namen <b>%(vote.name)s</b> "
+"            <p>Hier kannst du der unter dem Namen <b>%(name)s</b> "
 "abgegebenen Stimme einen Benutzer zuweisen.</p>"
 
-#: dudel/poll/templates/poll/vote_assign.html:25
+#: dudel/poll/templates/poll/vote_assign.html:28
 msgid "New vote owner"
 msgstr "Neuer Besitzer der Stimme"
 
-#: dudel/poll/templates/poll/vote_assign.html:29
+#: dudel/poll/templates/poll/vote_assign.html:32
 msgid "Assign"
 msgstr "Zuweisen"
 
-#: dudel/poll/templates/poll/vote_assign.html:34
+#: dudel/poll/templates/poll/vote_assign.html:37
 msgid ""
 "\n"
 "                <ul class=\"help-list\">\n"
@@ -1327,14 +1328,13 @@ msgstr "Du darfst diesen Kommentar nicht bearbeiten"
 msgid "Deletion not allowed. You are not {}."
 msgstr "Löschen nicht erlaubt. Du bist nicht {}."
 
-#: dudel/poll/views.py:254 dudel/poll/views.py:277 dudel/poll/views.py:591
-#: dudel/poll/views.py:917
+#: dudel/poll/views.py:254 dudel/poll/views.py:591 dudel/poll/views.py:917
 msgid "You are not allowed to listen."
 msgstr ""
 
-#: dudel/poll/views.py:303 dudel/poll/views.py:378 dudel/poll/views.py:427
-#: dudel/poll/views.py:467 dudel/poll/views.py:531 dudel/poll/views.py:585
-#: dudel/poll/views.py:626 dudel/poll/views.py:1012
+#: dudel/poll/views.py:277 dudel/poll/views.py:303 dudel/poll/views.py:378
+#: dudel/poll/views.py:427 dudel/poll/views.py:467 dudel/poll/views.py:531
+#: dudel/poll/views.py:585 dudel/poll/views.py:626 dudel/poll/views.py:1012
 msgid "You are not allowed to edit this Poll."
 msgstr "Du kannst diese Umfrage nicht ändern."
 

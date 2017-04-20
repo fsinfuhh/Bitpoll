@@ -274,7 +274,7 @@ def edit_choice(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     if not current_poll.can_edit(request.user):
         messages.error(
-            request, _("You are not allowed to listen.")
+            request, _("You are not allowed to edit this Poll.")
         )
         return redirect('poll', poll_url)
 
