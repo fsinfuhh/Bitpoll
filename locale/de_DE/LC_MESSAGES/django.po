@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-20 07:45+0000\n"
+"POT-Creation-Date: 2017-04-20 08:24+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -53,13 +53,13 @@ msgid "About"
 msgstr "Über"
 
 #: dudel/base/templates/base.html:52 dudel/base/templates/base.html:57
-#: dudel/base/templates/base/index.html:200
+#: dudel/base/templates/base/index.html:204
 #: dudel/registration/templates/registration/login.html:4
 #: dudel/registration/templates/registration/login.html:39
 msgid "Login"
 msgstr "Login"
 
-#: dudel/base/templates/base.html:55 dudel/base/templates/base/index.html:215
+#: dudel/base/templates/base.html:55 dudel/base/templates/base/index.html:219
 #: dudel/registration/templates/registration/request_account.html:7
 #: dudel/registration/templates/registration/request_account.html:11
 msgid "Register"
@@ -218,32 +218,37 @@ msgstr "Einladung zur Abstimmung erforderlich"
 msgid "one vote per user"
 msgstr "eine Stimme pro Benutzer"
 
-#: dudel/base/templates/base/index.html:170
+#: dudel/base/templates/base/index.html:167
+#: dudel/poll/templates/poll/settings.html:128
+msgid "forbid empty choices"
+msgstr "verbiete leere Wahlmöglichkeiten"
+
+#: dudel/base/templates/base/index.html:174
 msgid "More options"
 msgstr "mehr Optionen"
 
-#: dudel/base/templates/base/index.html:173
+#: dudel/base/templates/base/index.html:177
 msgid "Less options"
 msgstr "weniger Optionen"
 
-#: dudel/base/templates/base/index.html:176
+#: dudel/base/templates/base/index.html:180
 #: dudel/poll/templates/poll/copy.html:86
 msgid "Create"
 msgstr "Erstellen"
 
-#: dudel/base/templates/base/index.html:187
+#: dudel/base/templates/base/index.html:191
 #: dudel/registration/templates/registration/password_reset_complete.html:9
 msgid "Log in"
 msgstr "Login"
 
-#: dudel/base/templates/base/index.html:191
+#: dudel/base/templates/base/index.html:195
 #: dudel/registration/templates/registration/create_account.html:13
 #: dudel/registration/templates/registration/login.html:20
 #: dudel/registration/templates/registration/request_account.html:15
 msgid "Username"
 msgstr "Benutzername"
 
-#: dudel/base/templates/base/index.html:195 dudel/registration/forms.py:27
+#: dudel/base/templates/base/index.html:199 dudel/registration/forms.py:27
 #: dudel/registration/forms.py:51
 #: dudel/registration/templates/registration/account.html:91
 #: dudel/registration/templates/registration/create_account.html:17
@@ -251,46 +256,46 @@ msgstr "Benutzername"
 msgid "Password"
 msgstr "Passwort"
 
-#: dudel/base/templates/base/index.html:212
+#: dudel/base/templates/base/index.html:216
 msgid "Register for more"
 msgstr "Melde dich an für mehr"
 
-#: dudel/base/templates/base/index.html:213
+#: dudel/base/templates/base/index.html:217
 msgid "Registered users have access to the full width of features available."
 msgstr ""
 "Registrierte Benutzer haben Zugang zur vollen Bandbreite von verfügbaren "
 "Funktionen."
 
-#: dudel/base/templates/base/index.html:221
+#: dudel/base/templates/base/index.html:225
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: dudel/base/templates/base/index.html:224
+#: dudel/base/templates/base/index.html:228
 msgid "Polls created"
 msgstr "Erstellte Umfragen"
 
-#: dudel/base/templates/base/index.html:228
+#: dudel/base/templates/base/index.html:232
 #: dudel/poll/templates/poll/choicevalue.html:32
 msgid "Votes cast"
 msgstr "Abgegebene Stimmen"
 
-#: dudel/base/templates/base/index.html:232
+#: dudel/base/templates/base/index.html:236
 msgid "Users"
 msgstr "Benutzer"
 
-#: dudel/base/templates/base/index.html:238
+#: dudel/base/templates/base/index.html:242
 msgid "Public polls"
 msgstr "Öffentliche Umfragen"
 
-#: dudel/base/templates/base/index.html:241
+#: dudel/base/templates/base/index.html:245
 msgid "There are currently no public polls."
 msgstr "Zur Zeit gibt es keine öffentlichen Umfragen."
 
-#: dudel/base/templates/base/index.html:252
+#: dudel/base/templates/base/index.html:256
 msgid "My Polls"
 msgstr "Meine Umfragen"
 
-#: dudel/base/templates/base/index.html:253
+#: dudel/base/templates/base/index.html:257
 msgid ""
 "You can find a list of all the polls in which you have participated on your "
 "profile page."
@@ -298,7 +303,7 @@ msgstr ""
 "Du findest eine Liste mit allen Umfragen, an denen du teilgenommen hast, auf "
 "deiner Profilseite."
 
-#: dudel/base/templates/base/index.html:255
+#: dudel/base/templates/base/index.html:259
 msgid "Show my polls"
 msgstr "Meine Umfragen anzeigen"
 
@@ -416,7 +421,7 @@ msgstr "In keiner bestimmten Reihenfolge aufgelistet."
 msgid "%(value)s is not a valid timezone"
 msgstr "%(value)s ist keine gültige Zeitzone"
 
-#: dudel/invitations/models.py:41 dudel/poll/models.py:306
+#: dudel/invitations/models.py:41 dudel/poll/models.py:307
 msgid "The mail server had an error sending the notification to {}"
 msgstr "Der Mailserver konnte die Benachrichtigung nicht an {} senden"
 
@@ -434,8 +439,8 @@ msgid "Invitations"
 msgstr "Einladungen"
 
 #: dudel/invitations/templates/invitations/Invitation.html:22
-#: dudel/poll/templates/poll/settings.html:134
-#: dudel/poll/templates/poll/settings.html:136
+#: dudel/poll/templates/poll/settings.html:138
+#: dudel/poll/templates/poll/settings.html:140
 msgid "User"
 msgstr "User"
 
@@ -532,30 +537,30 @@ msgstr "Der User {} ist bereits eingeladen"
 msgid "The following User/Groups could not be found:  {}"
 msgstr "Der folgende User oder Gruppe konnte nicht gefunden werden: {}"
 
-#: dudel/poll/models.py:70
+#: dudel/poll/models.py:71
 msgid "It is only one vote allowed. You have already voted."
 msgstr ""
 "Es ist nur eine Stimme pro Benutzer erlaubt. Du hast bereits abgestimmt."
 
-#: dudel/poll/models.py:73
+#: dudel/poll/models.py:74
 msgid "Login required to vote."
 msgstr "Anmeldung zum Abstimmen erforderlich."
 
-#: dudel/poll/models.py:76
+#: dudel/poll/models.py:77
 msgid "You are not allowed to vote in this poll. You have to be invited"
 msgstr ""
 "Du kannst bei dieser Umfrage nicht abstimmen. Zum Abstimmen ist eine "
 "Einladung erforderlich."
 
-#: dudel/poll/models.py:193
+#: dudel/poll/models.py:194
 msgid "Give an HTML color without the #"
 msgstr "Bitte gib eine HTML Farbe ohne das # an"
 
-#: dudel/poll/models.py:290
+#: dudel/poll/models.py:291
 msgid "Annonymus"
 msgstr "anonym"
 
-#: dudel/poll/models.py:297
+#: dudel/poll/models.py:298
 msgid "by an user"
 msgstr "von einem User"
 
@@ -992,7 +997,7 @@ msgid "Ownership"
 msgstr "Besitzer"
 
 #: dudel/poll/templates/poll/poll_header.html:43
-#: dudel/poll/templates/poll/settings.html:148
+#: dudel/poll/templates/poll/settings.html:152
 msgid "Group"
 msgstr "Gruppe"
 
@@ -1067,7 +1072,7 @@ msgstr "In öffentlicher Umfrageliste anzeigen"
 msgid "show invitations as empty votes"
 msgstr "Zeige Einladungen als leere Stimmen an"
 
-#: dudel/poll/templates/poll/settings.html:127
+#: dudel/poll/templates/poll/settings.html:131
 msgid ""
 "\n"
 "                These settings are not retroactive, meaning that changing "
@@ -1079,7 +1084,7 @@ msgstr ""
 "verändern, keine Stimmen oder Kommentare geändert, die bereits abgegeben "
 "waren."
 
-#: dudel/poll/templates/poll/settings.html:165
+#: dudel/poll/templates/poll/settings.html:169
 msgid ""
 "\n"
 "                Only the owner of a poll, or a member of the owner group, "
@@ -1096,23 +1101,23 @@ msgstr ""
 "Die meisten einschränkenden Einstellungen oben sind nutzlos, bis du diese "
 "Umfrage in Besitz genommen hast."
 
-#: dudel/poll/templates/poll/settings.html:170
+#: dudel/poll/templates/poll/settings.html:174
 msgid "Very advanced stuff"
 msgstr "sehr fortgeschrittene Einstellungen"
 
-#: dudel/poll/templates/poll/settings.html:171
+#: dudel/poll/templates/poll/settings.html:175
 msgid "Edit possible answer values"
 msgstr "Antwortmöglichkeiten bearbeitet"
 
-#: dudel/poll/templates/poll/settings.html:172
+#: dudel/poll/templates/poll/settings.html:176
 msgid "Manage invitations"
 msgstr "Einladungen verwalten"
 
-#: dudel/poll/templates/poll/settings.html:173
+#: dudel/poll/templates/poll/settings.html:177
 msgid "Copy poll"
 msgstr "Umfrage kopieren"
 
-#: dudel/poll/templates/poll/settings.html:174
+#: dudel/poll/templates/poll/settings.html:178
 msgid "Delete this poll"
 msgstr "Diese Umfrage löschen"
 

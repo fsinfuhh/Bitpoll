@@ -17,7 +17,8 @@ class PollCreationForm(ModelForm):
             'anonymous_allowed',
             'require_login',
             'require_invitation',
-            'one_vote_per_user'
+            'one_vote_per_user',
+            'vote_all'
         ]
         widgets = {
             'due_date': DateTimeWidget(
@@ -74,7 +75,8 @@ class PollSettingsForm(ModelForm):
             'one_vote_per_user',
             'show_invitations',
             'group',
-            'public_listening'
+            'public_listening',
+            'vote_all'
         ]
         widgets = {
             'due_date': DateTimeWidget(

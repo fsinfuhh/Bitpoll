@@ -52,6 +52,7 @@ class Poll(models.Model):
     allow_comments = models.BooleanField(default=True)
     show_invitations = models.BooleanField(default=True)
     timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
+    vote_all = models.BooleanField(default=False)
 
     def __str__(self):
         return u'Poll {}'.format(self.title)

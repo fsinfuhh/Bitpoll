@@ -162,6 +162,10 @@
                                 <input type="checkbox" id="one_vote_per_user" name="{{ poll_form.one_vote_per_user.name }}" {% if poll_form.one_vote_per_user.value %} checked {% endif %}>
                                 <label for="one_vote_per_user">{% trans 'one vote per user' %}</label>
                             </div>
+                            <div class="checkbox">
+                                <input type="checkbox" id="vote_all" name="{{ poll_form.vote_all.name }}" {% if poll_form.vote_all.value %} checked {% endif %}>
+                                <label for="vote_all">{% trans 'forbid empty choices' %}</label>
+                            </div>
                         </div>
                     </div></div>
                     <div class="form-group text-center">

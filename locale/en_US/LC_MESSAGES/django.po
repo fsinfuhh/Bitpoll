@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-20 07:45+0000\n"
+"POT-Creation-Date: 2017-04-20 08:24+0000\n"
 "PO-Revision-Date: 2017-03-23 14:02+0100\n"
 "Last-Translator: Nils Rokita <0rokita@informatik.uni-hamburg.de>\n"
 "Language-Team: \n"
@@ -53,13 +53,13 @@ msgid "About"
 msgstr "About"
 
 #: dudel/base/templates/base.html:52 dudel/base/templates/base.html:57
-#: dudel/base/templates/base/index.html:200
+#: dudel/base/templates/base/index.html:204
 #: dudel/registration/templates/registration/login.html:4
 #: dudel/registration/templates/registration/login.html:39
 msgid "Login"
 msgstr "Login"
 
-#: dudel/base/templates/base.html:55 dudel/base/templates/base/index.html:215
+#: dudel/base/templates/base.html:55 dudel/base/templates/base/index.html:219
 #: dudel/registration/templates/registration/request_account.html:7
 #: dudel/registration/templates/registration/request_account.html:11
 msgid "Register"
@@ -221,32 +221,39 @@ msgstr "invitation required to vote"
 msgid "one vote per user"
 msgstr "one vote per user"
 
-#: dudel/base/templates/base/index.html:170
+#: dudel/base/templates/base/index.html:167
+#: dudel/poll/templates/poll/settings.html:128
+#, fuzzy
+#| msgid "Copy choices"
+msgid "forbid empty choices"
+msgstr "Copy choices"
+
+#: dudel/base/templates/base/index.html:174
 msgid "More options"
 msgstr "More options"
 
-#: dudel/base/templates/base/index.html:173
+#: dudel/base/templates/base/index.html:177
 msgid "Less options"
 msgstr "Less options"
 
-#: dudel/base/templates/base/index.html:176
+#: dudel/base/templates/base/index.html:180
 #: dudel/poll/templates/poll/copy.html:86
 msgid "Create"
 msgstr "Create"
 
-#: dudel/base/templates/base/index.html:187
+#: dudel/base/templates/base/index.html:191
 #: dudel/registration/templates/registration/password_reset_complete.html:9
 msgid "Log in"
 msgstr "Log in"
 
-#: dudel/base/templates/base/index.html:191
+#: dudel/base/templates/base/index.html:195
 #: dudel/registration/templates/registration/create_account.html:13
 #: dudel/registration/templates/registration/login.html:20
 #: dudel/registration/templates/registration/request_account.html:15
 msgid "Username"
 msgstr "Username"
 
-#: dudel/base/templates/base/index.html:195 dudel/registration/forms.py:27
+#: dudel/base/templates/base/index.html:199 dudel/registration/forms.py:27
 #: dudel/registration/forms.py:51
 #: dudel/registration/templates/registration/account.html:91
 #: dudel/registration/templates/registration/create_account.html:17
@@ -254,44 +261,44 @@ msgstr "Username"
 msgid "Password"
 msgstr "Password"
 
-#: dudel/base/templates/base/index.html:212
+#: dudel/base/templates/base/index.html:216
 msgid "Register for more"
 msgstr "Register for more"
 
-#: dudel/base/templates/base/index.html:213
+#: dudel/base/templates/base/index.html:217
 msgid "Registered users have access to the full width of features available."
 msgstr "Registered users have access to the full width of features available."
 
-#: dudel/base/templates/base/index.html:221
+#: dudel/base/templates/base/index.html:225
 msgid "Statistics"
 msgstr "Statistics"
 
-#: dudel/base/templates/base/index.html:224
+#: dudel/base/templates/base/index.html:228
 msgid "Polls created"
 msgstr "Polls created"
 
-#: dudel/base/templates/base/index.html:228
+#: dudel/base/templates/base/index.html:232
 #: dudel/poll/templates/poll/choicevalue.html:32
 msgid "Votes cast"
 msgstr "Votes cast"
 
-#: dudel/base/templates/base/index.html:232
+#: dudel/base/templates/base/index.html:236
 msgid "Users"
 msgstr "Users"
 
-#: dudel/base/templates/base/index.html:238
+#: dudel/base/templates/base/index.html:242
 msgid "Public polls"
 msgstr "Public polls"
 
-#: dudel/base/templates/base/index.html:241
+#: dudel/base/templates/base/index.html:245
 msgid "There are currently no public polls."
 msgstr "There are currently no public polls."
 
-#: dudel/base/templates/base/index.html:252
+#: dudel/base/templates/base/index.html:256
 msgid "My Polls"
 msgstr "My Polls"
 
-#: dudel/base/templates/base/index.html:253
+#: dudel/base/templates/base/index.html:257
 msgid ""
 "You can find a list of all the polls in which you have participated on your "
 "profile page."
@@ -299,7 +306,7 @@ msgstr ""
 "You can find a list of all the polls in which you have participated on your "
 "profile page."
 
-#: dudel/base/templates/base/index.html:255
+#: dudel/base/templates/base/index.html:259
 msgid "Show my polls"
 msgstr "Show my polls"
 
@@ -414,7 +421,7 @@ msgstr "Listed in no particular order."
 msgid "%(value)s is not a valid timezone"
 msgstr ""
 
-#: dudel/invitations/models.py:41 dudel/poll/models.py:306
+#: dudel/invitations/models.py:41 dudel/poll/models.py:307
 msgid "The mail server had an error sending the notification to {}"
 msgstr "The mail server had an error sending the notification to {}"
 
@@ -431,8 +438,8 @@ msgid "Invitations"
 msgstr "Invitations"
 
 #: dudel/invitations/templates/invitations/Invitation.html:22
-#: dudel/poll/templates/poll/settings.html:134
-#: dudel/poll/templates/poll/settings.html:136
+#: dudel/poll/templates/poll/settings.html:138
+#: dudel/poll/templates/poll/settings.html:140
 msgid "User"
 msgstr "User"
 
@@ -529,35 +536,35 @@ msgstr "The user {} was already invited"
 msgid "The following User/Groups could not be found:  {}"
 msgstr "The following User/Groups could not be found:  {}"
 
-#: dudel/poll/models.py:70
+#: dudel/poll/models.py:71
 #, fuzzy
 #| msgid "Deletion not allowed. You are not {}."
 msgid "It is only one vote allowed. You have already voted."
 msgstr "Deletion not allowed. You are not {}."
 
-#: dudel/poll/models.py:73
+#: dudel/poll/models.py:74
 #, fuzzy
 #| msgid "invitation required to vote"
 msgid "Login required to vote."
 msgstr "invitation required to vote"
 
-#: dudel/poll/models.py:76
+#: dudel/poll/models.py:77
 #, fuzzy
 #| msgid "You are not allowed to edit this Poll."
 msgid "You are not allowed to vote in this poll. You have to be invited"
 msgstr "You are not allowed to edit this Poll."
 
-#: dudel/poll/models.py:193
+#: dudel/poll/models.py:194
 msgid "Give an HTML color without the #"
 msgstr "Give an HTML color without the #"
 
-#: dudel/poll/models.py:290
+#: dudel/poll/models.py:291
 #, fuzzy
 #| msgid "Anonymous"
 msgid "Annonymus"
 msgstr "Anonymous"
 
-#: dudel/poll/models.py:297
+#: dudel/poll/models.py:298
 msgid "by an user"
 msgstr "by an user"
 
@@ -1040,7 +1047,7 @@ msgid "Ownership"
 msgstr "Owner"
 
 #: dudel/poll/templates/poll/poll_header.html:43
-#: dudel/poll/templates/poll/settings.html:148
+#: dudel/poll/templates/poll/settings.html:152
 msgid "Group"
 msgstr "Group"
 
@@ -1121,7 +1128,7 @@ msgstr "Show in public poll list"
 msgid "show invitations as empty votes"
 msgstr "show invitations as empty votes"
 
-#: dudel/poll/templates/poll/settings.html:127
+#: dudel/poll/templates/poll/settings.html:131
 msgid ""
 "\n"
 "                These settings are not retroactive, meaning that changing "
@@ -1133,7 +1140,7 @@ msgstr ""
 "them will not modify votes/comments already created.\n"
 "                "
 
-#: dudel/poll/templates/poll/settings.html:165
+#: dudel/poll/templates/poll/settings.html:169
 msgid ""
 "\n"
 "                Only the owner of a poll, or a member of the owner group, "
@@ -1151,23 +1158,23 @@ msgstr ""
 "not claim ownership of this poll.\n"
 "                "
 
-#: dudel/poll/templates/poll/settings.html:170
+#: dudel/poll/templates/poll/settings.html:174
 msgid "Very advanced stuff"
 msgstr "Very advanced stuff"
 
-#: dudel/poll/templates/poll/settings.html:171
+#: dudel/poll/templates/poll/settings.html:175
 msgid "Edit possible answer values"
 msgstr "Edit possible answer values"
 
-#: dudel/poll/templates/poll/settings.html:172
+#: dudel/poll/templates/poll/settings.html:176
 msgid "Manage invitations"
 msgstr "Manage invitations"
 
-#: dudel/poll/templates/poll/settings.html:173
+#: dudel/poll/templates/poll/settings.html:177
 msgid "Copy poll"
 msgstr "Copy poll"
 
-#: dudel/poll/templates/poll/settings.html:174
+#: dudel/poll/templates/poll/settings.html:178
 msgid "Delete this poll"
 msgstr "Delete this poll"
 
