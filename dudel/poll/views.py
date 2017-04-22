@@ -708,6 +708,7 @@ def vote(request, poll_url, vote_id=None):
     Takes vote with comments as input and saves the vote along with all comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    error_msg = ''
 
     if current_poll.due_date and current_poll.due_date < now():
         messages.error(
@@ -770,22 +771,29 @@ def vote(request, poll_url, vote_id=None):
                                 choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
                             else:
                                 choice_value = None
+                                if current_poll.vote_all:
+                                    error_msg = _('Due to the the configuration of this poll, you have to fill all '
+                                                  'choices.')
                             new_choices.append(VoteChoice(value=choice_value,
                                                           vote=current_vote,
                                                           choice=choice,
                                                           comment=request.POST.get(
                                                               'comment_{}'.format(choice.id)) or ''))
-                        if vote_id:
-                            VoteChoice.objects.filter(vote=current_vote).delete()
-                            # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
-                            # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
-                        else:
-                            for current_watch in current_poll.pollwatch_set.all():
-                                current_watch.send(request=request, vote=current_vote)
 
-                        VoteChoice.objects.bulk_create(new_choices)
-                        messages.success(request, _('Vote has been recorded'))
-                        return redirect('poll', poll_url)
+                        if not error_msg:
+                            if vote_id:
+                                VoteChoice.objects.filter(vote=current_vote).delete()
+                                # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
+                                # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
+                            else:
+                                for current_watch in current_poll.pollwatch_set.all():
+                                    current_watch.send(request=request, vote=current_vote)
+
+                            VoteChoice.objects.bulk_create(new_choices)
+                            messages.success(request, _('Vote has been recorded'))
+                            return redirect('poll', poll_url)
+                        else:
+                            messages.error(request, error_msg)
                 else:
                     messages.error(
                         request, _('You need to either provide a name or post an anonymous vote.'))

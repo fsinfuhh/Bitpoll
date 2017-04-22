@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-20 08:24+0000\n"
+"POT-Creation-Date: 2017-04-22 20:02+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -67,7 +67,7 @@ msgstr "Registrieren"
 
 #: dudel/base/templates/base.html:63 dudel/base/templates/base/settings.html:9
 #: dudel/base/templates/base/settings.html:66
-#: dudel/poll/templates/poll/poll_header.html:84
+#: dudel/poll/templates/poll/poll_header.html:90
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -525,7 +525,7 @@ msgstr ""
 "Du kannst diese Einstellung hier ändern: %(base_url)s%(link)s.\n"
 
 #: dudel/invitations/views.py:54 dudel/poll/views.py:599
-#: dudel/poll/views.py:632 dudel/poll/views.py:1022
+#: dudel/poll/views.py:632 dudel/poll/views.py:1030
 msgid "You are not allowed to edit this Poll"
 msgstr "Du darfst diese Umfrage nicht verändern"
 
@@ -935,7 +935,7 @@ msgid "Assign user"
 msgstr "Weise einen User zu"
 
 #: dudel/poll/templates/poll/poll.html:141
-#: dudel/poll/templates/poll/poll_header.html:98
+#: dudel/poll/templates/poll/poll_header.html:104
 msgid "Vote"
 msgstr "Abstimmen"
 
@@ -1021,16 +1021,21 @@ msgstr "Einladung erforderlich"
 msgid "Login required"
 msgstr "Login erforderlich"
 
-#: dudel/poll/templates/poll/poll_header.html:74
+#: dudel/poll/templates/poll/poll_header.html:65
+#: dudel/poll/templates/poll/poll_header.html:66
+msgid "Empty choices forbidden"
+msgstr "leere Wahlmöglichkeiten verboten"
+
+#: dudel/poll/templates/poll/poll_header.html:80
 msgid "Overview"
 msgstr "Übersicht"
 
-#: dudel/poll/templates/poll/poll_header.html:88
+#: dudel/poll/templates/poll/poll_header.html:94
 #: dudel/poll/templates/poll/universal_choice_creation.html:19
 msgid "Choices"
 msgstr "Wahlmöglichkeiten"
 
-#: dudel/poll/templates/poll/poll_header.html:93
+#: dudel/poll/templates/poll/poll_header.html:99
 msgid "Edit Vote"
 msgstr "Stimme bearbeiten"
 
@@ -1293,7 +1298,7 @@ msgid "Author of Vote:"
 msgstr "Autor der Stimme:"
 
 #: dudel/poll/templates/poll/vote_delete_error.html:8 dudel/poll/views.py:236
-#: dudel/poll/views.py:688 dudel/poll/views.py:891
+#: dudel/poll/views.py:688 dudel/poll/views.py:899
 msgid "Deletion not allowed. You are not authenticated."
 msgstr "Löschen nicht erlaubt. Du bist nicht angemeldet."
 
@@ -1329,17 +1334,17 @@ msgstr "Gib einen Namen an"
 msgid "You can't edit this Comment"
 msgstr "Du darfst diesen Kommentar nicht bearbeiten"
 
-#: dudel/poll/views.py:234 dudel/poll/views.py:889
+#: dudel/poll/views.py:234 dudel/poll/views.py:897
 msgid "Deletion not allowed. You are not {}."
 msgstr "Löschen nicht erlaubt. Du bist nicht {}."
 
-#: dudel/poll/views.py:254 dudel/poll/views.py:591 dudel/poll/views.py:917
+#: dudel/poll/views.py:254 dudel/poll/views.py:591 dudel/poll/views.py:925
 msgid "You are not allowed to listen."
 msgstr ""
 
 #: dudel/poll/views.py:277 dudel/poll/views.py:303 dudel/poll/views.py:378
 #: dudel/poll/views.py:427 dudel/poll/views.py:467 dudel/poll/views.py:531
-#: dudel/poll/views.py:585 dudel/poll/views.py:626 dudel/poll/views.py:1012
+#: dudel/poll/views.py:585 dudel/poll/views.py:626 dudel/poll/views.py:1020
 msgid "You are not allowed to edit this Poll."
 msgstr "Du kannst diese Umfrage nicht ändern."
 
@@ -1348,27 +1353,34 @@ msgstr "Du kannst diese Umfrage nicht ändern."
 msgid "There was en error interpreting the provided dates and times"
 msgstr ""
 
-#: dudel/poll/views.py:714
+#: dudel/poll/views.py:715
 msgid "This Poll is past the due date, voting is no longer possible"
 msgstr "Diese Umfrage ist abgelaufen. Abstimmen ist nicht länger möglich."
 
-#: dudel/poll/views.py:750
+#: dudel/poll/views.py:751
 msgid "Anonymous votes are not allowed for this poll."
 msgstr "Bei dieser Umfrage sind anonyme Stimmen nicht erlaubt."
 
-#: dudel/poll/views.py:787
+#: dudel/poll/views.py:775
+msgid ""
+"Due to the the configuration of this poll, you have to fill all choices."
+msgstr ""
+"Aufgrund der Einstellungen der Umfrage müssen alle Möglichkeiten ausgefüllt "
+"sein."
+
+#: dudel/poll/views.py:793
 msgid "Vote has been recorded"
 msgstr "Stimme wurde abgegeben"
 
-#: dudel/poll/views.py:791
+#: dudel/poll/views.py:799
 msgid "You need to either provide a name or post an anonymous vote."
 msgstr "Du musst entweder einen Namen angeben oder anonym abstimmen."
 
-#: dudel/poll/views.py:1031
+#: dudel/poll/views.py:1039
 msgid "User {} not Found"
 msgstr "Benutzer {} nicht gefunden"
 
-#: dudel/poll/views.py:1034
+#: dudel/poll/views.py:1042
 msgid "Settings have been changed"
 msgstr "Einstellungen wurden geändert"
 

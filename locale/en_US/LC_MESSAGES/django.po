@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-20 08:24+0000\n"
+"POT-Creation-Date: 2017-04-22 20:02+0000\n"
 "PO-Revision-Date: 2017-03-23 14:02+0100\n"
 "Last-Translator: Nils Rokita <0rokita@informatik.uni-hamburg.de>\n"
 "Language-Team: \n"
@@ -67,7 +67,7 @@ msgstr "Register"
 
 #: dudel/base/templates/base.html:63 dudel/base/templates/base/settings.html:9
 #: dudel/base/templates/base/settings.html:66
-#: dudel/poll/templates/poll/poll_header.html:84
+#: dudel/poll/templates/poll/poll_header.html:90
 msgid "Settings"
 msgstr "Settings"
 
@@ -524,7 +524,7 @@ msgstr ""
 "you can change this setting at %(base_url)s%(link)s .\n"
 
 #: dudel/invitations/views.py:54 dudel/poll/views.py:599
-#: dudel/poll/views.py:632 dudel/poll/views.py:1022
+#: dudel/poll/views.py:632 dudel/poll/views.py:1030
 msgid "You are not allowed to edit this Poll"
 msgstr "You are not allowed to edit this Poll"
 
@@ -973,7 +973,7 @@ msgid "Assign user"
 msgstr ""
 
 #: dudel/poll/templates/poll/poll.html:141
-#: dudel/poll/templates/poll/poll_header.html:98
+#: dudel/poll/templates/poll/poll_header.html:104
 msgid "Vote"
 msgstr "Vote"
 
@@ -1073,16 +1073,21 @@ msgstr "invitation required"
 msgid "Login required"
 msgstr "login required"
 
-#: dudel/poll/templates/poll/poll_header.html:74
+#: dudel/poll/templates/poll/poll_header.html:65
+#: dudel/poll/templates/poll/poll_header.html:66
+msgid "Empty choices forbidden"
+msgstr ""
+
+#: dudel/poll/templates/poll/poll_header.html:80
 msgid "Overview"
 msgstr "Overview"
 
-#: dudel/poll/templates/poll/poll_header.html:88
+#: dudel/poll/templates/poll/poll_header.html:94
 #: dudel/poll/templates/poll/universal_choice_creation.html:19
 msgid "Choices"
 msgstr "Choices"
 
-#: dudel/poll/templates/poll/poll_header.html:93
+#: dudel/poll/templates/poll/poll_header.html:99
 #, fuzzy
 #| msgid "Edit vote"
 msgid "Edit Vote"
@@ -1332,7 +1337,7 @@ msgid "Author of Vote:"
 msgstr "Author of Vote:"
 
 #: dudel/poll/templates/poll/vote_delete_error.html:8 dudel/poll/views.py:236
-#: dudel/poll/views.py:688 dudel/poll/views.py:891
+#: dudel/poll/views.py:688 dudel/poll/views.py:899
 msgid "Deletion not allowed. You are not authenticated."
 msgstr "Deletion not allowed. You are not authenticated."
 
@@ -1364,17 +1369,17 @@ msgstr ""
 msgid "You can't edit this Comment"
 msgstr ""
 
-#: dudel/poll/views.py:234 dudel/poll/views.py:889
+#: dudel/poll/views.py:234 dudel/poll/views.py:897
 msgid "Deletion not allowed. You are not {}."
 msgstr "Deletion not allowed. You are not {}."
 
-#: dudel/poll/views.py:254 dudel/poll/views.py:591 dudel/poll/views.py:917
+#: dudel/poll/views.py:254 dudel/poll/views.py:591 dudel/poll/views.py:925
 msgid "You are not allowed to listen."
 msgstr "You are not allowed to listen."
 
 #: dudel/poll/views.py:277 dudel/poll/views.py:303 dudel/poll/views.py:378
 #: dudel/poll/views.py:427 dudel/poll/views.py:467 dudel/poll/views.py:531
-#: dudel/poll/views.py:585 dudel/poll/views.py:626 dudel/poll/views.py:1012
+#: dudel/poll/views.py:585 dudel/poll/views.py:626 dudel/poll/views.py:1020
 msgid "You are not allowed to edit this Poll."
 msgstr "You are not allowed to edit this Poll."
 
@@ -1383,29 +1388,34 @@ msgstr "You are not allowed to edit this Poll."
 msgid "There was en error interpreting the provided dates and times"
 msgstr ""
 
-#: dudel/poll/views.py:714
+#: dudel/poll/views.py:715
 msgid "This Poll is past the due date, voting is no longer possible"
 msgstr "This Poll is past the due date, voting is no longer possible"
 
-#: dudel/poll/views.py:750
+#: dudel/poll/views.py:751
 #, fuzzy
 #| msgid "You are not allowed to edit this Poll."
 msgid "Anonymous votes are not allowed for this poll."
 msgstr "You are not allowed to edit this Poll."
 
-#: dudel/poll/views.py:787
+#: dudel/poll/views.py:775
+msgid ""
+"Due to the the configuration of this poll, you have to fill all choices."
+msgstr ""
+
+#: dudel/poll/views.py:793
 msgid "Vote has been recorded"
 msgstr "Vote has been recorded"
 
-#: dudel/poll/views.py:791
+#: dudel/poll/views.py:799
 msgid "You need to either provide a name or post an anonymous vote."
 msgstr "You need to either provide a name or post an anonymous vote."
 
-#: dudel/poll/views.py:1031
+#: dudel/poll/views.py:1039
 msgid "User {} not Found"
 msgstr "User {} not Found"
 
-#: dudel/poll/views.py:1034
+#: dudel/poll/views.py:1042
 msgid "Settings have been changed"
 msgstr ""
 

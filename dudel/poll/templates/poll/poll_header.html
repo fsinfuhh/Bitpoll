@@ -60,6 +60,12 @@
                 <span class="content">{% trans 'login required' %}</span>
             {% endif %}
             </li>
+            <li>
+                {% if poll.vote_all %}
+                    <li title="{% trans 'Empty choices forbidden' %}"><i class="fa fa-ban"></i>
+                    <span class="content">{% trans 'Empty choices forbidden' %}</span>
+                {% endif %}
+            </li>
         </ul>
         {% if  poll.description %}
             <div class="description">
