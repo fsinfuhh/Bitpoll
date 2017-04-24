@@ -22,12 +22,14 @@ from django.shortcuts import redirect
 import django.conf.urls.i18n
 from django.template import Context, loader
 
+from dudel import settings
+
 urlpatterns = [
     url(r'^poll/', include('dudel.poll.urls')),
     url(r'^', include('dudel.base.urls')),
     url(r'^invitations/', include('dudel.invitations.urls')),
     url(r'^$', lambda req: redirect('index'), name='home'),
-    url(r'^login/$', auth_views.login, name='login', ),
+    url(r'^login/$', auth_views.LoginView.as_view(), name='login', ),
     url(r'^logout/$', auth_views.logout, {
         'next_page': '/'
     }, name='logout'),

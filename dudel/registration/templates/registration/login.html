@@ -5,9 +5,15 @@
 
 {% block content %}
     <div class="container">
-    <div class="row">
         <div class="col-md-4">
-            <form method="post">
+            {% if next %}
+                {% if user.is_authenticated %}
+                <p>{% trans "Your account doesn't have access to this page. To proceed, please login with an account that has access." %}</p>
+            {% else %}
+                <p>{% trans 'Please login to see this page.' %}</p>
+                {% endif %}
+            {% endif %}
+            <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
                 {% if form.non_field_errors %}
                 <div class="alert alert-danger">
@@ -41,6 +47,5 @@
             </form>
             <p><a href="{% url 'password_reset' %}">{% trans "Did you forget your password?" %}</a></p>
       </div>
-  </div>
     </div>
-  {% endblock %}
+{% endblock %}

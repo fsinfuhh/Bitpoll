@@ -3,6 +3,7 @@ from smtplib import SMTPRecipientsRefused
 
 from django.contrib import messages
 from django.contrib.auth.models import Group
+from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.db import transaction, connection, IntegrityError
@@ -716,79 +717,84 @@ def vote(request, poll_url, vote_id=None):
         )
         return redirect('poll', poll_url)
 
+    if not current_poll.can_vote(request.user, request, vote_id is not None):
+        if current_poll.require_login and not request.user.is_authenticated:
+            return redirect_to_login(reverse('poll_vote', args=[poll_url]))
+        else:
+            return redirect('poll', poll_url)
+
     tz_activate(current_poll.get_tz_name(request.user))
 
     if request.method == 'POST':
-        if current_poll.can_vote(request.user, request, vote_id is not None):
-            vote_id = request.POST.get('vote_id', None)
-            if vote_id:
-                current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
-                if not current_vote.can_edit(request.user):
-                    # the vote belongs to an user and it is not the authenticated user
-                    return HttpResponseForbidden()  # todo: better errorpage?
-            else:
-                current_vote = Vote(poll=current_poll)
-            current_vote.date_created = now()
-            current_vote.comment = request.POST.get('comment')
-            if vote_id:
-                # leave the name as it was
-                pass
-            elif request.user.is_authenticated:
-                current_vote.name = request.user.get_username()
-                current_vote.user = request.user
+        vote_id = request.POST.get('vote_id', None)
+        if vote_id:
+            current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
+            if not current_vote.can_edit(request.user):
+                # the vote belongs to an user and it is not the authenticated user
+                return HttpResponseForbidden()  # todo: better errorpage?
+        else:
+            current_vote = Vote(poll=current_poll)
+        current_vote.date_created = now()
+        current_vote.comment = request.POST.get('comment')
+        if vote_id:
+            # leave the name as it was
+            pass
+        elif request.user.is_authenticated:
+            current_vote.name = request.user.get_username()
+            current_vote.user = request.user
 
-                if request.user.auto_watch:
-                    try:
-                        poll_watch = PollWatch(poll=current_poll, user=request.user)
-                        poll_watch.save()
-                    except IntegrityError:
-                        pass
-            else:
-                current_vote.name = request.POST.get('name').strip()
-            current_vote.anonymous = 'anonymous' in request.POST
+            if request.user.auto_watch:
+                try:
+                    poll_watch = PollWatch(poll=current_poll, user=request.user)
+                    poll_watch.save()
+                except IntegrityError:
+                    pass
+        else:
+            current_vote.name = request.POST.get('name').strip()
+        current_vote.anonymous = 'anonymous' in request.POST
 
-            if not current_poll.anonymous_allowed and current_vote.anonymous:
-                messages.error(request, _("Anonymous votes are not allowed for this poll."))
-            else:
-                if current_vote.anonymous or current_vote.name:
-                    # prevent non-anonymous vote without name
+        if not current_poll.anonymous_allowed and current_vote.anonymous:
+            messages.error(request, _("Anonymous votes are not allowed for this poll."))
+        else:
+            if current_vote.anonymous or current_vote.name:
+                # prevent non-anonymous vote without name
 
-                    with transaction.atomic():
-                        new_choices = []
+                with transaction.atomic():
+                    new_choices = []
 
-                        current_vote.save()
+                    current_vote.save()
 
-                        if request.user.is_authenticated:
-                            # check if this user was invited
-                            invitation = current_poll.invitation_set.filter(user=request.user)
-                            if invitation:
-                                invitation = invitation[0]
-                                invitation.vote = current_vote
-                                invitation.save()
+                    if request.user.is_authenticated:
+                        # check if this user was invited
+                        invitation = current_poll.invitation_set.filter(user=request.user)
+                        if invitation:
+                            invitation = invitation[0]
+                            invitation.vote = current_vote
+                            invitation.save()
 
-                        for choice in current_poll.choice_set.all():
-                            if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
-                                choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
-                            else:
-                                choice_value = None
-                            new_choices.append(VoteChoice(value=choice_value,
-                                                          vote=current_vote,
-                                                          choice=choice,
-                                                          comment=request.POST.get('comment_{}'.format(choice.id)) or ''))
-                        if vote_id:
-                            VoteChoice.objects.filter(vote=current_vote).delete()
-                            #todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
-                            #todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
+                    for choice in current_poll.choice_set.all():
+                        if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
+                            choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
                         else:
-                            for current_watch in current_poll.pollwatch_set.all():
-                                current_watch.send(request=request, vote=current_vote)
+                            choice_value = None
+                        new_choices.append(VoteChoice(value=choice_value,
+                                                      vote=current_vote,
+                                                      choice=choice,
+                                                      comment=request.POST.get('comment_{}'.format(choice.id)) or ''))
+                    if vote_id:
+                        VoteChoice.objects.filter(vote=current_vote).delete()
+                        #todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
+                        #todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
+                    else:
+                        for current_watch in current_poll.pollwatch_set.all():
+                            current_watch.send(request=request, vote=current_vote)
 
-                        VoteChoice.objects.bulk_create(new_choices)
-                        messages.success(request, _('Vote has been recorded'))
-                        return redirect('poll', poll_url)
-                else:
-                    messages.error(
-                        request, _('You need to either provide a name or post an anonymous vote.'))
+                    VoteChoice.objects.bulk_create(new_choices)
+                    messages.success(request, _('Vote has been recorded'))
+                    return redirect('poll', poll_url)
+            else:
+                messages.error(
+                    request, _('You need to either provide a name or post an anonymous vote.'))
 
     # no/invalid POST: show the dialog
     matrix = current_poll.get_choice_group_matrix(get_current_timezone())
