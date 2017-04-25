@@ -84,12 +84,11 @@ def poll(request, poll_url):
     choice_idx = {choice.id: i for (i, choice) in enumerate(choices)}
 
     vote_choice_matrix = [[None] * len(choice_idx) for _ in vote_idx]
-    for vote_choice in VoteChoice.objects.filter(vote__poll=current_poll, choice__deleted=0).\
+    for vote_choice in VoteChoice.objects.filter(vote__poll=current_poll, choice__deleted=0). \
             select_related('value', 'choice__poll', 'choice'):
         x = vote_idx[vote_choice.vote_id]
         y = choice_idx[vote_choice.choice_id]
         vote_choice_matrix[x][y] = vote_choice
-
 
     # aggregate stats for the different Choice_Values per column
     stats2 = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
@@ -100,7 +99,7 @@ def poll(request, poll_url):
     stats = [
         {
             'score': (stat['score'] / Decimal(votes_count)
-                if votes_count > 0 else 0) if stat['score'] is not None else None,
+                      if votes_count > 0 else 0) if stat['score'] is not None else None,
             'count': stat['score'],
             'text': stat,
             'choices': [
@@ -109,8 +108,8 @@ def poll(request, poll_url):
                     'color': stat2['votechoice__value__color'],
                     'icon': stat2['votechoice__value__icon'],
                     'title': stat2['votechoice__value__title']} for
-                        stat2 in stats2 if
-                        stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
+                stat2 in stats2 if
+                stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
         } for stat in stats]
 
     poll_watched = False
@@ -140,7 +139,7 @@ def poll(request, poll_url):
         'watched': poll_watched,
         'comment_form': CommentForm(),
         'timezone_warning': (request.user.is_authenticated and
-            current_poll.get_tz_name(request.user) != request.user.timezone),
+                             current_poll.get_tz_name(request.user) != request.user.timezone),
     })
 
 
@@ -149,6 +148,7 @@ def comment(request, poll_url, comment_id=None):
     Post a comment to a poll
     :param request:
     :param poll_url: the poll url to post to
+    :param comment_id:
     :return:
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
@@ -275,7 +275,7 @@ def edit_choice(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     if not current_poll.can_edit(request.user):
         messages.error(
-            request, _("You are not allowed to listen.")
+            request, _("You are not allowed to edit this Poll.")
         )
         return redirect('poll', poll_url)
 
@@ -587,7 +587,6 @@ def edit_choicevalues(request, poll_url):
         )
         return redirect('poll', poll_url)
 
-
     if not current_poll.can_listen(request.user):
         messages.error(
             request, _("You are not allowed to listen.")
@@ -710,6 +709,7 @@ def vote(request, poll_url, vote_id=None):
     Takes vote with comments as input and saves the vote along with all comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    error_msg = ''
 
     if current_poll.due_date and current_poll.due_date < now():
         messages.error(
@@ -777,21 +777,29 @@ def vote(request, poll_url, vote_id=None):
                             choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
                         else:
                             choice_value = None
+                            if current_poll.vote_all:
+                                error_msg = _('Due to the the configuration of this poll, you have to fill all '
+                                              'choices.')
                         new_choices.append(VoteChoice(value=choice_value,
                                                       vote=current_vote,
                                                       choice=choice,
-                                                      comment=request.POST.get('comment_{}'.format(choice.id)) or ''))
-                    if vote_id:
-                        VoteChoice.objects.filter(vote=current_vote).delete()
-                        #todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
-                        #todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
-                    else:
-                        for current_watch in current_poll.pollwatch_set.all():
-                            current_watch.send(request=request, vote=current_vote)
+                                                      comment=request.POST.get(
+                                                            'comment_{}'.format(choice.id)) or ''))
 
-                    VoteChoice.objects.bulk_create(new_choices)
-                    messages.success(request, _('Vote has been recorded'))
-                    return redirect('poll', poll_url)
+                    if not error_msg:
+                        if vote_id:
+                            VoteChoice.objects.filter(vote=current_vote).delete ()
+                            # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
+                            # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
+                        else:
+                            for current_watch in current_poll.pollwatch_set.all ():
+                                current_watch.send(request=request, vote=current_vote)
+
+                        VoteChoice.objects.bulk_create(new_choices)
+                        messages.success(request, _('Vote has been recorded'))
+                        return redirect('poll', poll_url)
+                    else:
+                        messages.error(request, error_msg)
             else:
                 messages.error(
                     request, _('You need to either provide a name or post an anonymous vote.'))
@@ -834,12 +842,30 @@ def vote(request, poll_url, vote_id=None):
         'page': 'Vote',
         'current_vote': current_vote,
         'timezone_warning': (request.user.is_authenticated and
-            current_poll.get_tz_name(request.user) != request.user.timezone),
+                             current_poll.get_tz_name(request.user) != request.user.timezone),
     })
 
 
 def vote_assign(request, poll_url, vote_id):
-    pass
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    current_vote = get_object_or_404(Vote, id=vote_id)
+
+    if request.method == 'POST':
+        if request.user.is_authenticated and current_vote.can_edit(request.user):
+            username = request.POST.get('username').strip()
+            user = DudelUser.objects.get(username=username)
+            current_vote.user = user
+            current_vote.name = username
+            current_vote.save()
+
+            return redirect('poll', poll_url)
+        else:
+            return HttpResponseForbidden()
+
+    return TemplateResponse(request, 'poll/vote_assign.html', {
+        'poll': current_poll,
+        'vote': current_vote
+    })
 
 
 def vote_delete(request, poll_url, vote_id):

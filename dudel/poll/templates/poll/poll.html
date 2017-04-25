@@ -97,6 +97,11 @@
                                        class="btn btn-xs btn-default" title="{{ _('Delete vote') }}"><i
                                             class="fa fa-trash-o"></i></a>
                                 {% endif %}
+                                {% if vote.user == None and vote|vote_can_edit:request.user %}
+                                    <a href="{% url 'poll_voteAssign' poll.url vote.id %}"
+                                       class="btn btn-xs btn-default" title="{{ _('Assign user') }}">
+                                        <i class="fa fa-user"></i></a>
+                                {% endif %}
                                 {% comment %}
                                     {% if not vote.anonymous and not vote.user and poll.user_can_administrate(current_user) %}
                                         <a href="{{ url_for('poll_vote_assign', slug=poll.slug, vote_id=vote.id) }}"

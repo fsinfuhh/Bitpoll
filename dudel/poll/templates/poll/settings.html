@@ -123,6 +123,10 @@
                 <input type="checkbox" id="show_invitations" name="{{ form.show_invitations.name }}" {% if form.show_invitations.value %} checked {% endif %}>
                 <label for="show_invitations">{% trans 'show invitations as empty votes' %}</label>
             </div>
+            <div class="checkbox">
+                <input type="checkbox" id="vote_all" name="{{ form.vote_all.name }}" {% if form.vote_all.value %} checked {% endif %}>
+                <label for="vote_all">{% trans 'forbid empty choices' %}</label>
+            </div>
             <div class="help-block">
                 {% blocktrans %}
                 These settings are not retroactive, meaning that changing them will not modify votes/comments already created.
