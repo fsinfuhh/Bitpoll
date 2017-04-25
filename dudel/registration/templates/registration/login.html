@@ -6,6 +6,11 @@
 {% block content %}
     <div class="container">
         <div class="col-md-4">
+              {% block messages %}
+                {% for message in messages %}
+                  <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+              {% endblock messages %}
             {% if next %}
                 {% if user.is_authenticated %}
                 <p>{% trans "Your account doesn't have access to this page. To proceed, please login with an account that has access." %}</p>
