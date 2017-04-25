@@ -16,12 +16,11 @@
     <title>{% block title %}{% endblock %} - {{ site_name }}</title>
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'css/jquery-ui-timepicker-addon.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'css/jquery-range.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/main.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
-    {#  <link href="{% static 'scss/menu.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/> #}
     <link href="{% static 'scss/form.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/action.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/iconpreview.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
@@ -50,20 +49,20 @@
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-left">
-                        <li><a href="{{ home_url }}"><i class="fa fa-home"></i> {% trans 'Home' %}</a></li>
-                        <li><a href="{% url 'index' %}"><i class="fa fa-plus"></i> {% trans 'Create poll' %}</a></li>
-                        <li><a href="{% url 'about' %}"><i class="fa fa-question-circle"></i> {% trans 'About' %}</a></li>
+                        <li><a href="{{ home_url }}"><i class="fa fa-home"></i>{% trans 'Home' %}</a></li>
+                        <li><a href="{% url 'index' %}"><i class="fa fa-plus"></i>{% trans 'Create poll' %}</a></li>
+                        <li><a href="{% url 'about' %}"><i class="fa fa-question-circle"></i>{% trans 'About' %}</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_anonymous %}
                         {% if register %}
-                            <li><a href="{% url 'registration_request_account' %}"><i class="fa fa-pencil"></i> {% trans 'Register' %}</a></li>
+                            <li><a href="{% url 'registration_request_account' %}"><i class="fa fa-pencil"></i>{% trans 'Register' %}</a></li>
                         {% endif %}
-                        <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> {% trans 'Login' %}</a></li>
+                        <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>{% trans 'Login' %}</a></li>
                     {% else %}
                         <li><a href=""><i class="fa fa-user"></i>{{ request.user.get_username }}</a></li>
-                        <li><a href="{% url 'settings' %}"><i class="fa fa-pencil"></i> {% trans 'Settings' %}</a></li>
-                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i> {% trans 'Logout' %}</a></li>
+                        <li><a href="{% url 'settings' %}"><i class="fa fa-pencil"></i>{% trans 'Settings' %}</a></li>
+                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>{% trans 'Logout' %}</a></li>
                     {% endif %}
                     </ul>
                 </div>

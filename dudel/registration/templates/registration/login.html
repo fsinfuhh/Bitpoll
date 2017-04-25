@@ -4,8 +4,9 @@
 {% block title %}{% trans "Login" %}{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="col-md-4">
+    <section class="section create-poll">
+        <div class="container">
+          <div class="halfsize">
               {% block messages %}
                 {% for message in messages %}
                   <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
@@ -47,10 +48,11 @@
                 </div>
                 <input type="hidden" name="next" value="{{ next }}" />
                 <div class="form-group">
-                  <button type="submit" class="btn btn-default">{% trans "Login" %}</button>
+                  <button type="submit" class="primary action">{% trans "Login" %}</button>
               </div>
             </form>
             <p><a href="{% url 'password_reset' %}">{% trans "Did you forget your password?" %}</a></p>
-      </div>
-    </div>
+          </div>
+        </div>
+    </section>
 {% endblock %}

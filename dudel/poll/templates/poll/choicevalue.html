@@ -8,18 +8,24 @@
 
 {% block content %}
         {% include 'poll/poll_header.html' %}
-        <div class="container">
-        <p>
-        {% blocktrans %}Here you can edit which options the voters have for each choice you give them. By default,
-            <b>yes</b>, <b>no</b> and <b>maybe</b> are always enabled, but you can disable or change any of these.
-            You should have at least one value in this list for the voting to make sense.{% endblocktrans %}
-        </p>
-        <p>
-        {% blocktrans %}Weights are factors on how the total score for a choice is calculated. These values are normally somewhere
-            between 0 and 1. The total score is displayed both as a percentage and as the weight sum, so you are
-            allowed to use other values if you want them to "cancel out".{% endblocktrans %}
-        </p>
-        <div class="col-md-6">
+
+    <div class="container container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+            {% blocktrans %}Here you can edit which options the voters have for each choice you give them. By default,
+                <b>yes</b>, <b>no</b> and <b>maybe</b> are always enabled, but you can disable or change any of these.
+                You should have at least one value in this list for the voting to make sense.{% endblocktrans %}
+            </p>
+            <p>
+                {% blocktrans %}Weights are factors on how the total score for a choice is calculated. These values are normally somewhere
+                    between 0 and 1. The total score is displayed both as a percentage and as the weight sum, so you are
+                    allowed to use other values if you want them to "cancel out".{% endblocktrans %}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
             <form method="post">
                 {% csrf_token %}
                 <h2>{% trans 'Available Values' %}</h2>
@@ -43,7 +49,7 @@
                             <td class="author">
                                 <strong>{{ choiceval.votechoice_count }}</strong> / {{ poll.vote_set.count }}
                             </td>
-                            <td class="author">
+                            <td>
                                 <button class="action default" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa fa-pencil"></i></button>
                                 <button class="action default" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa fa-trash-o"></i></button>
                             </td>
@@ -55,12 +61,11 @@
             <a href="{% url 'poll_settings' poll.url %}" class="action">{% trans ' Back' %}</a>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <h2>{% trans 'Add choice value' %}</h2>
 
             <form method="post" action="{% url 'poll_editchoicevalues_create' poll.url %}">
                 {% csrf_token %}
-                <div class="col-md-6">
                     <label for="title">{% trans 'Title' %}</label>
                     {% render_field form.title class+="form-control" %}
                         {% if form.title.errors %}
@@ -87,9 +92,6 @@
                             </div>
                             {% endif %}
                     </div>
-                </div>
-
-                <div class="col-md-6">
                     <label for="weight">{% trans 'Weight' %}</label>
                     <span class="help-inline">{% trans '(usually between 0 and 1)' %}</span>
                         {% render_field form.weight class+="form-control" %}
@@ -118,7 +120,6 @@
                             </div>
                         {% endif %}
                     </div>
-                </div>
 
                 {% if choiceval_select %}
                     <input name="choiceval_id" value="{{ choiceval_select.id }}" type="hidden" readonly>
@@ -450,5 +451,5 @@
                 </li>
             </ul>
         </div>
-      </div>
+      </div></div>
 {% endblock %}

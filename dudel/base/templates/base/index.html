@@ -201,7 +201,7 @@
                                                                                          type="password" value="">
                     </div>
                     <div class="form-group">
-                      <input type="submit" value="{% trans 'Login' %}" class="pull-right action secondary"/>
+                      <input type="submit" value="{% trans 'Login' %}" class="action secondary"/>
                     </div>
                 </form>
             </div>
@@ -217,7 +217,6 @@
                 <p>{% blocktrans %}Registered users have access to the full width of features available.{% endblocktrans %}
                 </p>
                 <a href="{% url 'registration_request_account' %}" class="action"><i class="fa fa-pencil"></i><span>{% trans 'Register' %}</span></a>
-                {# <a href="/login" class="action primary"><i class="fa fa-sign-in"></i> {% trans 'Login' %}</a> TODO #}
             </div>
             {% endif %}
         {# TODO: own polls? #}

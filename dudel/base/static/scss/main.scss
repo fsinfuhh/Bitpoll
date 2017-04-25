@@ -71,7 +71,19 @@ body {
 
 .navbar {
     margin-bottom: 0;
+    background: #333;
+    //color: #fff;
+
+    i {
+        display: inline-block;
+        margin-right: .5em;
+    }
+
+    .navbar-nav > li > a {
+        color: #fff;
+    }
 }
+
 #main-content {
     padding-bottom: 150px;
 }
@@ -106,7 +118,8 @@ body {
 }
 
 .alert {
-    padding: .7em .7em;
+    margin: .7em 0;
+    padding: .7em;
 }
 
 .alert .fa {
