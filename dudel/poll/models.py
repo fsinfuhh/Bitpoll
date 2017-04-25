@@ -194,6 +194,7 @@ class ChoiceValue(models.Model):
                                                                       message=_("Give an HTML color without the #"))])
     weight = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return u'ChoiceValue {}'.format(self.title)

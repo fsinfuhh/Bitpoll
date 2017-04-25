@@ -604,8 +604,18 @@ def edit_choicevalues(request, poll_url):
                 choiceval_id = request.POST.get('delete', None)
                 if choiceval_id:
                     choiceval = get_object_or_404(ChoiceValue, id=choiceval_id)
-                    choiceval.delete()
+                    choiceval.deleted = True
+                    choiceval.save()
                 return redirect('poll_editchoicevalues', current_poll.url)
+
+            if 'restore' in request.POST:
+                choiceval_id = request.POST.get('restore', None)
+                if choiceval_id:
+                    choiceval = get_object_or_404(ChoiceValue, id=choiceval_id)
+                    choiceval.deleted = False
+                    choiceval.save()
+                return redirect('poll_editchoicevalues', current_poll.url)
+
             elif 'edit' in request.POST:
                 choiceval_id = request.POST.get('edit', None)
                 if choiceval_id:
@@ -709,7 +719,8 @@ def vote(request, poll_url, vote_id=None):
     Takes vote with comments as input and saves the vote along with all comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    error_msg = ''
+    error_msg = False
+    deleted_choicevals = False
 
     if current_poll.due_date and current_poll.due_date < now():
         messages.error(
@@ -778,17 +789,26 @@ def vote(request, poll_url, vote_id=None):
                         else:
                             choice_value = None
                             if current_poll.vote_all:
-                                error_msg = _('Due to the the configuration of this poll, you have to fill all '
-                                              'choices.')
-                        new_choices.append(VoteChoice(value=choice_value,
-                                                      vote=current_vote,
-                                                      choice=choice,
-                                                      comment=request.POST.get(
-                                                            'comment_{}'.format(choice.id)) or ''))
+                                error_msg = True
+                                messages.error(request, _('Due to the the configuration of this poll, you have to fill '
+                                                          'all choices.'))
+                        if not choice_value.deleted:
+                            new_choices.append(VoteChoice(value=choice_value,
+                                                          vote=current_vote,
+                                                          choice=choice,
+                                                          comment=request.POST.get(
+                                                                'comment_{}'.format(choice.id)) or ''))
+                        else:
+                            deleted_choicevals = True
+
+                    if deleted_choicevals:
+                        error_msg = True
+                        messages.error(request, _('Value for choice does not exist. This is probably due to '
+                                                  'changes in the poll. Please correct your vote.'))
 
                     if not error_msg:
                         if vote_id:
-                            VoteChoice.objects.filter(vote=current_vote).delete ()
+                            VoteChoice.objects.filter(vote=current_vote).delete()
                             # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
                             # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
                         else:
@@ -798,8 +818,6 @@ def vote(request, poll_url, vote_id=None):
                         VoteChoice.objects.bulk_create(new_choices)
                         messages.success(request, _('Vote has been recorded'))
                         return redirect('poll', poll_url)
-                    else:
-                        messages.error(request, error_msg)
             else:
                 messages.error(
                     request, _('You need to either provide a name or post an anonymous vote.'))
@@ -838,7 +856,7 @@ def vote(request, poll_url, vote_id=None):
         'choices_matrix': zip(matrix, choices, comments, choice_votes),
         'choices': current_poll.choice_set.all(),
         'choices_matrix_len': len(choices),
-        'values': current_poll.choicevalue_set.all(),
+        'values': current_poll.choicevalue_set.filter(deleted=False).all(),
         'page': 'Vote',
         'current_vote': current_vote,
         'timezone_warning': (request.user.is_authenticated and

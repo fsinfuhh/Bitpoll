@@ -40,9 +40,9 @@
                     </tr>
 
                     {% for choiceval in poll.choicevalue_set.all %}
-                        <tr class="choice">
+                        <tr class="choice {% if choiceval.deleted %}deleted{% endif %}">
                             <td class="author choice">{{ choiceval.title }}</td>
-                            <td class="vote-choice" style="background-color: #{{ choiceval.color }}">
+                            <td class="vote-choice" style="background-color: {% if choiceval.deleted %} lightgrey {% else %} #{{ choiceval.color }} {% endif %}">
                                 <i class="fa fa-{{ choiceval.icon }}"></i>
                             </td>
                             <td class="author">{{ choiceval.weight }}</td>
@@ -51,7 +51,11 @@
                             </td>
                             <td>
                                 <button class="action default" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa fa-pencil"></i></button>
-                                <button class="action default" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa fa-trash-o"></i></button>
+                                {% if not choiceval.deleted %}
+                                    <button class="action default" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa fa-trash-o"></i></button>
+                                {% else %}
+                                    <button class="action default" type="submit" name="restore" value="{{ choiceval.id }}"><i class="fa fa-undo"></i></button>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

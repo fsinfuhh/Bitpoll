@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-22 20:02+0000\n"
+"POT-Creation-Date: 2017-04-25 22:40+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -35,60 +35,55 @@ msgstr ""
 msgid "We have recorded the error under the Identifier %(errorid)s."
 msgstr ""
 
-#: dudel/base/templates/base.html:43
-msgid "Menu"
-msgstr "Menü"
-
-#: dudel/base/templates/base.html:45
+#: dudel/base/templates/base.html:52
 msgid "Home"
 msgstr "Home"
 
-#: dudel/base/templates/base.html:46 dudel/base/templates/base/index.html:7
+#: dudel/base/templates/base.html:53 dudel/base/templates/base/index.html:7
 msgid "Create poll"
 msgstr "Umfrage erstellen"
 
-#: dudel/base/templates/base.html:47 dudel/base/templates/base.html:78
+#: dudel/base/templates/base.html:54 dudel/base/templates/base.html:111
 #: dudel/base/templates/base/about.html:10
 msgid "About"
 msgstr "Über"
 
-#: dudel/base/templates/base.html:52 dudel/base/templates/base.html:57
-#: dudel/base/templates/base/index.html:204
-#: dudel/registration/templates/registration/login.html:4
-#: dudel/registration/templates/registration/login.html:39
-msgid "Login"
-msgstr "Login"
-
-#: dudel/base/templates/base.html:55 dudel/base/templates/base/index.html:219
+#: dudel/base/templates/base.html:59 dudel/base/templates/base/index.html:219
 #: dudel/registration/templates/registration/request_account.html:7
 #: dudel/registration/templates/registration/request_account.html:11
 msgid "Register"
 msgstr "Registrieren"
 
-#: dudel/base/templates/base.html:63 dudel/base/templates/base/settings.html:9
+#: dudel/base/templates/base.html:61 dudel/base/templates/base/index.html:204
+#: dudel/registration/templates/registration/login.html:4
+#: dudel/registration/templates/registration/login.html:51
+msgid "Login"
+msgstr "Login"
+
+#: dudel/base/templates/base.html:64 dudel/base/templates/base/settings.html:9
 #: dudel/base/templates/base/settings.html:66
 #: dudel/poll/templates/poll/poll_header.html:90
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: dudel/base/templates/base.html:64
+#: dudel/base/templates/base.html:65
 msgid "Logout"
 msgstr "Abmelden"
 
-#: dudel/base/templates/base.html:79 dudel/base/templates/base/imprint.html:10
+#: dudel/base/templates/base.html:112 dudel/base/templates/base/imprint.html:10
 msgid "Imprint"
 msgstr "Impressum"
 
-#: dudel/base/templates/base.html:80
+#: dudel/base/templates/base.html:113
 #: dudel/base/templates/base/technical_info.html:4
 msgid "Technical Info"
 msgstr "Technische Informationen"
 
-#: dudel/base/templates/base.html:82
+#: dudel/base/templates/base.html:115
 msgid "Current timezone is"
 msgstr "Die aktuelle Zeitzone ist"
 
-#: dudel/base/templates/base.html:94
+#: dudel/base/templates/base.html:127
 #, python-format
 msgid ""
 "\n"
@@ -161,8 +156,8 @@ msgid "Enter Title"
 msgstr "Gib einen Titel ein"
 
 #: dudel/base/templates/base/index.html:86
-#: dudel/poll/templates/poll/choicevalue.html:29
-#: dudel/poll/templates/poll/choicevalue.html:64
+#: dudel/poll/templates/poll/choicevalue.html:35
+#: dudel/poll/templates/poll/choicevalue.html:73
 #: dudel/poll/templates/poll/copy.html:33
 #: dudel/poll/templates/poll/settings.html:31
 #: dudel/poll/templates/poll/settings.html:33
@@ -243,7 +238,7 @@ msgstr "Login"
 
 #: dudel/base/templates/base/index.html:195
 #: dudel/registration/templates/registration/create_account.html:13
-#: dudel/registration/templates/registration/login.html:20
+#: dudel/registration/templates/registration/login.html:32
 #: dudel/registration/templates/registration/request_account.html:15
 msgid "Username"
 msgstr "Benutzername"
@@ -252,7 +247,7 @@ msgstr "Benutzername"
 #: dudel/registration/forms.py:51
 #: dudel/registration/templates/registration/account.html:91
 #: dudel/registration/templates/registration/create_account.html:17
-#: dudel/registration/templates/registration/login.html:29
+#: dudel/registration/templates/registration/login.html:41
 msgid "Password"
 msgstr "Passwort"
 
@@ -266,36 +261,36 @@ msgstr ""
 "Registrierte Benutzer haben Zugang zur vollen Bandbreite von verfügbaren "
 "Funktionen."
 
-#: dudel/base/templates/base/index.html:225
+#: dudel/base/templates/base/index.html:224
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: dudel/base/templates/base/index.html:228
+#: dudel/base/templates/base/index.html:227
 msgid "Polls created"
 msgstr "Erstellte Umfragen"
 
-#: dudel/base/templates/base/index.html:232
-#: dudel/poll/templates/poll/choicevalue.html:32
+#: dudel/base/templates/base/index.html:231
+#: dudel/poll/templates/poll/choicevalue.html:38
 msgid "Votes cast"
 msgstr "Abgegebene Stimmen"
 
-#: dudel/base/templates/base/index.html:236
+#: dudel/base/templates/base/index.html:235
 msgid "Users"
 msgstr "Benutzer"
 
-#: dudel/base/templates/base/index.html:242
+#: dudel/base/templates/base/index.html:241
 msgid "Public polls"
 msgstr "Öffentliche Umfragen"
 
-#: dudel/base/templates/base/index.html:245
+#: dudel/base/templates/base/index.html:244
 msgid "There are currently no public polls."
 msgstr "Zur Zeit gibt es keine öffentlichen Umfragen."
 
-#: dudel/base/templates/base/index.html:256
+#: dudel/base/templates/base/index.html:255
 msgid "My Polls"
 msgstr "Meine Umfragen"
 
-#: dudel/base/templates/base/index.html:257
+#: dudel/base/templates/base/index.html:256
 msgid ""
 "You can find a list of all the polls in which you have participated on your "
 "profile page."
@@ -303,7 +298,7 @@ msgstr ""
 "Du findest eine Liste mit allen Umfragen, an denen du teilgenommen hast, auf "
 "deiner Profilseite."
 
-#: dudel/base/templates/base/index.html:259
+#: dudel/base/templates/base/index.html:258
 msgid "Show my polls"
 msgstr "Meine Umfragen anzeigen"
 
@@ -421,7 +416,7 @@ msgstr "In keiner bestimmten Reihenfolge aufgelistet."
 msgid "%(value)s is not a valid timezone"
 msgstr "%(value)s ist keine gültige Zeitzone"
 
-#: dudel/invitations/models.py:41 dudel/poll/models.py:307
+#: dudel/invitations/models.py:41 dudel/poll/models.py:308
 msgid "The mail server had an error sending the notification to {}"
 msgstr "Der Mailserver konnte die Benachrichtigung nicht an {} senden"
 
@@ -449,7 +444,7 @@ msgid "Invited"
 msgstr "Eingeladen"
 
 #: dudel/invitations/templates/invitations/Invitation.html:24
-#: dudel/poll/templates/poll/choicevalue.html:33
+#: dudel/poll/templates/poll/choicevalue.html:39
 #: dudel/poll/templates/poll/universal_choice_creation.html:21
 msgid "Actions"
 msgstr "Aktionen"
@@ -524,8 +519,8 @@ msgstr ""
 "Einstellungen aktiviert hast.\n"
 "Du kannst diese Einstellung hier ändern: %(base_url)s%(link)s.\n"
 
-#: dudel/invitations/views.py:54 dudel/poll/views.py:599
-#: dudel/poll/views.py:632 dudel/poll/views.py:1030
+#: dudel/invitations/views.py:54 dudel/poll/views.py:600
+#: dudel/poll/views.py:643 dudel/poll/views.py:1054
 msgid "You are not allowed to edit this Poll"
 msgstr "Du darfst diese Umfrage nicht verändern"
 
@@ -556,11 +551,11 @@ msgstr ""
 msgid "Give an HTML color without the #"
 msgstr "Bitte gib eine HTML Farbe ohne das # an"
 
-#: dudel/poll/models.py:291
+#: dudel/poll/models.py:292
 msgid "Annonymus"
 msgstr "anonym"
 
-#: dudel/poll/models.py:298
+#: dudel/poll/models.py:299
 msgid "by an user"
 msgstr "von einem User"
 
@@ -627,81 +622,82 @@ msgstr "Zurück"
 msgid "Next"
 msgstr "Nächste"
 
-#: dudel/poll/templates/poll/choicevalue.html:13
+#: dudel/poll/templates/poll/choicevalue.html:16
 msgid ""
 "Here you can edit which options the voters have for each choice you give "
 "them. By default,\n"
-"            <b>yes</b>, <b>no</b> and <b>maybe</b> are always enabled, but "
-"you can disable or change any of these.\n"
-"            You should have at least one value in this list for the voting "
-"to make sense."
+"                <b>yes</b>, <b>no</b> and <b>maybe</b> are always enabled, "
+"but you can disable or change any of these.\n"
+"                You should have at least one value in this list for the "
+"voting to make sense."
 msgstr ""
 "Hier kannst du die Antworten bearbeiten, die den Teilnehmern für jede "
 "Wahlmöglichkeit zur Verfügung stehen. Standardmäßig sind die Antworten "
 "<b>ja</b>, <b>nein</b> und <b>vielleicht</b> aktiviert, aber du kannst jede "
 "davon bearbeiten oder deaktivieren. Es sollte mindestens eine Antwort in der "
-"Liste geben, damit die Abstimmung sinnvoll ist. "
+"Liste geben, damit die Abstimmung sinnvoll ist."
 
-#: dudel/poll/templates/poll/choicevalue.html:18
+#: dudel/poll/templates/poll/choicevalue.html:21
 msgid ""
 "Weights are factors on how the total score for a choice is calculated. These "
 "values are normally somewhere\n"
-"            between 0 and 1. The total score is displayed both as a "
+"                    between 0 and 1. The total score is displayed both as a "
 "percentage and as the weight sum, so you are\n"
-"            allowed to use other values if you want them to \"cancel out\"."
+"                    allowed to use other values if you want them to \"cancel "
+"out\"."
 msgstr ""
 "Gewichtungen sind Faktoren, die bestimmen, wie die Gesamtwertung berechnet "
 "wird. Gewichtungen sind normalerweise Werte zwischen 0 und 1. Die "
 "Gesamtwertung wird angezeigt als Summe und Anteil, also kannst du auch "
-"andere Werte verwenden. "
+"andere Werte verwenden."
 
-#: dudel/poll/templates/poll/choicevalue.html:25
+#: dudel/poll/templates/poll/choicevalue.html:31
 msgid "Available Values"
 msgstr "Mögliche Antworten"
 
-#: dudel/poll/templates/poll/choicevalue.html:30
+#: dudel/poll/templates/poll/choicevalue.html:36
 msgid "Color/Icon"
 msgstr "Farbe/Symbol"
 
-#: dudel/poll/templates/poll/choicevalue.html:31
-#: dudel/poll/templates/poll/choicevalue.html:93
+#: dudel/poll/templates/poll/choicevalue.html:37
+#: dudel/poll/templates/poll/choicevalue.html:99
 msgid "Weight"
 msgstr "Gewichtung"
 
-#: dudel/poll/templates/poll/choicevalue.html:55
+#: dudel/poll/templates/poll/choicevalue.html:65
 msgid " Back"
 msgstr "Zurück"
 
-#: dudel/poll/templates/poll/choicevalue.html:59
+#: dudel/poll/templates/poll/choicevalue.html:69
 msgid "Add choice value"
 msgstr "Eine Antwort hinzufügen"
 
-#: dudel/poll/templates/poll/choicevalue.html:76
+#: dudel/poll/templates/poll/choicevalue.html:85
 msgid "Color"
 msgstr "Farbe"
 
-#: dudel/poll/templates/poll/choicevalue.html:94
+#: dudel/poll/templates/poll/choicevalue.html:100
 msgid "(usually between 0 and 1)"
 msgstr "(normalerweise zwischen 0 und 1)"
 
-#: dudel/poll/templates/poll/choicevalue.html:106
+#: dudel/poll/templates/poll/choicevalue.html:112
 msgid "Icon"
 msgstr "Symbol"
 
-#: dudel/poll/templates/poll/choicevalue.html:107
+#: dudel/poll/templates/poll/choicevalue.html:113
 msgid "(any FontAwesome icon)"
 msgstr "(ein beliebiges FontAwesome-Icon)"
 
-#: dudel/poll/templates/poll/choicevalue.html:125
+#: dudel/poll/templates/poll/choicevalue.html:130
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: dudel/poll/templates/poll/choicevalue.html:128
+#: dudel/poll/templates/poll/choicevalue.html:133
 #: dudel/poll/templates/poll/dt_choice_creation_time.html:43
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: dudel/poll/templates/poll/choicevalue.html:132
+#: dudel/poll/templates/poll/choicevalue.html:137
 msgid "Click icon to insert it into the form."
 msgstr "Klick auf ein Symbol, um es hinzuzufügen."
 
@@ -960,7 +956,7 @@ msgstr "Kommentar bearbeiten"
 msgid "Post a comment"
 msgstr "Kommentar abschicken"
 
-#: dudel/poll/templates/poll/poll.html:230 dudel/poll/views.py:155
+#: dudel/poll/templates/poll/poll.html:230 dudel/poll/views.py:156
 msgid "Comments are disabled for this Poll"
 msgstr "Kommentare sind für diese Umfrage deaktiviert"
 
@@ -1297,90 +1293,99 @@ msgstr "Titel der Umfrage:"
 msgid "Author of Vote:"
 msgstr "Autor der Stimme:"
 
-#: dudel/poll/templates/poll/vote_delete_error.html:8 dudel/poll/views.py:236
-#: dudel/poll/views.py:688 dudel/poll/views.py:899
+#: dudel/poll/templates/poll/vote_delete_error.html:8 dudel/poll/views.py:237
+#: dudel/poll/views.py:699 dudel/poll/views.py:923
 msgid "Deletion not allowed. You are not authenticated."
 msgstr "Löschen nicht erlaubt. Du bist nicht angemeldet."
 
-#: dudel/poll/views.py:66
+#: dudel/poll/views.py:67
 msgid "No individual results are shown due to Poll settings"
 msgstr ""
 "Individuelle Abstimmungsergebnisse werden aufgrund der Umfrageeinstellungen "
 "nicht angezeigt"
 
-#: dudel/poll/views.py:70
+#: dudel/poll/views.py:71
 msgid "Results are only sown after (authenticated) Voting"
 msgstr "Ergebnisse werden erst nach (angemeldetem) Abstimmen angezeigt."
 
-#: dudel/poll/views.py:74
+#: dudel/poll/views.py:75
 msgid "Only the Summary is shown due to the Poll settings"
 msgstr ""
 "Es wird aufgrund der Umfrageeinstellungen nur eine Zusammenfassung angezeigt"
 
-#: dudel/poll/views.py:79
+#: dudel/poll/views.py:80
 msgid "The summary is not shown due to the config of the Poll"
 msgstr ""
 "Die Zusammenfassung wird aufgrund der Umfrageeinstellungen nicht angezeigt."
 
-#: dudel/poll/views.py:166
+#: dudel/poll/views.py:167
 msgid "A Comment should have a text"
 msgstr "Ein Kommentar sollte einen Text haben."
 
-#: dudel/poll/views.py:168
+#: dudel/poll/views.py:169
 msgid "Provide a name"
 msgstr "Gib einen Namen an"
 
-#: dudel/poll/views.py:176 dudel/poll/views.py:191
+#: dudel/poll/views.py:177 dudel/poll/views.py:192
 msgid "You can't edit this Comment"
 msgstr "Du darfst diesen Kommentar nicht bearbeiten"
 
-#: dudel/poll/views.py:234 dudel/poll/views.py:897
+#: dudel/poll/views.py:235 dudel/poll/views.py:921
 msgid "Deletion not allowed. You are not {}."
 msgstr "Löschen nicht erlaubt. Du bist nicht {}."
 
-#: dudel/poll/views.py:254 dudel/poll/views.py:591 dudel/poll/views.py:925
+#: dudel/poll/views.py:255 dudel/poll/views.py:592 dudel/poll/views.py:949
 msgid "You are not allowed to listen."
 msgstr ""
 
-#: dudel/poll/views.py:277 dudel/poll/views.py:303 dudel/poll/views.py:378
-#: dudel/poll/views.py:427 dudel/poll/views.py:467 dudel/poll/views.py:531
-#: dudel/poll/views.py:585 dudel/poll/views.py:626 dudel/poll/views.py:1020
+#: dudel/poll/views.py:278 dudel/poll/views.py:304 dudel/poll/views.py:379
+#: dudel/poll/views.py:428 dudel/poll/views.py:468 dudel/poll/views.py:532
+#: dudel/poll/views.py:586 dudel/poll/views.py:637 dudel/poll/views.py:1044
 msgid "You are not allowed to edit this Poll."
 msgstr "Du kannst diese Umfrage nicht ändern."
 
-#: dudel/poll/views.py:333 dudel/poll/views.py:337 dudel/poll/views.py:490
-#: dudel/poll/views.py:494
+#: dudel/poll/views.py:334 dudel/poll/views.py:338 dudel/poll/views.py:491
+#: dudel/poll/views.py:495
 msgid "There was en error interpreting the provided dates and times"
 msgstr ""
 
-#: dudel/poll/views.py:715
+#: dudel/poll/views.py:727
 msgid "This Poll is past the due date, voting is no longer possible"
 msgstr "Diese Umfrage ist abgelaufen. Abstimmen ist nicht länger möglich."
 
-#: dudel/poll/views.py:751
+#: dudel/poll/views.py:768
 msgid "Anonymous votes are not allowed for this poll."
 msgstr "Bei dieser Umfrage sind anonyme Stimmen nicht erlaubt."
 
-#: dudel/poll/views.py:775
+#: dudel/poll/views.py:793
 msgid ""
 "Due to the the configuration of this poll, you have to fill all choices."
 msgstr ""
 "Aufgrund der Einstellungen der Umfrage müssen alle Möglichkeiten ausgefüllt "
 "sein."
 
-#: dudel/poll/views.py:793
+#: dudel/poll/views.py:806
+msgid ""
+"Value for choice does not exist. This is probably due to changes in the "
+"poll. Please correct your vote."
+msgstr ""
+"Eine der ausgewählten Antwortmöglichkeiten existiert nicht. Dies liegt "
+"wahrscheinlich an Änderungen bei der Umfrage. Bitte korrigiere deine "
+"Stimmabgabe."
+
+#: dudel/poll/views.py:819
 msgid "Vote has been recorded"
 msgstr "Stimme wurde abgegeben"
 
-#: dudel/poll/views.py:799
+#: dudel/poll/views.py:823
 msgid "You need to either provide a name or post an anonymous vote."
 msgstr "Du musst entweder einen Namen angeben oder anonym abstimmen."
 
-#: dudel/poll/views.py:1039
+#: dudel/poll/views.py:1063
 msgid "User {} not Found"
 msgstr "Benutzer {} nicht gefunden"
 
-#: dudel/poll/views.py:1042
+#: dudel/poll/views.py:1066
 msgid "Settings have been changed"
 msgstr "Einstellungen wurden geändert"
 
@@ -1487,7 +1492,17 @@ msgid ""
 "\n"
 msgstr ""
 
-#: dudel/registration/templates/registration/login.html:42
+#: dudel/registration/templates/registration/login.html:17
+msgid ""
+"Your account doesn't have access to this page. To proceed, please login with "
+"an account that has access."
+msgstr ""
+
+#: dudel/registration/templates/registration/login.html:19
+msgid "Please login to see this page."
+msgstr ""
+
+#: dudel/registration/templates/registration/login.html:54
 msgid "Did you forget your password?"
 msgstr "Passwort vergessen?"
 
@@ -1568,7 +1583,7 @@ msgstr ""
 msgid "Thanks for using our site!"
 msgstr "Danke dass du unsere Seite benutzt!"
 
-#: dudel/registration/templates/registration/password_reset_form.html:10
+#: dudel/registration/templates/registration/password_reset_form.html:11
 msgid ""
 "Forgotten your password? Enter your email address below, and we'll email "
 "instructions for setting a new one."
@@ -1576,11 +1591,11 @@ msgstr ""
 "Passwort vergessen? Gib unten deine E-Mail-Adresse ein und wir senden dir "
 "Anweisungen um ein neues Passwort zu setzen."
 
-#: dudel/registration/templates/registration/password_reset_form.html:17
+#: dudel/registration/templates/registration/password_reset_form.html:18
 msgid "Email address:"
 msgstr "E-Mail-Adresse:"
 
-#: dudel/registration/templates/registration/password_reset_form.html:25
+#: dudel/registration/templates/registration/password_reset_form.html:26
 msgid "Reset my password"
 msgstr "Mein Passwort zurÃ¼cksetzen"
 
@@ -1659,6 +1674,9 @@ msgstr ""
 #: dudel/registration/views.py:191
 msgid "Registration: Sending mail failed: {}"
 msgstr ""
+
+#~ msgid "Menu"
+#~ msgstr "Menü"
 
 #~ msgid "Current timezone is Europe/Berlin."
 #~ msgstr "Aktuelle Zeitzone ist Europa/Berlin."
