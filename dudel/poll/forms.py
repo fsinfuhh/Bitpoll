@@ -95,6 +95,12 @@ class ChoiceValueForm(ModelForm):
         model = ChoiceValue
         fields = ['title', 'icon', 'color', 'weight']
 
+    def clean_color(self):
+        color = self.cleaned_data['color']
+        if color[0] == '#':
+            return color[1:]
+        return color
+
 
 class CommentForm(ModelForm):
     class Meta:

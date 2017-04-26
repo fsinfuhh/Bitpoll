@@ -189,7 +189,7 @@
         {#<a href="{% url 'poll_voteEdit' poll.url vote.id %}"> Edit </a> #}
         {#<a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a> #}
 
-        <br/><br/>
+        <br/><br/><h1 class="print-only">{% trans 'Comments' %}</h1>
         <div class="comments">
             {% for comment in poll.comment_set.all %}
             <div class="comment">

@@ -83,19 +83,17 @@
                         {% endif %}
 
                     <label for="color">{% trans 'Color' %}</label>
-                    <div class="input-group">
-                        <span class="input-group-addon">#</span>
-                            {% render_field form.color class+="form-control" %}
-                            {% if form.color.errors %}
-                                <div class="form-errors">
-                                <div class="alert alert-danger">
-                                    <div class="container">
-                                        <i class="fa fa-times"></i>{{ form.color.errors }}
-                                    </div>
+                    <input type="color" class="form-control" name="{{ form.color.name }}" value="#{{ form.color.value|default_if_none:'90db45' }}" />
+                        {# {% render_field form.color class+="form-control" %} #}
+                        {% if form.color.errors %}
+                            <div class="form-errors">
+                            <div class="alert alert-danger">
+                                <div class="container">
+                                    <i class="fa fa-times"></i>{{ form.color.errors }}
                                 </div>
                             </div>
-                            {% endif %}
-                    </div>
+                        </div>
+                        {% endif %}
                     <label for="weight">{% trans 'Weight' %}</label>
                     <span class="help-inline">{% trans '(usually between 0 and 1)' %}</span>
                         {% render_field form.weight class+="form-control" %}
