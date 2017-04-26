@@ -3,6 +3,7 @@ import pytz
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import BaseCommand
 from django.db.utils import IntegrityError
 
@@ -28,10 +29,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         """Import data from the old dudel."""
         # connect to db
-        conn_string = "host='{}' dbname='{}' user='{}' password='{}'".format(
+        self.conn_string = "host='{}' dbname='{}' user='{}' password='{}'".format(
             options['db_host'], options['db_name'], options['db_user'], options['db_password'])
 
-        conn = psycopg2.connect(conn_string)
+        conn = psycopg2.connect(self.conn_string)
         cursor = conn.cursor()
 
         # migrating polls
@@ -204,14 +205,29 @@ class Command(BaseCommand):
                     user=self.resolve_user(comment['user_id']),
                     poll=poll)
 
-    @staticmethod
-    def resolve_user(old_user_id):
+    def resolve_user(self, old_user_id):
         """Resolve a user by its user id from old dudel."""
-        # TODO: do actual resolving
-        return get_user_model().objects.first()
+        # connect to db
+        conn = psycopg2.connect(self.conn_string)
+        cursor = conn.cursor()
 
-    @staticmethod
-    def resolve_group(old_group_id):
+        cursor.execute('SELECT username FROM "user" WHERE id=%s', (old_user_id,))
+        username = cursor.fetchone()
+        try:
+            if username:
+                return get_user_model().objects.get(username=username[0])
+        except ObjectDoesNotExist:
+            return None
+
+    def resolve_group(self, old_group_id):
         """Resolve a group by its id from old dudel."""
-        # TODO: do actual resolving
-        return Group.objects.first()
+        conn = psycopg2.connect(self.conn_string)
+        cursor = conn.cursor()
+
+        cursor.execute('SELECT name FROM "group" WHERE id=%s', (old_group_id,))
+        groupname = cursor.fetchone()
+        try:
+            if groupname:
+                return Group.objects.get(name=groupname[0])
+        except ObjectDoesNotExist:
+            return None
