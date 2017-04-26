@@ -86,12 +86,13 @@ class Command(BaseCommand):
                 show_invitations=poll['show_invitations'],
                 timezone_name=poll['timezone_name'])
 
-            if poll['owner_id'] and poll['owner_id'] > 0:
-                # group owner
-                migrated_poll.user = self.resolve_user(poll['owner_id'])
-            elif poll['owner_id'] and poll['owner_id'] < 0:
+            owner = self.resolve_user_or_group(poll['owner_id'])
+            if isinstance(owner, get_user_model()):
                 # user owner
-                migrated_poll.user = self.resolve_group(-poll['owner_id'])
+                migrated_poll.user = owner
+            elif isinstance(owner, Group):
+                # group owner
+                migrated_poll.group = owner
             
             migrated_poll.save()
             migrated_polls.add((poll['id'], migrated_poll))
@@ -162,9 +163,9 @@ class Command(BaseCommand):
                     anonymous=vote['anonymous'],
                     date_created=timezone.localize(vote['created']),
                     comment=vote['comment'],
-                    assigned_by=self.resolve_user(vote['assigned_by_id']) if vote['assigned_by_id'] else None,
+                    assigned_by=self.resolve_user_or_group(vote['assigned_by_id']) if vote['assigned_by_id'] else None,
                     poll=poll,
-                    user=self.resolve_user(vote['user_id']) if vote['user_id'] else None)
+                    user=self.resolve_user_or_group(vote['user_id']) if vote['user_id'] else None)
                 votes_migrated.add((vote['id'], v))
             for vote_id, vote in votes_migrated:
                 # vote choices
@@ -202,32 +203,24 @@ class Command(BaseCommand):
                     text=comment['text'],
                     date_created=timezone.localize(comment['created']),
                     name=comment['name'] or '',
-                    user=self.resolve_user(comment['user_id']),
+                    user=self.resolve_user_or_group(comment['user_id']),
                     poll=poll)
 
-    def resolve_user(self, old_user_id):
+    def resolve_user_or_group(self, old_id):
         """Resolve a user by its user id from old dudel."""
         # connect to db
         conn = psycopg2.connect(self.conn_string)
         cursor = conn.cursor()
 
-        cursor.execute('SELECT username FROM "user" WHERE id=%s', (old_user_id,))
+        cursor.execute('SELECT username FROM "user" WHERE id=%s', (old_id,))
         username = cursor.fetchone()
         try:
             if username:
                 return get_user_model().objects.get(username=username[0])
-        except ObjectDoesNotExist:
-            return None
-
-    def resolve_group(self, old_group_id):
-        """Resolve a group by its id from old dudel."""
-        conn = psycopg2.connect(self.conn_string)
-        cursor = conn.cursor()
-
-        cursor.execute('SELECT name FROM "group" WHERE id=%s', (old_group_id,))
-        groupname = cursor.fetchone()
-        try:
-            if groupname:
-                return Group.objects.get(name=groupname[0])
+            else:
+                cursor.execute('SELECT name FROM "group" WHERE id=%s', (old_id,))
+                groupname = cursor.fetchone()
+                if groupname:
+                    return Group.objects.get(name=groupname[0])
         except ObjectDoesNotExist:
             return None
