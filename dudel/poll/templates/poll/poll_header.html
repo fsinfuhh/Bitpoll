@@ -9,9 +9,9 @@
             <form class="form form-inline pull-right" action="{% url 'poll_watch' poll.url %}" method="post">
                 {% csrf_token %}
                 {% if watched %}
-                    <button class="action" type="submit"><i class="fa fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
+                    <button class="action noprint" type="submit"><i class="fa fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
                 {% else %}
-                    <button class="action" type="submit"><i class="fa fa-eye"></i> {% trans 'Watch Poll' %}</button>
+                    <button class="action noprint" type="submit"><i class="fa fa-eye"></i> {% trans 'Watch Poll' %}</button>
                 {% endif %}
             </form>
         {% endif %}
@@ -47,25 +47,20 @@
             {% endif %}
             {% if poll.anonymous_allowed %}
                 <li title="{% trans 'Anonymous voting allowed' %}"><i class="fa fa-check"></i>
-                <span class="content">{% trans 'anonymous voting' %}</span>
+                    <span class="content">{% trans 'anonymous voting' %}</span></li>
             {% endif %}
-            </li>
             {% if poll.require_invitation %}
                 <li title="{% trans 'Invitation required' %}"><i class="fa fa-check"></i>
-                <span class="content">{% trans 'invitation required' %}</span>
+                    <span class="content">{% trans 'invitation required' %}</span></li>
             {% endif %}
-            </li>
             {% if poll.require_login %}
                 <li title="{% trans 'Login required' %}"><i class="fa fa-check"></i>
-                <span class="content">{% trans 'login required' %}</span>
+                    <span class="content">{% trans 'login required' %}</span></li>
             {% endif %}
-            </li>
-            <li>
                 {% if poll.vote_all %}
                     <li title="{% trans 'Empty choices forbidden' %}"><i class="fa fa-ban"></i>
-                    <span class="content">{% trans 'Empty choices forbidden' %}</span>
+                        <span class="content">{% trans 'Empty choices forbidden' %}</span></li>
                 {% endif %}
-            </li>
         </ul>
         {% if  poll.description %}
             <div class="description">
@@ -73,7 +68,7 @@
             </div>
         {% endif %}
         <nav>
-            <ul class="poll-tabs">
+            <ul class="poll-tabs noprint">
                 <li class="{% if page == "" %}active{% endif %}"><a data-shortcut="g o"
                                                                     href="{% url 'poll' poll.url %}"><i
                         class="fa fa-table"></i>

@@ -190,7 +190,7 @@ class Choice(models.Model):
 class ChoiceValue(models.Model):
     title = models.CharField(max_length=80)
     icon = models.CharField(max_length=64)
-    color = models.CharField(max_length=6, validators=[RegexValidator('^[a-fA-F0-9]{6}$',
+    color = models.CharField(max_length=7, validators=[RegexValidator('#?[a-fA-F0-9]{6}$',
                                                                       message=_("Give an HTML color without the #"))])
     weight = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
