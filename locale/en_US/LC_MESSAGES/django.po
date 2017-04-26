@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-25 22:40+0000\n"
+"POT-Creation-Date: 2017-04-26 14:16+0000\n"
 "PO-Revision-Date: 2017-03-23 14:02+0100\n"
 "Last-Translator: Nils Rokita <0rokita@informatik.uni-hamburg.de>\n"
 "Language-Team: \n"
@@ -61,8 +61,8 @@ msgid "Login"
 msgstr "Login"
 
 #: dudel/base/templates/base.html:64 dudel/base/templates/base/settings.html:9
-#: dudel/base/templates/base/settings.html:66
-#: dudel/poll/templates/poll/poll_header.html:90
+#: dudel/base/templates/base/settings.html:67
+#: dudel/poll/templates/poll/poll_header.html:85
 msgid "Settings"
 msgstr "Settings"
 
@@ -201,7 +201,7 @@ msgid "allow anonymous votes"
 msgstr "allow anonymous votes"
 
 #: dudel/base/templates/base/index.html:155
-#: dudel/poll/templates/poll/poll_header.html:60
+#: dudel/poll/templates/poll/poll_header.html:58
 #: dudel/poll/templates/poll/settings.html:108
 msgid "login required"
 msgstr "login required"
@@ -309,11 +309,11 @@ msgstr "Show my polls"
 msgid "License information"
 msgstr "License information"
 
-#: dudel/base/templates/base/settings.html:14
+#: dudel/base/templates/base/settings.html:15
 msgid "Poll overview"
 msgstr "Poll overview"
 
-#: dudel/base/templates/base/settings.html:16
+#: dudel/base/templates/base/settings.html:17
 msgid ""
 "This list shows all the polls you have participated in, either by owning "
 "them, voting on them, being invited, or watching."
@@ -321,79 +321,79 @@ msgstr ""
 "This list shows all the polls you have participated in, either by owning "
 "them, voting on them, being invited, or watching."
 
-#: dudel/base/templates/base/settings.html:20
+#: dudel/base/templates/base/settings.html:21
 msgid "Poll title"
 msgstr "Poll title"
 
-#: dudel/base/templates/base/settings.html:21
+#: dudel/base/templates/base/settings.html:22
 #, fuzzy
 #| msgid "Due-Date:"
 msgid "Due-Date"
 msgstr "Due-Date:"
 
-#: dudel/base/templates/base/settings.html:22
+#: dudel/base/templates/base/settings.html:23
 msgid "Tags"
 msgstr "Tags"
 
-#: dudel/base/templates/base/settings.html:34
+#: dudel/base/templates/base/settings.html:35
 msgid "Owner"
 msgstr "Owner"
 
-#: dudel/base/templates/base/settings.html:36
+#: dudel/base/templates/base/settings.html:37
 msgid "Not owner"
 msgstr "Not owner"
 
-#: dudel/base/templates/base/settings.html:43
+#: dudel/base/templates/base/settings.html:44
 msgid "Not own group"
 msgstr "Not own group"
 
-#: dudel/base/templates/base/settings.html:48
+#: dudel/base/templates/base/settings.html:49
 msgid "Voted"
 msgstr "Voted"
 
-#: dudel/base/templates/base/settings.html:50
+#: dudel/base/templates/base/settings.html:51
 msgid "Not voted"
 msgstr "Not voted"
 
-#: dudel/base/templates/base/settings.html:55
+#: dudel/base/templates/base/settings.html:56
 msgid "Watching"
 msgstr "Watching"
 
-#: dudel/base/templates/base/settings.html:57
+#: dudel/base/templates/base/settings.html:58
 msgid "Not watching"
 msgstr "Not watching"
 
-#: dudel/base/templates/base/settings.html:70
+#: dudel/base/templates/base/settings.html:71
 #, python-format
 msgid ""
 " You can change your email and Password <a href=\"%(reg_url)s\">here</a> "
 msgstr ""
 
-#: dudel/base/templates/base/settings.html:72
+#: dudel/base/templates/base/settings.html:73
 msgid "You can edit your account settings in the centralized accounts page"
 msgstr "You can edit your account settings in the centralized accounts page"
 
-#: dudel/base/templates/base/settings.html:78
+#: dudel/base/templates/base/settings.html:79
 msgid "Language:"
 msgstr "Language:"
 
-#: dudel/base/templates/base/settings.html:91
+#: dudel/base/templates/base/settings.html:92
 msgid "Timezone:"
 msgstr "Timezone:"
 
-#: dudel/base/templates/base/settings.html:103
+#: dudel/base/templates/base/settings.html:104
 msgid "Various"
 msgstr "Various"
 
-#: dudel/base/templates/base/settings.html:106
+#: dudel/base/templates/base/settings.html:107
 msgid "Auto-watch polls"
 msgstr "Auto-watch polls"
 
-#: dudel/base/templates/base/settings.html:110
+#: dudel/base/templates/base/settings.html:111
 msgid "Allow to receive emails for poll invitations"
 msgstr "Allow to receive emails for poll invitations"
 
-#: dudel/base/templates/base/settings.html:113
+#: dudel/base/templates/base/settings.html:114
 #: dudel/poll/templates/poll/universal_choice_creation.html:14
 #: dudel/poll/templates/poll/universal_choice_creation.html:94
 msgid "Save"
@@ -518,8 +518,8 @@ msgstr ""
 "Invitation in your settings.\n"
 "you can change this setting at %(base_url)s%(link)s .\n"
 
-#: dudel/invitations/views.py:54 dudel/poll/views.py:600
-#: dudel/poll/views.py:643 dudel/poll/views.py:1054
+#: dudel/invitations/views.py:54 dudel/poll/views.py:612
+#: dudel/poll/views.py:655 dudel/poll/views.py:1071
 msgid "You are not allowed to edit this Poll"
 msgstr "You are not allowed to edit this Poll"
 
@@ -689,7 +689,7 @@ msgid "Color/Icon"
 msgstr "Color/Icon"
 
 #: dudel/poll/templates/poll/choicevalue.html:37
-#: dudel/poll/templates/poll/choicevalue.html:99
+#: dudel/poll/templates/poll/choicevalue.html:97
 msgid "Weight"
 msgstr "Weight"
 
@@ -705,28 +705,28 @@ msgstr "Add choice value"
 msgid "Color"
 msgstr "Color"
 
-#: dudel/poll/templates/poll/choicevalue.html:100
+#: dudel/poll/templates/poll/choicevalue.html:98
 msgid "(usually between 0 and 1)"
 msgstr "(usually between 0 and 1)"
 
-#: dudel/poll/templates/poll/choicevalue.html:112
+#: dudel/poll/templates/poll/choicevalue.html:110
 msgid "Icon"
 msgstr "Icon"
 
-#: dudel/poll/templates/poll/choicevalue.html:113
+#: dudel/poll/templates/poll/choicevalue.html:111
 msgid "(any FontAwesome icon)"
 msgstr "(any FontAwesome icon)"
 
-#: dudel/poll/templates/poll/choicevalue.html:130
+#: dudel/poll/templates/poll/choicevalue.html:128
 msgid "Edit"
 msgstr "Edit"
 
-#: dudel/poll/templates/poll/choicevalue.html:133
+#: dudel/poll/templates/poll/choicevalue.html:131
 #: dudel/poll/templates/poll/dt_choice_creation_time.html:43
 msgid "Add"
 msgstr "Add"
 
-#: dudel/poll/templates/poll/choicevalue.html:137
+#: dudel/poll/templates/poll/choicevalue.html:135
 msgid "Click icon to insert it into the form."
 msgstr "Click icon to insert it into the form."
 
@@ -985,7 +985,7 @@ msgid "Assign user"
 msgstr ""
 
 #: dudel/poll/templates/poll/poll.html:141
-#: dudel/poll/templates/poll/poll_header.html:104
+#: dudel/poll/templates/poll/poll_header.html:99
 msgid "Vote"
 msgstr "Vote"
 
@@ -997,6 +997,10 @@ msgstr "Percent"
 #: dudel/poll/templates/poll/poll.html:171
 msgid "Score"
 msgstr "Score"
+
+#: dudel/poll/templates/poll/poll.html:193
+msgid "Comments"
+msgstr "Comments"
 
 #: dudel/poll/templates/poll/poll.html:202
 #, fuzzy
@@ -1014,7 +1018,7 @@ msgstr "Add a comment"
 msgid "Post a comment"
 msgstr "Post a comment"
 
-#: dudel/poll/templates/poll/poll.html:230 dudel/poll/views.py:156
+#: dudel/poll/templates/poll/poll.html:230 dudel/poll/views.py:168
 #, fuzzy
 #| msgid "You are not allowed to edit this Poll"
 msgid "Comments are disabled for this Poll"
@@ -1071,35 +1075,35 @@ msgstr "Anonymous voting allowed"
 msgid "anonymous voting"
 msgstr "anonymous voting"
 
-#: dudel/poll/templates/poll/poll_header.html:54
+#: dudel/poll/templates/poll/poll_header.html:53
 msgid "Invitation required"
 msgstr "Invitation required"
 
-#: dudel/poll/templates/poll/poll_header.html:55
+#: dudel/poll/templates/poll/poll_header.html:54
 msgid "invitation required"
 msgstr "invitation required"
 
-#: dudel/poll/templates/poll/poll_header.html:59
+#: dudel/poll/templates/poll/poll_header.html:57
 #, fuzzy
 #| msgid "login required"
 msgid "Login required"
 msgstr "login required"
 
-#: dudel/poll/templates/poll/poll_header.html:65
-#: dudel/poll/templates/poll/poll_header.html:66
+#: dudel/poll/templates/poll/poll_header.html:61
+#: dudel/poll/templates/poll/poll_header.html:62
 msgid "Empty choices forbidden"
 msgstr ""
 
-#: dudel/poll/templates/poll/poll_header.html:80
+#: dudel/poll/templates/poll/poll_header.html:75
 msgid "Overview"
 msgstr "Overview"
 
-#: dudel/poll/templates/poll/poll_header.html:94
+#: dudel/poll/templates/poll/poll_header.html:89
 #: dudel/poll/templates/poll/universal_choice_creation.html:19
 msgid "Choices"
 msgstr "Choices"
 
-#: dudel/poll/templates/poll/poll_header.html:99
+#: dudel/poll/templates/poll/poll_header.html:94
 #, fuzzy
 #| msgid "Edit vote"
 msgid "Edit Vote"
@@ -1348,8 +1352,8 @@ msgstr "Title of Poll:"
 msgid "Author of Vote:"
 msgstr "Author of Vote:"
 
-#: dudel/poll/templates/poll/vote_delete_error.html:8 dudel/poll/views.py:237
-#: dudel/poll/views.py:699 dudel/poll/views.py:923
+#: dudel/poll/templates/poll/vote_delete_error.html:8 dudel/poll/views.py:249
+#: dudel/poll/views.py:711 dudel/poll/views.py:940
 msgid "Deletion not allowed. You are not authenticated."
 msgstr "Deletion not allowed. You are not authenticated."
 
@@ -1369,71 +1373,77 @@ msgstr "Only the Summary is shown due to the Poll settings"
 msgid "The summary is not shown due to the config of the Poll"
 msgstr "The summary is not shown due to the config of the Poll"
 
-#: dudel/poll/views.py:167
+#: dudel/poll/views.py:132
+msgid ""
+"Some votes contain deleted values. If you have already voted, please check "
+"your vote."
+msgstr ""
+
+#: dudel/poll/views.py:179
 msgid "A Comment should have a text"
 msgstr ""
 
-#: dudel/poll/views.py:169
+#: dudel/poll/views.py:181
 msgid "Provide a name"
 msgstr ""
 
-#: dudel/poll/views.py:177 dudel/poll/views.py:192
+#: dudel/poll/views.py:189 dudel/poll/views.py:204
 msgid "You can't edit this Comment"
 msgstr ""
 
-#: dudel/poll/views.py:235 dudel/poll/views.py:921
+#: dudel/poll/views.py:247 dudel/poll/views.py:938
 msgid "Deletion not allowed. You are not {}."
 msgstr "Deletion not allowed. You are not {}."
 
-#: dudel/poll/views.py:255 dudel/poll/views.py:592 dudel/poll/views.py:949
+#: dudel/poll/views.py:267 dudel/poll/views.py:604 dudel/poll/views.py:966
 msgid "You are not allowed to listen."
 msgstr "You are not allowed to listen."
 
-#: dudel/poll/views.py:278 dudel/poll/views.py:304 dudel/poll/views.py:379
-#: dudel/poll/views.py:428 dudel/poll/views.py:468 dudel/poll/views.py:532
-#: dudel/poll/views.py:586 dudel/poll/views.py:637 dudel/poll/views.py:1044
+#: dudel/poll/views.py:290 dudel/poll/views.py:316 dudel/poll/views.py:391
+#: dudel/poll/views.py:440 dudel/poll/views.py:480 dudel/poll/views.py:544
+#: dudel/poll/views.py:598 dudel/poll/views.py:649 dudel/poll/views.py:1061
 msgid "You are not allowed to edit this Poll."
 msgstr "You are not allowed to edit this Poll."
 
-#: dudel/poll/views.py:334 dudel/poll/views.py:338 dudel/poll/views.py:491
-#: dudel/poll/views.py:495
+#: dudel/poll/views.py:346 dudel/poll/views.py:350 dudel/poll/views.py:503
+#: dudel/poll/views.py:507
 msgid "There was en error interpreting the provided dates and times"
 msgstr ""
 
-#: dudel/poll/views.py:727
+#: dudel/poll/views.py:739
 msgid "This Poll is past the due date, voting is no longer possible"
 msgstr "This Poll is past the due date, voting is no longer possible"
 
-#: dudel/poll/views.py:768
+#: dudel/poll/views.py:780
 #, fuzzy
 #| msgid "You are not allowed to edit this Poll."
 msgid "Anonymous votes are not allowed for this poll."
 msgstr "You are not allowed to edit this Poll."
 
-#: dudel/poll/views.py:793
+#: dudel/poll/views.py:805
 msgid ""
 "Due to the the configuration of this poll, you have to fill all choices."
 msgstr ""
 
-#: dudel/poll/views.py:806
+#: dudel/poll/views.py:818
 msgid ""
 "Value for choice does not exist. This is probably due to changes in the "
 "poll. Please correct your vote."
 msgstr ""
 
-#: dudel/poll/views.py:819
+#: dudel/poll/views.py:831
 msgid "Vote has been recorded"
 msgstr "Vote has been recorded"
 
-#: dudel/poll/views.py:823
+#: dudel/poll/views.py:840
 msgid "You need to either provide a name or post an anonymous vote."
 msgstr "You need to either provide a name or post an anonymous vote."
 
-#: dudel/poll/views.py:1063
+#: dudel/poll/views.py:1080
 msgid "User {} not Found"
 msgstr "User {} not Found"
 
-#: dudel/poll/views.py:1066
+#: dudel/poll/views.py:1083
 msgid "Settings have been changed"
 msgstr ""
 
@@ -1795,9 +1805,6 @@ msgstr ""
 
 #~ msgid "Coffe"
 #~ msgstr "Coffe"
-
-#~ msgid "Comments"
-#~ msgstr "Comments"
 
 #~ msgid "Mensa"
 #~ msgstr "Mensa"

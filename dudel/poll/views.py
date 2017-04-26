@@ -93,7 +93,8 @@ def poll(request, poll_url):
     # aggregate stats for the different Choice_Values per column
     stats2 = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
         count=Count('votechoice__value__color')).values('count', 'id', 'votechoice__value__icon',
-                                                        'votechoice__value__color', 'votechoice__value__title')
+                                                        'votechoice__value__color', 'votechoice__value__title',
+                                                        'votechoice__value__deleted')
     #
     # use average for stats
     stats = [
@@ -119,6 +120,17 @@ def poll(request, poll_url):
             poll_watched = bool(poll_watch)
         except ObjectDoesNotExist:
             pass
+
+    deleted_choiceval = False
+    try:
+        choicevals = ChoiceValue.objects.get(poll=current_poll, deleted=True)
+        deleted_choiceval = bool(choicevals)
+    except ObjectDoesNotExist:
+        pass
+
+    if deleted_choiceval:
+        messages.warning(request, _('Some votes contain deleted values. If you have already voted, please check your '
+                                    'vote.'))
 
     max_score = None
     if stats and votes_count > 0:
@@ -769,55 +781,60 @@ def vote(request, poll_url, vote_id=None):
         else:
             if current_vote.anonymous or current_vote.name:
                 # prevent non-anonymous vote without name
+                try:
+                    with transaction.atomic():
+                        new_choices = []
 
-                with transaction.atomic():
-                    new_choices = []
+                        current_vote.save()
 
-                    current_vote.save()
+                        if request.user.is_authenticated:
+                            # check if this user was invited
+                            invitation = current_poll.invitation_set.filter(user=request.user)
+                            if invitation:
+                                invitation = invitation[0]
+                                invitation.vote = current_vote
+                                invitation.save()
 
-                    if request.user.is_authenticated:
-                        # check if this user was invited
-                        invitation = current_poll.invitation_set.filter(user=request.user)
-                        if invitation:
-                            invitation = invitation[0]
-                            invitation.vote = current_vote
-                            invitation.save()
+                        for choice in current_poll.choice_set.all():
+                            if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
+                                choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+                            else:
+                                choice_value = None
+                                if current_poll.vote_all:
+                                    error_msg = True
+                                    messages.error(request, _('Due to the the configuration of this poll, you have to fill '
+                                                              'all choices.'))
+                            if not choice_value.deleted:
+                                new_choices.append(VoteChoice(value=choice_value,
+                                                              vote=current_vote,
+                                                              choice=choice,
+                                                              comment=request.POST.get(
+                                                                    'comment_{}'.format(choice.id)) or ''))
+                            else:
+                                deleted_choicevals = True
 
-                    for choice in current_poll.choice_set.all():
-                        if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
-                            choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+                        if deleted_choicevals:
+                            error_msg = True
+                            messages.error(request, _('Value for choice does not exist. This is probably due to '
+                                                      'changes in the poll. Please correct your vote.'))
+
+                        if not error_msg:
+                            if vote_id:
+                                VoteChoice.objects.filter(vote=current_vote).delete()
+                                # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
+                                # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
+                            else:
+                                for current_watch in current_poll.pollwatch_set.all():
+                                    current_watch.send(request=request, vote=current_vote)
+
+                            VoteChoice.objects.bulk_create(new_choices)
+                            messages.success(request, _('Vote has been recorded'))
+                            return redirect('poll', poll_url)
                         else:
-                            choice_value = None
-                            if current_poll.vote_all:
-                                error_msg = True
-                                messages.error(request, _('Due to the the configuration of this poll, you have to fill '
-                                                          'all choices.'))
-                        if not choice_value.deleted:
-                            new_choices.append(VoteChoice(value=choice_value,
-                                                          vote=current_vote,
-                                                          choice=choice,
-                                                          comment=request.POST.get(
-                                                                'comment_{}'.format(choice.id)) or ''))
-                        else:
-                            deleted_choicevals = True
-
-                    if deleted_choicevals:
-                        error_msg = True
-                        messages.error(request, _('Value for choice does not exist. This is probably due to '
-                                                  'changes in the poll. Please correct your vote.'))
-
-                    if not error_msg:
-                        if vote_id:
-                            VoteChoice.objects.filter(vote=current_vote).delete()
-                            # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
-                            # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
-                        else:
-                            for current_watch in current_poll.pollwatch_set.all ():
-                                current_watch.send(request=request, vote=current_vote)
-
-                        VoteChoice.objects.bulk_create(new_choices)
-                        messages.success(request, _('Vote has been recorded'))
-                        return redirect('poll', poll_url)
+                            raise IntegrityError("An Error ehilr saving the Vote occured, see message")
+                except IntegrityError as e:
+                    # Nothing todo as the main point in this exception is the database rollback
+                    pass
             else:
                 messages.error(
                     request, _('You need to either provide a name or post an anonymous vote.'))

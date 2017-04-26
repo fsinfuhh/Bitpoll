@@ -76,7 +76,7 @@
                                 <td class="vote-choice text-center
                                     {% if vote_choice.comment %}comment{% endif %}
                                     {% if not vote_choice.value %}none{% endif %}"
-                                    style="background-color: #{{ vote_choice.value.color }}"
+                                    style="background-color: {% if vote_choice.value.deleted %} lightgrey {% else %} #{{ vote_choice.value.color }} {% endif %}"
                                     data-toggle="popover"
                                     data-trigger="hover"
                                     data-container="body"
