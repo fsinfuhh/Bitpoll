@@ -16,8 +16,8 @@
 
     <br /><br />
     <form action="{% url 'poll_voteDelete' poll.url vote.id %}" method="POST">{% csrf_token %}
-        <input type="submit" class="btn-default" name="Cancel" value="{% trans 'Cancel' %}" />
-        <input type="submit" class="btn-primary" name="Delete" value="{% trans 'Delete' %}" />
+        <input type="submit" class="action" name="Cancel" value="{% trans 'Cancel' %}" />
+        <input type="submit" class="action primary" name="Delete" value="{% trans 'Delete' %}" />
     </form>
     </div>
 {% endblock %}

@@ -251,7 +251,7 @@ tr.choice td {
 
 .comments {
     .comment {
-        padding: 10px;
+        padding: .7em;
         min-height: 68px;
         border: 1px solid #F6F6F6;
         border-width: 0 2px;
@@ -282,23 +282,6 @@ tr.choice td {
 
         .text > *:last-child {
             margin-bottom: 0;
-        }
-
-        .avatar {
-            float: left;
-
-            img {
-                border: 1px solid #DDD;
-                padding: 2px;
-                background: #FFF;
-                width: 48px;
-                height: 48px;
-            }
-        }
-
-        .meta,
-        .text {
-            margin-left: 58px;
         }
     }
 }

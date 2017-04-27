@@ -29,7 +29,7 @@ def index(request):
 
     If the input is not valid, the user is directed back for correction.
     """
-    public_polls = Poll.objects.filter(public_listening=True)
+    public_polls = Poll.objects.filter(public_listening=True)  # TODO: limit & sotierung & pagination oder so?
     if request.method == 'POST':
         form = PollCreationForm(request.POST)
         if form.is_valid():

@@ -29,7 +29,7 @@
         </div>
         <label for="poll_description">{% trans 'Description' %}</label> {# TODO: design #}
         <div class="text " id="poll_description">
-            {% render_field form.description class+="form-control"%}
+            {% render_field form.description class+="form-control" readonly="readonly" %}
         </div>
 
         <br /><br />

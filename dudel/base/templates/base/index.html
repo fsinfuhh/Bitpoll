@@ -245,9 +245,13 @@
                         </div>
                     </div>
                 {% else %}
+                    <ul class="public_polls">
                     {% for poll in public_polls %}
-                        <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
+                        <li>
+                            <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
+                        </li>
                     {% endfor %}
+                    </ul>
                 {% endif %}
             </div>
             {% if request.user.is_authenticated %}

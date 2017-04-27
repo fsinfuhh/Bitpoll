@@ -70,21 +70,22 @@
 
             <form method="post" action="{% url 'poll_editchoicevalues_create' poll.url %}">
                 {% csrf_token %}
+                <div class="form-group">
                     <label for="title">{% trans 'Title' %}</label>
                     {% render_field form.title class+="form-control" %}
-                        {% if form.title.errors %}
-                            <div class="form-errors">
-                            <div class="alert alert-danger">
-                                <div class="container">
-                                    <i class="fa fa-times"></i>{{ form.title.errors }}
-                                </div>
+                    {% if form.title.errors %}
+                        <div class="form-errors">
+                        <div class="alert alert-danger">
+                            <div class="container">
+                                <i class="fa fa-times"></i>{{ form.title.errors }}
                             </div>
                         </div>
-                        {% endif %}
-
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
                     <label for="color">{% trans 'Color' %}</label>
                     <input type="color" class="form-control" name="{{ form.color.name }}" value="#{{ form.color.value|default_if_none:'90db45' }}" />
-                        {# {% render_field form.color class+="form-control" %} #}
                         {% if form.color.errors %}
                             <div class="form-errors">
                             <div class="alert alert-danger">
@@ -94,6 +95,8 @@
                             </div>
                         </div>
                         {% endif %}
+                </div>
+                <div class="form-group">
                     <label for="weight">{% trans 'Weight' %}</label>
                     <span class="help-inline">{% trans '(usually between 0 and 1)' %}</span>
                         {% render_field form.weight class+="form-control" %}
@@ -106,7 +109,8 @@
                             </div>
                         </div>
                         {% endif %}
-
+                </div>
+                <div class="form-group">
                     <label for="icon">{% trans 'Icon' %}</label>
                     <span class="help-inline">{% trans '(any FontAwesome icon)' %}</span>
                     <div class="input-group">
@@ -122,6 +126,7 @@
                             </div>
                         {% endif %}
                     </div>
+                </div>
 
                 {% if choiceval_select %}
                     <input name="choiceval_id" value="{{ choiceval_select.id }}" type="hidden" readonly>

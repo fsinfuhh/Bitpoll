@@ -100,17 +100,17 @@
                         {% endfor %}
                     </select>
                 </div>
-
-                <label>{% trans 'Various' %}</label>
-                <div class="checkbox">
-                    <input id="autowatch" name="{{ user_form.auto_watch.name }}" type="checkbox" {% if user_form.auto_watch.value %} checked {% endif %}>
-                    <label for="autowatch">{% trans 'Auto-watch polls' %}</label>
+                <div class="form-group">
+                    <label>{% trans 'Various' %}</label>
+                    <div class="checkbox">
+                        <input id="autowatch" name="{{ user_form.auto_watch.name }}" type="checkbox" {% if user_form.auto_watch.value %} checked {% endif %}>
+                        <label for="autowatch">{% trans 'Auto-watch polls' %}</label>
+                    </div>
+                    <div class="checkbox">
+                        <input id="allow-invitation-mails" name="{{ user_form.email_invitation.name }}" type="checkbox" {% if user_form.email_invitation.value %} checked {% endif %}>
+                        <label for="allow-invitation-mails">{% trans 'Allow to receive emails for poll invitations' %}</label>
+                    </div>
                 </div>
-                <div class="checkbox">
-                    <input id="allow-invitation-mails" name="{{ user_form.email_invitation.name }}" type="checkbox" {% if user_form.email_invitation.value %} checked {% endif %}>
-                    <label for="allow-invitation-mails">{% trans 'Allow to receive emails for poll invitations' %}</label>
-                </div>
-
                 <input type="submit" value="{% trans 'Save' %}" class="action primary" name="create"/>
             </form>
         </div>

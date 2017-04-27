@@ -120,6 +120,7 @@ body {
 .alert {
     margin: .7em 0;
     padding: .7em;
+    font-size: 9pt;
 }
 
 .alert .fa {
@@ -452,4 +453,9 @@ tr.deleted, tr.deleted .color {
 
 #advanced-open {
     margin: 0 -15px;
+}
+
+.public_polls {
+    list-style: none;
+    padding: 0;
 }

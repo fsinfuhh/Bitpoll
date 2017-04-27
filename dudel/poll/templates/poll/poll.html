@@ -193,9 +193,6 @@
         <div class="comments">
             {% for comment in poll.comment_set.all %}
             <div class="comment">
-                <div class="avatar">
-                    <img src="https://secure.gravatar.com/avatar/b1c328a4d689f21f3299987027b83480?s=48&amp;d=identicon&amp;r=g">{# TODO: #}
-                </div>
                 <div class="meta">
                     <div class="author">{% if comment.user %}{{ request.user.get_username }}{% else %}{{ comment.name }}{% endif %}</div>
                     {% trans 'commented on' %}
