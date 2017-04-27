@@ -798,20 +798,20 @@ def vote(request, poll_url, vote_id=None):
                         for choice in current_poll.choice_set.all():
                             if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
                                 choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+                                if not choice_value.deleted:
+                                    new_choices.append(VoteChoice(value=choice_value,
+                                                                  vote=current_vote,
+                                                                  choice=choice,
+                                                                  comment=request.POST.get(
+                                                                        'comment_{}'.format(choice.id)) or ''))
+                                else:
+                                    deleted_choicevals = True
                             else:
                                 choice_value = None
                                 if current_poll.vote_all:
                                     error_msg = True
                                     messages.error(request, _('Due to the the configuration of this poll, you have to fill '
                                                               'all choices.'))
-                            if not choice_value.deleted:
-                                new_choices.append(VoteChoice(value=choice_value,
-                                                              vote=current_vote,
-                                                              choice=choice,
-                                                              comment=request.POST.get(
-                                                                    'comment_{}'.format(choice.id)) or ''))
-                            else:
-                                deleted_choicevals = True
 
                         if deleted_choicevals:
                             error_msg = True
