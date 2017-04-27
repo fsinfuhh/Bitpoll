@@ -261,6 +261,15 @@ class Vote(models.Model):
         if user.is_anonymous:
             return False
         return self.can_edit(user)
+    
+    @property
+    def display_name(self) -> str:
+        """Name of user if assigned, name field or anonymous else."""
+        if self.anonymous:
+            return _('Anonymous')
+        if self.user:
+            return '{} ({})'.format(self.user.first_name, self.user.username)
+        return self.name
 
     def __str__(self):
         return u'Vote {}'.format(self.name)

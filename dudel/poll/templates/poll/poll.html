@@ -44,13 +44,12 @@
                     <tbody>
                     {% for vote, vote_choices in votes %}
                         <tr class="vote {% if not request.user.is_anonymous and vote.user_id == request.user.id %} mine{% endif %}"
-                                {# data-author="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"#}>
+                                {# data-author="{{ vote.display_name|force_escape|force_escape }}"#}>
                             <td class="author"
                                 data-toggle="popover"
                                 data-trigger="hover"
                                 data-container="body"
-                                data-title="
-                                        {% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}Anonymous{% endif %}"
+                                data-title="{{ vote.display_name|force_escape|force_escape }}"
                                 data-content="
                                     {{ vote.date_created|date }}
                                     {% if vote.comment %}
@@ -70,7 +69,7 @@
                                         {% endif %}
                                     </div>
                                 {% endif %}
-                                {% if not vote.anonymous %}{{ vote.name }}{% else %}{% trans 'Anonymous' %}{% endif %}
+                                {{ vote.display_name }}
                             </td>
                             {% for vote_choice in vote_choices %}
                                 <td class="vote-choice text-center
@@ -81,7 +80,7 @@
                                     data-trigger="hover"
                                     data-container="body"
                                     data-title="{{ vote_choice.choice.get_title|force_escape|force_escape }}"
-                                    data-content="{% if not vote.anonymous %}{{ vote.name|force_escape|force_escape }}{% else %}{% trans 'Anonymous' %}{% endif %}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
+                                    data-content="{{ vote.display_name|force_escape|force_escape }}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
                                     data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
                                     <span class="fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
                                 </td>
