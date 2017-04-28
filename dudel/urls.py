@@ -18,9 +18,9 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.http import HttpResponseServerError
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 import django.conf.urls.i18n
-from django.template import Context, loader
+from django.template import Context, RequestContext, loader
 
 from dudel import settings
 
@@ -48,11 +48,7 @@ def handler500(request):
     Templates: `500.html`
     Context: None
     """
-
-    t = loader.get_template('500.html')  # You need to create a 500.html template.
-    return HttpResponseServerError(t.render(Context({
-        'request': request,
-    })))
+    return render(request, '500.html', status=500)
 
 
 """
