@@ -72,9 +72,16 @@ table.vote label {
 .poll .vote-actions,
 .vote .choice-group {
     font-weight: bold;
-    white-space: nowrap;
     background: #EEE;
     vertical-align: middle;
+}
+
+.poll td {
+    white-space: nowrap;
+}
+
+.poll .author.choice {
+    white-space: normal;
 }
 
 .poll .info {
