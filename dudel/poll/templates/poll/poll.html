@@ -193,7 +193,7 @@
             {% for comment in poll.comment_set.all %}
             <div class="comment">
                 <div class="meta">
-                    <div class="author">{% if comment.user %}{{ request.user.get_username }}{% else %}{{ comment.name }}{% endif %}</div>
+                    <div class="author">{% if comment.user %}{{ comment.user.get_username }}{% else %}{{ comment.name }}{% endif %}</div>
                     {% trans 'commented on' %}
                     <div class="date">{{ comment.date_created }}</div>
 
