@@ -181,6 +181,8 @@ def comment(request, poll_url, comment_id=None):
                 messages.error(_("A Comment should have a text"))
             if not user and not name:
                 messages.error(_("Provide a name"))
+            if user:
+                name = user.get_displayname()
             if comment_id:
                 comment = get_object_or_404(Comment, pk=comment_id)
                 if comment.can_edit(request.user):
