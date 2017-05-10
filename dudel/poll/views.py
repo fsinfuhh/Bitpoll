@@ -713,8 +713,8 @@ def delete(request, poll_url):
                 error_msg = _("Deletion not allowed. You are not authenticated.")
         else:
             return redirect('poll', poll_url)
-    else:
-        form = PollDeleteForm(instance=current_poll)
+
+    form = PollDeleteForm(instance=current_poll)
 
     return TemplateResponse(request, 'poll/poll_delete.html', {
         'poll': current_poll,
