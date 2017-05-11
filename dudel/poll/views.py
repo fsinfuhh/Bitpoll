@@ -123,6 +123,9 @@ def poll(request, poll_url):
         except ObjectDoesNotExist:
             pass
 
+        if current_poll.get_tz_name(request.user) != request.user.timezone:
+            messages.warning(request, _("This poll has a different timezone than you."))
+
     deleted_choicevals_count = ChoiceValue.objects.filter(poll=current_poll, deleted=True).count()
     if deleted_choicevals_count > 0:
         messages.warning(request, _('Some votes contain deleted values. If you have already voted, please check your '
@@ -146,8 +149,6 @@ def poll(request, poll_url):
         'summary': summary,
         'watched': poll_watched,
         'comment_form': CommentForm(),
-        'timezone_warning': (request.user.is_authenticated and
-                             current_poll.get_tz_name(request.user) != request.user.timezone),
     })
 
 
