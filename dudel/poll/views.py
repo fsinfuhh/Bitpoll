@@ -85,7 +85,7 @@ def poll(request, poll_url):
 
     vote_choice_matrix = [[None] * len(choice_idx) for _ in vote_idx]
     for vote_choice in VoteChoice.objects.filter(vote__poll=current_poll, choice__deleted=0).select_related('value'):
-        if vote_choice.vote_id not in vote_idx:
+        if vote_choice.vote_id in vote_idx:
             x = vote_idx[vote_choice.vote_id]
             y, choice = choice_idx[vote_choice.choice_id]
             vote_choice_matrix[x][y] = {'comment': vote_choice.comment,
@@ -123,14 +123,8 @@ def poll(request, poll_url):
         except ObjectDoesNotExist:
             pass
 
-    deleted_choiceval = False
-    try:
-        choicevals = ChoiceValue.objects.get(poll=current_poll, deleted=True)
-        deleted_choiceval = bool(choicevals)
-    except ObjectDoesNotExist:
-        pass
-
-    if deleted_choiceval:
+    deleted_choicevals_count = ChoiceValue.objects.filter(poll=current_poll, deleted=True).count()
+    if deleted_choicevals_count > 0:
         messages.warning(request, _('Some votes contain deleted values. If you have already voted, please check your '
                                     'vote.'))
 
