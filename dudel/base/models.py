@@ -15,7 +15,7 @@ class DudelUser(AbstractUser):
     email_invitation = models.BooleanField(default=True)
     timezone = models.CharField(max_length=40, default=settings.TIME_ZONE, validators=[validate_timezone])
     auto_watch = models.BooleanField(default=False)
-    displayname = models.CharField(max_length=20)
+    displayname = models.CharField(max_length=20, default="")
 
     def get_displayname(self):
         if self.displayname:

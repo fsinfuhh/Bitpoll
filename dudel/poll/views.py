@@ -767,7 +767,7 @@ def vote(request, poll_url, vote_id=None):
             # leave the name as it was
             pass
         elif request.user.is_authenticated:
-            current_vote.name = request.user.get_username()
+            current_vote.name = request.user.get_displayname()
             current_vote.user = request.user
 
             if request.user.auto_watch:
@@ -894,7 +894,7 @@ def vote_assign(request, poll_url, vote_id):
             username = request.POST.get('username').strip()
             user = DudelUser.objects.get(username=username)
             current_vote.user = user
-            current_vote.name = username
+            current_vote.name = user.get_displayname()
             current_vote.save()
 
             return redirect('poll', poll_url)

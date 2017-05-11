@@ -60,7 +60,7 @@
                         {% endif %}
                         <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i>{% trans 'Login' %}</a></li>
                     {% else %}
-                        <li><a href=""><i class="fa fa-user"></i>{{ request.user.get_username }}</a></li>
+                        <li><a href=""><i class="fa fa-user"></i>{{ request.user.get_displayname }}</a></li>
                         <li><a href="{% url 'settings' %}"><i class="fa fa-pencil"></i>{% trans 'Settings' %}</a></li>
                         <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>{% trans 'Logout' %}</a></li>
                     {% endif %}
