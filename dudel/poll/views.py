@@ -123,14 +123,8 @@ def poll(request, poll_url):
         except ObjectDoesNotExist:
             pass
 
-    deleted_choiceval = False
-    try:
-        choicevals = ChoiceValue.objects.get(poll=current_poll, deleted=True)
-        deleted_choiceval = bool(choicevals)
-    except ObjectDoesNotExist:
-        pass
-
-    if deleted_choiceval:
+    deleted_choicevals_count = ChoiceValue.objects.filter(poll=current_poll, deleted=True).count()
+    if deleted_choicevals_count > 0:
         messages.warning(request, _('Some votes contain deleted values. If you have already voted, please check your '
                                     'vote.'))
 
