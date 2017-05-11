@@ -104,7 +104,6 @@ table.vote label {
 .poll .choice-text {
     text-align: center;
     white-space: inherit;
-    max-width: 10em;
 }
 
 .vote .choice-group {
@@ -361,6 +360,21 @@ header.poll {
             color: #666;
         }
     }
+}
+
+span.vote-header {
+    transform: translateX(2.5em) rotate(-45deg);
+    transform-origin: 0 100%;
+    display: inline-block;
+    white-space: normal;
+}
+
+tr.vote-header > td{
+    vertical-align: bottom !important;
+}
+
+td.vote-header {
+    background: #EEE;
 }
 
 @media #{$media-phone} {

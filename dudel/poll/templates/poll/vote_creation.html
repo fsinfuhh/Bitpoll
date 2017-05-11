@@ -26,25 +26,24 @@
         {% endif %}
             {% csrf_token %}
             <table class="table poll vote auto-width">
-
-                <tr class="script-only">
+                <tr class="script-only vote-header">
                     <td colspan="{{ matrix_len }}"></td>
                     {% for value in values %}
-                        <td class="text-center">
-                            <input value="all" data-choice="{{ value.id }}" class="action small vote-choice-column" type="button">
-                        </td>
-                    {% endfor %}
-                </tr>
-                <tr class="script-only">
-                    <td colspan="{{ matrix_len }}"></td>
-                    {% for value in values %}
-                        <td>
+                        <td class="">
                             <span class="vote-header">{{ value.title }}</span>
                         </td>
                     {% endfor %}
                 </tr>
+                <tr class="script-only">
+                    <td colspan="{{ matrix_len }}"></td>
+                    {% for value in values %}
+                        <td class="text-center vote-header">
+                            <input value="all" data-choice="{{ value.id }}" class="action small vote-choice-column" type="button">
+                        </td>
+                    {% endfor %}
+                </tr>
                 {% for row, choice, comment, vote in choices_matrix %}
-                    <tr data-vote-choice="{{ choice.id }}">
+                    <tr class="vote" data-vote-choice="{{ choice.id }}">
                         {% for item in row %}
                             {% if item.0 != None %}
                                 <td class="choice-group" colspan="{{ item.1 }}" rowspan="{{ item.2 }}">

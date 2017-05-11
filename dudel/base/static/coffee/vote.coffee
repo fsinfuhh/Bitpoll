@@ -98,6 +98,3 @@ $ ->
             val = Math.round((val - min) / step) * step + min if step
             console.log(val)
             $(this).val(val)
-
-
-    $(".vote-header").rotate(90)
