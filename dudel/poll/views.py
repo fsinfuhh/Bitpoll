@@ -85,7 +85,7 @@ def poll(request, poll_url):
 
     vote_choice_matrix = [[None] * len(choice_idx) for _ in vote_idx]
     for vote_choice in VoteChoice.objects.filter(vote__poll=current_poll, choice__deleted=0).select_related('value'):
-        if vote_choice.vote_id not in vote_idx:
+        if vote_choice.vote_id in vote_idx:
             x = vote_idx[vote_choice.vote_id]
             y, choice = choice_idx[vote_choice.choice_id]
             vote_choice_matrix[x][y] = {'comment': vote_choice.comment,
