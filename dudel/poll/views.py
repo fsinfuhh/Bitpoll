@@ -176,6 +176,8 @@ def comment(request, poll_url, comment_id=None):
                 messages.error(_("A Comment should have a text"))
             if not user and not name:
                 messages.error(_("Provide a name"))
+            if user:
+                name = user.get_displayname()
             if comment_id:
                 comment = get_object_or_404(Comment, pk=comment_id)
                 if comment.can_edit(request.user):
@@ -760,7 +762,7 @@ def vote(request, poll_url, vote_id=None):
             # leave the name as it was
             pass
         elif request.user.is_authenticated:
-            current_vote.name = request.user.get_username()
+            current_vote.name = request.user.get_displayname()
             current_vote.user = request.user
 
             if request.user.auto_watch:
@@ -887,7 +889,7 @@ def vote_assign(request, poll_url, vote_id):
             username = request.POST.get('username').strip()
             user = DudelUser.objects.get(username=username)
             current_vote.user = user
-            current_vote.name = username
+            current_vote.name = user.get_displayname()
             current_vote.save()
 
             return redirect('poll', poll_url)
@@ -1073,8 +1075,11 @@ def settings(request, poll_url):
                 try:
                     user_obj = DudelUser.objects.get(username=user)
                     new_poll.user = user_obj
-                except ObjectDoesNotExist:  # TODO: correct exception
+                except ObjectDoesNotExist:
                     user_error = _("User {} not Found".format(user))
+            else:
+                new_poll.user = None
+
             if not user_error:
                 new_poll.save()
                 messages.success(request, _('Settings have been changed'))

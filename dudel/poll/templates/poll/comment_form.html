@@ -11,7 +11,7 @@
                 {% if request.user.is_authenticated %}
                     <label>{% trans 'Name' %}</label>
                     <input class="form-control" type="text" title="Name" name="{{ comment_form.name.name }}"
-                           value="{{ request.user.get_username }}"
+                           value="{{ request.user.get_displayname }}"
                            readonly/>
                 {% else %}
                     <label>{% trans 'Name' %}</label>

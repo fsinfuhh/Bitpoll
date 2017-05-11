@@ -36,7 +36,7 @@
             {% if poll.user %}
                 <li title="{% trans 'Ownership' %}: {{ poll.user.username }}">
                 <i class="fa fa-user"></i>
-                <span class="content">{{ poll.user.username }}</span>
+                <span class="content">{{ poll.user.get_displayname }}</span>
                 </li>
             {% endif %}
             {% if poll.group %}

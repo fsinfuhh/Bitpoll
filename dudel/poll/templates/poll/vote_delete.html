@@ -11,7 +11,7 @@
     {% endif %}
     <div class="alert alert-danger">{% trans 'Shall the following Vote be deleted?' %}</div><br />
     <label>{% trans 'Title of Poll:' %} </label> {{ poll.title }}<br />
-    <label>{% trans 'Author of Vote:' %} </label> {{ vote.name }}<br />
+    <label>{% trans 'Author of Vote:' %} </label> {% if vote.user %}{{ vote.user.get_displayname }}{% else %}{{ vote.name }}{% endif %}<br />
     <label>{% trans 'Comment:' %}</label> {{ vote.comment }}
 
     <br /><br />

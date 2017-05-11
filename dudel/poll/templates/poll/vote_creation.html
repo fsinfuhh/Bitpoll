@@ -86,12 +86,12 @@
                     </td>
                     <td colspan="4">
                         <input type="text" name="name" title="{% trans 'Your name' %}"
-                            {% if current_vote.name %}
-                                value="{{ current_vote.name }}" readonly="readonly"
-                            {% elif request.user.is_authenticated %}
-                                value="{{ request.user.get_username }}" readonly="readonly"
-                            {%  endif %}
-                            class="form-control" id="name"/>
+                                {% if request.user.is_authenticated %}
+                                    value="{{ request.user.get_displayname }}" readonly="readonly"
+                                {% elif current_vote.name %}
+                                    value="{{ current_vote.name }}" readonly="readonly"
+                                {%  endif %}
+                                class="form-control" id="name"/>
 
                         {% if poll.anonymous_allowed %}
                             <br>

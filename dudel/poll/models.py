@@ -268,7 +268,8 @@ class Vote(models.Model):
         if self.anonymous:
             return _('Anonymous')
         if self.user:
-            return '{} ({})'.format(self.user.first_name, self.user.username)
+            # return '{} ({})'.format(self.user.first_name, self.user.username)
+            return self.user.displayname
         return self.name
 
     def __str__(self):
