@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load django_markdown django_markdown_static %}
-{% load poll_filter %}
+{% load poll_filter poll_permissions %}
 <header class="poll">
     <div class="container">
         <div class="poll-actions">
@@ -79,14 +79,16 @@
                     class="fa fa-comments-o"></i><span>{% trans 'Activity' %}</span></a>
                 </li>
             {%  endcomment %}
-                 <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s"
-                                                                            href="{% url 'poll_settings' poll.url %}">
-                    <i class="fa fa-wrench"></i><span>{% trans 'Settings' %}</span></a>
-                </li>
-                <li class="{% if page == "Choices" %}active{% endif %}">
-                    <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
-                            class="fa fa-list"></i><span>{% trans 'Choices' %}</span></a>
-                </li>
+                {% if poll|poll_can_edit:request.user %}
+                     <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s"
+                                                                                href="{% url 'poll_settings' poll.url %}">
+                        <i class="fa fa-wrench"></i><span>{% trans 'Settings' %}</span></a>
+                    </li>
+                    <li class="{% if page == "Choices" %}active{% endif %}">
+                        <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
+                                class="fa fa-list"></i><span>{% trans 'Choices' %}</span></a>
+                    </li>
+                {% endif %}
                 {% if poll.one_vote_per_user and poll|has_voted:request.user %}
                     <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
                                                                                  href="{% url 'poll_voteEdit' poll.url poll|get_own_vote_pk:request.user %}"><i
@@ -100,10 +102,12 @@
                 {% endif %}
             </ul>
         </nav>
-      {% block messages %}
-        {% for message in messages %}
-          <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
-        {% endfor %}
-      {% endblock messages %}
     </div>
 </header>
+<div class="container">
+  {% block messages %}
+    {% for message in messages %}
+      <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+    {% endfor %}
+  {% endblock messages %}
+</div>
