@@ -182,7 +182,8 @@ def comment(request, poll_url, comment_id=None):
                 comment = get_object_or_404(Comment, pk=comment_id)
                 if comment.can_edit(request.user):
                     comment.text = text
-                    comment.name = name
+                    #comment.name = name # TODO: wenn wir das erlauben wollen mit angemeldet/nicht angemeldet aufpassen
+                    # das die namen nicht durcheinander kommen.
                     comment.save()
                 else:
                     messages.error(request, _("You can't edit this Comment"))
