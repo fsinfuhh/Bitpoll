@@ -762,6 +762,8 @@ def vote(request, poll_url, vote_id=None):
         if vote_id:
             # leave the name as it was
             pass
+        elif 'anonymous' in request.POST:
+            current_vote.name = 'Anonymous'
         elif request.user.is_authenticated:
             current_vote.name = request.user.get_displayname()
             current_vote.user = request.user
@@ -774,6 +776,13 @@ def vote(request, poll_url, vote_id=None):
                     pass
         else:
             current_vote.name = request.POST.get('name').strip()
+
+        if len(current_vote.name) > 80:
+            messages.error(
+                request, _("The Name is longer than the allowed name length of 80 characters")
+            )
+            return redirect('poll', poll_url)
+
         current_vote.anonymous = 'anonymous' in request.POST
 
         if not current_poll.anonymous_allowed and current_vote.anonymous:

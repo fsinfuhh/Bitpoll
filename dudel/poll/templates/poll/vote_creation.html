@@ -91,6 +91,7 @@
                                 {% elif current_vote.name %}
                                     value="{{ current_vote.name }}" readonly="readonly"
                                 {%  endif %}
+                                maxlength="80"
                                 class="form-control" id="name"/>
 
                         {% if poll.anonymous_allowed %}
