@@ -16,7 +16,7 @@ from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
-from django.utils.timezone import activate as tz_activate, localtime, now
+from django.utils.timezone import activate as tz_activate, localtime, now, override, make_naive, make_aware
 from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST
 
@@ -1073,31 +1073,44 @@ def settings(request, poll_url):
 
     user_error = ""
     error_msg = ""
+    print("buhoiü muztfgontizf ibt zgu")
     user = current_poll.user.username if current_poll.user else ""
     if request.method == 'POST':
+        old_timezone_name = current_poll.timezone_name
         form = PollSettingsForm(request.POST, instance=current_poll)
         if not current_poll.can_edit(request.user):
             error_msg = _("You are not allowed to edit this Poll")
         elif form.is_valid():
             new_poll = form.save(commit=False)
             user = form.data.get('user', '')
-            if user:
-                try:
-                    user_obj = DudelUser.objects.get(username=user)
-                    new_poll.user = user_obj
-                except ObjectDoesNotExist:
-                    user_error = _("User {} not Found".format(user))
-            else:
-                new_poll.user = None
-
-            if not user_error:
-                new_poll.save()
-                messages.success(request, _('Settings have been changed'))
-                return redirect('poll_settings', current_poll.url)
+            with transaction.atomic():
+                if user:
+                    try:
+                        user_obj = DudelUser.objects.get(username=user)
+                        new_poll.user = user_obj
+                    except ObjectDoesNotExist:
+                        user_error = _("User {} not Found".format(user))
+                else:
+                    new_poll.user = None
+                    current_poll.choice_set.all()
+                if not user_error:
+                    # change the Timezone in the Choices, date-polls are in UTC regardles of the timezone
+                    if old_timezone_name != new_poll.timezone_name and current_poll.type == 'datetime':
+                        new_timezone = timezone(new_poll.timezone_name)
+                        old_timezone = timezone(old_timezone_name)
+                        for choice in current_poll.choice_set.all():
+                            choice.date = make_aware(make_naive(choice.date, old_timezone), new_timezone)
+                            choice.save()
+                    new_poll.save()
+                    messages.success(request, _('Settings have been changed'))
+                    return redirect('poll_settings', current_poll.url)
         else:
             user = form.cleaned_data.get('user', '')
     else:
         form = PollSettingsForm(instance=current_poll)
+
+    # we activate the base timezone of this poll so the due date etc is showed in the correct way.
+    tz_activate(current_poll.timezone_name)
 
     return TemplateResponse(request, 'poll/settings.html', {
         'perm_error': error_msg,
