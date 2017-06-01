@@ -52,6 +52,7 @@ class Poll(models.Model):
     allow_comments = models.BooleanField(default=True)
     show_invitations = models.BooleanField(default=True)
     timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
+    use_user_timezone = models.BooleanField(default=False)
     vote_all = models.BooleanField(default=False)
 
     def __str__(self):
@@ -148,12 +149,19 @@ class Poll(models.Model):
 
         return matrix
 
-    def get_tz_name(self, user):
+    def get_tz_name(self, user: DudelUser):
         # TODO: local etc beachten (umrechenn auf user...)
-        tz = self.timezone_name
         if self.type == 'date':
             # Datepolls are using UTC as timezone
             tz = 'UTC'
+        else:
+            tz = self.get_tz_name_no_date_utc(user)
+        return tz
+
+    def get_tz_name_no_date_utc(self, user: DudelUser):
+        tz = self.timezone_name
+        if self.use_user_timezone:
+            return user.timezone
         return tz
 
 

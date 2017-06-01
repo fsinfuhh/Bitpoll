@@ -1,6 +1,8 @@
 {% load i18n %}
 {% load django_markdown django_markdown_static %}
 {% load poll_filter poll_permissions %}
+{% load tz %}
+{% timezone poll|get_tz_name_no_date_utc:request.user %}
 <header class="poll">
     <div class="container">
         <div class="poll-actions">
@@ -104,6 +106,7 @@
         </nav>
     </div>
 </header>
+{% endtimezone %}
 <div class="container">
   {% block messages %}
     {% for message in messages %}

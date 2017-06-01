@@ -123,8 +123,14 @@ def poll(request, poll_url):
         except ObjectDoesNotExist:
             pass
 
-        if current_poll.get_tz_name(request.user) != request.user.timezone:
-            messages.warning(request, _("This poll has a different timezone than you."))
+        # warn the user if the Timezone is not the same on the Poll and in his settings
+        different_timezone = current_poll.timezone_name != request.user.timezone
+        if current_poll.use_user_timezone and different_timezone:
+            messages.info(request, _("This poll was transferred from {} to your local timezone {}".format(
+                current_poll.timezone_name, request.user.timezone)))
+        elif different_timezone:
+            messages.warning(request, _("This poll has a different timezone ({}) than you.".format(
+                current_poll.timezone_name)))
 
     deleted_choicevals_count = ChoiceValue.objects.filter(poll=current_poll, deleted=True).count()
     if deleted_choicevals_count > 0:
@@ -1050,7 +1056,6 @@ def copy(request, poll_url):
         'date_shift': date_shift,
         'error': error_msg,
     })
-
 
 def settings(request, poll_url):
     """

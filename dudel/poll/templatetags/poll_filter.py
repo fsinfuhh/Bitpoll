@@ -39,3 +39,8 @@ def has_voted(poll: Poll, user: DudelUser) -> bool:
 @register.filter
 def get_own_vote_pk(poll: Poll, user: DudelUser) -> int:
     return poll.get_own_vote(user).pk
+
+
+@register.filter
+def get_tz_name_no_date_utc(poll: Poll, user: DudelUser) -> str:
+    return poll.get_tz_name_no_date_utc(user)
