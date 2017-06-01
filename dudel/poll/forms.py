@@ -76,7 +76,8 @@ class PollSettingsForm(ModelForm):
             'show_invitations',
             'group',
             'public_listening',
-            'vote_all'
+            'vote_all',
+            'use_user_timezone',
         ]
         widgets = {
             'due_date': DateTimeWidget(

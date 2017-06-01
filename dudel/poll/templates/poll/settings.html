@@ -66,16 +66,22 @@
                 {% endblocktrans %}
             </div>
 
-            <label for="timezone-select">{% trans 'Timezone' %}</label><br>
-            <select id="timezone-select" class="form-control" name="{{ form.timezone_name.name }}">
-                {% for timezone in timezones %}
-                    {% if timezone == form.timezone_name.value %}
-                        <option value="{{ timezone }}" selected="selected"> {{ timezone }}</option>
-                    {% else %}
-                        <option value="{{ timezone }}"> {{ timezone }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
+            <div class="form-group">
+                <label for="timezone-select">{% trans 'Timezone' %}</label><br>
+                <select id="timezone-select" class="form-control" name="{{ form.timezone_name.name }}">
+                    {% for timezone in timezones %}
+                        {% if timezone == form.timezone_name.value %}
+                            <option value="{{ timezone }}" selected="selected"> {{ timezone }}</option>
+                        {% else %}
+                            <option value="{{ timezone }}"> {{ timezone }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <div class="checkbox">
+                    <input type="checkbox" id="public_listening" name="{{ form.use_user_timezone.name }}" {% if form.use_user_timezone.value %} checked {% endif %}>
+                    <label for="public_listening">{% trans 'Translate all times to the users timezone' %}</label>
+                </div>
+            </div>
 
             <br>
             <label for="description-input">{% trans 'Description' %}</label>

@@ -160,7 +160,7 @@ class Poll(models.Model):
 
     def get_tz_name_no_date_utc(self, user: DudelUser):
         tz = self.timezone_name
-        if self.use_user_timezone:
+        if user.is_authenticated and self.use_user_timezone:
             return user.timezone
         return tz
 
