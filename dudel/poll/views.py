@@ -1078,7 +1078,6 @@ def settings(request, poll_url):
 
     user_error = ""
     error_msg = ""
-    print("buhoiü muztfgontizf ibt zgu")
     user = current_poll.user.username if current_poll.user else ""
     if request.method == 'POST':
         old_timezone_name = current_poll.timezone_name
