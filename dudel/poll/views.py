@@ -66,7 +66,7 @@ def poll(request, poll_url):
             invitations = []
             messages.info(request, _("No individual results are shown due to Poll settings"))
     elif current_poll.show_results in ("summary after vote", "complete after vote") \
-            and (request.user.is_anonymous or request.user not in poll_votes.user_set):
+            and (request.user.is_anonymous or not poll_votes.filter(Q(user=request.user))):
         poll_votes = []
         messages.info(request, _("Results are only sown after (authenticated) Voting"))
         summary = False
