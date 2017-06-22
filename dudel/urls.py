@@ -41,6 +41,12 @@ urlpatterns = [
 
 ]
 
+if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
+
 
 def handler500(request):
     """500 error handler which includes ``request`` in the context.
@@ -50,14 +56,3 @@ def handler500(request):
     """
     return render(request, '500.html', status=500)
 
-
-"""
-    url(r'^register$', views.index, name='index'),
-    url(r'^user/language$', views.index, name='index'),
-    url(r'^groups$', views.index, name='index'),
-    url(r'^groups/(\d+)$', views.index, name='index'),
-    url(r'^groups/(\d+)/disband$', views.index, name='index'),
-    url(r'^groups/(\d+)/make-admin/(\d+)$', views.index, name='index'),
-    url(r'^groups/(\d+)/leave/(\d+)$', views.index, name='index'),
-    url(r'^user/settings$', views.index, name='index'),
-    url(r'^api/members$', views.getMembers, name='poll_getMembers'),"""
