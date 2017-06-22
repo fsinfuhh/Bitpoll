@@ -23,7 +23,7 @@
                   {{ time.times }}
                 </div>
             </div>
-            <div class="script-only" style="">
+            <div class="script-only">
                 <div class="alert alert-info">
                   <div class="container"><i class="fa fa-exclamation-circle"></i>{% blocktrans %}Please select the time slots that you
                     want to be able to choose. In the next step, you will match them against the selected days. {% endblocktrans %}
@@ -31,16 +31,16 @@
                 </div>
                 <div class="time-input">
                     <div id="time-slider">
-                        <div id="time-slider-knob" style="left: 200px;"></div>
+                        <div id="time-slider-knob"></div>
                     </div>
                     <div class="time-slider-display">
-                        <div class="hour animated" style="transform: rotate(360deg);"></div>
-                        <div class="minute animated" style="transform: rotate(4320deg);"></div>
+                        <div class="hour animated"></div>
+                        <div class="minute animated"></div>
                     </div>
                     <div class="form-inline" id="time-slider-form">
                         <input type="text" class="form-control" placeholder="HH" id="time-hour">
                         <input type="text" class="form-control" placeholder="MM" id="time-minute">
-                        <input type="submit" class="action" style="height: 3.4em;" value="{% trans 'Add' %}" id="time-add-button">
+                        <input type="submit" class="action" value="{% trans 'Add' %}" id="time-add-button">
                     </div>
                 </div>
                 <div class="calendar-list">

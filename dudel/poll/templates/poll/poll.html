@@ -53,7 +53,7 @@
                                         {% blocktrans %}Assigned after voting by {{ vote.assigned_by.name|force_escape|force_escape }} {% endblocktrans %}</div>
                                     {% endif %}">
                                 {% if vote.comment or vote.assigned %}
-                                    <div class="pull-left" style="margin-right: 0.4em;">
+                                    <div class="pull-left vote-extra-icons">
                                         {% if vote.comment %}
                                             <i class="fa fa-comment-o"></i>
                                         {% endif %}
@@ -116,7 +116,6 @@
                             </td>
                             {% for row in matrix.0 %}
                                 <td class="vote-choice text-center none"
-                                    style="background-color: #{{ vote_choice.value.color }}"
                                     data-toggle="popover"
                                     data-trigger="hover"
                                     data-container="body"
