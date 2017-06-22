@@ -14,6 +14,7 @@ from django_markdown.models import MarkdownField
 from dudel.base.models import DudelUser
 from dudel.base.validators import validate_timezone
 from dudel.poll.util import DateTimePart, PartialDateTime
+from django.utils import translation
 
 POLL_TYPES = (
     ('universal', 'Universal'),
@@ -305,6 +306,8 @@ class PollWatch(models.Model):
     user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
 
     def send(self, request, vote: Vote):
+        old_lang = translation.get_language()
+        translation.activate(self.user.language)
         link = reverse('poll', args=(self.poll.url,))
         if vote.anonymous:
             username = _("Annonymus")
@@ -319,13 +322,15 @@ class PollWatch(models.Model):
             'link': link,
         })
         try:
-            send_mail("New votes for {}".format(self.poll.title), email_content, None,
+            send_mail(_("New votes for {}".format(self.poll.title)), email_content, None,
                       [self.user.email])
         except SMTPRecipientsRefused:
+            translation.activate(old_lang)
             messages.error(
                 request, _("The mail server had an error sending the notification to {}".format(
                     self.user.username))
             )
+        translation.activate(old_lang)
 
     def __str__(self):
         return u'Pollwatch of Poll {} and User {}'.format(self.poll_id, self.user_id)

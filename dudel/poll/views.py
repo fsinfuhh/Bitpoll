@@ -66,7 +66,7 @@ def poll(request, poll_url):
             invitations = []
             messages.info(request, _("No individual results are shown due to Poll settings"))
     elif current_poll.show_results in ("summary after vote", "complete after vote") \
-            and (request.user.is_anonymous or request.user not in poll_votes.user_set):
+            and (request.user.is_anonymous or not poll_votes.filter(Q(user=request.user))):
         poll_votes = []
         messages.info(request, _("Results are only sown after (authenticated) Voting"))
         summary = False
@@ -904,11 +904,14 @@ def vote_assign(request, poll_url, vote_id):
         if request.user.is_authenticated and current_vote.can_edit(request.user):
             username = request.POST.get('username').strip()
             user = DudelUser.objects.get(username=username)
-            current_vote.user = user
-            current_vote.name = user.get_displayname()
-            current_vote.save()
-
-            return redirect('poll', poll_url)
+            if not current_poll.vote_set.filter(Q(user=request.user)):
+                current_vote.user = user
+                current_vote.name = user.get_displayname()
+                current_vote.assigned_by = request.user
+                current_vote.save()
+                return redirect('poll', poll_url)
+            else:
+                messages.info(request, _("This user has already voted and only one vote per user is permitted"))
         else:
             return HttpResponseForbidden()
 
