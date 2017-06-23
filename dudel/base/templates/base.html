@@ -82,9 +82,9 @@
         <form class="form-inline" action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
             <p>
-                <button name="language" value="de" class="btn-link" style="padding: 0;" type="submit">Deutsch</button>
+                <button name="language" value="de" class="btn-link lang-btn" type="submit">Deutsch</button>
                 &middot;
-                <button name="language" value="en" class="btn-link" style="padding: 0;" type="submit">English</button>
+                <button name="language" value="en" class="btn-link lang-btn" type="submit">English</button>
             </p>
         </form>
 

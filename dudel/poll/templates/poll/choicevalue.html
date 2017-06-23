@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load poll_filter vote_permissions %}
 {% load tz %}
+{% load csp %}
+{% load static compile_static %}
 {% load widget_tweaks %}
 {% block title %}{{ poll.title }}{% endblock %}
 {% block css %}
@@ -46,7 +48,12 @@
                     {% for choiceval in poll.choicevalue_set.all %}
                         <tr class="choice {% if choiceval.deleted %}deleted{% endif %}">
                             <td class="author choice">{{ choiceval.title }}</td>
-                            <td class="vote-choice" style="background-color: {% if choiceval.deleted %} lightgrey {% else %} #{{ choiceval.color }} {% endif %}">
+                            <td class="vote-choice"
+                                {% if vote_choice.value.deleted %}
+                                    style="{% csp_css_hash 'background-color:  lightgrey' %}"
+                                {% else %}
+                                    style="{% csp_css_hash 'background-color: #' choiceval.color %}"
+                                {% endif %}>
                                 <i class="fa fa-{{ choiceval.icon }}"></i>
                             </td>
                             <td class="author">{{ choiceval.weight }}</td>
