@@ -6,6 +6,10 @@ $(document).ready(function() {
     $("table.script-only").css("display", "table");
     $(".script-hidden").hide();
 
+    $(".btn-js-back").click(function() {
+        history.back();
+    })
+
     // Enable bootstrap popovers
     $('[data-toggle="popover"]').popover({
         html: true
