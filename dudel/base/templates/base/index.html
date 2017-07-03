@@ -267,4 +267,5 @@
 {% block additionalJS %}
     <script src="{% static 'coffee/create.coffee'|compile %}"  type="text/javascript" ></script>
     <script src="{% static 'coffee/slug.coffee'|compile %}"  type="text/javascript" ></script>
+    <script nonce="{% csp_nonce %}">$.datetimepicker.setLocale('{{ request.LANGUAGE_CODE }}');</script>
 {% endblock %}
