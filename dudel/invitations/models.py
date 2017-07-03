@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import translation
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from dudel.base.models import DudelUser
@@ -26,6 +27,8 @@ class Invitation(models.Model):
 
     def send(self, request):
         if (not self.last_email) or self.last_email + timedelta(hours=12) < now():  # TODO: TIMEDELTA mit config
+            old_lang = translation.get_language()
+            translation.activate(self.user.language)
             link = reverse('poll_vote', args=(self.poll.url,))  # TODO: hier direkt das poll oder das Vote?
             email_content = render_to_string('invitations/mail_invite.txt', {
                 'receiver': self.user.username,
@@ -37,9 +40,11 @@ class Invitation(models.Model):
                 self.last_email = now()
                 self.save()
             except SMTPRecipientsRefused:
+                translation.activate(old_lang)
                 messages.error(
                     request, _("The mail server had an error sending the notification to {}".format(self.user.username))
                 )
+            translation.activate(old_lang)
         else:
             messages.error(
                 request, _("You have send an Email for {} in the last 12 Hours".format(self.user.username))
