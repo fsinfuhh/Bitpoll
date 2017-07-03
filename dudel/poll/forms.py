@@ -20,10 +20,6 @@ class PollCreationForm(ModelForm):
             'one_vote_per_user',
             'vote_all'
         ]
-        widgets = {
-            'due_date': DateTimeWidget(
-                attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
-        }
 
 
 class PollCopyForm(ModelForm):
@@ -79,10 +75,6 @@ class PollSettingsForm(ModelForm):
             'vote_all',
             'use_user_timezone',
         ]
-        widgets = {
-            'due_date': DateTimeWidget(
-                attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
-        }
 
 
 class PollDeleteForm(ModelForm):

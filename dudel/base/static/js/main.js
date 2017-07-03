@@ -86,5 +86,9 @@ $(document).ready(function() {
         group.find(".btn[value='" + select.val() + "']").addClass("active");
     });
 
+    $('#datetimepicker').datetimepicker({
+        format: 'd.m.Y H:i'
+    });
+
 });
 

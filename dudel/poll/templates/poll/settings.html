@@ -45,7 +45,7 @@
             <label for="due-date-input">{% trans 'Due date'%}</label>
             <div class="form-group">
 
-                {% render_field form.due_date class+="form-control" %}
+                {% render_field form.due_date class+="form-control" id+="datetimepicker" %}
                  {% if form.due_date.errors %}
                     <div class="form-errors">
                         <div class="alert alert-danger">
