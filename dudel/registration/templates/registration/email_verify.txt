@@ -1,8 +1,4 @@
-{% load i18n %}
-{% load settings_value %}
-{% autoescape off %}
-{% get_current_language as LANGUAGE_CODE %}
-{% value_from_settings PROJECT_NAME as project_name%}
+{% load i18n %}{% load settings_value %}{% autoescape off %}{% value_from_settings PROJECT_NAME as project_name%}{% value_from_settings MAIL_SIGNATURE as signature %}
 {% blocktrans %}Hi,
 
 you requested to associate the email address
@@ -13,11 +9,8 @@ If this is correct, please verify the address by following this link:
   {{ link }}
 The link will be valid for 24 hours.
 
-{% endblocktrans %}
 
-{% if LANGUAGE_CODE == "de" %}
-    {% value_from_settings MAIL_GREETING_DE %}
-{% else %}
-    {% value_from_settings MAIL_GREETING_EN %}
-{% endif %}
-{% endautoescape %}
+Greetings,
+
+Your {{ signature }}
+{% endblocktrans %}{% endautoescape %}
