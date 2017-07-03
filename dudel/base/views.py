@@ -76,7 +76,7 @@ def settings(request):
             form.save()
 
             if request.user.auto_watch:
-                for poll in polls:
+                for poll in polls.filter(Q(vote__user=request.user)):
                     try:
                         poll_watch = PollWatch(poll=poll, user=request.user)
                         poll_watch.save()
