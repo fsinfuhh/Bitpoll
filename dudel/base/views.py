@@ -1,9 +1,13 @@
+import json
+
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.db.models import Q
 from django.db import IntegrityError
 
+from dudel.base.autocomplete import autocomplete_users
 from dudel.base.models import DudelUser
 
 from dudel.poll.forms import PollCreationForm
@@ -118,3 +122,17 @@ def licenses(request):
 
 def tecnical(request):
     return TemplateResponse(request, 'base/technical_info.html')
+
+
+@login_required
+def autocomplete(request):
+    term = request.GET.get('term', '')
+    users = autocomplete_users(term)
+    result_json = json.dumps({
+    "users": [{
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name
+        } for user in users]
+    })
+    return HttpResponse(result_json, content_type='application/json')

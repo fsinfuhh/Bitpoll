@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from mafiasi.groups.models import GroupInvitation, GroupProperties
+from dudel.groups.models import GroupInvitation, GroupProperties
 
 class GroupPropertiesAdmin(admin.ModelAdmin):
     filter_vertical = ['admins']

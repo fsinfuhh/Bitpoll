@@ -1,5 +1,5 @@
 from django.template.response import TemplateResponse
-from django.template import loader, Context
+from django.template import loader
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -13,11 +13,10 @@ from django.http import Http404
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 
-from mafiasi.base.models import LdapGroup
-from mafiasi.groups.models import (GroupInvitation, GroupProxy, GroupError,
+from .models import (GroupInvitation, GroupProxy, GroupError,
         create_usergroup)
-from mafiasi.groups.forms import InvitationForm
-from mafiasi.groups.signals import GroupOverview, show_group_overview
+from .forms import InvitationForm
+from .signals import GroupOverview, show_group_overview
 
 
 @login_required
@@ -27,6 +26,7 @@ def index(request):
         return redirect('groups_show', group.name)
     else:
         return TemplateResponse(request, 'groups/groups_base.html')
+
 
 @login_required
 def create(request):
@@ -45,6 +45,7 @@ def create(request):
         'error': error,
         'group_name': group_name,
     })
+
 
 @login_required
 def show(request, group_name):
@@ -75,12 +76,10 @@ def show(request, group_name):
     else:
         invitations = []
 
-    group_dn = LdapGroup.lookup_dn.format(group.name)
     panel_responses = show_group_overview.send(
         GroupOverview,
         group=group,
         members=group_members,
-        group_dn=group_dn,
         is_admin=is_groupadmin,
         is_member=request.user in group_members)
     extra_panels = [response[1] for response in panel_responses
@@ -94,8 +93,8 @@ def show(request, group_name):
         'is_groupadmin': is_groupadmin,
         'last_admin': num_admins == 1,
         'extra_panels': extra_panels,
-        'module_mailinglist': 'mafiasi.mailinglist' in settings.INSTALLED_APPS,
     })
+
 
 @login_required
 @require_POST
@@ -109,6 +108,7 @@ def leave(request, group_name):
         messages.error(request, e.message)
     
     return redirect('groups_index')
+
 
 @login_required
 @require_POST
@@ -142,6 +142,7 @@ def group_action(request, group_name, member_pk):
     
     return redirect('groups_show', group.name) 
 
+
 @login_required
 def invite(request, group_name):
     group = get_object_or_404(Group, name=group_name)
@@ -167,6 +168,7 @@ def invite(request, group_name):
         'form': form
     })
 
+
 @login_required
 @require_POST
 def invitation_action(request, invitation_pk):
@@ -182,6 +184,7 @@ def invitation_action(request, invitation_pk):
         invitation.refuse()
     return redirect('groups_index')
 
+
 @login_required
 @require_POST
 def withdraw_invite(request, invitation_pk):
@@ -192,6 +195,7 @@ def withdraw_invite(request, invitation_pk):
     
     invitation.delete()
     return redirect('groups_show', group.name)
+
 
 def _send_invitation_mail(request, invitation, subject, template_name):
     if not invitation.invitee.email:

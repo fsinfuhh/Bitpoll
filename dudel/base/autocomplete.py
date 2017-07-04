@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
-from mafiasi.base.models import Mafiasi
+from dudel.base.models import DudelUser
 
 RESULT_LIMIT = 10
 MIN_LENGTH = 3
+
 
 def autocomplete_users(term):
     """Autocomplete users.
@@ -22,9 +23,9 @@ def autocomplete_users(term):
         
     # Always make sure we "autocomplete" a complete match for username
     try:
-        exact_user = Mafiasi.objects.get(username=terms[0])
+        exact_user = DudelUser.objects.get(username=terms[0])
         autocomplete_refused = [exact_user]
-    except Mafiasi.DoesNotExist:
+    except DudelUser.DoesNotExist:
         autocomplete_refused = []
 
     if len(terms[0]) < MIN_LENGTH:
@@ -42,27 +43,29 @@ def autocomplete_users(term):
             return autocomplete_refused
 
     else:
-        query = ('SELECT * FROM base_mafiasi '
+        query = ('SELECT * FROM base_dudeluser '
                  'WHERE lower(first_name) LIKE %s AND lower(last_name) LIKE %s '
                  'LIMIT %s')
         params = (terms[0] + '%', terms[1] + '%', RESULT_LIMIT + 1)
-        users = list(Mafiasi.objects.raw(query, params=params))
+        users = list(DudelUser.objects.raw(query, params=params))
         if len(users) > RESULT_LIMIT:
             return autocomplete_refused
 
     users.sort(key=_sort_key)
     return users
 
+
 def _add_nodup(expr, term, users, dups):
-    query = 'SELECT * FROM base_mafiasi WHERE {} LIKE %s LIMIT %s'.format(expr)
+    query = 'SELECT * FROM base_dudeluser WHERE {} LIKE %s LIMIT %s'.format(expr)
     params = (term + '%', RESULT_LIMIT + 1)
-    special_users = list(Mafiasi.objects.raw(query, params=params))
+    special_users = list(DudelUser.objects.raw(query, params=params))
     
     for user in special_users:
         if user.pk in dups:
             continue
         users.append(user)
         dups.add(user.pk)
+
 
 def _sort_key(user):
     return (user.first_name, user.last_name, user.username)

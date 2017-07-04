@@ -19,46 +19,7 @@
         </div>
     </div>
     {% endfor %}
-    {% if module_mailinglist %}
-    {% with mailinglist=group.mailinglist %}
-    {% if mailinglist or is_groupadmin %}
-    {% url 'mailinglist_show_list' group.name as mailinglist_url %}
-    <div class="col-sm-12">
-        <div class="panel panel-default" id="panel-mailinglist-{{ group.name }}">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Mailinglist" %}
-                    <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
-                </h3>
-            </div>
-            <div class="panel-body">
-                {% if mailinglist %}
-                {% blocktrans with address=mailinglist.get_address %}The mailinglist address is <a href="mailto:{{ address }}">{{ address }}</a>.{% endblocktrans %}
-                {% elif is_groupadmin %}
-                This group does not have a mailinglist.
-                {% endif %}
-            </div>
-            {% if is_groupadmin %}
-            <div class="panel-footer">
-                {% if mailinglist %}
-                <a class="btn btn-default btn-xs" 
-                   href="{{ mailinglist_url }}">
-                    <span class="glyphicon glyphicon-cog"></span>
-                    {% trans "Manage" %}
-                </a>
-                {% else %}
-                <a class="btn btn-primary btn-xs" href="{{ mailinglist_url }}">
-                    <span class="glyphicon glyphicon-envelope"></span>
-                    {% trans 'Create mailinglist' %}
-                </a>
-                {% endif %}
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    {% endif %}
-    {% endwith %}
-    {% endif %}
+
     {% if is_groupadmin %}
     <div class="col-sm-12">
         <div class="panel panel-default" id="panel-invitations-{{ group.name }}">

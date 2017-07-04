@@ -7,13 +7,13 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 
-from mafiasi.base.models import LdapGroup, LOCK_ID_LDAP_GROUP
-from mafiasi.base.utils import AdvisoryLock
 
 MIN_GROUPNAME_LENGTH = 3
 
+
 class GroupError(Exception):
-    pass
+    def __init__(self, message):
+        self.message = message
 
 
 class GroupProperties(models.Model):
@@ -21,13 +21,7 @@ class GroupProperties(models.Model):
     admins = models.ManyToManyField(settings.AUTH_USER_MODEL,
             related_name='admin_of')
     public_members = models.BooleanField(default=False)
-    has_mailinglist = models.BooleanField(default=False)
-    
-    def get_ldap_group(self):
-        return LdapGroup.lookup(self.group.name)
 
-    def __unicode__(self):
-        return unicode(self.group)
 
 class GroupProxy(object):
     def __init__(self, group):
@@ -35,24 +29,13 @@ class GroupProxy(object):
 
     def add_member(self, user):
         group = self.group
-        with AdvisoryLock(LOCK_ID_LDAP_GROUP, group.pk):
-            ldap_group = LdapGroup.lookup(group.name)
-            ldap_group.members.append(user.username)
-            ldap_group.save()
-            group.user_set.add(user)
+        group.user_set.add(user)
 
     def remove_member(self, user, check_sole_admin=False):
-        with AdvisoryLock(LOCK_ID_LDAP_GROUP, self.group.pk):
             properties = self.group.properties
             if check_sole_admin:
                 self._raise_if_sole_admin(user)
             properties.admins.remove(user)
-            ldap_group = LdapGroup.lookup(self.group.name)
-            try:
-                ldap_group.members.remove(user.username)
-                ldap_group.save()
-            except ValueError:
-                pass
             self.group.user_set.remove(user)
     
     def grant_admin(self, user):
@@ -77,6 +60,7 @@ class GroupProxy(object):
                         'group or appoint another group admin.')
                 raise GroupError(msg)
 
+
 class GroupInvitation(models.Model):
     date_invited = models.DateTimeField(default=now)
     group = models.ForeignKey(Group, related_name='invitations')
@@ -97,6 +81,8 @@ class GroupInvitation(models.Model):
         self.delete()
 
 _group_name_re = re.compile(r'^[a-zA-Z]([a-zA-Z0-9-]*)$')
+
+
 def create_usergroup(user, name):
     if not _group_name_re.match(name):
         raise GroupError(_('Invalid group name.'))
@@ -118,8 +104,10 @@ def create_usergroup(user, name):
 
     return group
 
+
 def _change_group_cb(sender, instance, created, **kwargs):
     if created:
         props = GroupProperties.objects.create(group=instance)
         instance.properties = props
+
 post_save.connect(_change_group_cb, sender=Group)

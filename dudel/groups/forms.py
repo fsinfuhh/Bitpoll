@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 
-from mafiasi.groups.models import GroupInvitation
+from dudel.groups.models import GroupInvitation
 
 class InvitationForm(forms.Form):
     def __init__(self, *args, **kwargs):

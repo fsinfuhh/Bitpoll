@@ -8,6 +8,7 @@
 {% block content %}
 {% get_invitations as user_invitations %}
 {% get_user_groups as groups %}
+    <section class="section"><div class="container">
 <div class="row">
   <div class="col-xs-3">
     {% if user_invitations %}
@@ -59,9 +60,9 @@
     {% endif %}
     {% endblock %}
   </div>
-    {% value_from_settings PROJECT_NAME as project_name %}
+    {% value_from_settings SITE_NAME as project_name %}
   <div class="col-xs-9">
-      <h2>{% block group_ptitle %}{% trans '{{ project_name }} Groups' %}{% endblock %}</h2>
+      <h2>{% block group_ptitle %}{% blocktrans %}{{ project_name }} Groups {% endblocktrans %}{% endblock %}</h2>
       <hr/>
     {% block group_content %}
     <p class="alert alert-info">
@@ -74,4 +75,5 @@
     {% endblock %}
   </div>
 </div>
+    </div> </section>
 {% endblock %}

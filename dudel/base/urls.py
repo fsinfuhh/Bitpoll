@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^licenses/$', views.licenses, name='base_licenses'),
     url(r'^technical_info/$', views.tecnical, name='technical'),
     #url(r'^register/$', views.register, name='register')
+    url(r'^autocomplete$', views.autocomplete, name='base_autocomplete'),
 ]

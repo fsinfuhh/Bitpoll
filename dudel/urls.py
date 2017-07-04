@@ -41,6 +41,11 @@ urlpatterns = [
 
 ]
 
+if settings.GROUP_MANAGEMENT:
+    urlpatterns += [
+        url(r'^groups/', include('dudel.groups.urls')),
+        ]
+
 if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
     urlpatterns = [

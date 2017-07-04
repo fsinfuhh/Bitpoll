@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'dudel.base',
     'dudel.invitations',
     'dudel.registration',
+    'dudel.groups',
     'django.contrib.admin',
 ]
 
