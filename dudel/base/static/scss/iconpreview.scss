@@ -2,12 +2,22 @@
 .icon-preview {
     list-style: none;
     padding: 0;
+
+    li button {
+        width: 28px;
+        span {
+            display: none;
+        }
+    }
 }
 
 .icon-preview li {
     display: inline-block;
 }
 
+.icon-script-insert {
+    display: block;
+}
 .icon-preview li button {
     background: none;
     border: none;

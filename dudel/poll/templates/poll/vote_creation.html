@@ -2,7 +2,9 @@
 {% load i18n %}
 {% load poll_filter %}
 {% load widget_tweaks %}
-
+{% block css %}
+    {% include "poll/choice_style.html" %}
+{% endblock %}
 {% block title %}Vote on {{ poll.title }}{% endblock %}
 
 {% block content %}
@@ -59,9 +61,8 @@
                                 {{ value.title }}
                             {% endfor %}</td>
                         {% for value in values %}
-                            <td class="vote-choice control {% if value != vote %}off{% endif %} script-only"
-                                data-choice="{{ value.id }}" title="{{ value.title }}"
-                                style="background-color: #{{ value.color }}">
+                            <td class="vote-choice control {% if value != vote %}off{% endif %} script-only bg-{{ value.color }}"
+                                data-choice="{{ value.id }}" title="{{ value.title }}">
                                 <span class="fa fa-{{ value.icon }}"></span></td>
                         {% endfor %}
                         <td class="vote-comment">

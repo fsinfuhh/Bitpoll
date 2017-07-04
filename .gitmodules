@@ -1,0 +1,3 @@
+[submodule "django-simple-csp"]
+	path = django-simple-csp
+	url = gogs@gogs.mafiasi.de:mafiasi/django-simple-csp.git

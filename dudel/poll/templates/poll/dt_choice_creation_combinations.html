@@ -21,7 +21,7 @@
     <form class="form" action="{% url 'poll_editDTChoiceCombinations' poll.url %}" method="POST">
         {% csrf_token %}
         {# TODO: maybe we need the imput data fields to this view here for recreation on error #}
-        <div class="table-responsive" style="margin-bottom: 1em;">
+        <div class="table-responsive choice-combinations-table">
             <table class="table auto-width poll">
                 <tbody>
                 <tr>

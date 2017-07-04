@@ -69,6 +69,10 @@ body {
     position:relative;
 }
 
+.lang-btn {
+    padding: 0;
+}
+
 .navbar {
     margin-bottom: 0;
     background: #333;
@@ -458,4 +462,8 @@ tr.deleted, tr.deleted .color {
 .public_polls {
     list-style: none;
     padding: 0;
+}
+
+.slug-right {
+    float: right;
 }

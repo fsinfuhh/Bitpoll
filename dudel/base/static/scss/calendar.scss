@@ -36,7 +36,26 @@
     }
 }
 
+.choice-combinations-table {
+    margin-bottom: 1em;
+}
 
+#time-slider-form input {
+    height: 3.4em;
+}
+
+.time-slider-display div {
+    .hour {
+        transform: rotate(360deg);
+    }
+    .minute {
+        transform: rotate(4320deg);
+    }
+}
+
+#time-slider-knob {
+    left: 200px;
+}
 
 .calendar-list {
     display: inline-block;

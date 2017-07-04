@@ -19,15 +19,14 @@
     <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css"/>
     <link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="{% static 'css/jquery-ui-timepicker-addon.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'css/jquery-range.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/main.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/form.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/action.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="{% static 'scss/iconpreview.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/poll.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/slider.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
     <link href="{% static 'scss/timeinput.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="{% static 'css/jquery.datetimepicker.css' %}" rel="stylesheet" type="text/css" media="screen"/>
     <link media="print" rel="stylesheet" href="{% static 'css/print.css' %}">
     <script src="{% static 'js/lib/jquery.js' %}"  type="text/javascript" ></script>
     <script src="{% static 'js/lib/bootstrap.js' %}"  type="text/javascript" ></script>
@@ -92,9 +91,9 @@
         <form class="form-inline" action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
             <p>
-                <button name="language" value="de" class="btn-link" style="padding: 0;" type="submit">Deutsch</button>
+                <button name="language" value="de" class="btn-link lang-btn" type="submit">Deutsch</button>
                 &middot;
-                <button name="language" value="en" class="btn-link" style="padding: 0;" type="submit">English</button>
+                <button name="language" value="en" class="btn-link lang-btn" type="submit">English</button>
             </p>
         </form>
 
@@ -120,6 +119,7 @@
     <script src="{% static 'coffee/common.coffee'|compile %}"  type="text/javascript" ></script>
     <script src="{% static 'coffee/slider.coffee'|compile %}"  type="text/javascript" ></script>
     <script src="{% static 'coffee/vote.coffee'|compile %}"  type="text/javascript" ></script>
+    <script src="{% static 'js/lib/jquery.datetimepicker.full.min.js'%}"  type="text/javascript" ></script>
 {% comment %}
     <script src="{% static 'coffee/votefilter.coffee'|compile %}"  type="text/javascript" ></script>
 {% endcomment %}
