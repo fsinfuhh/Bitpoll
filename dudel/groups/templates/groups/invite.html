@@ -18,8 +18,8 @@
         </div>
         {% endif %}
     </div>
-    <button class="btn btn-primary">{% trans "Invite user" %}</button>
-    <a href="{% url 'groups_show' group.name %}" class="btn btn-default">{% trans "Cancel" %}</a>
+    <button class="action primary">{% trans "Invite user" %}</button>
+    <a href="{% url 'groups_show' group.name %}" class="action default">{% trans "Cancel" %}</a>
 </form>
 {% endblock %}
 
