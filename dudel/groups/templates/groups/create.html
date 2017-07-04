@@ -1,0 +1,19 @@
+{% extends "groups/groups_base.html" %}
+{% load i18n %}
+
+{% block wtitle %}{% block group_ptitle %}{% trans "Create new group" %}{% endblock %}{% endblock %}
+
+{% block group_content %}
+<p class="alert alert-warning">{% trans "Please note: The group name will be visible to other users." %}</p>
+<form method="post" action="">
+    {% csrf_token %}
+    <div class="form-group{% if error %} has-error{% endif %}">
+        <label for="group_name">{% trans "Group name" %}</label>
+        <input type="text" value="{{ group_name }}" class="form-control" name="group_name">
+        <div class="help-block">{% trans 'Only letters, numbers "." and "-" are allowed. Must start with a letter.' %}
+        {% if error %}<p>{{ error }}</p>{% endif %}
+        </div>
+    </div>
+    <button class="btn btn-primary">{% trans "Create" %}</button>
+</form>
+{% endblock %}

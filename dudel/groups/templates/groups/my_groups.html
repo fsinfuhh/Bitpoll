@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block wtitle %}{% block ptitle %}{% trans "My groups" %}{% endblock %}{% endblock %}
+
+{% block submenu %}
+{% include "groups/menu.html" with tab='my_groups' %}
+{% endblock %}
+
+{% block content %}
+
+<table class="table table-striped">
+    <tr>
+        <th>{% trans "Group name" %}</th>
+        <th>{% trans "Leave" %}</th>
+    </tr>
+{% for group in my_groups %}
+    <tr>
+        <td><a href="{% url 'groups_show' group.name %}">{{ group.name }}</a></td>
+        <td>
+            <form method="post" action="{% url 'groups_leave' group.name %}">
+            {% csrf_token %}
+            <button class="btn btn-danger">{% trans "Leave" %}</button>
+            </form>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+
+<p><a href="{% url 'groups_create' %}" class="btn btn-primary">{% trans "Create new group" %}</a></p>
+
+{% endblock %}

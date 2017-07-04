@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load group_tags %}
+{% load humanize %}
+{% load i18n %}
+{% load userformat %}
+{% load settings_value %}
+
+{% block content %}
+{% get_invitations as user_invitations %}
+{% get_user_groups as groups %}
+<div class="row">
+  <div class="col-xs-3">
+    {% if user_invitations %}
+    <h4>
+      {% trans 'Invitations' %}
+    </h4>
+    <div class="list-group">
+      {% for invitation in user_invitations %}
+      <div class="list-group-item list-group-item-success" href="#">
+        <div>
+          {% with group=invitation.group %}
+          <strong>{{ group.name }}</strong>
+          {% endwith %}
+          <form method="post" action="{% url 'groups_invitation_action' invitation.pk %}" class="form-inline pull-right">
+            {% csrf_token %}
+            <div class="form-group btn-group">
+              <button class="btn btn-success btn-xs" title="{% trans 'Accept invitation' %}" name="accept">
+                <span class="glyphicon glyphicon-ok"></span>
+              </button>
+              <button class="btn btn-danger btn-xs" title="{% trans 'Decline invitation' %}" name="refuse">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+        <small>{% trans 'Invited by' %} {% format_user invitation.invited_by %} {{ invitation.date_invited|naturaltime }}</small>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <h4>
+      {% trans 'My Groups' %}
+      <a class="btn btn-success btn-xs pull-right" title="{% trans 'Create new group' %}" href="{% url 'groups_create' %}">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        <span class="hidden-sm hidden-xs">{% trans 'New' %}</span>
+      </a>
+    </h4>
+    {% block group_list %}
+    {% if groups %}
+    <div class="list-group">  
+      {% for group in groups %}      
+      <a class="list-group-item{% ifequal active_group_name group.name %} active{% endifequal %}" href="{% url 'groups_show' group.name %}">
+        {{ group.name }}
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <small>{% trans 'You are not yet member of any group.' %}</small>
+    {% endif %}
+    {% endblock %}
+  </div>
+    {% value_from_settings PROJECT_NAME as project_name %}
+  <div class="col-xs-9">
+      <h2>{% block group_ptitle %}{% trans '{{ project_name }} Groups' %}{% endblock %}</h2>
+      <hr/>
+    {% block group_content %}
+    <p class="alert alert-info">
+      {% blocktrans %}
+      Accept an invitation or create a new group and invite
+      others to use {{ project_name }} features such as private
+      etherpads, owncloud sharing, group calendars and group dudels. Please check for existing groups.
+      {% endblocktrans %} {# TODO: dynamic feature list from activated services? #}
+    </p>
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}

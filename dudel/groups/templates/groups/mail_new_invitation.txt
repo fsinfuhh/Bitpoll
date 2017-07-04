@@ -1,0 +1,25 @@
+{% extends "base_email.html" %}
+{% load i18n %}
+{% load settings_value %}
+{% load userformat %}
+{% autoescape off %}
+
+
+{% block content_de %}
+Hallo {{ invitation.invitee.get_full_name }},
+
+du hast von {% format_user invitation.invited_by 'email' %} eine Einladung in die Gruppe "{{ invitation.group.name }}" bekommen. Um diese Einladung anzunehmen und der Gruppe beizutreten, besuche:
+
+  https://{{ site.domain }}{% url 'groups_index' %}
+{% endblock %}
+
+
+{% block content_en %}
+
+Hi {{ invitation.invitee.get_full_name }},
+
+{% format_user invitation.invited_by 'email' %} invited you to join the group "{{ invitation.group.name }}". To accept this invitation and join the group, visit
+
+  https://{{ site.domain }}{% url 'groups_index' %}
+{% endblock %}
+{% endautoescape %}

@@ -1,0 +1,65 @@
+{% extends "groups/groups_base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block wtitle %}{% block group_ptitle %}{% blocktrans with group_name=group.name %}Invite people to {{ group_name }}{% endblocktrans %}{% endblock %}{% endblock %}
+
+{% block group_content %}
+<form method="post" action="">
+    {% csrf_token %}
+    <div class="form-group{% if form.invitees.errors %} has-error{% endif %}">
+        <label for="invitee">{% trans "Account names" %}</label>
+        {% render_field form.invitees class+="form-control" id="invitees" %}
+        {% if form.invitees.errors %}
+        <div class="help-block">
+        {% for error in form.invitees.errors %}{{ error }} {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <button class="btn btn-primary">{% trans "Invite user" %}</button>
+    <a href="{% url 'groups_show' group.name %}" class="btn btn-default">{% trans "Cancel" %}</a>
+</form>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'select2/select2.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'select2/select2-bootstrap.css' %}" />
+{% endblock css %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'select2/select2.js' %}"></script>
+<script type="text/javascript">
+    $(function() {
+        $("#invitees").select2({
+            tags: [],
+            tokenSeparators: [",", " "],
+            formatNoMatches: "{% trans 'Please enter the account names of the users you want to invite' %}",
+			ajax: {
+				url: "/base/autocomplete",
+				dataType: "json",
+				delay: 250,
+				data: function(term) {
+					return {
+						term: term
+					};
+				},
+				results: function(data, page) {
+					var results = [];
+					for (var i = 0; i < data.users.length; i++) {
+						var user = data.users[i];
+						results.push({
+							id: user.username,
+							text: user.first_name + " " + user.last_name + " (" + user.username + ")"
+						});
+					}
+					return {
+						results: results
+					};
+				}
+			},
+			minimumInputLength: 2
+        });
+    });
+</script>
+{% endblock js %}

@@ -1,0 +1,13 @@
+<div class="panel-heading">
+    <h3 class="panel-title">{% block panel_title_content %}{% endblock %}
+        <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+    </h3>
+</div>
+<div class="panel-body">
+    {% block panel_body_content %}{% endblock %}
+</div>
+{% block panel_footer %}
+<div class="panel-footer">
+{% block panel_footer_content %}{% endblock %}
+</div>
+{% endblock panel_footer %}

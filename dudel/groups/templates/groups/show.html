@@ -1,0 +1,173 @@
+{% extends "groups/groups_base.html" %}
+{% load i18n %}
+{% load userformat %}
+
+{% block wtitle %}{% block group_ptitle %}{{ group.name }}{% endblock %}{% endblock %}
+
+{% block group_list %}
+  {% with group.name as active_group_name %}
+  {{ block.super }}
+  {% endwith %}
+{% endblock %}
+
+{% block group_content %}
+<div class="row">
+    {% for panel in extra_panels %}
+    <div class="col-sm-12">
+        <div class="panel panel-default" id="panel-{{ panel.identifier }}-{{ group.name }}">
+{{ panel.content|safe }}
+        </div>
+    </div>
+    {% endfor %}
+    {% if module_mailinglist %}
+    {% with mailinglist=group.mailinglist %}
+    {% if mailinglist or is_groupadmin %}
+    {% url 'mailinglist_show_list' group.name as mailinglist_url %}
+    <div class="col-sm-12">
+        <div class="panel panel-default" id="panel-mailinglist-{{ group.name }}">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {% trans "Mailinglist" %}
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                {% if mailinglist %}
+                {% blocktrans with address=mailinglist.get_address %}The mailinglist address is <a href="mailto:{{ address }}">{{ address }}</a>.{% endblocktrans %}
+                {% elif is_groupadmin %}
+                This group does not have a mailinglist.
+                {% endif %}
+            </div>
+            {% if is_groupadmin %}
+            <div class="panel-footer">
+                {% if mailinglist %}
+                <a class="btn btn-default btn-xs" 
+                   href="{{ mailinglist_url }}">
+                    <span class="glyphicon glyphicon-cog"></span>
+                    {% trans "Manage" %}
+                </a>
+                {% else %}
+                <a class="btn btn-primary btn-xs" href="{{ mailinglist_url }}">
+                    <span class="glyphicon glyphicon-envelope"></span>
+                    {% trans 'Create mailinglist' %}
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+    {% if is_groupadmin %}
+    <div class="col-sm-12">
+        <div class="panel panel-default" id="panel-invitations-{{ group.name }}">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {% trans "Invitations" %}
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                </h3>
+            </div>
+            {% if invitations %}
+            <table class="table table-striped">
+                <tr>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Invitee" %}</th>
+                    <th>{% trans "Invited by" %}</th>
+                    <th></th>
+                </tr>
+            {% for invitation in invitations %}
+                <tr>
+                    <td>{{ invitation.date_invited|date:"SHORT_DATE_FORMAT" }}</td>
+                    <td>{% format_user invitation.invitee %}</td>
+                    <td>{% format_user invitation.invited_by %}</td>
+                    <td>
+                    <form method="post" action="{% url 'groups_withdraw_invite' invitation.pk %}">
+                    {% csrf_token %}
+                        <button class="btn btn-warning btn-xs">{% trans "Withdraw" %}</button>
+                    </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+            {% else %}
+            <div class="panel-body">
+                {% trans "There are no open invitations." %}
+            </div>
+            {% endif %}
+            <div class="panel-footer">
+                <a class="btn btn-primary btn-xs" 
+                   href="{% url 'groups_invite' group.name %}">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    {% trans "Invite users" %}
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="col-sm-12">
+        <div class="panel panel-default" id="panel-members-{{ group.name }}">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {% trans "Members" %} ({{ members|length }})
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                </h3>
+            </div>
+            <table class="table table-striped">
+                {% if is_groupadmin %}
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th></th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+                {% endif %}
+                {% for member in members %}
+                <tr>
+                    <td>
+                    {% format_user member %}
+                    </td>
+                    <td>
+                    {% if member.is_groupadmin %}
+                        <span class="label label-default">
+                            <span class="glyphicon glyphicon-bishop"></span>
+                            {% trans "Group admin" %}
+                        </span>
+                    {% endif %}
+                    </td>
+                    {% if is_groupadmin %}
+                    {% if last_admin and member == user %}
+                    <td>
+                        <p>{% trans "Last group admin can't be removed." %}</p>
+                    </td>
+                    {% else %}
+                    <td>
+                    <form method="post" action="{% url 'groups_action' group.name member.pk %}">
+                        {% csrf_token %}
+                        <button class="btn btn-danger btn-xs" name="kick">{% trans "Remove" %}</button>
+
+                        {% if member.is_groupadmin %}
+                        <button class="btn btn-warning btn-xs" name="revoke_admin">{% trans "Revoke admin" %}</button>
+                        {% else %}
+                        <button class="btn btn-warning btn-xs" name="grant_admin">{% trans "Grant admin" %}</button>
+                        {% endif %}
+                    </form>
+                    </td>
+                    {% endif %}
+                    {% else %}
+                    <td>
+                        {% ifequal user member %}
+                        <form class="form-inline pull-right" method="post" action="{% url 'groups_leave' group.name %}">
+                        {% csrf_token %}
+                        <button class="btn btn-danger btn-xs">{% trans "Leave group" %}</button>
+                        </form>
+                        {% endifequal %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
