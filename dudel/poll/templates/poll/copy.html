@@ -119,7 +119,8 @@
     </div>
 {% endblock %}
 
-
+{% load csp %}
 {% block additionalJS %}
     <script src="{% static 'coffee/slug.coffee'|compile %}" type="text/javascript"></script>
+    <script nonce="{% csp_nonce %}">$.datetimepicker.setLocale('{{ request.LANGUAGE_CODE }}');</script>
 {% endblock %}

@@ -1,5 +1,4 @@
 from django.forms import ModelForm, CharField, Form
-from datetimewidget.widgets import DateTimeWidget
 
 from .models import Poll, Choice, ChoiceValue, Comment
 
@@ -26,10 +25,6 @@ class PollCopyForm(ModelForm):
     class Meta:
         model = Poll
         fields = ['title', 'due_date', 'url']
-        widgets = {
-            'due_date': DateTimeWidget(
-                attrs={'id': "id_due_date"}, usel10n=True, bootstrap_version=3)
-        }
 
 
 class DateChoiceCreationForm(Form):

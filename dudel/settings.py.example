@@ -81,7 +81,6 @@ INSTALLED_APPS = [
     'django_markdown',
     'widget_tweaks',
     'static_precompiler',
-    'datetimewidget',
     'dudel.poll',
     'dudel.base',
     'dudel.invitations',
