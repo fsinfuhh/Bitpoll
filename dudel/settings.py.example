@@ -261,3 +261,5 @@ AUTH_LDAP_USER_FLAGS_BY_GROUP = {
 """
 
 MAIL_SIGNATURE = "Dudel Team"
+
+TEAM_EMAIL = "mail@example.com"
