@@ -4,7 +4,9 @@
 {% block wtitle %}{% block ptitle %}{% trans "Verify your address to continue" %}{% endblock %}{% endblock %}
 
 {% block content %}
-
-<p>{% blocktrans %}You should have received a link via email (to <strong>{{ email }}</strong>) now, which you can use to verify your address.{% endblocktrans %}</p>
-
+    <section class="section">
+        <div class="container">
+            <p>{% blocktrans %}You should have received a link via email (to <strong>{{ email }}</strong>) now, which you can use to verify your address.{% endblocktrans %}</p>
+        </div>
+    </section>
 {% endblock content %}
