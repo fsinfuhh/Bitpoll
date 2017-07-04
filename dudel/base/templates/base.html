@@ -7,6 +7,7 @@
 {%  value_from_settings DEBUG as debug %}
 {%  value_from_settings HOME_URL as home_url %}
 {%  value_from_settings REGISTER_ENABLED as register %}
+{%  value_from_settings GROUP_MANAGEMENT as groups %}
 
 <!DOCTYPE html>
 <html>
@@ -60,7 +61,15 @@
                         {% endif %}
                         <li><a href="{% url 'login' %}?next={{ request.path }}"><i class="fa fa-sign-in"></i>{% trans 'Login' %}</a></li>
                     {% else %}
-                        <li><a href=""><i class="fa fa-user"></i>{{ request.user.get_displayname }}</a></li>
+                        <li><a href="{% url 'settings' %}"><i class="fa fa-user"></i>{{ request.user.get_displayname }}</a></li>
+                        {% if groups %}
+                            {% load group_tags %}
+                            {% open_invitations as oi %}
+                            {% if oi %}
+                                <span class="badge">{{ oi }}</span>
+                            {% endif %}
+                            <li><a href="{% url 'groups_index' %}"><i class="fa fa-group"></i>{% trans 'Groups' %}</a></li>
+                        {% endif %}
                         <li><a href="{% url 'settings' %}"><i class="fa fa-pencil"></i>{% trans 'Settings' %}</a></li>
                         <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>{% trans 'Logout' %}</a></li>
                     {% endif %}

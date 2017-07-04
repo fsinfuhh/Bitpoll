@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -200,11 +201,14 @@ def withdraw_invite(request, invitation_pk):
 def _send_invitation_mail(request, invitation, subject, template_name):
     if not invitation.invitee.email:
         return
+    old_lang = translation.get_language()
+    translation.activate(invitation.invitee.language)
     template = loader.get_template('groups/mail_{0}.txt'.format(template_name))
     message = template.render({
         'invitation': invitation,
         'site': get_current_site(request)
     })
+    translation.activate(old_lang)
     send_mail(settings.EMAIL_SUBJECT_PREFIX + subject,
               message,
               settings.DEFAULT_FROM_EMAIL,

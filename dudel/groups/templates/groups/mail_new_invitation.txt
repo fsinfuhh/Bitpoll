@@ -1,25 +1,11 @@
-{% extends "base_email.html" %}
-{% load i18n %}
-{% load settings_value %}
-{% load userformat %}
-{% autoescape off %}
+{% load i18n %}{% load settings_value %}{% load userformat %}{% value_from_settings BASE_URL as base_url%}{% value_from_settings MAIL_SIGNATURE as signature %}{% format_user invitation.invited_by 'email' as user%}{% url 'groups_index' as url %}{% autoescape off %}{% blocktrans %}Hi {{ invitation.invitee.get_full_name }},
 
+{{ user }} invited you to join the group "{{ invitation.group.name }}". To accept this invitation and join the group, visit
 
-{% block content_de %}
-Hallo {{ invitation.invitee.get_full_name }},
+  https://{{ base_url }}{{ url }}
 
-du hast von {% format_user invitation.invited_by 'email' %} eine Einladung in die Gruppe "{{ invitation.group.name }}" bekommen. Um diese Einladung anzunehmen und der Gruppe beizutreten, besuche:
+Greetings,
 
-  https://{{ site.domain }}{% url 'groups_index' %}
-{% endblock %}
-
-
-{% block content_en %}
-
-Hi {{ invitation.invitee.get_full_name }},
-
-{% format_user invitation.invited_by 'email' %} invited you to join the group "{{ invitation.group.name }}". To accept this invitation and join the group, visit
-
-  https://{{ site.domain }}{% url 'groups_index' %}
-{% endblock %}
+Your {{ signature }}
+{% endblocktrans %}
 {% endautoescape %}
