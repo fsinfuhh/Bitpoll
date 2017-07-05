@@ -66,9 +66,7 @@ class Command(BaseCommand):
             }
             timezone = pytz.timezone(poll['timezone_name'])
             local_poll = Poll.objects.filter(url=poll['slug'])
-            if local_poll.count() > 0:
-                # poll exists. Delete it
-                local_poll.delete()
+
             migrated_poll = Poll(
                 title=poll['title'],
                 description=poll['description'],
@@ -86,6 +84,10 @@ class Command(BaseCommand):
                 allow_comments=poll['allow_comments'],
                 show_invitations=poll['show_invitations'],
                 timezone_name=poll['timezone_name'])
+
+            if local_poll.count() > 0:
+                # poll exists. Update it
+                migrated_poll.pk = local_poll.first().pk
 
             owner = self.resolve_user_or_group(poll['owner_id'])
             if isinstance(owner, get_user_model()):
