@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import BaseCommand
 from django.db.utils import IntegrityError
+from django.utils.timezone import make_aware
 
 from dudel.poll.models import Choice, ChoiceValue, Comment, Poll, Vote, VoteChoice
 
@@ -73,8 +74,8 @@ class Command(BaseCommand):
                 description=poll['description'],
                 url=poll['slug'],
                 type=POLL_TYPE_MAPPING[poll['type']],
-                created=timezone.localize(poll['created']),
-                due_date=timezone.localize(poll['due_date']) if poll['due_date'] is not None else None,
+                created=make_aware(poll['created'], timezone),
+                due_date=make_aware(poll['due_date'], timezone) if poll['due_date'] is not None else None,
                 anonymous_allowed=poll['anonymous_allowed'],
                 public_listening=poll['public_listing'],
                 require_login=poll['require_login'],
@@ -117,7 +118,7 @@ class Command(BaseCommand):
                 }
                 c = Choice.objects.create(
                     text=choice['text'],
-                    date=timezone.localize(choice['date']) if choice['date'] else None,
+                    date=make_aware(choice['date'], timezone) if choice['date'] else None,
                     poll=poll,
                     sort_key=sort_key,
                     deleted=choice['deleted'])
@@ -161,7 +162,7 @@ class Command(BaseCommand):
                 v = Vote.objects.create(
                     name=vote['name'],
                     anonymous=vote['anonymous'],
-                    date_created=timezone.localize(vote['created']),
+                    date_created=make_aware(vote['created'], timezone),
                     comment=vote['comment'],
                     assigned_by=self.resolve_user_or_group(vote['assigned_by_id']) if vote['assigned_by_id'] else None,
                     poll=poll,
@@ -201,7 +202,7 @@ class Command(BaseCommand):
                 }
                 Comment.objects.create(
                     text=comment['text'],
-                    date_created=timezone.localize(comment['created']),
+                    date_created=make_aware(comment['created'], timezone),
                     name=comment['name'] or '',
                     user=self.resolve_user_or_group(comment['user_id']),
                     poll=poll)
