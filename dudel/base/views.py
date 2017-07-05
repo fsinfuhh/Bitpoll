@@ -20,6 +20,7 @@ from pytz import all_timezones
 from dudel.registration.forms import RegisterForm
 from dudel.settings import IMPRINT_URL, ABOUT_URL
 from django.core import signing
+from django.conf import settings
 
 
 def index(request):
@@ -67,7 +68,7 @@ def index(request):
 
 
 @login_required
-def settings(request):
+def user_settings(request):
     polls = Poll.objects.filter(Q(user=request.user)
                                 | Q(vote__user=request.user)
                                 | Q(group__user=request.user)
