@@ -9,6 +9,7 @@
 {% block content %}
 <script>Raven.config('{% sentry_public_dsn %}').install()</script>
 {% url 'base_problems' as problems_url %}
+    <div class="container"><section class="section">
 <p>{% blocktrans %}We're sorry, but we didn't expect this to happen. Our error reporting tool should have sent an email to us with some technical details. Please try again later. If the problem persists, see our <a href="{{ problems_url }}">problem reporting page</a>.{% endblocktrans %}</p>
     {% if request.sentry.id %}
         {% with request.sentry.id as errorid %}
@@ -21,5 +22,7 @@
             </script>
         {% endwith %}
     {% endif %}
+
+</section> </div>
 {% endblock %}
 
