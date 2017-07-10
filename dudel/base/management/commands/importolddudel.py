@@ -40,7 +40,8 @@ class Command(BaseCommand):
         # migrating polls
         print('migrating polls')
         count = 0
-        total_count = Poll.objects.count()
+        cursor.execute('SELECT COUNT(*) FROM poll WHERE deleted=false')
+        total_count = cursor.fetchone()[0]
         migrated_polls = set()
         cursor.execute('SELECT * FROM poll WHERE deleted=false;')
         for poll in cursor:
