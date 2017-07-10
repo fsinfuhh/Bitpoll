@@ -221,7 +221,7 @@ class Command(BaseCommand):
                     'poll_id': comment[5],
                     'deleted': comment[6],
                 }
-                comments.append(Comment.objects.create(
+                comments.append(Comment(
                     text=comment['text'],
                     date_created=make_aware(comment['created'], timezone),
                     name=comment['name'] or '',
