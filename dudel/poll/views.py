@@ -645,6 +645,7 @@ def edit_choicevalues(request, poll_url):
         'poll': current_poll,
         'form': form,
         'choiceval_select': choiceval_select,
+        'choice_values': ChoiceValue.objects.filter(poll=current_poll)
     })
 
 
