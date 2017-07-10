@@ -70,7 +70,12 @@ class Command(BaseCommand):
                 'timezone_name': poll[18] or 'Europe/Berlin',
             }
             timezone = pytz.timezone(poll['timezone_name'])
-            local_poll = Poll.objects.filter(url=poll['slug'])
+            local_poll = Poll.objects.filter(url=poll['slug']).first()
+
+            new_pk = None
+            if local_poll:
+                # poll exists. Delete it to get rid of related elements
+                new_pk = local_poll.pk
 
             migrated_poll = Poll(
                 title=poll['title'],
@@ -89,13 +94,7 @@ class Command(BaseCommand):
                 allow_comments=poll['allow_comments'],
                 show_invitations=poll['show_invitations'],
                 timezone_name=poll['timezone_name'])
-
-            if local_poll.count() > 0:
-                local_poll = local_poll.first()
-                # poll exists. Delete it to get rid of related elements
-                # One could build up a merge strategy for votes and comments ...
-                local_poll.delete()
-                migrated_poll.pk = local_poll.pk
+            migrated_poll.pk = new_pk
 
             owner = self.resolve_user_or_group(poll['owner_id'])
             if isinstance(owner, get_user_model()):
