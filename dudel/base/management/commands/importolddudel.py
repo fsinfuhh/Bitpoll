@@ -43,6 +43,8 @@ class Command(BaseCommand):
         cursor.execute('SELECT COUNT(*) FROM poll WHERE deleted=false')
         total_count = cursor.fetchone()[0]
         migrated_polls = set()
+        choices = {}
+        choice_values = {}
         cursor.execute('SELECT * FROM poll WHERE deleted=false;')
         for poll in cursor:
             sys.stdout.write('\r{:4d}/{:4d} polls migrated'.format(count, total_count))
@@ -114,8 +116,6 @@ class Command(BaseCommand):
         print('migrating comments, choice values, choices and votes for previously imported polls')
         count = 0
         total_count = len(migrated_polls)
-        vote_choices = []
-        comments = []
         for poll_id, poll in migrated_polls:
             sys.stdout.write('\r{:4d}/{:4d} polls handled'.format(count, total_count))
             sys.stdout.flush()
@@ -127,7 +127,7 @@ class Command(BaseCommand):
 
             # choices
             cursor.execute('SELECT * FROM choice WHERE deleted=false AND poll_id=%s ORDER BY date, text;', (poll_id,))
-            choices = {}
+            sort_key = 0
             for choice in cursor:
                 choice = {
                     'id': choice[0],
@@ -136,18 +136,17 @@ class Command(BaseCommand):
                     'poll_id': choice[3],
                     'deleted': choice[4],
                 }
-                c = Choice(
+                c = Choice.objects.create(
                     text=choice['text'],
                     date=make_aware(choice['date'], timezone) if choice['date'] else None,
                     poll=poll,
-                    sort_key=len(choices),
+                    sort_key=sort_key,
                     deleted=choice['deleted'])
                 choices[choice['id']] = c
-            Choice.objects.bulk_create(choices.values())
+                sort_key += 1
 
             # choice values
             cursor.execute('SELECT * FROM choice_value WHERE deleted=false AND poll_id=%s;', (poll_id,))
-            choice_values = {}
             for choice_value in cursor:
                 choice_value = {
                     'id': choice_value[0],
@@ -158,14 +157,13 @@ class Command(BaseCommand):
                     'deleted': choice_value[5],
                     'weight': choice_value[6],
                 }
-                c = ChoiceValue(
+                c = ChoiceValue.objects.create(
                     title=choice_value['title'],
                     icon=choice_value['icon'],
                     color=choice_value['color'],
                     weight=choice_value['weight'],
                     poll=poll)
                 choice_values[choice_value['id']] = c
-            ChoiceValue.objects.bulk_create(choice_values.values())
 
             # vote
             cursor.execute('SELECT * FROM vote WHERE poll_id=%s;', (poll_id,))
@@ -202,11 +200,11 @@ class Command(BaseCommand):
                         'choice_id': vote_choice[4],
                     }
                     try:
-                        vote_choices.append(VoteChoice(
+                        VoteChoice.objects.create(
                             comment=vote_choice['comment'],
                             value=choice_values[vote_choice['value_id']] if vote_choice['value_id'] else None,
                             vote=vote,
-                            choice=choices[vote_choice['choice_id']] if vote_choice['choice_id'] else None))
+                            choice=choices[vote_choice['choice_id']] if vote_choice['choice_id'] else None)
                     except (KeyError, IntegrityError):
                         continue
 
@@ -222,14 +220,12 @@ class Command(BaseCommand):
                     'poll_id': comment[5],
                     'deleted': comment[6],
                 }
-                comments.append(Comment(
+                Comment.objects.create(
                     text=comment['text'],
                     date_created=make_aware(comment['created'], timezone),
                     name=comment['name'] or '',
                     user=self.resolve_user_or_group(comment['user_id']),
-                    poll=poll))
-        VoteChoice.objects.bulk_create(vote_choices)
-        Comment.objects.bulk_create(comments)
+                    poll=poll)
         sys.stdout.write('\n')
 
         print('Finished.')
