@@ -76,6 +76,7 @@ class Command(BaseCommand):
             if local_poll:
                 # poll exists. Delete it to get rid of related elements
                 new_pk = local_poll.pk
+                local_poll.delete()
 
             migrated_poll = Poll(
                 title=poll['title'],
