@@ -2,12 +2,12 @@
 {% load i18n %}
 {% load poll_filter vote_permissions %}
 {% load tz %}
-{% load csp %}
 {% load static compile_static %}
 {% load widget_tweaks %}
 {% block title %}{{ poll.title }}{% endblock %}
 {% block css %}
     <link href="{% static 'scss/iconpreview.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
+    {% include "poll/choice_style.html" %}
 {% endblock %}
 
 {% load django_markdown django_markdown_static %}
@@ -48,12 +48,12 @@
                     {% for choiceval in poll.choicevalue_set.all %}
                         <tr class="choice {% if choiceval.deleted %}deleted{% endif %}">
                             <td class="author choice">{{ choiceval.title }}</td>
-                            <td class="vote-choice"
+                            <td class="vote-choice
                                 {% if vote_choice.value.deleted %}
-                                    style="{% csp_css_hash 'background-color:  lightgrey' %}"
+                                    choice-deleted
                                 {% else %}
-                                    style="{% csp_css_hash 'background-color: #' choiceval.color %}"
-                                {% endif %}>
+                                    bg-{{ choiceval.color }}
+                                {% endif %}">
                                 <i class="fa fa-{{ choiceval.icon }}"></i>
                             </td>
                             <td class="author">{{ choiceval.weight }}</td>
