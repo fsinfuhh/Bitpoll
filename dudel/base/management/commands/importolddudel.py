@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import BaseCommand
 from django.db.utils import IntegrityError
 from django.utils.timezone import make_aware
+import sys
 
 from dudel.poll.models import Choice, ChoiceValue, Comment, Poll, Vote, VoteChoice
 
@@ -37,12 +38,19 @@ class Command(BaseCommand):
         cursor = conn.cursor()
 
         # migrating polls
+        print('migrating polls')
+        count = 0
+        cursor.execute('SELECT COUNT(*) FROM poll WHERE deleted=false')
+        total_count = cursor.fetchone()[0]
         migrated_polls = set()
         choices = {}
         choice_values = {}
-        print('migrating polls')
         cursor.execute('SELECT * FROM poll WHERE deleted=false;')
         for poll in cursor:
+            sys.stdout.write('\r{:4d}/{:4d} polls migrated'.format(count, total_count))
+            sys.stdout.flush()
+            count += 1
+
             poll = {
                 'id': poll[0],
                 'title': poll[1],
@@ -65,7 +73,13 @@ class Command(BaseCommand):
                 'timezone_name': poll[18] or 'Europe/Berlin',
             }
             timezone = pytz.timezone(poll['timezone_name'])
-            local_poll = Poll.objects.filter(url=poll['slug'])
+            local_poll = Poll.objects.filter(url=poll['slug']).first()
+
+            new_pk = None
+            if local_poll:
+                # poll exists. Delete it to get rid of related elements
+                new_pk = local_poll.pk
+                local_poll.delete()
 
             migrated_poll = Poll(
                 title=poll['title'],
@@ -84,10 +98,7 @@ class Command(BaseCommand):
                 allow_comments=poll['allow_comments'],
                 show_invitations=poll['show_invitations'],
                 timezone_name=poll['timezone_name'])
-
-            if local_poll.count() > 0:
-                # poll exists. Update it
-                migrated_poll.pk = local_poll.first().pk
+            migrated_poll.pk = new_pk
 
             owner = self.resolve_user_or_group(poll['owner_id'])
             if isinstance(owner, get_user_model()):
@@ -99,10 +110,17 @@ class Command(BaseCommand):
             
             migrated_poll.save()
             migrated_polls.add((poll['id'], migrated_poll))
+        sys.stdout.write('\n')
 
         # migrating choice values and choices
-        print('Migrating comments, choice values, choices and votes for previously imported polls')
+        print('migrating comments, choice values, choices and votes for previously imported polls')
+        count = 0
+        total_count = len(migrated_polls)
         for poll_id, poll in migrated_polls:
+            sys.stdout.write('\r{:4d}/{:4d} polls handled'.format(count, total_count))
+            sys.stdout.flush()
+            count += 1
+
             # nothing to delete, poll has just been created.
 
             timezone = pytz.timezone(poll.timezone_name)
@@ -208,6 +226,9 @@ class Command(BaseCommand):
                     name=comment['name'] or '',
                     user=self.resolve_user_or_group(comment['user_id']),
                     poll=poll)
+        sys.stdout.write('\n')
+
+        print('Finished.')
 
     def resolve_user_or_group(self, old_id):
         """Resolve a user by its user id from old dudel."""
