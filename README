@@ -15,6 +15,7 @@ Generate a Python Virtualenviroment and install dependencies:
     virtualenv -p /usr/bin/python3 .pyenv
     source .pyenv/bin/activate
     pip install -p requirements.txt
+    git submodule init
 
 Copy the example Settings:
 
@@ -31,4 +32,6 @@ Run Testserver:
 
 In production Senty is used for errorreporting:
 
-   pip instal raven
+   pip install raven
+
+for usage with LDAP install django-auth-ldap and configure it (example in settings.py)
