@@ -55,6 +55,7 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'DEFAULT_RANDOM_SLUG',
     'BASE_URL',
     'HOME_URL',
+    'HOME_URL_NAME',
     'IMPRINT_TEXT',
     'IMPRINT_URL',
     'ABOUT_TEXT',
@@ -89,7 +90,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -195,10 +196,12 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
-HOME_URL = "/"
+# Url to the Base Homepage and Text on the Link, leave empty to not use this option
+HOME_URL = "https://example.com"
+HOME_URL_NAME = "Dashboard"
 
 # Test mail functionality by printing mails to console:
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # if the imprint URL is not empty use it as an link to the imprint, else use IMPRINT_TEXT
 IMPRINT_URL = ""
