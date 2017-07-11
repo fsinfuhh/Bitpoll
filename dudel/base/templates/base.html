@@ -1,6 +1,7 @@
 {% load compile_static %}
 {% load i18n %}
 {% load static %}
+{% load csp %}
 {% load settings_value %}
 
 {%  value_from_settings SITE_NAME as site_name %}
@@ -109,7 +110,7 @@
 </div>
     <script src="{% static 'js/lib/jquery-ui.min.js' %}"  type="text/javascript" ></script>
     <script src="{% static 'js/lib/jquery-range.min.js' %}"  type="text/javascript" ></script>
-    <script src="{% static 'js/lib/moment.min.js' %}"  type="text/javascript" ></script>
+    <script src="{% static 'js/lib/moment-with-locales.min.js' %}"  type="text/javascript" ></script>
     <script src="{% static 'js/lib/mousetrap.min.js' %}"  type="text/javascript" ></script>
 
     <script src="{% static 'js/main.js' %}"  type="text/javascript" ></script>
@@ -123,7 +124,7 @@
 {% comment %}
     <script src="{% static 'coffee/votefilter.coffee'|compile %}"  type="text/javascript" ></script>
 {% endcomment %}
-
+    <script nonce="{% csp_nonce %}">moment.lang("{{ request.LANGUAGE_CODE }}")</script>
     {% block additionalJS %}
     {% endblock %}
 </body>
