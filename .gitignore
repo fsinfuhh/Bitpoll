@@ -5,6 +5,5 @@ db.sqlite3
 .gen
 **.sass-cache
 **.swp
-dudel/settings.py
 .pyenv
 *.mo
