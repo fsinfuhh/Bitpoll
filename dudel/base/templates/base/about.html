@@ -1,16 +1,50 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% load widget_tweaks %}
-{% load settings_value %}
-{% load i18n %}
-
-{% load poll_watched poll_voted %}
-
 {% block title %}{% trans 'About' %}{% endblock %}
 
 {% block content %}
-    <div class="container">
-          {% value_from_settings ABOUT_TEXT %}
-    </div>
+    <section class="section">
+        <div class="container">
+            <div class="col-md-5">
+                <h2>{% trans 'The History of BitPoll' %}</h2>
+                <p>{% blocktrans %}BitPoll is a free software alternative to the Doodle website. Its origins are in
+                    <a href="https://github.com/kellerben/dudle">Dudle</a> from TU-Dresden.
+                    Later <a href="https://github.com/opatut/dudel">Dudel</a> was written from Paul Bienkowski
+                    to speed it up and add a nicer Interface and some new Features.
+                    This is writen in Flask a Python web Framework{% endblocktrans %}</p>
+
+                <p>{% blocktrans %}After some time in Production use the discovered some shortcomings, especially with ldap and very big
+                    polls in the architecture.
+                    We decided to rewrite it again this time using Django, also in Python. For the starting point
+                    most styles and javascript artifacts where imported from the Dudel project.{% endblocktrans %}</p>
+
+                <p>{% blocktrans %}BitPoll was developed by Students from the Informatics department at University Hamburg.
+                    The Primary goal was to use it as one of the services provides on <a href="https://mafiasi.de">mafiasi.de</a>
+                    as a Service for other Students. After a time to long, it is now ready for Productive use.
+                    The sourcecode can be found at <a href="https://github.com/fsinfuhh/BitPoll">GitHub</a>. {% endblocktrans %}</p>
+                <p>{% blocktrans %}There are multiple Ideas for new Features to improve BitPoll further on. Hopefully we will find the Time
+                    to work on
+                    some of them{% endblocktrans %}</p>
+            </div>
+            <div class="col-md-5 col-md-offset-1">
+                <h2>{% trans 'Thanks' %}</h2>
+                {% trans 'We want to thank all who have contributed to this project.' %}
+                <p>{% trans 'Main authors:' %}</p>
+                <ul>
+                    <li>Nils Rokita</li>
+                    <li>Mareike Schmidt</li>
+                    <li>Pascal Wichmann</li>
+                    <li>Paul Bienkowski</li>
+                </ul>
+                <p>{% blocktrans %}Thanks for the help with style and layout to Lars Thoms{% endblocktrans %}</p>
+                <p>{% blocktrans %}We like to thank the Students of the Department Informatics from university Hamburg for the testing
+                    of BitPoll{% endblocktrans %}</p>
+
+                <h2>Contributing</h2>
+                <p>{% blocktrans %}If you like to contribute you can create issues an/or Pull requests on
+                    <a href="https://github.com/fsinfuhh/BitPoll">GitHub</a>.{% endblocktrans %}</p>
+            </div>
+        </div>
+    </section>
 {% endblock %}

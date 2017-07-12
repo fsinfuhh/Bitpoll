@@ -12,5 +12,7 @@
 {% block content %}
     <div class="container">
           {% value_from_settings IMPRINT_TEXT %}
+
+        <p><a href="{% url 'base_licenses' %}">List of third party licences</a> </p>
     </div>
 {% endblock %}

@@ -58,8 +58,6 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'HOME_URL_NAME',
     'IMPRINT_TEXT',
     'IMPRINT_URL',
-    'ABOUT_TEXT',
-    'ABOUT_URL',
     'TIME_ZONE',
     'REGISTER_ENABLED',
     'MAIL_SIGNATURE',
@@ -208,13 +206,6 @@ IMPRINT_URL = ""
 IMPRINT_TEXT = """
 <h1>ImpressuXm</h1>
 <p>Text goes here</p>
-"""
-
-# if the about URL is not empty use it as a link to the about, else use ABOUT_TEXT
-ABOUT_URL = ""
-ABOUT_TEXT = """
-<h1>About</h1>
-<p>Text goes here </p>
 """
 
 LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'), )
