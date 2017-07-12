@@ -1,4 +1,6 @@
-# Dudel
+# Bitpoll
+
+Bitpoll is a software to conduct polls about Dates, Times or general Questions.
 
 
 This is a new version of the Dudel from opatut (https://github.com/opatut/dudel) used at mafiasi.de, rewritten using the Django framework
@@ -17,9 +19,7 @@ Generate a Python Virtualenviroment and install dependencies:
     pip install -p requirements.txt
     git submodule init
 
-Copy the example Settings:
-
-    cp dudel/settings.py.example dudel/settings.py
+Customize the local settings in settings_local.py
 
 Initiallise Database:
 
@@ -34,4 +34,4 @@ In production Senty is used for errorreporting:
 
    pip install raven
 
-for usage with LDAP install django-auth-ldap and configure it (example in settings.py)
+for usage with LDAP install django-auth-ldap and configure it (example in settings_locale.py)
