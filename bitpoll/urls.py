@@ -25,16 +25,16 @@ from django.template import Context, RequestContext, loader
 from bitpoll import settings
 
 urlpatterns = [
-    url(r'^poll/', include('dudel.poll.urls')),
-    url(r'^base/', include('dudel.base.urls')),
-    url(r'^invitations/', include('dudel.invitations.urls')),
+    url(r'^poll/', include('bitpoll.poll.urls')),
+    url(r'^base/', include('bitpoll.base.urls')),
+    url(r'^invitations/', include('bitpoll.invitations.urls')),
     url(r'^$', lambda req: redirect('index'), name='home'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login', ),
     url(r'^logout/$', auth_views.logout, {
         'next_page': '/'
     }, name='logout'),
     url(r'^markdown/', include('django_markdown.urls')),
-    url(r'^registration/', include('dudel.registration.urls')),
+    url(r'^registration/', include('bitpoll.registration.urls')),
 
     url(r'^i18n/', include(django.conf.urls.i18n)),
     url(r'^admin/', admin.site.urls),
@@ -43,7 +43,7 @@ urlpatterns = [
 
 if settings.GROUP_MANAGEMENT:
     urlpatterns += [
-        url(r'^groups/', include('dudel.groups.urls')),
+        url(r'^groups/', include('bitpoll.groups.urls')),
         ]
 
 if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
