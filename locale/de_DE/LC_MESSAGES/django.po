@@ -15,11 +15,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: bitpoll/base/templates/500.html:6
 msgid "Internal server error"
-msgstr ""
+msgstr "Interner Serverfehler"
 
 #: bitpoll/base/templates/500.html:15
 #, python-format
@@ -29,11 +29,15 @@ msgid ""
 "again later. If the problem persists, see our <a href=\"%(problems_url)s"
 "\">problem reporting page</a>."
 msgstr ""
+"Entschuldigung, das haben wir so nicht erwartet. Unser Fehlerreport-Dienst "
+"sollte uns eine E-Mail mit technischen Details gesendet haben. Bitte "
+"versuche es später noch einmal. Wenn das Problem weiterhin auftritt, siehe "
+"bitte auf unsere <a href=\"%(problems_url)s\">Problem Report Seite</a>."
 
 #: bitpoll/base/templates/500.html:18
 #, python-format
 msgid "We have recorded the error under the Identifier %(errorid)s."
-msgstr ""
+msgstr "Wir haben den Fehler unter der ID %(errorid)s gespeichert."
 
 #: bitpoll/base/templates/base.html:56 bitpoll/base/templates/base/index.html:8
 msgid "Create poll"
@@ -59,10 +63,8 @@ msgid "Login"
 msgstr "Login"
 
 #: bitpoll/base/templates/base.html:76
-#, fuzzy
-#| msgid "Group"
 msgid "Groups"
-msgstr "Gruppe"
+msgstr "Gruppen"
 
 #: bitpoll/base/templates/base.html:78
 #: bitpoll/base/templates/base/settings.html:9
@@ -99,13 +101,12 @@ msgid ""
 msgstr ""
 "\n"
 "\t\t<b>Warnung!</b> %(site_name)s ist mit <code>DEBUG = True</code> "
-"Konfiguriert"
+"Konfiguriert\n"
+"                            "
 
 #: bitpoll/base/templates/base/about.html:10
-#, fuzzy
-#| msgid "Title of Poll:"
 msgid "The History of BitPoll"
-msgstr "Titel der Umfrage:"
+msgstr "Geschichte von Bitpoll"
 
 #: bitpoll/base/templates/base/about.html:11
 msgid ""
@@ -119,6 +120,16 @@ msgid ""
 "Features.\n"
 "                    This is writen in Flask a Python web Framework"
 msgstr ""
+"Bitpoll ist eine freie Software alternative zur Doodle Webseite. Der "
+"Ursprung ist das \n"
+"                    <a href=\"https://github.com/kellerben/dudle\">Dudle</a> "
+"der TU-Dresden.\n"
+"                    Später wurde <a href=\"https://github.com/opatut/dudel"
+"\">Dudel</a> von Paul Bienkowski geschrieben\n"
+"                   um es schneller und schöner zu machen, sowie einige neue "
+"Features hinzuzufügen.\n"
+"                  Dudel wurde mit dem Flask web Framework in Python "
+"geschrieben"
 
 #: bitpoll/base/templates/base/about.html:17
 msgid ""
@@ -153,7 +164,7 @@ msgstr ""
 
 #: bitpoll/base/templates/base/about.html:31
 msgid "Thanks"
-msgstr ""
+msgstr "Dank"
 
 #: bitpoll/base/templates/base/about.html:32
 msgid "We want to thank all who have contributed to this project."
@@ -161,7 +172,7 @@ msgstr ""
 
 #: bitpoll/base/templates/base/about.html:33
 msgid "Main authors:"
-msgstr ""
+msgstr "Hauptautoren:"
 
 #: bitpoll/base/templates/base/about.html:40
 msgid "Thanks for the help with style and layout to Lars Thoms"
@@ -265,7 +276,7 @@ msgstr "Erweiterte Einstellungen"
 #: bitpoll/base/templates/base/index.html:107
 #: bitpoll/poll/templates/poll/copy.html:52
 msgid "Randomize"
-msgstr "zufällig auswählen"
+msgstr "Zufällig auswählen"
 
 #: bitpoll/base/templates/base/index.html:128
 #: bitpoll/poll/templates/poll/copy.html:70
@@ -308,11 +319,11 @@ msgstr "verbiete leere Wahlmöglichkeiten"
 
 #: bitpoll/base/templates/base/index.html:173
 msgid "More options"
-msgstr "mehr Optionen"
+msgstr "Mehr Optionen"
 
 #: bitpoll/base/templates/base/index.html:176
 msgid "Less options"
-msgstr "weniger Optionen"
+msgstr "Weniger Optionen"
 
 #: bitpoll/base/templates/base/index.html:179
 #: bitpoll/groups/templates/groups/create.html:17
@@ -397,7 +408,7 @@ msgstr "Information zur Lizenz"
 
 #: bitpoll/base/templates/base/problems.html:4
 msgid "Problems?"
-msgstr ""
+msgstr "Probleme?"
 
 #: bitpoll/base/templates/base/problems.html:8
 #, python-format
@@ -438,11 +449,11 @@ msgstr "Besitzer"
 
 #: bitpoll/base/templates/base/settings.html:37
 msgid "Not owner"
-msgstr "nicht der Besitzer"
+msgstr "Nicht der Besitzer"
 
 #: bitpoll/base/templates/base/settings.html:44
 msgid "Not own group"
-msgstr "keine eigene Gruppe"
+msgstr "Keine eigene Gruppe"
 
 #: bitpoll/base/templates/base/settings.html:49
 msgid "Voted"
@@ -465,7 +476,7 @@ msgstr "Nicht beobachten"
 msgid ""
 " You can change your email and Password <a href=\"%(reg_url)s\">here</a> "
 msgstr ""
-"Du kannst deine E-Mail-Adresse und dein Passwort <a href=\"%(reg_url)s"
+" Du kannst deine E-Mail-Adresse und dein Passwort <a href=\"%(reg_url)s"
 "\">hier</a> ändern"
 
 #: bitpoll/base/templates/base/settings.html:73
@@ -488,7 +499,7 @@ msgstr "Verschiedenes"
 
 #: bitpoll/base/templates/base/settings.html:107
 msgid "Auto-watch polls then you vote on them"
-msgstr ""
+msgstr "Beobachte Umfragen automatisch wenn du abstimmst"
 
 #: bitpoll/base/templates/base/settings.html:111
 msgid "Allow to receive emails for poll invitations"
@@ -520,17 +531,17 @@ msgstr "%(value)s ist keine gültige Zeitzone"
 #: bitpoll/groups/forms.py:26
 #, python-format
 msgid "There is no user \"%s.\""
-msgstr ""
+msgstr "Es gibt keinen Benutzer \"%s\":"
 
 #: bitpoll/groups/forms.py:33
 #, python-format
 msgid "\"%s\" already has an invitation."
-msgstr ""
+msgstr "\"%s\" wurde bereits eingeladen."
 
 #: bitpoll/groups/forms.py:39
 #, python-format
 msgid "\"%s\" is already a member of this group."
-msgstr ""
+msgstr "\"%s\" ist bereits Mitglied dieser Gruppe."
 
 #: bitpoll/groups/models.py:59
 msgid ""
@@ -539,28 +550,22 @@ msgid ""
 msgstr ""
 
 #: bitpoll/groups/models.py:88
-#, fuzzy
-#| msgid "Invalid token"
 msgid "Invalid group name."
-msgstr "Ungültiger Token"
+msgstr "Ungültiger Gruppen Name."
 
 #: bitpoll/groups/models.py:91
 msgid "The group name must be at least {} characters"
 msgstr ""
 
 #: bitpoll/groups/models.py:96
-#, fuzzy
-#| msgid "This User already exists"
 msgid "Group does already exist."
-msgstr "Dieser Benutzer existiert bereits"
+msgstr "Diese Gruppe existiert bereits"
 
 #: bitpoll/groups/templates/groups/create.html:4
 #: bitpoll/groups/templates/groups/groups_base.html:44
 #: bitpoll/groups/templates/groups/my_groups.html:30
-#, fuzzy
-#| msgid "Create a poll"
 msgid "Create new group"
-msgstr "Erstelle eine Umfrage"
+msgstr "Erstelle eine neue Gruppe"
 
 #: bitpoll/groups/templates/groups/create.html:7
 msgid "Please note: The group name will be visible to other users."
@@ -569,10 +574,8 @@ msgstr ""
 #: bitpoll/groups/templates/groups/create.html:11
 #: bitpoll/groups/templates/groups/invitations.html:17
 #: bitpoll/groups/templates/groups/my_groups.html:14
-#, fuzzy
-#| msgid "Your name"
 msgid "Group name"
-msgstr "Dein Name"
+msgstr "Gruppenname"
 
 #: bitpoll/groups/templates/groups/create.html:13
 msgid ""
@@ -587,39 +590,29 @@ msgid "Invitations"
 msgstr "Einladungen"
 
 #: bitpoll/groups/templates/groups/groups_base.html:28
-#, fuzzy
-#| msgid "Copy invitations"
 msgid "Accept invitation"
-msgstr "Kopiere Einladungen"
+msgstr "Einladung annehmen"
 
 #: bitpoll/groups/templates/groups/groups_base.html:31
-#, fuzzy
-#| msgid "Manage invitations"
 msgid "Decline invitation"
-msgstr "Einladungen verwalten"
+msgstr "Einladung ablehnen"
 
 #: bitpoll/groups/templates/groups/groups_base.html:37
 #: bitpoll/groups/templates/groups/show.html:37
-#, fuzzy
-#| msgid "Invited"
 msgid "Invited by"
-msgstr "Eingeladen"
+msgstr "Eingeladen von"
 
 #: bitpoll/groups/templates/groups/groups_base.html:43
-#, fuzzy
-#| msgid "Group"
 msgid "My Groups"
-msgstr "Gruppe"
+msgstr "Meine Gruppen"
 
 #: bitpoll/groups/templates/groups/groups_base.html:46
 msgid "New"
-msgstr ""
+msgstr "Neu"
 
 #: bitpoll/groups/templates/groups/groups_base.html:59
-#, fuzzy
-#| msgid "You can enter multiple users or groups."
 msgid "You are not yet member of any group."
-msgstr "Du kannst mehrere Benutzer oder Gruppen angeben."
+msgstr "Du bist noch kein Mitglied irgendeiner Gruppe"
 
 #: bitpoll/groups/templates/groups/groups_base.html:65
 #, python-format
@@ -637,10 +630,8 @@ msgid ""
 msgstr ""
 
 #: bitpoll/groups/templates/groups/invitations.html:18
-#, fuzzy
-#| msgid "Invited"
 msgid "Invited By"
-msgstr "Eingeladen"
+msgstr "Eingeladen von"
 
 #: bitpoll/groups/templates/groups/invitations.html:19
 #: bitpoll/groups/templates/groups/show.html:83
@@ -652,17 +643,15 @@ msgstr "Aktionen"
 
 #: bitpoll/groups/templates/groups/invitations.html:31
 msgid "Accept"
-msgstr ""
+msgstr "Annehmen"
 
 #: bitpoll/groups/templates/groups/invitations.html:32
 msgid "Refuse"
-msgstr ""
+msgstr "Ablehnen"
 
 #: bitpoll/groups/templates/groups/invitations.html:39
-#, fuzzy
-#| msgid "Manage invitations"
 msgid "You have no invitations."
-msgstr "Einladungen verwalten"
+msgstr "Du hast keine Einladungen."
 
 #: bitpoll/groups/templates/groups/invite.html:7
 #, python-format
@@ -670,16 +659,12 @@ msgid "Invite people to %(group_name)s"
 msgstr ""
 
 #: bitpoll/groups/templates/groups/invite.html:13
-#, fuzzy
-#| msgid "Account"
 msgid "Account names"
-msgstr "Account"
+msgstr "Account namen"
 
 #: bitpoll/groups/templates/groups/invite.html:21
-#, fuzzy
-#| msgid "Invited"
 msgid "Invite user"
-msgstr "Eingeladen"
+msgstr "Lade einen User ein"
 
 #: bitpoll/groups/templates/groups/invite.html:22
 #: bitpoll/poll/templates/poll/comment_delete.html:33
@@ -689,14 +674,8 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: bitpoll/groups/templates/groups/invite.html:38
-#, fuzzy
-#| msgid ""
-#| "Enter the username or group title of the user or group of users you want "
-#| "to invite."
 msgid "Please enter the account names of the users you want to invite"
-msgstr ""
-"Gib die Kennung eines Benutzers oder einen Gruppen-Titel ein, um den "
-"Benutzer oder alle Benutzer der Gruppe einzuladen."
+msgstr "Bitte gib die Accountnamen der Nutzer ein welche zu einladen möchtest"
 
 #: bitpoll/groups/templates/groups/mail_new_invitation.txt:1
 #, python-format
@@ -715,38 +694,32 @@ msgstr ""
 
 #: bitpoll/groups/templates/groups/my_groups.html:4
 msgid "My groups"
-msgstr ""
+msgstr "Meine Gruppen"
 
 #: bitpoll/groups/templates/groups/my_groups.html:15
 #: bitpoll/groups/templates/groups/my_groups.html:23
 msgid "Leave"
-msgstr ""
+msgstr "Verlassen"
 
 #: bitpoll/groups/templates/groups/show.html:36
-#, fuzzy
-#| msgid "Invited"
 msgid "Invitee"
-msgstr "Eingeladen"
+msgstr "Eingeladener"
 
 #: bitpoll/groups/templates/groups/show.html:48
 msgid "Withdraw"
-msgstr ""
+msgstr "Zurückziehen"
 
 #: bitpoll/groups/templates/groups/show.html:56
-#, fuzzy
-#| msgid "Manage invitations"
 msgid "There are no open invitations."
-msgstr "Einladungen verwalten"
+msgstr "Es gibt keine offenen Einladungen."
 
 #: bitpoll/groups/templates/groups/show.html:63
-#, fuzzy
-#| msgid "Invited"
 msgid "Invite users"
-msgstr "Eingeladen"
+msgstr "Eingeladene User"
 
 #: bitpoll/groups/templates/groups/show.html:74
 msgid "Members"
-msgstr ""
+msgstr "Mitglieder"
 
 #: bitpoll/groups/templates/groups/show.html:81
 #: bitpoll/poll/templates/poll/comment_form.html:12
@@ -755,10 +728,8 @@ msgid "Name"
 msgstr "Name"
 
 #: bitpoll/groups/templates/groups/show.html:95
-#, fuzzy
-#| msgid "Grouping"
 msgid "Group admin"
-msgstr "Gruppieren"
+msgstr "Gruppenadmins"
 
 #: bitpoll/groups/templates/groups/show.html:102
 msgid "Last group admin can't be removed."
@@ -766,7 +737,7 @@ msgstr ""
 
 #: bitpoll/groups/templates/groups/show.html:108
 msgid "Remove"
-msgstr ""
+msgstr "Entfernen"
 
 #: bitpoll/groups/templates/groups/show.html:111
 msgid "Revoke admin"
@@ -778,7 +749,7 @@ msgstr ""
 
 #: bitpoll/groups/templates/groups/show.html:123
 msgid "Leave group"
-msgstr ""
+msgstr "Verlasse die Gruppe"
 
 #: bitpoll/groups/views.py:40
 #, python-brace-format
@@ -790,10 +761,8 @@ msgid "You left the group."
 msgstr ""
 
 #: bitpoll/groups/views.py:131
-#, fuzzy
-#| msgid "User or Group"
 msgid "User was removed from group"
-msgstr "User oder Gruppe"
+msgstr "Der User wurde aus der Gruppe entfernt"
 
 #: bitpoll/groups/views.py:136
 msgid "User was granted group admin."
@@ -804,10 +773,8 @@ msgid "Revoked group admin rights from user."
 msgstr ""
 
 #: bitpoll/groups/views.py:162
-#, fuzzy
-#| msgid "Invitations"
 msgid "Invitation was sent."
-msgstr "Einladungen"
+msgstr "Einladung wurde versendet."
 
 #: bitpoll/invitations/models.py:45 bitpoll/poll/models.py:330
 msgid "The mail server had an error sending the notification to {}"
@@ -874,20 +841,7 @@ msgid "Back to poll"
 msgstr "Zurück zur Umfrage"
 
 #: bitpoll/invitations/templates/invitations/mail_invite.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hi %(receiver)s,\n"
-#| "\n"
-#| "you are invited to Participate in a Poll created by %(creator)s\n"
-#| "You can vote at %(base_url)s%(link)s\n"
-#| "\n"
-#| "Greetings,\n"
-#| "TODO: Appname-team\n"
-#| "\n"
-#| "--\n"
-#| "You received this notification because you have allowed for E-Mail "
-#| "Invitation in your settings.\n"
-#| "you can change this setting at %(base_url)s%(link)s .\n"
+#, python-format
 msgid ""
 "Hi %(receiver)s,\n"
 "\n"
@@ -908,12 +862,13 @@ msgstr ""
 "Du kannst hier abstimmen: %(base_url)s%(link)s\n"
 "\n"
 "Viele Grüße\n"
-"TODO: Appname-team\n"
+"\n"
+"Dein %(signature)s\n"
 "\n"
 "--\n"
 "Du bekommst diese Benachrichtigung weil du Einladungen per E-Mail in deinen "
 "Einstellungen aktiviert hast.\n"
-"Du kannst diese Einstellung hier ändern: %(base_url)s%(link)s.\n"
+"Du kannst diese Einstellung hier ändern: %(base_url)s%(settings_url)s.\n"
 
 #: bitpoll/invitations/views.py:54 bitpoll/poll/views.py:619
 #: bitpoll/poll/views.py:663 bitpoll/poll/views.py:1092
@@ -949,21 +904,19 @@ msgstr "Bitte gib eine HTML Farbe ohne das # an"
 
 #: bitpoll/poll/models.py:278
 msgid "Anonymous"
-msgstr "anonym"
+msgstr "Anonym"
 
 #: bitpoll/poll/models.py:313
 msgid "Annonymus"
-msgstr "anonym"
+msgstr "Anonym"
 
 #: bitpoll/poll/models.py:320
 msgid "by an user"
 msgstr "von einem User"
 
 #: bitpoll/poll/models.py:325
-#, fuzzy
-#| msgid "New vote owner"
 msgid "New votes for {}"
-msgstr "Neuer Besitzer der Stimme"
+msgstr "Neue Stimmen für {}"
 
 #: bitpoll/poll/templates/poll/choice_creation_date.html:25
 #: bitpoll/poll/templates/poll/dt_choice_creation_time.html:19
@@ -1072,7 +1025,7 @@ msgstr "Gewichtung"
 
 #: bitpoll/poll/templates/poll/choicevalue.html:76
 msgid " Back"
-msgstr "Zurück"
+msgstr " Zurück"
 
 #: bitpoll/poll/templates/poll/choicevalue.html:80
 msgid "Add choice value"
@@ -1195,7 +1148,7 @@ msgid ""
 "          are available for voting."
 msgstr ""
 "Hier kannst du auswählen, über welche Kombinationen aus Tag und Uhrzeit "
-"abgestimmt werden kann. "
+"abgestimmt werden kann."
 
 #: bitpoll/poll/templates/poll/dt_choice_creation_time.html:22
 #: bitpoll/poll/templates/poll/dt_choice_header.html:6
@@ -1209,7 +1162,7 @@ msgid ""
 "match them against the selected days. "
 msgstr ""
 "Bitte wähle die Zeiten, über die abgestimmt werden soll. Im nächsten Schritt "
-"kannst du sie ausgewählten Tagen zuordnen."
+"kannst du sie ausgewählten Tagen zuordnen. "
 
 #: bitpoll/poll/templates/poll/dt_choice_header.html:4
 msgid "Days"
@@ -1232,23 +1185,7 @@ msgid "Choose combinations"
 msgstr "Wähle die Kombinationen"
 
 #: bitpoll/poll/templates/poll/mail_watch.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hi %(receiver)s,\n"
-#| "\n"
-#| "There was a change made on the poll \"%(poll)s\": A new vote has been "
-#| "posted by %(user)s.\n"
-#| "\n"
-#| "Visit this link to see the poll page: %(base_url)s%(link)s\n"
-#| "\n"
-#| "\n"
-#| "Greetings,\n"
-#| "TODO: Appname-team\n"
-#| "\n"
-#| "--\n"
-#| "You receive this mail because you are watching the poll \"%(poll)s\". "
-#| "Visit the following link to unsubscribe from these notifications: "
-#| "%(base_url)s%(link)s .\n"
+#, python-format
 msgid ""
 "Hi %(receiver)s,\n"
 "\n"
@@ -1271,9 +1208,10 @@ msgstr ""
 "Es gab eine Änderung bei der Umfrage \"%(poll)s\": Eine neue Stimme wurde "
 "von %(user)s abgegeben.\n"
 "\n"
+"Besuche diese Seite um die Umfrage zu sehen: %(base_url)s%(link)s\n"
 "\n"
 "viele Grüße\n"
-"TODO: Appname-team\n"
+"Dein %(signature)s\n"
 "\n"
 "--\n"
 "Du bekommst diese Benachrichtigung da du die Umfrage \"%(poll)s\" "
@@ -1293,7 +1231,7 @@ msgstr ""
 "kommaseparierte Einträge im korrekten Format vornehmen. Es sind keine "
 "Leerzeichen erlaubt. Oder Du schaltest einfach JavaScript für diese Seite "
 "an. Dann erhältst Du eine sicher ziemlich tolle Oberfläche zur Eingabe von "
-"Daten und Zeiten ..."
+"Daten und Zeiten ... "
 
 #: bitpoll/poll/templates/poll/poll.html:20
 msgid ""
@@ -1312,7 +1250,7 @@ msgid ""
 "Assigned after voting by %(vote.assigned_by.name|force_escape|force_escape)s "
 msgstr ""
 "Nach der Abstimmung von %(vote.assigned_by.name|force_escape|force_escape)s "
-"zugewiesen."
+"zugewiesen"
 
 #: bitpoll/poll/templates/poll/poll.html:88
 msgid "Edit vote"
@@ -1400,7 +1338,7 @@ msgstr "Gruppe"
 
 #: bitpoll/poll/templates/poll/poll_header.html:51
 msgid "Anonymous voting allowed"
-msgstr "anonymes Abstimmen erlaubt"
+msgstr "Anonymes Abstimmen erlaubt"
 
 #: bitpoll/poll/templates/poll/poll_header.html:52
 msgid "anonymous voting"
@@ -1729,15 +1667,8 @@ msgid "This poll was transferred from {} to your local timezone {}"
 msgstr ""
 
 #: bitpoll/poll/views.py:132
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "      This poll has a different timezone than you.\n"
-#| "      "
 msgid "This poll has a different timezone ({}) than you."
-msgstr ""
-"\n"
-"\tDiese Umfrage hat eine andere Zeitzone als du."
+msgstr "Diese Umfrage hat eine andere Zeitzone ({}) als du."
 
 #: bitpoll/poll/views.py:137
 msgid ""
@@ -1895,13 +1826,7 @@ msgid "Create account"
 msgstr "Erstelle Account"
 
 #: bitpoll/registration/templates/registration/create_email.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "Hi,\n"
-#| "\n"
-#| "Here is your account creation link:\n"
-#| "    %(activation_link)s\n"
+#, python-format
 msgid ""
 "\n"
 "Hi,\n"
@@ -1918,6 +1843,10 @@ msgstr ""
 "\n"
 "Hier ist dein Link zur Accounterstellung:\n"
 "\t%(activation_link)s\n"
+"\n"
+"Grüße,\n"
+"\n"
+"Dein %(signature)s\n"
 
 #: bitpoll/registration/templates/registration/email_error.html:5
 msgid "Email address is invalid"
