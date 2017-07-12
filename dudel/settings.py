@@ -77,6 +77,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'django-simple-csp',
     'django_markdown',
     'widget_tweaks',
     'static_precompiler',
@@ -98,6 +100,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'django-simple-csp.middleware.csp.CSPMiddleware',
 ]
 
 STATICFILES_FINDERS = [
@@ -159,7 +162,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # User Model
 
-AUTH_USER_MODEL = 'base.DudelUser'
+AUTH_USER_MODEL = 'base.BitpollUser'
 
 
 # Internationalization
@@ -179,7 +182,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_URL = '/static/'
 STATIC_PRECOMPILER_ROOT = STATIC_ROOT
 SASS_PRECISION = 8
 
@@ -204,7 +206,7 @@ HOME_URL_NAME = "Dashboard"
 # if the imprint URL is not empty use it as an link to the imprint, else use IMPRINT_TEXT
 IMPRINT_URL = ""
 IMPRINT_TEXT = """
-<h1>ImpressuXm</h1>
+<h1>Impressum</h1>
 <p>Text goes here</p>
 """
 
@@ -219,6 +221,8 @@ LANGUAGES = (
 REGISTER_ENABLED = True
 GROUP_MANAGEMENT = REGISTER_ENABLED
 
+CSP_REPORT_ONLY = True
+CSP_REPORT_URL = ""
 
 MAIL_SIGNATURE = "Dudel Team"
 

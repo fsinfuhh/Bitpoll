@@ -11,12 +11,12 @@ from django.contrib.sites.shortcuts import get_current_site
 
 from dudel import settings
 
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 
 
 class RegisterForm(forms.ModelForm):
     class Meta:
-        model = DudelUser
+        model = BitpollUser
         fields = ['username', 'first_name', 'last_name', 'email', 'auto_watch',
                   'email_invitation']
         # TODO for later: 'timezone', 'language',
@@ -90,7 +90,7 @@ class EmailChangeForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data.get('email')
 
-        if DudelUser.objects.filter(email=email).count() > 0:
+        if BitpollUser.objects.filter(email=email).count() > 0:
             raise forms.ValidationError(
                 _('This address is already associated with an account.'))
 

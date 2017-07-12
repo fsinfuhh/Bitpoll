@@ -23,7 +23,7 @@ from django.views.decorators.http import require_POST
 from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, CommentForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS, PollWatch
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 from dudel.invitations.models import Invitation
 
 from datetime import datetime, timedelta
@@ -906,7 +906,7 @@ def vote_assign(request, poll_url, vote_id):
     if request.method == 'POST':
         if request.user.is_authenticated and current_vote.can_edit(request.user):
             username = request.POST.get('username').strip()
-            user = DudelUser.objects.get(username=username)
+            user = BitpollUser.objects.get(username=username)
             if not current_poll.vote_set.filter(Q(user=request.user)):
                 current_vote.user = user
                 current_vote.name = user.get_displayname()
@@ -1096,7 +1096,7 @@ def settings(request, poll_url):
             with transaction.atomic():
                 if user:
                     try:
-                        user_obj = DudelUser.objects.get(username=user)
+                        user_obj = BitpollUser.objects.get(username=user)
                         new_poll.user = user_obj
                     except ObjectDoesNotExist:
                         user_error = _("User {} not Found".format(user))

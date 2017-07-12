@@ -8,17 +8,17 @@ from django.db.models import Q
 from django.db import IntegrityError
 
 from dudel.base.autocomplete import autocomplete_users
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 
 from dudel.poll.forms import PollCreationForm
 from dudel.poll.models import ChoiceValue, Poll, Vote, PollWatch
 
 from dudel.base.models import USER_LANG
-from dudel.base.forms import DudelUserSettingsForm
+from dudel.base.forms import BitpollUserSettingsForm
 from pytz import all_timezones
 
 from dudel.registration.forms import RegisterForm
-from dudel.settings import IMPRINT_URL, ABOUT_URL
+from dudel.settings import IMPRINT_URL
 from django.core import signing
 from django.conf import settings
 
@@ -62,7 +62,7 @@ def index(request):
         'poll_form': form,
         'poll_count': Poll.objects.all().count(),
         'votes_count': Vote.objects.all().count(),
-        'user_count': DudelUser.objects.count(),
+        'user_count': BitpollUser.objects.count(),
         'public_polls': public_polls,
     })
 
@@ -76,7 +76,7 @@ def user_settings(request):
                                 ).distinct().order_by('due_date')
 
     if request.method == 'POST':
-        form = DudelUserSettingsForm(request.POST, instance=request.user)
+        form = BitpollUserSettingsForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
 
@@ -88,7 +88,7 @@ def user_settings(request):
                     except IntegrityError:
                         pass
 
-    user_form = DudelUserSettingsForm(instance=request.user)
+    user_form = BitpollUserSettingsForm(instance=request.user)
 
     return TemplateResponse(request, 'base/settings.html', {
         'polls': polls,
@@ -109,12 +109,9 @@ def imprint(request):
 
 
 def about(request):
-    if ABOUT_URL:
-        return redirect(ABOUT_URL)
-    else:
-        return TemplateResponse(request, 'base/about.html', {
+    return TemplateResponse(request, 'base/about.html', {
 
-        })
+    })
 
 
 def licenses(request):

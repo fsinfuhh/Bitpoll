@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='dudeluser',
+            model_name='bitpolluser',
             name='displayname',
             field=models.CharField(default='', max_length=20),
         ),

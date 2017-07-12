@@ -16,7 +16,7 @@ from django.views.decorators.http import require_POST
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 from dudel.registration.forms import (RegisterForm,
                                         PasswordForm, NickChangeForm,
                                         EmailChangeForm)
@@ -57,7 +57,7 @@ def create_account(request, info_token):
 
     username = info['username']
 
-    if DudelUser.objects.filter(username=username).exists():
+    if BitpollUser.objects.filter(username=username).exists():
         messages.warning(request,_("This User already exists"))
         return redirect('login')
 
@@ -69,13 +69,13 @@ def create_account(request, info_token):
             if not (first_name and last_name):
                 return TemplateResponse(request, 'registration/token_invalid.html')
             email = info['email']
-            user = DudelUser(username=username,
-                             email=email,
-                             first_name=first_name,
-                             last_name=last_name,
-                             email_invitation=info['email_invitation'],
-                             #TODO: weitere felder??
-                             )
+            user = BitpollUser(username=username,
+                               email=email,
+                               first_name=first_name,
+                               last_name=last_name,
+                               email_invitation=info['email_invitation'],
+                               #TODO: weitere felder??
+                               )
             user.set_password(form.cleaned_data['password1'])
             user.save()
             user.backend='django.contrib.auth.backends.ModelBackend'

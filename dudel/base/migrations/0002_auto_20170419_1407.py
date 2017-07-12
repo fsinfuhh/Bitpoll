@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='dudeluser',
+            model_name='bitpolluser',
             name='timezone',
             field=models.CharField(default='UTC', max_length=40, validators=[dudel.base.validators.validate_timezone]),
         ),

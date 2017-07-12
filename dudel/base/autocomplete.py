@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 
 RESULT_LIMIT = 10
 MIN_LENGTH = 3
@@ -23,9 +23,9 @@ def autocomplete_users(term):
         
     # Always make sure we "autocomplete" a complete match for username
     try:
-        exact_user = DudelUser.objects.get(username=terms[0])
+        exact_user = BitpollUser.objects.get(username=terms[0 ])
         autocomplete_refused = [exact_user]
-    except DudelUser.DoesNotExist:
+    except BitpollUser.DoesNotExist:
         autocomplete_refused = []
 
     if len(terms[0]) < MIN_LENGTH:
@@ -47,7 +47,7 @@ def autocomplete_users(term):
                  'WHERE lower(first_name) LIKE %s AND lower(last_name) LIKE %s '
                  'LIMIT %s')
         params = (terms[0] + '%', terms[1] + '%', RESULT_LIMIT + 1)
-        users = list(DudelUser.objects.raw(query, params=params))
+        users = list(BitpollUser.objects.raw(query, params=params))
         if len(users) > RESULT_LIMIT:
             return autocomplete_refused
 
@@ -58,7 +58,7 @@ def autocomplete_users(term):
 def _add_nodup(expr, term, users, dups):
     query = 'SELECT * FROM base_dudeluser WHERE {} LIKE %s LIMIT %s'.format(expr)
     params = (term + '%', RESULT_LIMIT + 1)
-    special_users = list(DudelUser.objects.raw(query, params=params))
+    special_users = list(BitpollUser.objects.raw(query, params=params))
     
     for user in special_users:
         if user.pk in dups:

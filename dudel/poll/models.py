@@ -11,7 +11,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django_markdown.models import MarkdownField
 
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 from dudel.base.validators import validate_timezone
 from dudel.poll.util import DateTimePart, PartialDateTime
 from django.utils import translation
@@ -35,9 +35,9 @@ class Poll(models.Model):
     title = models.CharField(max_length=80)
     description = models.TextField(blank=True)
     url = models.SlugField(max_length=80, unique=True)
-    type = models.CharField(max_length=20, choices=POLL_TYPES, default="universal")
+    type = models.CharField(max_length=20, choices=POLL_TYPES)
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(DudelUser, null=True, blank=True)
+    user = models.ForeignKey(BitpollUser, null=True, blank=True)
     group = models.ForeignKey(Group, null=True, blank=True)
     """owner_id = models.ForeignKey(Member)"""
 
@@ -59,7 +59,7 @@ class Poll(models.Model):
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
-    def can_vote(self, user: DudelUser, request, is_edit: bool=False) -> bool:
+    def can_vote(self, user: BitpollUser, request, is_edit: bool=False) -> bool:
         """
         Determine if the user is allowed to vote
 
@@ -80,13 +80,13 @@ class Poll(models.Model):
             return False
         return True
 
-    def has_voted(self, user: DudelUser) -> bool:
+    def has_voted(self, user: BitpollUser) -> bool:
         return user.is_authenticated and Vote.objects.filter(user=user, poll=self).count() > 0
 
-    def get_own_vote(self, user: DudelUser):
+    def get_own_vote(self, user: BitpollUser):
         return Vote.objects.filter(user=user, poll=self)[0]
 
-    def can_edit(self, user: DudelUser):
+    def can_edit(self, user: BitpollUser):
         has_owner = self.group or self.user
         is_owner = user == self.user
         if self.group:
@@ -96,7 +96,7 @@ class Poll(models.Model):
 
         return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated() or not has_owner
 
-    def can_listen(self, user: DudelUser):
+    def can_listen(self, user: BitpollUser):
         if self.public_listening:
             return True
         elif user.is_authenticated and user in self.invitation_set.all().values('user'):
@@ -150,7 +150,7 @@ class Poll(models.Model):
 
         return matrix
 
-    def get_tz_name(self, user: DudelUser):
+    def get_tz_name(self, user: BitpollUser):
         # TODO: local etc beachten (umrechenn auf user...)
         if self.type == 'date':
             # Datepolls are using UTC as timezone
@@ -159,7 +159,7 @@ class Poll(models.Model):
             tz = self.get_tz_name_no_date_utc(user)
         return tz
 
-    def get_tz_name_no_date_utc(self, user: DudelUser):
+    def get_tz_name_no_date_utc(self, user: BitpollUser):
         tz = self.timezone_name
         if user.is_authenticated and self.use_user_timezone:
             return user.timezone
@@ -219,18 +219,18 @@ class Comment(models.Model):
     text = MarkdownField()
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
-    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
 
     def __str__(self):
         return u'CommentID {} by {}'.format(self.id, self.name)
 
-    def can_edit(self, user: DudelUser) -> bool:
+    def can_edit(self, user: BitpollUser) -> bool:
         is_owner = user == self.user
 
         return user.is_authenticated() and is_owner
 
-    def can_delete(self, user: DudelUser) -> bool:
+    def can_delete(self, user: BitpollUser) -> bool:
         is_poll_owner = self.poll.user == user
 
         return is_poll_owner or self.can_edit(user)
@@ -241,11 +241,11 @@ class Vote(models.Model):
     anonymous = models.BooleanField(default=False)
     date_created = models.DateTimeField()
     comment = models.TextField()
-    assigned_by = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, related_name='assigning')
+    assigned_by = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, related_name='assigning')
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
-    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)
 
-    def can_edit(self, user: DudelUser) -> bool:
+    def can_edit(self, user: BitpollUser) -> bool:
         """
         Determine if the user can edit the Vote
 
@@ -258,7 +258,7 @@ class Vote(models.Model):
             return True
         return False
 
-    def can_delete(self, user: DudelUser) -> bool:
+    def can_delete(self, user: BitpollUser) -> bool:
         """
         Determine if the user can delete the Vote
 
@@ -303,7 +303,7 @@ class PollWatch(models.Model):
         unique_together = ('poll', 'user')
 
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
-    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE)
 
     def send(self, request, vote: Vote):
         old_lang = translation.get_language()

@@ -2,7 +2,7 @@ from numbers import Number
 
 from django import template
 
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 from dudel.poll.models import Poll
 from dudel.poll.util import PartialDateTime
 
@@ -32,15 +32,15 @@ def or_none(value: object) -> object:
 
 
 @register.filter
-def has_voted(poll: Poll, user: DudelUser) -> bool:
+def has_voted(poll: Poll, user: BitpollUser) -> bool:
     return poll.has_voted(user)
 
 
 @register.filter
-def get_own_vote_pk(poll: Poll, user: DudelUser) -> int:
+def get_own_vote_pk(poll: Poll, user: BitpollUser) -> int:
     return poll.get_own_vote(user).pk
 
 
 @register.filter
-def get_tz_name_no_date_utc(poll: Poll, user: DudelUser) -> str:
+def get_tz_name_no_date_utc(poll: Poll, user: BitpollUser) -> str:
     return poll.get_tz_name_no_date_utc(user)

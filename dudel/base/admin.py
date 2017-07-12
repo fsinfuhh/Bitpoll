@@ -1,24 +1,24 @@
 from django.contrib import admin
 
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 
 
-class DudelUserChangeForm(UserChangeForm):
+class BitpollUserChangeForm(UserChangeForm):
     class Meta:
-        model = DudelUser
+        model = BitpollUser
         fields = '__all__'
 
 
-class DudelUserAdmin(UserAdmin):
+class BitpollUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         ('Additional info', {'fields': ('language', 'email_invitation', 'timezone', 'auto_watch')}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Additional info', {'fields': ('language', 'email_invitation', 'timezone', 'auto_watch')}),
     )
-    form = DudelUserChangeForm
+    form = BitpollUserChangeForm
 
-admin.site.register(DudelUser, DudelUserAdmin)
+admin.site.register(BitpollUser, BitpollUserAdmin)

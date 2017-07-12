@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import translation
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 from dudel.poll.models import Poll, Vote
 
 from datetime import timedelta
@@ -19,8 +19,8 @@ class Invitation(models.Model):
         unique_together = ('user', 'poll')
 
     date_created = models.DateTimeField()
-    creator = models.ForeignKey(DudelUser, on_delete=models.CASCADE, related_name='creator')
-    user = models.ForeignKey(DudelUser, on_delete=models.CASCADE)
+    creator = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, related_name='creator')
+    user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     vote = models.ForeignKey(Vote, on_delete=models.SET_NULL, null=True, blank=True)
     last_email = models.DateTimeField(null=True, blank=True)
@@ -50,7 +50,7 @@ class Invitation(models.Model):
                 request, _("You have send an Email for {} in the last 12 Hours".format(self.user.username))
             )
 
-    def can_edit(self, user: DudelUser):
+    def can_edit(self, user: BitpollUser):
         return self.poll.can_edit(user)
 
     def __str__(self):

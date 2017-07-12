@@ -7,7 +7,7 @@ from django.template.response import TemplateResponse
 from django.utils.timezone import now
 from django.views.decorators.http import require_POST
 
-from dudel.base.models import DudelUser
+from dudel.base.models import BitpollUser
 from dudel.invitations.models import Invitation
 from dudel.poll.models import Poll
 from django.utils.translation import ugettext_lazy as _
@@ -57,7 +57,7 @@ def invitation_send(request, poll_url):
         receivers = request.POST.get('invite', None).split()
         for receiver in receivers:
             try:
-                user = DudelUser.objects.get(username=receiver)
+                user = BitpollUser.objects.get(username=receiver)
                 invitation = Invitation(user=user, poll=current_poll, date_created=now(), creator=request.user,
                                         vote=None)
                 invitation.save()

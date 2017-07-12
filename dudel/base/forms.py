@@ -1,9 +1,9 @@
 from django.forms import ModelForm
 
-from .models import DudelUser
+from .models import BitpollUser
 
 
-class DudelUserSettingsForm(ModelForm):
+class BitpollUserSettingsForm(ModelForm):
     class Meta:
-        model = DudelUser
+        model = BitpollUser
         fields = ['auto_watch', 'email_invitation', 'timezone', 'language']
