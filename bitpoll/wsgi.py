@@ -1,5 +1,5 @@
 """
-WSGI config for dudel project.
+WSGI config for bitpoll project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -16,7 +16,7 @@ try:
 except ImportError:
     raven_support = False
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dudel.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bitpoll.settings")
 
 if raven_support:
     application = Sentry(get_wsgi_application())

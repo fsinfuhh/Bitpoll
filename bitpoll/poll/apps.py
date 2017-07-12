@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class DudelConfig(AppConfig):
+class BitpollConfig(AppConfig):
     name = 'poll'
