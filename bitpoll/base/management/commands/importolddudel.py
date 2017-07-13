@@ -6,7 +6,6 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import BaseCommand
 from django.db.utils import IntegrityError
-from django.utils.timezone import make_aware
 import sys
 
 from bitpoll.poll.models import Choice, ChoiceValue, Comment, Poll, Vote, VoteChoice
@@ -45,7 +44,7 @@ class Command(BaseCommand):
         migrated_polls = set()
         choices = {}
         choice_values = {}
-        cursor.execute('SELECT * FROM poll WHERE deleted=false;')
+        cursor.execute('SELECT * FROM poll WHERE deleted=false')
         for poll in cursor:
             sys.stdout.write('\r{:4d}/{:4d} polls migrated'.format(count, total_count))
             sys.stdout.flush()
@@ -81,13 +80,12 @@ class Command(BaseCommand):
                 new_pk = local_poll.pk
                 local_poll.delete()
 
-            created = make_aware(poll['created'], timezone)
             migrated_poll = Poll(
                 title=poll['title'],
                 description=poll['description'],
                 url=poll['slug'],
                 type=POLL_TYPE_MAPPING[poll['type']],
-                due_date=make_aware(poll['due_date'], timezone) if poll['due_date'] is not None else None,
+                due_date=_fix_timezone(poll['due_date'], timezone) if poll['due_date'] is not None else None,
                 anonymous_allowed=poll['anonymous_allowed'],
                 public_listening=poll['public_listing'],
                 require_login=poll['require_login'],
@@ -109,7 +107,7 @@ class Command(BaseCommand):
                 migrated_poll.group = owner
             
             migrated_poll.save()
-            migrated_poll.created = created
+            migrated_poll.created = _fix_timezone(poll['created'], timezone)
             migrated_poll.save()
             migrated_polls.add((poll['id'], migrated_poll))
         sys.stdout.write('\n')
@@ -140,7 +138,7 @@ class Command(BaseCommand):
                 }
                 c = Choice.objects.create(
                     text=choice['text'],
-                    date=make_aware(choice['date'], timezone) if choice['date'] else None,
+                    date=_fix_timezone(choice['date'], timezone) if choice['date'] else None,
                     poll=poll,
                     sort_key=sort_key,
                     deleted=choice['deleted'])
@@ -184,7 +182,7 @@ class Command(BaseCommand):
                 v = Vote.objects.create(
                     name=vote['name'],
                     anonymous=vote['anonymous'],
-                    date_created=make_aware(vote['created'], timezone),
+                    date_created=_fix_timezone(vote['created'], timezone),
                     comment=vote['comment'],
                     assigned_by=self.resolve_user_or_group(vote['assigned_by_id']) if vote['assigned_by_id'] else None,
                     poll=poll,
@@ -224,7 +222,7 @@ class Command(BaseCommand):
                 }
                 Comment.objects.create(
                     text=comment['text'],
-                    date_created=make_aware(comment['created'], timezone),
+                    date_created=_fix_timezone(comment['created'], timezone),
                     name=comment['name'] or '',
                     user=self.resolve_user_or_group(comment['user_id']),
                     poll=poll)
@@ -250,3 +248,9 @@ class Command(BaseCommand):
                     return Group.objects.get(name=groupname[0])
         except ObjectDoesNotExist:
             return None
+
+
+def _fix_timezone(obj, tz):
+    if obj.tzinfo is not None:
+        return obj
+    return pytz.utc.localize(obj).astimezone(tz)
