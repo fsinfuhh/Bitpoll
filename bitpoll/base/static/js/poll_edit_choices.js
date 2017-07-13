@@ -96,7 +96,7 @@ function updateDateTimeList() {
 }
 
 function addTime(rawTime) {
-    var time = moment(rawTime, "HH:mm", true);
+    var time = moment(rawTime, "H:mm", true);
     if(time.isValid()) {
         times.push(time.format("HH:mm"));
         times = times.uniquify();
