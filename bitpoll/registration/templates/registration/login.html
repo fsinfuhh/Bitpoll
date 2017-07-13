@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load widget_tweaks %}
+{% load settings_value %}
 {% block title %}{% trans "Login" %}{% endblock %}
+
+{%  value_from_settings REGISTER_ENABLED as register %}
 
 {% block content %}
     <section class="section create-poll">
@@ -51,7 +54,11 @@
                   <button type="submit" class="primary action">{% trans "Login" %}</button>
               </div>
             </form>
-            <p><a href="{% url 'password_reset' %}">{% trans "Did you forget your password?" %}</a></p>
+              {% if register %}{# TODO: link to central account management? #}
+                <p><a href="{% url 'password_reset' %}">{% trans "Did you forget your password?" %}</a></p>
+              {% else %}
+                  <p>{% trans 'You can not reset your password here, as the account management is centraliced' %}</p>
+              {% endif %}
           </div>
         </div>
     </section>

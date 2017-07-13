@@ -15,16 +15,19 @@ urlpatterns = [
     url(r'^request_successful/([a-zA-Z0-9.\-_+]+@[a-zA-Z0-9.\-_]+)$', request_successful,
             name='registration_request_successful'),
     url(r'^account$', account_settings, name='registration_account'),
+    ]
 
-    url(r'^password_reset/$', password_reset, {
-        'password_reset_form': PasswordResetForm
-    }, name='password_reset'),
-    url(r'^password_reset/done$', password_reset_done,
-        name='password_reset_done'),
-    url(r'^password_reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)$',
-        password_reset_confirm, name='password_reset_confirm'),
-    url(r'^password_reset/complete', password_reset_complete,
-        name='password_reset_complete')
+if settings.REGISTER_ENABLED:  # TODO: own settings value for changing password? If yes: remember to change template ifs when to show the link
+    urlpatterns += [
+        url(r'^password_reset/$', password_reset, {
+            'password_reset_form': PasswordResetForm
+        }, name='password_reset'),
+        url(r'^password_reset/done$', password_reset_done,
+            name='password_reset_done'),
+        url(r'^password_reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)$',
+            password_reset_confirm, name='password_reset_confirm'),
+        url(r'^password_reset/complete', password_reset_complete,
+            name='password_reset_complete')
 ]
 
 if settings.REGISTER_ENABLED:
