@@ -7,6 +7,7 @@
 {% load i18n %}
 {% block title %}{% trans 'Create poll' %}{% endblock %}
 
+
 {% block headJS %}
     {{ poll_form.media }}
 {% endblock %}
@@ -234,23 +235,26 @@
                     </tr>
                 </table>
             </div>
-            <div class="col-md-4">
-                <h4>{% trans 'Public polls' %}</h4>
-                {% if not public_polls %}
-                    <div class="alert alert-info">
-                        <div class="container"><i class="fa fa-exclamation-circle"></i>{% trans 'There are currently no public polls.' %}
+            {% value_from_settings PUBLIC_POLLS as public_polls_setting %}
+            {% if public_polls_setting %}
+                <div class="col-md-4">
+                    <h4>{% trans 'Public polls' %}</h4>
+                    {% if not public_polls %}
+                        <div class="alert alert-info">
+                            <div class="container"><i class="fa fa-exclamation-circle"></i>{% trans 'There are currently no public polls.' %}
+                            </div>
                         </div>
-                    </div>
-                {% else %}
-                    <ul class="public_polls">
-                    {% for poll in public_polls %}
-                        <li>
-                            <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
-                        </li>
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
+                    {% else %}
+                        <ul class="public_polls">
+                        {% for poll in public_polls %}
+                            <li>
+                                <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endif %}
             {% if request.user.is_authenticated %}
             <div class="col-md-4">
                 <h4>{% trans 'My Polls' %}</h4>

@@ -62,6 +62,7 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'REGISTER_ENABLED',
     'MAIL_SIGNATURE',
     'GROUP_MANAGEMENT',
+    'PUBLIC_POLLS',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -227,6 +228,8 @@ CSP_REPORT_URL = ""
 MAIL_SIGNATURE = "Bitpoll Team"
 
 TEAM_EMAIL = "mail@example.com"
+
+PUBLIC_POLLS = True
 
 from .settings_local import *
 
