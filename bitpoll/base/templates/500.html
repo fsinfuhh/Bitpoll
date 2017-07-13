@@ -7,7 +7,7 @@
 {% block headJS %}<script src="{% static 'js/lib/raven.min.js' %}"></script>{% endblock %}
 {% sentry_public_dsn 'https' %}
 {% block content %}
-<script>Raven.config('{% sentry_public_dsn %}').install()</script>
+<script nonce="{% csp_nonce %}">Raven.config('{% sentry_public_dsn %}').install()</script>
 {% url 'base_problems' as problems_url %}
     <div class="container"><section class="section">
     <div class="col-md-5">
