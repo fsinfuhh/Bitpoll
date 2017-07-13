@@ -229,3 +229,5 @@ MAIL_SIGNATURE = "Bitpoll Team"
 TEAM_EMAIL = "mail@example.com"
 
 from .settings_local import *
+
+INSTALLED_APPS += INSTALLED_APPS_LOCAL

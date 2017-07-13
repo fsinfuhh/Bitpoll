@@ -1,5 +1,8 @@
 # Add your production settings here
 
+#Add additionall installed apps here
+INSTALLED_APPS_LOCAL = []
+
 #LANGUAGE_CODE = 'en-us'
 #
 #TIME_ZONE = 'Europe/Berlin'
