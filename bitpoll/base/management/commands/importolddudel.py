@@ -81,12 +81,12 @@ class Command(BaseCommand):
                 new_pk = local_poll.pk
                 local_poll.delete()
 
+            created = make_aware(poll['created'], timezone)
             migrated_poll = Poll(
                 title=poll['title'],
                 description=poll['description'],
                 url=poll['slug'],
                 type=POLL_TYPE_MAPPING[poll['type']],
-                created=make_aware(poll['created'], timezone),
                 due_date=make_aware(poll['due_date'], timezone) if poll['due_date'] is not None else None,
                 anonymous_allowed=poll['anonymous_allowed'],
                 public_listening=poll['public_listing'],
@@ -108,6 +108,8 @@ class Command(BaseCommand):
                 # group owner
                 migrated_poll.group = owner
             
+            migrated_poll.save()
+            migrated_poll.created = created
             migrated_poll.save()
             migrated_polls.add((poll['id'], migrated_poll))
         sys.stdout.write('\n')
