@@ -26,6 +26,11 @@ class Command(BaseCommand):
         parser.add_argument('db_name', type=str)
         parser.add_argument('db_user', type=str)
         parser.add_argument('db_password', type=str)
+        parser.add_argument('--deleted-only',
+                            action='store_true',
+                            dest='deleted_only',
+                            default=False,
+                            help='Only import previously imported polls deleted in old dudel.')
 
     def handle(self, *args, **options):
         """Import data from the old dudel."""
@@ -39,12 +44,12 @@ class Command(BaseCommand):
         # migrating polls
         print('migrating polls')
         count = 0
-        cursor.execute('SELECT COUNT(*) FROM poll WHERE deleted=false')
+        cursor.execute('SELECT COUNT(*) FROM poll')
         total_count = cursor.fetchone()[0]
         migrated_polls = set()
         choices = {}
         choice_values = {}
-        cursor.execute('SELECT * FROM poll WHERE deleted=false')
+        cursor.execute('SELECT * FROM poll')
         for poll in cursor:
             sys.stdout.write('\r{:4d}/{:4d} polls migrated'.format(count, total_count))
             sys.stdout.flush()
@@ -73,6 +78,14 @@ class Command(BaseCommand):
             }
             timezone = pytz.timezone(poll['timezone_name'])
             local_poll = Poll.objects.filter(url=poll['slug']).first()
+
+            if options['deleted_only'] and not poll['deleted']:
+                # has not been deleted and import of deleted only was requested
+                continue
+
+            if poll['deleted'] and not local_poll:
+                # Poll is deleted and has not been imported before
+                continue
 
             new_pk = None
             if local_poll:
