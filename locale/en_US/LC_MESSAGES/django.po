@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-12 16:56+0200\n"
+"POT-Creation-Date: 2017-07-17 16:28+0200\n"
 "PO-Revision-Date: 2017-03-23 14:02+0100\n"
 "Last-Translator: Nils Rokita <0rokita@informatik.uni-hamburg.de>\n"
 "Language-Team: \n"
@@ -45,16 +45,16 @@ msgid "About"
 msgstr "About"
 
 #: bitpoll/base/templates/base.html:65
-#: bitpoll/base/templates/base/index.html:216
+#: bitpoll/base/templates/base/index.html:217
 #: bitpoll/registration/templates/registration/request_account.html:7
 #: bitpoll/registration/templates/registration/request_account.html:11
 msgid "Register"
 msgstr "Register"
 
 #: bitpoll/base/templates/base.html:67
-#: bitpoll/base/templates/base/index.html:201
-#: bitpoll/registration/templates/registration/login.html:4
-#: bitpoll/registration/templates/registration/login.html:51
+#: bitpoll/base/templates/base/index.html:202
+#: bitpoll/registration/templates/registration/login.html:5
+#: bitpoll/registration/templates/registration/login.html:54
 msgid "Login"
 msgstr "Login"
 
@@ -117,41 +117,42 @@ msgid ""
 "                    <a href=\"https://github.com/kellerben/dudle\">Dudle</a> "
 "from TU-Dresden.\n"
 "                    Later <a href=\"https://github.com/opatut/dudel\">Dudel</"
-"a> was written from Paul Bienkowski\n"
-"                    to speed it up and add a nicer Interface and some new "
-"Features.\n"
-"                    This is writen in Flask a Python web Framework"
+"a> was written by Paul Bienkowski\n"
+"                    to speed it up and add a nicer interface and some new "
+"features.\n"
+"                    Paul's version is written in Flask, a Python web "
+"framework."
 msgstr ""
 
 #: bitpoll/base/templates/base/about.html:17
 msgid ""
-"After some time in Production use the discovered some shortcomings, "
-"especially with ldap and very big\n"
+"After some time, some shortcomings where discovered, especially with ldap "
+"and very big\n"
 "                    polls in the architecture.\n"
 "                    We decided to rewrite it again this time using Django, "
-"also in Python. For the starting point\n"
+"also in Python. As a  starting point,\n"
 "                    most styles and javascript artifacts where imported from "
 "the Dudel project."
 msgstr ""
 
 #: bitpoll/base/templates/base/about.html:22
 msgid ""
-"BitPoll was developed by Students from the Informatics department at "
-"University Hamburg.\n"
-"                    The Primary goal was to use it as one of the services "
+"BitPoll was developed by students from the Department of Informatics at the "
+"University of Hamburg.\n"
+"                    The primary goal was to use it as one of the services "
 "provides on <a href=\"https://mafiasi.de\">mafiasi.de</a>\n"
-"                    as a Service for other Students. After a time to long, "
-"it is now ready for Productive use.\n"
-"                    The sourcecode can be found at <a href=\"https://github."
+"                    as a service for other Students. It is now finally ready "
+"for production.\n"
+"                    The sourcecode can be found on <a href=\"https://github."
 "com/fsinfuhh/BitPoll\">GitHub</a>. "
 msgstr ""
 
 #: bitpoll/base/templates/base/about.html:26
 msgid ""
-"There are multiple Ideas for new Features to improve BitPoll further on. "
-"Hopefully we will find the Time\n"
+"There are multiple ideas for new features to further improve BitPoll. "
+"Hopefully we will find the time\n"
 "                    to work on\n"
-"                    some of them"
+"                    some of them."
 msgstr ""
 
 #: bitpoll/base/templates/base/about.html:31
@@ -172,81 +173,82 @@ msgstr ""
 
 #: bitpoll/base/templates/base/about.html:41
 msgid ""
-"We like to thank the Students of the Department Informatics from university "
-"Hamburg for the testing\n"
+"We would like to thank the students of the Department of Informatics from "
+"the University of Hamburg for their testing\n"
 "                    of BitPoll"
 msgstr ""
 
 #: bitpoll/base/templates/base/about.html:45
 msgid ""
-"If you like to contribute you can create issues an/or Pull requests on\n"
+"If you would like to contribute, you can create issues and / or Pull "
+"requests at\n"
 "                    <a href=\"https://github.com/fsinfuhh/BitPoll\">GitHub</"
 "a>."
 msgstr ""
 
-#: bitpoll/base/templates/base/index.html:18
+#: bitpoll/base/templates/base/index.html:19
 msgid "Create a poll"
 msgstr "Create a poll"
 
-#: bitpoll/base/templates/base/index.html:23
+#: bitpoll/base/templates/base/index.html:24
 #: bitpoll/poll/templates/poll/dt_choice_header.html:4
 #: bitpoll/poll/templates/poll/dt_choice_header.html:14
 msgid "Step 1"
 msgstr "Step 1"
 
-#: bitpoll/base/templates/base/index.html:24
+#: bitpoll/base/templates/base/index.html:25
 msgid "Select Type"
 msgstr "Select Type"
 
-#: bitpoll/base/templates/base/index.html:30
-#: bitpoll/base/templates/base/index.html:48
+#: bitpoll/base/templates/base/index.html:31
+#: bitpoll/base/templates/base/index.html:49
 msgid "Date and Time"
 msgstr "Date and Time"
 
-#: bitpoll/base/templates/base/index.html:33
-#: bitpoll/base/templates/base/index.html:56
+#: bitpoll/base/templates/base/index.html:34
+#: bitpoll/base/templates/base/index.html:57
 #: bitpoll/groups/templates/groups/invitations.html:16
 #: bitpoll/groups/templates/groups/show.html:35
 msgid "Date"
 msgstr "Date"
 
-#: bitpoll/base/templates/base/index.html:36
-#: bitpoll/base/templates/base/index.html:64
+#: bitpoll/base/templates/base/index.html:37
+#: bitpoll/base/templates/base/index.html:65
 msgid "Normal Poll"
 msgstr "Normal Poll"
 
-#: bitpoll/base/templates/base/index.html:39
-#: bitpoll/base/templates/base/index.html:72
+#: bitpoll/base/templates/base/index.html:40
+#: bitpoll/base/templates/base/index.html:73
 msgid "Numeric"
 msgstr "Numeric"
 
-#: bitpoll/base/templates/base/index.html:49
+#: bitpoll/base/templates/base/index.html:50
 msgid "Schedule date and time for an event"
 msgstr "Schedule date and time for an event"
 
-#: bitpoll/base/templates/base/index.html:57
+#: bitpoll/base/templates/base/index.html:58
 msgid "Schedule an all-day event"
 msgstr "Schedule an all-day event"
 
-#: bitpoll/base/templates/base/index.html:65
+#: bitpoll/base/templates/base/index.html:66
 msgid "Retrieve opinions on various choices"
 msgstr "Retrieve opinions on various choices"
 
-#: bitpoll/base/templates/base/index.html:73
+#: bitpoll/base/templates/base/index.html:74
 msgid "Rate each choice in a numeric range"
 msgstr "Rate each choice in a numeric range"
 
-#: bitpoll/base/templates/base/index.html:80
+#: bitpoll/base/templates/base/index.html:81
 #: bitpoll/poll/templates/poll/dt_choice_header.html:6
 #: bitpoll/poll/templates/poll/dt_choice_header.html:16
 msgid "Step 2"
 msgstr "Step 2"
 
-#: bitpoll/base/templates/base/index.html:81
+#: bitpoll/base/templates/base/index.html:82
 msgid "Enter Title"
 msgstr "Enter Title"
 
-#: bitpoll/base/templates/base/index.html:85
+#: bitpoll/base/templates/base/index.html:86
 #: bitpoll/poll/templates/poll/choicevalue.html:41
 #: bitpoll/poll/templates/poll/choicevalue.html:85
 #: bitpoll/poll/templates/poll/copy.html:33
@@ -255,134 +257,134 @@ msgstr "Enter Title"
 msgid "Title"
 msgstr "Title"
 
-#: bitpoll/base/templates/base/index.html:99
+#: bitpoll/base/templates/base/index.html:100
 #: bitpoll/poll/templates/poll/dt_choice_header.html:8
 #: bitpoll/poll/templates/poll/dt_choice_header.html:18
 msgid "Step 3"
 msgstr "Step 3"
 
-#: bitpoll/base/templates/base/index.html:100
+#: bitpoll/base/templates/base/index.html:101
 msgid "Advanced Settings"
 msgstr "Advanced Settings"
 
-#: bitpoll/base/templates/base/index.html:107
+#: bitpoll/base/templates/base/index.html:108
 #: bitpoll/poll/templates/poll/copy.html:52
 msgid "Randomize"
 msgstr "Randomize"
 
-#: bitpoll/base/templates/base/index.html:128
+#: bitpoll/base/templates/base/index.html:129
 #: bitpoll/poll/templates/poll/copy.html:70
 #: bitpoll/poll/templates/poll/poll_header.html:29
 #: bitpoll/poll/templates/poll/settings.html:45
 msgid "Due date"
 msgstr "Due date"
 
-#: bitpoll/base/templates/base/index.html:142
+#: bitpoll/base/templates/base/index.html:143
 #: bitpoll/poll/templates/poll/poll_delete.html:30
 #: bitpoll/poll/templates/poll/settings.html:87
 msgid "Description"
 msgstr "Description"
 
-#: bitpoll/base/templates/base/index.html:150
+#: bitpoll/base/templates/base/index.html:151
 #: bitpoll/poll/templates/poll/settings.html:110
 msgid "allow anonymous votes"
 msgstr "allow anonymous votes"
 
-#: bitpoll/base/templates/base/index.html:154
+#: bitpoll/base/templates/base/index.html:155
 #: bitpoll/poll/templates/poll/poll_header.html:60
 #: bitpoll/poll/templates/poll/settings.html:114
 msgid "login required"
 msgstr "login required"
 
-#: bitpoll/base/templates/base/index.html:158
+#: bitpoll/base/templates/base/index.html:159
 #: bitpoll/poll/templates/poll/settings.html:118
 msgid "invitation required to vote"
 msgstr "invitation required to vote"
 
-#: bitpoll/base/templates/base/index.html:162
+#: bitpoll/base/templates/base/index.html:163
 #: bitpoll/poll/templates/poll/settings.html:126
 msgid "one vote per user"
 msgstr "one vote per user"
 
-#: bitpoll/base/templates/base/index.html:166
+#: bitpoll/base/templates/base/index.html:167
 #: bitpoll/poll/templates/poll/settings.html:134
 #, fuzzy
 #| msgid "Copy choices"
 msgid "forbid empty choices"
 msgstr "Copy choices"
 
-#: bitpoll/base/templates/base/index.html:173
+#: bitpoll/base/templates/base/index.html:174
 msgid "More options"
 msgstr "More options"
 
-#: bitpoll/base/templates/base/index.html:176
+#: bitpoll/base/templates/base/index.html:177
 msgid "Less options"
 msgstr "Less options"
 
-#: bitpoll/base/templates/base/index.html:179
+#: bitpoll/base/templates/base/index.html:180
 #: bitpoll/groups/templates/groups/create.html:17
 #: bitpoll/poll/templates/poll/copy.html:86
 msgid "Create"
 msgstr "Create"
 
-#: bitpoll/base/templates/base/index.html:190
+#: bitpoll/base/templates/base/index.html:191
 #: bitpoll/registration/templates/registration/password_reset_complete.html:9
 msgid "Log in"
 msgstr "Log in"
 
-#: bitpoll/base/templates/base/index.html:192
+#: bitpoll/base/templates/base/index.html:193
 #: bitpoll/registration/templates/registration/create_account.html:14
-#: bitpoll/registration/templates/registration/login.html:32
+#: bitpoll/registration/templates/registration/login.html:35
 #: bitpoll/registration/templates/registration/request_account.html:15
 msgid "Username"
 msgstr "Username"
 
-#: bitpoll/base/templates/base/index.html:196 bitpoll/registration/forms.py:27
+#: bitpoll/base/templates/base/index.html:197 bitpoll/registration/forms.py:27
 #: bitpoll/registration/forms.py:51
 #: bitpoll/registration/templates/registration/account.html:91
 #: bitpoll/registration/templates/registration/create_account.html:18
-#: bitpoll/registration/templates/registration/login.html:41
+#: bitpoll/registration/templates/registration/login.html:44
 msgid "Password"
 msgstr "Password"
 
-#: bitpoll/base/templates/base/index.html:213
+#: bitpoll/base/templates/base/index.html:214
 msgid "Register for more"
 msgstr "Register for more"
 
-#: bitpoll/base/templates/base/index.html:214
+#: bitpoll/base/templates/base/index.html:215
 msgid "Registered users have access to the full width of features available."
 msgstr "Registered users have access to the full width of features available."
 
-#: bitpoll/base/templates/base/index.html:221
+#: bitpoll/base/templates/base/index.html:222
 msgid "Statistics"
 msgstr "Statistics"
 
-#: bitpoll/base/templates/base/index.html:224
+#: bitpoll/base/templates/base/index.html:225
 msgid "Polls created"
 msgstr "Polls created"
 
-#: bitpoll/base/templates/base/index.html:228
+#: bitpoll/base/templates/base/index.html:229
 #: bitpoll/poll/templates/poll/choicevalue.html:44
 msgid "Votes cast"
 msgstr "Votes cast"
 
-#: bitpoll/base/templates/base/index.html:232
+#: bitpoll/base/templates/base/index.html:233
 msgid "Users"
 msgstr "Users"
 
-#: bitpoll/base/templates/base/index.html:238
+#: bitpoll/base/templates/base/index.html:241
 msgid "Public polls"
 msgstr "Public polls"
 
-#: bitpoll/base/templates/base/index.html:241
+#: bitpoll/base/templates/base/index.html:244
 msgid "There are currently no public polls."
 msgstr "There are currently no public polls."
 
-#: bitpoll/base/templates/base/index.html:256
+#: bitpoll/base/templates/base/index.html:260
 msgid "My Polls"
 msgstr "My Polls"
 
-#: bitpoll/base/templates/base/index.html:257
+#: bitpoll/base/templates/base/index.html:261
 msgid ""
 "You can find a list of all the polls in which you have participated on your "
 "profile page."
@@ -390,7 +392,7 @@ msgstr ""
 "You can find a list of all the polls in which you have participated on your "
 "profile page."
 
-#: bitpoll/base/templates/base/index.html:259
+#: bitpoll/base/templates/base/index.html:263
 msgid "Show my polls"
 msgstr "Show my polls"
 
@@ -508,7 +510,7 @@ msgstr "License overview of third-party components"
 msgid "This site uses the following software/components:"
 msgstr "This site uses the following software/components:"
 
-#: bitpoll/base/templates/base/technical_info.html:36
+#: bitpoll/base/templates/base/technical_info.html:37
 msgid "Listed in no particular order."
 msgstr "Listed in no particular order."
 
@@ -1982,18 +1984,24 @@ msgid ""
 "Your %(signature)s\n"
 msgstr ""
 
-#: bitpoll/registration/templates/registration/login.html:17
+#: bitpoll/registration/templates/registration/login.html:20
 msgid ""
 "Your account doesn't have access to this page. To proceed, please login with "
 "an account that has access."
 msgstr ""
 
-#: bitpoll/registration/templates/registration/login.html:19
+#: bitpoll/registration/templates/registration/login.html:22
 msgid "Please login to see this page."
 msgstr ""
 
-#: bitpoll/registration/templates/registration/login.html:54
+#: bitpoll/registration/templates/registration/login.html:58
 msgid "Did you forget your password?"
+msgstr ""
+
+#: bitpoll/registration/templates/registration/login.html:60
+msgid ""
+"You can not reset your password here, as the account management is "
+"centraliced"
 msgstr ""
 
 #: bitpoll/registration/templates/registration/password_reset_complete.html:4
