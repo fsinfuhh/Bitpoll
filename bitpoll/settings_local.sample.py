@@ -1,15 +1,20 @@
-# Add your production settings here
+# customize to your needs
+
+# You must insert your own random value here
+# SECURITY WARNING: keep the secret key used in production secret!
+# see <https://docs.djangoproject.com/en/dev/howto/deployment/checklist/#secret-key>
+SECRET_KEY = '...'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 #Add additionall installed apps here
 INSTALLED_APPS_LOCAL = []
 
 #LANGUAGE_CODE = 'en-us'
-#
 #TIME_ZONE = 'Europe/Berlin'
-#
-## Database
+
 ## https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-#
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.sqlite3',
@@ -17,22 +22,25 @@ INSTALLED_APPS_LOCAL = []
 #    }
 #}
 
+## Customize your instance
+#SITE_NAME = 'Bitpoll'
+#BASE_URL = 'https://bitpoll.mafiasi.de'
+
 ## Url to the Base Homepage and Text on the Link, leave empty to not use this option
 #HOME_URL = "https://example.com"
 #HOME_URL_NAME = "Dashboard"
-#
+
 ## Test mail functionality by printing mails to console:
 ## EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#
+
 ## if the imprint URL is not empty use it as an link to the imprint, else use IMPRINT_TEXT
 #IMPRINT_URL = ""
 #IMPRINT_TEXT = """
 #<h1>ImpressuXm</h1>
 #<p>Text goes here</p>
 #"""
-#
+
 #LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'), )
-#
 #LANGUAGES = (
 #    ('de', 'Deutsch'),
 #    ('en', 'English'),
@@ -42,7 +50,7 @@ INSTALLED_APPS_LOCAL = []
 #REGISTER_ENABLED = True
 #GROUP_MANAGEMENT = REGISTER_ENABLED
 
-# Use ldap login
+## Use ldap login
 #import ldap
 #from django_auth_ldap.config import LDAPSearch
 #
