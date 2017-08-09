@@ -143,10 +143,7 @@
                     {% if summary %}
                     <tr id="scores">
                         <th>
-                                <span class="print-only">
-                                  <b>{% trans 'Percent' %}<br/>
-                                      {% trans 'Score' %}</b>
-                                </span>
+                                <span class="print-only"><b>{% trans 'Percent' %}<br/></b></span>
                         </th>
                         {#                            {% set scores, counts, totals, max_score = poll.get_stats() %}#}
                         {% for choice in stats %}
@@ -166,10 +163,30 @@
                                 data-score="{{ choice.score|percentage }}">
                                 {# if vote.score != 0 else 1  TODO: das if soll glaube ich ob da übrhaupt was da ist #}
                                 {{ choice.score|percentage }}
-                                <span class="print-only">{{ choice.score|percentage }}</span>
                             </th>
                         {% endfor %}
-                        <th class="noprint"></th>
+                    </tr>
+                    <tr class="print-only">
+                        <th>
+                            {% trans 'Score' %}
+                        </th>
+                        {% for choice in stats %}
+                            <td class="choice-sum">{{ choice.count|or_none }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr class="print-only">
+                        <th>{% trans 'Details' %}</th>
+                        {% for choice in stats %}
+                            <td>
+                            {% for choice_value in choice.choices %}
+                                <div class='value'>{{ choice_value.count|force_escape|force_escape }}
+                                    <span class='label choice-sum-value-label'>
+                                        <span class='fa fa-{{ choice_value.icon }}'></span>
+                                    </span>
+                                </div>
+                            {% endfor %}
+                            </td>
+                        {% endfor %}
                     </tr>
                     {% endif %}
                     </tfoot>
@@ -183,7 +200,7 @@
         {#<a href="{% url 'poll_voteEdit' poll.url vote.id %}"> Edit </a> #}
         {#<a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a> #}
 
-        <br/><br/><h1 class="print-only">{% trans 'Comments' %}</h1>
+        <br/><br/>{% if poll.comment_set.all %}<h1 class="print-only">{% trans 'Comments' %}</h1>{% endif %}
         <div class="comments">
             {% for comment in poll.comment_set.all %}
             <div class="comment">

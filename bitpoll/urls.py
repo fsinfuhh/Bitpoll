@@ -26,7 +26,7 @@ from bitpoll import settings
 
 urlpatterns = [
     url(r'^poll/', include('bitpoll.poll.urls')),
-    url(r'^base/', include('bitpoll.base.urls')),
+    url(r'^', include('bitpoll.base.urls')),
     url(r'^invitations/', include('bitpoll.invitations.urls')),
     url(r'^$', lambda req: redirect('index'), name='home'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login', ),

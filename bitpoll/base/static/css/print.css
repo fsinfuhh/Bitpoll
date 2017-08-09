@@ -2,13 +2,10 @@
     display: none !important;
 }
 
-.poll .choice {
-    color: #000;
-    text-shadow: none;
-}
-
 * {
     background: none !important;
+    color: black !important;
+    text-shadow: none !important;
 }
 
 footer,
@@ -16,9 +13,10 @@ footer,
     display: none !important;
 }
 
-table, table th, table td {
+table, table th, table td, table.poll td, table.poll th, table.poll tr, table.poll, table.poll td.none{
     border: 1px solid black !important;
     border-collapse: collapse !important;
+    border-spacing: 0 !important;
 }
 
 .container {
@@ -39,6 +37,18 @@ td {
     font-weight: normal;
 }
 
-.print-only {
-    display: block;
+th {
+    background-color: lightgrey !important;
+}
+
+.poll .choice-sum.maximum {
+    font-weight: bold !important;
+}
+
+table.poll td.none {
+    visibility: hidden;
+}
+
+.table-scroll-x, .table-noscroll-y{
+    overflow-x: visible !important;
 }

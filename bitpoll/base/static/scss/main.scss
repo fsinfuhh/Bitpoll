@@ -318,8 +318,10 @@ footer {
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.print-only {
-    display: none;
+@media screen {
+    .print-only {
+        display: none;
+    }
 }
 
 .current-user {
