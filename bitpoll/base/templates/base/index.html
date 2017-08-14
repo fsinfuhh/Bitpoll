@@ -101,7 +101,7 @@
                             <div class="title">{% trans 'Advanced Settings' %}</div>
                         </div>
                     {# TODO: due date, public? #}
-                        <script nonce="{% csp_nonce %}">var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %};</script>
+                        <script nonce="{% csp_js_nonce %}">var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %};</script>
                         <div class="col-md-12">
                             <div id="slug" class="form-group">
                                 <div class="slug-right">
@@ -271,5 +271,5 @@
 {% block additionalJS %}
     <script src="{% static 'coffee/create.coffee'|compile %}"  type="text/javascript" ></script>
     <script src="{% static 'coffee/slug.coffee'|compile %}"  type="text/javascript" ></script>
-    <script nonce="{% csp_nonce %}">$.datetimepicker.setLocale('{{ request.LANGUAGE_CODE }}');</script>
+    <script nonce="{% csp_js_nonce %}">$.datetimepicker.setLocale('{{ request.LANGUAGE_CODE }}');</script>
 {% endblock %}

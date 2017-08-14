@@ -130,7 +130,7 @@
 {% comment %}
     <script src="{% static 'coffee/votefilter.coffee'|compile %}"  type="text/javascript" ></script>
 {% endcomment %}
-    <script nonce="{% csp_nonce %}">moment.lang("{{ request.LANGUAGE_CODE }}")</script>
+    <script nonce="{% csp_js_nonce %}">moment.lang("{{ request.LANGUAGE_CODE }}")</script>
     {% block additionalJS %}
     {% endblock %}
 </body>

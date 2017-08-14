@@ -7,7 +7,7 @@
 {% block headJS %}<script src="{% static 'js/lib/raven.min.js' %}"></script>{% endblock %}
 {% sentry_public_dsn 'https' %}
 {% block content %}
-<script nonce="{% csp_nonce %}">Raven.config('{% sentry_public_dsn %}').install()</script>
+<script nonce="{% csp_js_nonce %}">Raven.config('{% sentry_public_dsn %}').install()</script>
 {% url 'base_problems' as problems_url %}
     <div class="container"><section class="section">
     <div class="col-md-5">
@@ -16,7 +16,7 @@
     {% if request.sentry.id %}
         {% with request.sentry.id as errorid %}
             <p>{% blocktrans %}We have recorded the error under the Identifier {{ errorid }}.{% endblocktrans %}</p>
-            <script nonce="{% csp_nonce %}">
+            <script nonce="{% csp_js_nonce %}">
                 Raven.showReportDialog({
                     eventId: '{{ errorid }}',
                     dsn: '{% sentry_public_dsn %}'

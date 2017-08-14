@@ -188,5 +188,5 @@
 
 {% load csp %}
 {% block additionalJS %}
-    <script nonce="{% csp_nonce %}">$.datetimepicker.setLocale('{{ request.LANGUAGE_CODE }}');</script>
+    <script nonce="{% csp_js_nonce %}">$.datetimepicker.setLocale('{{ request.LANGUAGE_CODE }}');</script>
 {% endblock %}

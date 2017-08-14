@@ -1,9 +1,9 @@
 {% load csp %}
-<style>{% csp_css_hash %}
+{% csp_css_hash %}
         {% for choice_value in choice_values %}
             .bg-{{ choice_value.color }} {background-color: #{{ choice_value.color }};}
         {% endfor %}
     .choice-deleted {
         background-color: lightgrey
     }
-{% end_csp_css_hash %}</style>
+{% end_csp_css_hash %}

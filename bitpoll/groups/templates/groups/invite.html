@@ -30,7 +30,7 @@
 
 {% block additionalJS %}
 <script type="text/javascript" src="{% static 'select2/select2.js' %}"></script>
-<script type="text/javascript" nonce="{{ csp_nonce }}">
+<script type="text/javascript" nonce="{{ csp_js_nonce }}">
     $(function() {
         $("#invitees").select2({
             tags: [],
