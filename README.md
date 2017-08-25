@@ -10,7 +10,7 @@ This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel
 Get the code:
 
 ~~~
-git clone --recurse-submodules https://github.com/fsinfuhh/Bitpoll
+git clone https://github.com/fsinfuhh/Bitpoll
 ~~~
 
 Install the System Dependencies:
