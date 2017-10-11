@@ -44,7 +44,7 @@ def poll(request, poll_url):
     tz_activate(current_poll.get_tz_name(request.user))
 
     poll_votes = Vote.objects.filter(poll=current_poll).order_by(
-        'name').select_related('user')
+        'date_created').select_related('user')
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
     matrix = transpose(current_poll.get_choice_group_matrix(get_current_timezone()))
@@ -123,7 +123,7 @@ def poll(request, poll_url):
         except ObjectDoesNotExist:
             pass
 
-        # warn the user if the Timezone is not the same on the Poll and in his settings
+        # warn the user if Poll Timezone differs from user's settings
         different_timezone = current_poll.timezone_name != request.user.timezone
         if current_poll.use_user_timezone and different_timezone:
             messages.info(request, _("This poll was transferred from {} to your local timezone {}".format(
@@ -767,6 +767,7 @@ def vote(request, poll_url, vote_id=None):
             current_vote = Vote(poll=current_poll)
         current_vote.date_created = now()
         current_vote.comment = request.POST.get('comment')
+
         if vote_id:
             # leave the name as it was
             pass
