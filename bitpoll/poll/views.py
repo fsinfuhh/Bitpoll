@@ -4,7 +4,7 @@ from smtplib import SMTPRecipientsRefused
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import redirect_to_login
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import send_mail
 from django.db import transaction, connection, IntegrityError
 
@@ -556,12 +556,20 @@ def edit_universal_choice(request, poll_url):
         # save new choices
         choice_texts = request.POST.getlist('choice_text')
         choice_sort_keys = request.POST.getlist('choice_sort_key')  # TODO: errorhandling
+        error = False
         for i, choice_text in zip(choice_sort_keys, choice_texts):
             choice_text = choice_text.strip()
             if choice_text == '':
                 continue
             choice = Choice(text=choice_text, poll=current_poll, sort_key=i)
-            choice.save()
+            try:
+                choice.full_clean()
+                choice.save()
+            except ValidationError:
+                messages.error(request,
+                               _('The title "{}" is to long. The maximum is 80 characters'.format(choice_text)))
+                error = True
+                # TODO: reentry text in form? / Use normal ModelForm?
 
         # update existing choices
         pattern = re.compile(r'^choice_text_(\d+)$')
@@ -581,8 +589,15 @@ def edit_universal_choice(request, poll_url):
                     if sort_key == -1 or sort_key == "":
                         sort_key = current_poll.choice_set.count() + 1  # TODO: unter umständen hier max nemen?
                     db_choice.sort_key = sort_key
-                    db_choice.save()
-        if 'next' in request.POST:
+                    try:
+                        db_choice.full_clean()
+                        db_choice.save()
+                    except ValidationError:
+                        #TODO: können hier auch andere fehler auftreten?
+                        # TODO: reentry text in form? / Use normal ModelForm?
+                        messages.error(request, _('The title "{}" is to long. The maximum is 80 characters'.format(choice_text)))
+                        error = True
+        if 'next' in request.POST and not error:
             return redirect('poll', poll_url)
         if 'delete' in request.POST:
             db_choice = get_object_or_404(Choice, poll=current_poll, pk=request.POST.get('delete'))
