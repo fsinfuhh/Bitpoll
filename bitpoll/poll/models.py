@@ -1,3 +1,4 @@
+import enum
 from smtplib import SMTPRecipientsRefused
 
 from django.contrib import messages
@@ -55,6 +56,12 @@ class Poll(models.Model):
     timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
     use_user_timezone = models.BooleanField(default=False)
     vote_all = models.BooleanField(default=False)
+    sorting = models.IntegerField(default=0)
+
+    class ResultSorting(enum.IntEnum):
+        DATE = 0
+        NAME = 1
+
 
     def __str__(self):
         return u'Poll {}'.format(self.title)
@@ -164,6 +171,12 @@ class Poll(models.Model):
         if user.is_authenticated and self.use_user_timezone:
             return user.timezone
         return tz
+
+
+POLL_RESULT_SORTING = (
+    (Poll.ResultSorting.DATE, 'Date'),
+    (Poll.ResultSorting.NAME, 'Name')
+)
 
 
 class Choice(models.Model):

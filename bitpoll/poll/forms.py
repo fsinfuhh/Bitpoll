@@ -17,7 +17,7 @@ class PollCreationForm(ModelForm):
             'require_login',
             'require_invitation',
             'one_vote_per_user',
-            'vote_all'
+            'vote_all',
         ]
 
 
@@ -69,6 +69,7 @@ class PollSettingsForm(ModelForm):
             'public_listening',
             'vote_all',
             'use_user_timezone',
+            'sorting',
         ]
 
 

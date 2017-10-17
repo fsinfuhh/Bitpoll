@@ -43,8 +43,12 @@ def poll(request, poll_url):
 
     tz_activate(current_poll.get_tz_name(request.user))
 
-    poll_votes = Vote.objects.filter(poll=current_poll).order_by(
-        'name').select_related('user')
+    poll_votes = Vote.objects.filter(poll=current_poll).select_related('user')
+    if current_poll.sorting == Poll.ResultSorting.NAME:
+        poll_votes = poll_votes.order_by('name')
+        print(current_poll.sorting)
+    elif current_poll.sorting == Poll.ResultSorting.DATE:
+        poll_votes = poll_votes.order_by('date_created')
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
     matrix = transpose(current_poll.get_choice_group_matrix(get_current_timezone()))

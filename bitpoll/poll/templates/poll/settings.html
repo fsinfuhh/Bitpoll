@@ -133,6 +133,12 @@
                 <input type="checkbox" id="vote_all" name="{{ form.vote_all.name }}" {% if form.vote_all.value %} checked {% endif %}>
                 <label for="vote_all">{% trans 'forbid empty choices' %}</label>
             </div>
+            <div class="">
+                Sort results by:
+            {# TODO: use enum values #}
+                <input type="radio" name="{{ form.sorting.name }}" value="0" id="sorting_date" {% if form.sorting.value == 0 %} checked {% endif %}><label for="sorting_date">Date</label>
+                <input type="radio" name="{{ form.sorting.name }}" value="1" id="sorting_name" {% if form.sorting.value == 1 %} checked {% endif %}><label for="sorting_name">Name</label>
+            </div>
             <div class="help-block">
                 {% blocktrans %}
                 These settings are not retroactive, meaning that changing them will not modify votes/comments already created.
