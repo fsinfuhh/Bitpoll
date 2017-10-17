@@ -17,7 +17,7 @@ class GroupError(Exception):
 
 
 class GroupProperties(models.Model):
-    group = models.OneToOneField(Group, related_name='properties')
+    group = models.OneToOneField(Group, related_name='properties', on_delete=models.CASCADE)
     admins = models.ManyToManyField(settings.AUTH_USER_MODEL,
             related_name='admin_of')
     public_members = models.BooleanField(default=False)
@@ -63,11 +63,11 @@ class GroupProxy(object):
 
 class GroupInvitation(models.Model):
     date_invited = models.DateTimeField(default=now)
-    group = models.ForeignKey(Group, related_name='invitations')
+    group = models.ForeignKey(Group, related_name='invitations', on_delete=models.CASCADE)
     invitee = models.ForeignKey(settings.AUTH_USER_MODEL,
-            related_name='invitations')
+            related_name='invitations', on_delete=models.CASCADE)
     invited_by = models.ForeignKey(settings.AUTH_USER_MODEL,
-            related_name='given_invitations')
+            related_name='given_invitations', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return u'Invitation to {0} for {1}'.format(self.group, self.invitee)

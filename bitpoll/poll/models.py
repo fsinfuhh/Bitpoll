@@ -38,8 +38,8 @@ class Poll(models.Model):
     url = models.SlugField(max_length=80, unique=True)
     type = models.CharField(max_length=20, choices=POLL_TYPES)
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(BitpollUser, null=True, blank=True)
-    group = models.ForeignKey(Group, null=True, blank=True)
+    user = models.ForeignKey(BitpollUser, null=True, blank=True, on_delete=models.SET_NULL)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
     """owner_id = models.ForeignKey(Member)"""
 
     # === Extra settings ==
@@ -101,7 +101,7 @@ class Poll(models.Model):
         else:
             is_group_member = False
 
-        return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated() or not has_owner
+        return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated or not has_owner
 
     def can_listen(self, user: BitpollUser):
         if self.public_listening:

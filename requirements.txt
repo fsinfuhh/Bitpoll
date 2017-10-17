@@ -1,7 +1,7 @@
-django
+django=1.11
 django-widget-tweaks
 libsass
 django-static-precompiler
 django-markdown-app
 pytz
-django-simple-csp
+django-simple-csp=0.1dev2
