@@ -68,6 +68,7 @@ class PollSettingsForm(ModelForm):
             'group',
             'public_listening',
             'vote_all',
+            'hide_participants',
             'use_user_timezone',
             'sorting',
         ]

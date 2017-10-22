@@ -103,6 +103,10 @@ table.vote label {
     text-align: right;
 }
 
+.poll .author-hidden {
+  font-style: italic;;
+}
+
 .poll .choice-group,
 .poll .choice-sum,
 .poll .choice-text {

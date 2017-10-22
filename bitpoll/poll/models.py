@@ -57,6 +57,7 @@ class Poll(models.Model):
     use_user_timezone = models.BooleanField(default=False)
     vote_all = models.BooleanField(default=False)
     sorting = models.IntegerField(default=0)
+    hide_participants = models.BooleanField(default=False)
 
     class ResultSorting(enum.IntEnum):
         DATE = 0
