@@ -1,6 +1,6 @@
 {% load i18n settings_value %}{% value_from_settings BASE_URL as base_url%}{% value_from_settings MAIL_SIGNATURE as signature %}{% url 'settings' as settings_url %}{% blocktrans %}Hi {{ receiver}},
 
-There was a change made on the poll "{{ poll }}": A new vote has been posted by {{ user }}.
+There was a change made on the poll "{{ poll }}": {% if hide_participants %}A new vote has been posted.{% else %}A new vote has been posted by {{ user }}.{% endif %}
 
 Visit this link to see the poll page: {{ base_url }}{{ link }}
 

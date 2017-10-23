@@ -57,6 +57,7 @@ class Poll(models.Model):
     use_user_timezone = models.BooleanField(default=False)
     vote_all = models.BooleanField(default=False)
     sorting = models.IntegerField(default=0)
+    hide_participants = models.BooleanField(default=False)
 
     class ResultSorting(enum.IntEnum):
         DATE = 0
@@ -333,6 +334,7 @@ class PollWatch(models.Model):
             'user': username if self.poll.show_results == "complete" else _("by an user"),
             'poll': self.poll.title,
             'link': link,
+            'hide_participants': self.poll.hide_participants
         })
         try:
             send_mail(_("New votes for {}".format(self.poll.title)), email_content, None,

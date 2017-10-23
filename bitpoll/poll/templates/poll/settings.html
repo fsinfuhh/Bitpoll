@@ -133,6 +133,10 @@
                 <input type="checkbox" id="vote_all" name="{{ form.vote_all.name }}" {% if form.vote_all.value %} checked {% endif %}>
                 <label for="vote_all">{% trans 'forbid empty choices' %}</label>
             </div>
+            <div class="checkbox">
+                <input type="checkbox" id="vote_hide_participants" name="{{ form.hide_participants.name }}" {% if form.hide_participants.value %} checked {% endif %}>
+                <label for="vote_hide_participants">{% trans 'hide participants' %}</label>
+            </div>
             <div class="">
                 Sort results by:
             {# TODO: use enum values #}
