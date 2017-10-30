@@ -8,8 +8,18 @@ SECRET_KEY = '...'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+## If Bitpoll is served via HTTPS enable the next two options
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+
+
 #Add additionall installed apps here
+## Example for installed raven (Sentry instrumentation)
+#INSTALLED_APPS_LOCAL = [
+#        'raven.contrib.django.raven_compat',
+#        ]
 INSTALLED_APPS_LOCAL = []
+
 
 #LANGUAGE_CODE = 'en-us'
 #TIME_ZONE = 'Europe/Berlin'
