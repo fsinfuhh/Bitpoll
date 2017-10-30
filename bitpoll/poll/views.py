@@ -843,11 +843,14 @@ def vote(request, poll_url, vote_id=None):
                                 else:
                                     deleted_choicevals = True
                             else:
-                                choice_value = None
-                                if current_poll.vote_all:
+                                if current_poll.vote_all and not choice.deleted:
+                                    if not error_msg:  # TODO: error_msg is used in other places here to, maybe use
+                                        # deduplication for messages?
+                                        # https://stackoverflow.com/questions/23249807/django-remove-duplicate
+                                        # -messages-from-storage
+                                        messages.error(request, _('Due to the the configuration of this poll, '
+                                                                  'you have to fill all choices.'))
                                     error_msg = True
-                                    messages.error(request, _('Due to the the configuration of this poll, you have to fill '
-                                                              'all choices.'))
 
                         if deleted_choicevals:
                             error_msg = True
@@ -867,7 +870,7 @@ def vote(request, poll_url, vote_id=None):
                             messages.success(request, _('Vote has been recorded'))
                             return redirect('poll', poll_url)
                         else:
-                            raise IntegrityError("An Error ehilr saving the Vote occured, see message")
+                            raise IntegrityError("An Error while saving the Vote occurred, see message")
                 except IntegrityError as e:
                     # Nothing todo as the main point in this exception is the database rollback
                     pass
