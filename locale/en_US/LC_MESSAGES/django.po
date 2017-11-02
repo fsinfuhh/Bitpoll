@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-22 22:37+0200\n"
+"POT-Creation-Date: 2017-11-02 17:26+0100\n"
 "PO-Revision-Date: 2017-10-22 22:46+0200\n"
 "Last-Translator: Nils Rokita <0rokita@informatik.uni-hamburg.de>\n"
 "Language-Team: \n"
@@ -809,7 +809,7 @@ msgstr ""
 msgid "Invitation was sent."
 msgstr "Invitations"
 
-#: bitpoll/invitations/models.py:45 bitpoll/poll/models.py:344
+#: bitpoll/invitations/models.py:45 bitpoll/poll/models.py:345
 msgid "The mail server had an error sending the notification to {}"
 msgstr "The mail server had an error sending the notification to {}"
 
@@ -915,7 +915,7 @@ msgstr ""
 "you can change this setting at %(base_url)s%(link)s .\n"
 
 #: bitpoll/invitations/views.py:54 bitpoll/poll/views.py:638
-#: bitpoll/poll/views.py:682 bitpoll/poll/views.py:1111
+#: bitpoll/poll/views.py:682 bitpoll/poll/views.py:1114
 msgid "You are not allowed to edit this Poll"
 msgstr "You are not allowed to edit this Poll"
 
@@ -963,7 +963,7 @@ msgstr "Anonymous"
 msgid "by an user"
 msgstr "by an user"
 
-#: bitpoll/poll/models.py:339
+#: bitpoll/poll/models.py:340
 #, fuzzy
 #| msgid "Not owner"
 msgid "New votes for {}"
@@ -1275,6 +1275,25 @@ msgid "Choose combinations"
 msgstr "Choose combinations"
 
 #: bitpoll/poll/templates/poll/mail_watch.txt:1
+#, python-format
+msgid ""
+"Hi %(receiver)s,\n"
+"\n"
+"There was a change made on the poll \"%(poll)s\": "
+msgstr ""
+
+#: bitpoll/poll/templates/poll/mail_watch.txt:3
+#, fuzzy
+#| msgid "Vote has been recorded"
+msgid "A new vote has been posted."
+msgstr "Vote has been recorded"
+
+#: bitpoll/poll/templates/poll/mail_watch.txt:3
+#, python-format
+msgid "A new vote has been posted by %(user)s."
+msgstr ""
+
+#: bitpoll/poll/templates/poll/mail_watch.txt:3
 #, fuzzy, python-format
 #| msgid ""
 #| "Hi %(receiver)s,\n"
@@ -1293,10 +1312,7 @@ msgstr "Choose combinations"
 #| "Visit the following link to unsubscribe from these notifications: "
 #| "%(base_url)s%(link)s .\n"
 msgid ""
-"Hi %(receiver)s,\n"
 "\n"
-"There was a change made on the poll \"%(poll)s\": A new vote has been posted "
-"by %(user)s.\n"
 "\n"
 "Visit this link to see the poll page: %(base_url)s%(link)s\n"
 "\n"
@@ -1759,7 +1775,7 @@ msgstr "Author of Vote:"
 
 #: bitpoll/poll/templates/poll/vote_delete_error.html:8
 #: bitpoll/poll/views.py:260 bitpoll/poll/views.py:738
-#: bitpoll/poll/views.py:980
+#: bitpoll/poll/views.py:983
 msgid "Deletion not allowed. You are not authenticated."
 msgstr "Deletion not allowed. You are not authenticated."
 
@@ -1815,12 +1831,12 @@ msgstr ""
 msgid "You can't edit this Comment"
 msgstr ""
 
-#: bitpoll/poll/views.py:258 bitpoll/poll/views.py:978
+#: bitpoll/poll/views.py:258 bitpoll/poll/views.py:981
 msgid "Deletion not allowed. You are not {}."
 msgstr "Deletion not allowed. You are not {}."
 
 #: bitpoll/poll/views.py:278 bitpoll/poll/views.py:630
-#: bitpoll/poll/views.py:1006
+#: bitpoll/poll/views.py:1009
 msgid "You are not allowed to listen."
 msgstr "You are not allowed to listen."
 
@@ -1828,7 +1844,7 @@ msgstr "You are not allowed to listen."
 #: bitpoll/poll/views.py:402 bitpoll/poll/views.py:451
 #: bitpoll/poll/views.py:491 bitpoll/poll/views.py:555
 #: bitpoll/poll/views.py:624 bitpoll/poll/views.py:676
-#: bitpoll/poll/views.py:1100
+#: bitpoll/poll/views.py:1103
 msgid "You are not allowed to edit this Poll."
 msgstr "You are not allowed to edit this Poll."
 
@@ -1855,34 +1871,34 @@ msgstr ""
 msgid "Anonymous votes are not allowed for this poll."
 msgstr "You are not allowed to edit this Poll."
 
-#: bitpoll/poll/views.py:849
+#: bitpoll/poll/views.py:851
 msgid ""
 "Due to the the configuration of this poll, you have to fill all choices."
 msgstr ""
 
-#: bitpoll/poll/views.py:854
+#: bitpoll/poll/views.py:857
 msgid ""
 "Value for choice does not exist. This is probably due to changes in the "
 "poll. Please correct your vote."
 msgstr ""
 
-#: bitpoll/poll/views.py:867
+#: bitpoll/poll/views.py:870
 msgid "Vote has been recorded"
 msgstr "Vote has been recorded"
 
-#: bitpoll/poll/views.py:876
+#: bitpoll/poll/views.py:879
 msgid "You need to either provide a name or post an anonymous vote."
 msgstr "You need to either provide a name or post an anonymous vote."
 
-#: bitpoll/poll/views.py:936
+#: bitpoll/poll/views.py:939
 msgid "This user has already voted and only one vote per user is permitted"
 msgstr ""
 
-#: bitpoll/poll/views.py:1121
+#: bitpoll/poll/views.py:1124
 msgid "User {} not Found"
 msgstr "User {} not Found"
 
-#: bitpoll/poll/views.py:1134
+#: bitpoll/poll/views.py:1137
 msgid "Settings have been changed"
 msgstr ""
 
