@@ -114,6 +114,7 @@ def poll(request, poll_url):
                     'count': stat2['count'],
                     'color': stat2['votechoice__value__color'],
                     'icon': stat2['votechoice__value__icon'],
+                    'deleted': stat2['votechoice__value__deleted'],
                     'title': stat2['votechoice__value__title']} for
                 stat2 in stats2 if
                 stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
@@ -136,7 +137,7 @@ def poll(request, poll_url):
             messages.warning(request, _("This poll has a different timezone ({}) than you.".format(
                 current_poll.timezone_name)))
 
-    deleted_choicevals_count = ChoiceValue.objects.filter(poll=current_poll, deleted=True).count()
+    deleted_choicevals_count = VoteChoice.objects.filter(choice__poll=current_poll, value__deleted=True).count()
     if deleted_choicevals_count > 0:
         messages.warning(request, _('Some votes contain deleted values. If you have already voted, please check your '
                                     'vote.'))
