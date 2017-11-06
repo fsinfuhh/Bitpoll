@@ -929,15 +929,18 @@ def vote_assign(request, poll_url, vote_id):
     if request.method == 'POST':
         if request.user.is_authenticated and current_vote.can_edit(request.user):
             username = request.POST.get('username').strip()
-            user = BitpollUser.objects.get(username=username)
-            if not current_poll.vote_set.filter(Q(user=request.user)):
-                current_vote.user = user
-                current_vote.name = user.get_displayname()
-                current_vote.assigned_by = request.user
-                current_vote.save()
-                return redirect('poll', poll_url)
-            else:
-                messages.info(request, _("This user has already voted and only one vote per user is permitted"))
+            try:
+                user = BitpollUser.objects.get(username=username)
+                if not current_poll.vote_set.filter(Q (user=request.user)):
+                    current_vote.user = user
+                    current_vote.name = user.get_displayname ()
+                    current_vote.assigned_by = request.user
+                    current_vote.save()
+                    return redirect('poll', poll_url)
+                else:
+                    messages.info(request, _("This user has already voted and only one vote per user is permitted"))
+            except ObjectDoesNotExist:
+                messages.warning(request, _("The user {} does not exists".format(username)))
         else:
             return HttpResponseForbidden()
 
