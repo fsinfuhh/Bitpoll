@@ -5,6 +5,7 @@
 {% load i18n %}
 {% load compile_static %}
 {% load static %}
+{% load csp %}
 
 {% block title %}{% trans 'Copy Poll' %}{% endblock %}
 
@@ -47,7 +48,7 @@
                 <div class="form-group">
                     <label for="url-input">{% trans 'URL name' %}</label>
                     <div class="pull-right">
-                        <script>var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %}</script>
+                        <script nonce="{% csp_js_nonce %}">var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %};</script>
                         <button id="slug-randomize" class="action small"><i
                             class="fa fa-random"></i><span>{% trans 'Randomize' %}</span></button>
                     </div>

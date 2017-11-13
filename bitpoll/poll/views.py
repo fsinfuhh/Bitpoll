@@ -1080,7 +1080,10 @@ def copy(request, poll_url):
             return redirect('poll', current_poll.url)
 
     else:
-        form = PollCopyForm({'title': "Copy of " + current_poll.title, 'due_date': current_poll.due_date})
+        form = PollCopyForm({
+            'title': "Copy of " + current_poll.title,
+            'due_date': current_poll.due_date,
+            'url': current_poll.url + '2'})  # we set an url, this will be overwritten by the slug generation JS
 
     return TemplateResponse(request, 'poll/copy.html', {
         'form': form,
@@ -1088,6 +1091,7 @@ def copy(request, poll_url):
         'date_shift': date_shift,
         'error': error_msg,
     })
+
 
 def settings(request, poll_url):
     """
@@ -1157,7 +1161,7 @@ def settings(request, poll_url):
         'results': POLL_RESULTS,
         'timezones': all_timezones,
         'user_error': user_error,
-        'user': user,
+        'user_select': user,
     })
 
 
