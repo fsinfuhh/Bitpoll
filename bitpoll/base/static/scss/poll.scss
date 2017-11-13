@@ -162,6 +162,10 @@ td.control {
     text-shadow: 0px 1px 6px rgba(0, 0, 0, 0.7);
 }
 
+td.control {
+    cursor: pointer;
+}
+
 .vote-choice-radio {
     padding: 0;
     list-style: none;
@@ -366,8 +370,8 @@ header.poll {
 }
 
 span.vote-header {
-    #transform: translateX(2.5em) rotate(-45deg);
-    #transform-origin: 0 100%;
+    /*transform: translateX(2.5em) rotate(-45deg);
+    transform-origin: 0 100%;*/
     display: inline-block;
     white-space: normal;;
 }
