@@ -11,15 +11,20 @@ $ ->
     $randomizeButton = $ '#slug-randomize'
     $title           = $ '#title-input'
     $slugInput       = $ '#slug-input'
+    $randomSlug      = $ '#random_slug'
 
     # Check if we are on a page with a slug input
     return if $title.length == 0
 
+    $randomSlug.prop('checked', RANDOM_SLUGS)
+
     update = (random) ->
         title     = $title.val()
+        slug = $slugInput.val()
 
-        if RANDOM_SLUGS or random or not title
-            slug = makeRandomString 8
+        if $randomSlug.prop('checked') or random or not title
+            if not slug or random or slug == "None" #  Do not regenerate the slug if a random slug is already set
+                slug = makeRandomString 8
         else
             slug = get_slug title
 
@@ -31,10 +36,17 @@ $ ->
 
     updateRandom = ->
         update(true)
+        $randomSlug.prop('checked', true)
         return false
+
+    updateRandomSlug = ->
+        $slugInput.val '' #  reset the current slug
+        update(false)
+        return true
 
 
     # Bind events
     $randomizeButton.on "click", updateRandom
     $title.on "input", updateTitle
+    $randomSlug.on "click", updateRandomSlug
     update(false)
