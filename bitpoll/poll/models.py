@@ -173,6 +173,11 @@ class Poll(models.Model):
             return user.timezone
         return tz
 
+    def current_user_is_owner(self, request) -> bool:
+        if request.user.is_authenticated:
+            return self.user == request.user or (self.group and request.user in self.group.user_set.all())
+        return False
+
 
 POLL_RESULT_SORTING = (
     (Poll.ResultSorting.DATE, 'Date'),

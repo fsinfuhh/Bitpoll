@@ -46,7 +46,6 @@ def poll(request, poll_url):
     poll_votes = Vote.objects.filter(poll=current_poll).select_related('user')
     if current_poll.sorting == Poll.ResultSorting.NAME:
         poll_votes = poll_votes.order_by('name')
-        print(current_poll.sorting)
     elif current_poll.sorting == Poll.ResultSorting.DATE:
         poll_votes = poll_votes.order_by('date_created')
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
@@ -61,24 +60,27 @@ def poll(request, poll_url):
     invitations = current_poll.invitation_set.filter(vote=None)
     # The next block is limiting the visibility of the results
     summary = True
-    if current_poll.show_results in ("summary", "never"):  # TODO: should the owner see all?
-        if request.user.is_authenticated:
-            poll_votes = poll_votes.filter(user=request.user)
-            invitations = invitations.filter(user=request.user)
-        else:
-            poll_votes = []
-            invitations = []
+    if current_poll.current_user_is_owner(request):
+        messages.info(request, _("You can see the results because you are the owner of the Poll"))
+    else:
+        if current_poll.show_results in ("summary", "never"):
+            if request.user.is_authenticated:
+                poll_votes = poll_votes.filter(user=request.user)
+                invitations = invitations.filter(user=request.user)
+            else:
+                poll_votes = []
+                invitations = []
             messages.info(request, _("No individual results are shown due to Poll settings"))
-    elif current_poll.show_results in ("summary after vote", "complete after vote") \
-            and (request.user.is_anonymous or not poll_votes.filter(Q(user=request.user))):
-        poll_votes = []
-        messages.info(request, _("Results are only sown after (authenticated) Voting"))
-        summary = False
-    elif current_poll.show_results == "summary after vote":
-        poll_votes = poll_votes.filter(user=request.user)
-        messages.info(request, _("Only the Summary is shown due to the Poll settings"))
-    if current_poll.show_results == "never":
-        summary = False
+        elif current_poll.show_results in ("summary after vote", "complete after vote") \
+                and (request.user.is_anonymous or not poll_votes.filter(Q(user=request.user))):
+            poll_votes = []
+            messages.info(request, _("Results are only sown after (authenticated) Voting"))
+            summary = False
+        elif current_poll.show_results == "summary after vote":
+            poll_votes = poll_votes.filter(user=request.user)
+            messages.info(request, _("Only the Summary is shown due to the Poll settings"))
+        if current_poll.show_results == "never":
+            summary = False
 
     if not summary:
         messages.info(request, _("The summary is not shown due to the config of the Poll"))
