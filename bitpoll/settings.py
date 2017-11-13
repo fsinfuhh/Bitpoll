@@ -76,7 +76,7 @@ INSTALLED_APPS = [
     'django-simple-csp',
     'django_markdown',
     'widget_tweaks',
-    'static_precompiler',
+    'pipeline',
     'bitpoll.poll',
     'bitpoll.base',
     'bitpoll.invitations',
@@ -101,8 +101,106 @@ MIDDLEWARE = [
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'static_precompiler.finders.StaticPrecompilerFinder',
+    'pipeline.finders.PipelineFinder',
 ]
+
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+PIPELINE = {
+    'STYLESHEETS': {
+        'base': {
+            'source_filenames': (
+                'css/font-awesome.css',
+                'scss/main.scss',
+                'scss/poll.scss'
+            ),
+            'output_filename': 'css/base.css',
+        },
+        'base_print': {
+            'source_filenames': (
+                'css/print.css',
+            ),
+            'output_filename': 'css/base_print.css',
+            'extra_context': {
+                'media': 'print',
+            },
+        },
+        'base_screen': {
+            'source_filenames': (
+                'css/bootstrap.css',
+                'css/bootstrap-theme.css',
+                'css/jquery-ui.css',
+                'css/jquery-range.css',
+                'scss/form.scss',
+                'scss/action.scss',
+                'scss/slider.scss',
+                'scss/timeinput.scss',
+                'css/jquery.datetimepicker.css',
+            ),
+            'output_filename': 'css/base_screen.css',
+            'extra_context': {
+                'media': 'screen,projection',
+            },
+        },
+        'poll_edit': {
+            'source_filenames': (
+                'scss/calendar.scss',
+                'scss/iconpreview.scss',
+            ),
+            'output_filename': 'css/poll_edit.css',
+            'extra_context': {
+                'media': 'screen,projection',
+            },
+        },
+    },
+    'JAVASCRIPT': {
+        'base': {
+            'source_filenames': (
+                'js/lib/jquery.js',
+                'js/lib/bootstrap.js',
+            ),
+            'output_filename': 'js/base.js',
+        },
+        'create_poll': {
+            'source_filenames': (
+                'coffee/create.coffee',
+                'coffee/slug.coffee',
+            ),
+            'output_filename': 'js/index.js',
+        },
+        'poll_edit': {
+            'source_filenames': (
+                'js/poll_edit_universal_choices.js',
+                'js/poll_edit_choices.js',
+            ),
+            'output_filename': 'js/poll_edit.js',
+        },
+        'base_late': {
+            'source_filenames': (
+                'js/lib/jquery-ui.min.js',  # todo: update, missing images
+                'js/lib/jquery-range.min.js',  # TODO: part of jquerry-ui?
+                'js/lib/moment-with-locales.min.js',
+                'js/lib/mousetrap.min.js',
+                'js/main.js',
+                'js/util.js',
+                'js/custom-select.jquery.js',
+                'coffee/common.coffee',
+                'coffee/slider.coffee',
+                'coffee/vote.coffee',
+                'js/lib/jquery.datetimepicker.full.min.js',  # TODO: is this used? part of jquerry.ui
+
+            ),
+            'output_filename': 'js/base_late.js',
+        },
+    },
+    'COMPILERS': (
+        'libsasscompiler.LibSassCompiler',
+    ),
+    'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',  # TODO
+    'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',  # TODO
+}
+
+PIPELINE_ENABLED = False  # todo uglfyer mal ansehen
 
 ROOT_URLCONF = 'bitpoll.urls'
 

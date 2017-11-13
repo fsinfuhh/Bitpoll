@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load pipeline %}
 {% load i18n %}
 
 {% block title %}{% trans 'Create choice' %}{% endblock %}
@@ -122,5 +122,5 @@
 {% endblock %}
 
 {% block additionalJS %}
-    <script src="{% static 'js/poll_edit_universal_choices.js' %}" type="text/javascript"></script>
+    {% javascript 'poll_edit_universal_choices' %}
 {% endblock additionalJS %}

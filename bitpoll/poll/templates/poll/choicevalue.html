@@ -2,11 +2,11 @@
 {% load i18n %}
 {% load poll_filter vote_permissions %}
 {% load tz %}
-{% load static compile_static %}
+{% load pipeline %}
 {% load widget_tweaks %}
 {% block title %}{{ poll.title }}{% endblock %}
 {% block css %}
-    <link href="{% static 'scss/iconpreview.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
+    {% stylesheet 'poll_edit' %}
     {% include "poll/choice_style.html" %}
 {% endblock %}
 

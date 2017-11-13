@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load static %}{% load compile_static %}
+{% load pipeline %}
 {% load widget_tweaks %}
 {% load settings_value %}
 {% load csp %}
@@ -269,7 +269,6 @@
 {% endblock %}
 
 {% block additionalJS %}
-    <script src="{% static 'coffee/create.coffee'|compile %}"  type="text/javascript" ></script>
-    <script src="{% static 'coffee/slug.coffee'|compile %}"  type="text/javascript" ></script>
+    {% javascript 'create_poll' %}
     <script nonce="{% csp_js_nonce %}">$.datetimepicker.setLocale('{{ request.LANGUAGE_CODE }}');</script>
 {% endblock %}
