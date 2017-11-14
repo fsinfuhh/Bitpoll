@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load django_markdown django_markdown_static %}
-{% load poll_filter poll_permissions %}
+{% load poll_filter poll_permissions poll_watched%}
 {% load tz %}
 {% timezone poll|get_tz_name_no_date_utc:request.user %}
 <header class="poll">
@@ -10,7 +10,7 @@
         <h1>{{ poll.title }}{% if request.user.is_authenticated %}
             <form class="form form-inline pull-right" action="{% url 'poll_watch' poll.url %}" method="post">
                 {% csrf_token %}
-                {% if watched %}
+                {% if request.user|is_watching:poll %}
                     <button class="action noprint" type="submit"><i class="fa fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
                 {% else %}
                     <button class="action noprint" type="submit"><i class="fa fa-eye"></i> {% trans 'Watch Poll' %}</button>

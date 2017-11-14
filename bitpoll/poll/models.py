@@ -187,6 +187,15 @@ class Poll(models.Model):
             return self.is_owner(request.user)
         return False
 
+    def user_watches(self, user: BitpollUser) -> bool:
+        """
+        Check if the user is watching this poll
+
+        :param user: The User in Question
+        :return: True if the User watches the Poll
+        """
+        return user.is_authenticated and PollWatch.objects.filter(poll=self, user=user).count() > 0
+
 
 POLL_RESULT_SORTING = (
     (Poll.ResultSorting.DATE, 'Date'),

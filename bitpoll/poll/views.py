@@ -120,14 +120,7 @@ def poll(request, poll_url):
                 stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
         } for stat in stats]
 
-    poll_watched = False
     if request.user.is_authenticated:
-        try:
-            poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
-            poll_watched = bool(poll_watch)
-        except ObjectDoesNotExist:
-            pass
-
         # warn the user if the Timezone is not the same on the Poll and in his settings
         different_timezone = current_poll.timezone_name != request.user.timezone
         if current_poll.use_user_timezone and different_timezone:
@@ -158,7 +151,6 @@ def poll(request, poll_url):
         'max_score': max_score,
         'invitations': invitations if current_poll.show_invitations else [],
         'summary': summary,
-        'watched': poll_watched,
         'comment_form': CommentForm(),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
     })
@@ -273,7 +265,6 @@ def delete_comment(request, poll_url, comment_id):
 @login_required
 def watch(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
-    poll_watch = None
 
     if not current_poll.can_watch(request.user, request):
         messages.error(
@@ -281,12 +272,7 @@ def watch(request, poll_url):
         )
         return redirect('poll', poll_url)
 
-    try:
-        poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
-    except ObjectDoesNotExist:
-        pass
-
-    if poll_watch:
+    if current_poll.user_watches(request.user):
         poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
         poll_watch.delete()
     else:
