@@ -1,36 +1,33 @@
 import re
-from smtplib import SMTPRecipientsRefused
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.core.mail import send_mail
-from django.db import transaction, connection, IntegrityError
+from django.db import transaction, IntegrityError
 
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, get_object_or_404
 from django.db.models import F, Sum, Count, Q
-from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
-from django.utils.timezone import activate as tz_activate, localtime, now, override, make_naive, make_aware
+from django.utils.timezone import activate as tz_activate, localtime, now, make_naive, make_aware
 from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST
 
-from .forms import PollCreationForm, PollCopyForm, DateChoiceCreationForm, UniversalChoiceCreationForm, \
+from .forms import PollCopyForm, DateChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, CommentForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS, PollWatch
 from bitpoll.base.models import BitpollUser
 from bitpoll.invitations.models import Invitation
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from decimal import Decimal
 from pytz import all_timezones, timezone
-from django.utils.dateparse import parse_datetime, parse_date
+from django.utils.dateparse import parse_datetime
 
 
 def poll(request, poll_url):
@@ -295,16 +292,12 @@ def watch(request, poll_url):
     else:
         poll_watch = PollWatch(poll=current_poll, user=request.user)
         poll_watch.save()
-
     return redirect('poll', poll_url)
 
 
 def edit_choice(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
     if current_poll.type == 'universal':
@@ -327,10 +320,7 @@ def edit_date_choice(request, poll_url):
     If the input is not valid, the user is directed back for correction.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
     tz_activate('UTC')
@@ -402,10 +392,7 @@ def edit_dt_choice_date(request, poll_url):
     If the data is not valid, the user is directed back for correction.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
@@ -451,10 +438,7 @@ def edit_dt_choice_time(request, poll_url):
     If the times are missing, the user is directed back to the time-input-site.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
@@ -491,10 +475,7 @@ def edit_dt_choice_time(request, poll_url):
 
 def edit_dt_choice_combinations(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
@@ -555,10 +536,7 @@ def edit_universal_choice(request, poll_url):
     If the input is not valid, the user is directed back for correction.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
     if request.method == 'POST':
@@ -624,40 +602,32 @@ def edit_universal_choice(request, poll_url):
 def edit_choicevalues(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     choiceval_select = None
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
     form = ChoiceValueForm()
-    if request.method == 'POST': ###TODO: ### doppelte rechteprüfung
-        if not current_poll.can_edit(request.user):
-            messages.error(
-                request, _("You are not allowed to edit this Poll")
-            )
-        else:
-            if 'delete' in request.POST:
-                choiceval_id = request.POST.get('delete', None)
-                if choiceval_id:
-                    choiceval = get_object_or_404(ChoiceValue, id=choiceval_id)
-                    choiceval.deleted = True
-                    choiceval.save()
-                return redirect('poll_editchoicevalues', current_poll.url)
+    if request.method == 'POST':
+        if 'delete' in request.POST:
+            choiceval_id = request.POST.get('delete', None)
+            if choiceval_id:
+                choiceval = get_object_or_404(ChoiceValue, id=choiceval_id)
+                choiceval.deleted = True
+                choiceval.save()
+            return redirect('poll_editchoicevalues', current_poll.url)
 
-            if 'restore' in request.POST:
-                choiceval_id = request.POST.get('restore', None)
-                if choiceval_id:
-                    choiceval = get_object_or_404(ChoiceValue, id=choiceval_id)
-                    choiceval.deleted = False
-                    choiceval.save()
-                return redirect('poll_editchoicevalues', current_poll.url)
+        if 'restore' in request.POST:
+            choiceval_id = request.POST.get('restore', None)
+            if choiceval_id:
+                choiceval = get_object_or_404(ChoiceValue, id=choiceval_id)
+                choiceval.deleted = False
+                choiceval.save()
+            return redirect('poll_editchoicevalues', current_poll.url)
 
-            elif 'edit' in request.POST:
-                choiceval_id = request.POST.get('edit', None)
-                if choiceval_id:
-                    choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id)
-                    form = ChoiceValueForm(instance=choiceval_select)
+        elif 'edit' in request.POST:
+            choiceval_id = request.POST.get('edit', None)
+            if choiceval_id:
+                choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id)
+                form = ChoiceValueForm(instance=choiceval_select)
 
     return TemplateResponse(request, 'poll/choicevalue.html', {
         'poll': current_poll,
@@ -670,47 +640,39 @@ def edit_choicevalues(request, poll_url):
 @require_POST
 def edit_choicevalues_create(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll")
-        )
-    else:  # TODO exception-handling
-        form = ChoiceValueForm(request.POST)
-        if form.is_valid():
-            title = form.cleaned_data['title']
-            color = form.cleaned_data['color']
-            icon = form.cleaned_data['icon']
-            weight = form.cleaned_data['weight']
-            current_id = request.POST.get('choiceval_id', None)
+    form = ChoiceValueForm(request.POST)
+    if form.is_valid():
+        title = form.cleaned_data['title']
+        color = form.cleaned_data['color']
+        icon = form.cleaned_data['icon']
+        weight = form.cleaned_data['weight']
+        current_id = request.POST.get('choiceval_id', None)
 
-            if current_id:
-                current_choiceval = get_object_or_404(ChoiceValue, id=current_id, poll=current_poll)
-                current_choiceval.title = title
-                current_choiceval.color = color
-                current_choiceval.icon = icon
-                current_choiceval.weight = weight
+        if current_id:
+            current_choiceval = get_object_or_404(ChoiceValue, id=current_id, poll=current_poll)
+            current_choiceval.title = title
+            current_choiceval.color = color
+            current_choiceval.icon = icon
+            current_choiceval.weight = weight
 
-                current_choiceval.save()
-            else:
-                choice_val = ChoiceValue(title=title, icon=icon, color=color, weight=weight, poll=current_poll)
-                choice_val.save()
+            current_choiceval.save()
         else:
-            choiceval_id = request.POST.get('choiceval_id', None)
-            if choiceval_id:
-                choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id)
-            else:
-                choiceval_select = None
-            return TemplateResponse(request, 'poll/choicevalue.html', {
-                'poll': current_poll,
-                'form': form,
-                'choiceval_select': choiceval_select,
-            })
+            choice_val = ChoiceValue(title=title, icon=icon, color=color, weight=weight, poll=current_poll)
+            choice_val.save()
+    else:
+        choiceval_id = request.POST.get('choiceval_id', None)
+        if choiceval_id:
+            choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id)
+        else:
+            choiceval_select = None
+        return TemplateResponse(request, 'poll/choicevalue.html', {
+            'poll': current_poll,
+            'form': form,
+            'choiceval_select': choiceval_select,
+        })
     return redirect('poll_editchoicevalues', current_poll.url)
 
 
@@ -729,8 +691,8 @@ def delete(request, poll_url):
     if request.method == 'POST':
         if 'Delete' in request.POST:
             if request.user.is_authenticated:
-                # TODO restriction for deletion
-                if current_poll.can_edit(request.user):
+                # TODO restriction for deletion same as edit?
+                if current_poll.can_edit(request.user, request):
                     current_poll.delete()
                 return redirect('index')
             else:
@@ -1006,10 +968,7 @@ def copy(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     date_shift = 0
     error_msg = ""
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
     if request.method == 'POST':
@@ -1104,21 +1063,15 @@ def settings(request, poll_url):
     if request.user.is_authenticated:
         groups = Group.objects.filter(user=request.user)
 
-    if not current_poll.can_edit(request.user):
-        messages.error(
-            request, _("You are not allowed to edit this Poll.")
-        )
+    if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
     user_error = ""
-    error_msg = ""
     user = current_poll.user.username if current_poll.user else ""
     if request.method == 'POST':
         old_timezone_name = current_poll.timezone_name
         form = PollSettingsForm(request.POST, instance=current_poll)
-        if not current_poll.can_edit(request.user):
-            error_msg = _("You are not allowed to edit this Poll")
-        elif form.is_valid():
+        if form.is_valid():
             new_poll = form.save(commit=False)
             user = form.data.get('user', '')
             with transaction.atomic():
@@ -1151,7 +1104,6 @@ def settings(request, poll_url):
     tz_activate(current_poll.timezone_name)
 
     return TemplateResponse(request, 'poll/settings.html', {
-        'perm_error': error_msg,
         'form': form,
         'poll': current_poll,
         'page': 'Settings',

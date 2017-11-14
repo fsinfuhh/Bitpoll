@@ -3,9 +3,11 @@ from smtplib import SMTPRecipientsRefused
 
 from django.contrib import messages
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
 from django.db import models
+from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -66,7 +68,7 @@ class Poll(models.Model):
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
-    def can_vote(self, user: BitpollUser, request, is_edit: bool=False) -> bool:
+    def can_vote(self, user: BitpollUser, request: HttpRequest, is_edit: bool=False) -> bool:
         """
         Determine if the user is allowed to vote
 
@@ -93,13 +95,26 @@ class Poll(models.Model):
     def get_own_vote(self, user: BitpollUser):
         return Vote.objects.filter(user=user, poll=self)[0]
 
-    def can_edit(self, user: BitpollUser):
+    def can_edit(self, user: BitpollUser, request: HttpRequest=None) -> bool:
+        """
+        check if the user can edit this Poll
+
+        :param user: The user to edit the Poll
+        :param request:  The request object,
+                if this is set a error message will be emitted via the django.messages framework
+        :return:
+        """
         has_owner = self.group or self.user
         is_owner = self.is_owner(user)
 
-        return ((not has_owner) or is_owner) and user.is_authenticated or not has_owner
+        can_edit = ((not has_owner) or is_owner) and user.is_authenticated or not has_owner
+        if request and not can_edit:
+            messages.error(
+                request, _("You are not allowed to edit this Poll.")
+            )
+        return can_edit
 
-    def can_watch(self, user: BitpollUser, request):
+    def can_watch(self, user: BitpollUser, request: HttpRequest) -> bool:
         return (self.can_vote(user, request) or self.has_voted(user)) and self.show_results not in (
             'never', 'summary after vote', 'complete after vote') or self.has_voted(user) and self.show_results in (
             'summary after vote', 'complete after vote')
@@ -196,8 +211,8 @@ class Choice(models.Model):
     def get_title(self):
         return self.__str__()
 
-    def can_edit(self, user):
-        return self.poll.can_edit(user)
+    def can_edit(self, user: BitpollUser, request: HttpRequest=None) -> bool:
+        return self.poll.can_edit(user, request)
 
     def get_hierarchy(self, tz):
         if self.date:
@@ -221,8 +236,8 @@ class ChoiceValue(models.Model):
     def __str__(self):
         return u'ChoiceValue {}'.format(self.title)
 
-    def can_edit(self, user):
-        return self.poll.can_edit(user)
+    def can_edit(self, user: BitpollUser, request=None) -> bool:
+        return self.poll.can_edit(user, request)
 
     def votechoice_count(self):
         return self.poll.vote_set.filter(votechoice__value=self).count()

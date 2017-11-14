@@ -18,7 +18,7 @@ def invite(request, poll_url):
     error_msg = ""
 
     if request.method == 'POST':
-        if not current_poll.can_edit(request.user):
+        if not current_poll.can_edit(request.user, request):
             error_msg = "Not allowed to edit"
         else:
             if 'resend_all' in request.POST:
@@ -49,7 +49,7 @@ def invite(request, poll_url):
 def invitation_send(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     user_error = ""
-    if not current_poll.can_edit(request.user):
+    if not current_poll.can_edit(request.user, request):
         messages.error(
             request, _("You are not allowed to edit this Poll")
         )
