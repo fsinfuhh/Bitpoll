@@ -63,7 +63,6 @@ class Poll(models.Model):
         DATE = 0
         NAME = 1
 
-
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
@@ -96,22 +95,17 @@ class Poll(models.Model):
 
     def can_edit(self, user: BitpollUser):
         has_owner = self.group or self.user
-        is_owner = user == self.user
-        if self.group:
-            is_group_member = user in self.group.user_set.all()
-        else:
-            is_group_member = False
+        is_owner = self.is_owner(user)
 
-        return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated or not has_owner
+        return ((not has_owner) or is_owner) and user.is_authenticated or not has_owner
 
-    def can_listen(self, user: BitpollUser):
-        if self.public_listening:
-            return True
-        elif user.is_authenticated and user in self.invitation_set.all().values('user'):
-            return True
-        elif self.can_edit(user):
-            return True
-        return False
+    def can_watch(self, user: BitpollUser, request):
+        return (self.can_vote(user, request) or self.has_voted(user)) and self.show_results not in (
+            'never', 'summary after vote', 'complete after vote') or self.has_voted(user) and self.show_results in (
+            'summary after vote', 'complete after vote')
+
+    def is_owner(self, user: BitpollUser):
+        return self.user == user or (self.group and user in self.group.user_set.all())
 
     def get_icon(self):
         if self.type == 'universal':
@@ -175,7 +169,7 @@ class Poll(models.Model):
 
     def current_user_is_owner(self, request) -> bool:
         if request.user.is_authenticated:
-            return self.user == request.user or (self.group and request.user in self.group.user_set.all())
+            return self.is_owner(request.user)
         return False
 
 

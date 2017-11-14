@@ -2,6 +2,7 @@ import re
 from smtplib import SMTPRecipientsRefused
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -272,13 +273,14 @@ def delete_comment(request, poll_url, comment_id):
 
 
 @require_POST
+@login_required
 def watch(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     poll_watch = None
 
-    if not current_poll.can_listen(request.user):
+    if not current_poll.can_watch(request.user, request):
         messages.error(
-            request, _("You are not allowed to listen.")
+            request, _("You are not allowed to watch this poll.")
         )
         return redirect('poll', poll_url)
 
@@ -628,14 +630,8 @@ def edit_choicevalues(request, poll_url):
         )
         return redirect('poll', poll_url)
 
-    if not current_poll.can_listen(request.user):
-        messages.error(
-            request, _("You are not allowed to listen.")
-        )
-        return redirect('poll', poll_url)
-
     form = ChoiceValueForm()
-    if request.method == 'POST':
+    if request.method == 'POST': ###TODO: ### doppelte rechteprüfung
         if not current_poll.can_edit(request.user):
             messages.error(
                 request, _("You are not allowed to edit this Poll")
@@ -811,7 +807,7 @@ def vote(request, poll_url, vote_id=None):
             messages.error(
                 request, _("The Name is longer than the allowed name length of 80 characters")
             )
-            return redirect('poll', poll_url)
+            return redirect('poll', poll_url) #todo: das macht keinen sinn, warum nicht verbessern?
 
         current_vote.anonymous = 'anonymous' in request.POST
 
@@ -1010,13 +1006,13 @@ def copy(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
     date_shift = 0
     error_msg = ""
-    if not current_poll.can_listen(request.user):
+    if not current_poll.can_edit(request.user):
         messages.error(
-            request, _("You are not allowed to listen.")
+            request, _("You are not allowed to edit this poll.")
         )
         return redirect('poll', poll_url)
 
-    if request.method == 'POST' and current_poll.can_listen(request.user):
+    if request.method == 'POST':
         form = PollCopyForm(request.POST)
 
         if form.is_valid():
