@@ -877,9 +877,9 @@ def vote_assign(request, poll_url, vote_id):
             username = request.POST.get('username').strip()
             try:
                 user = BitpollUser.objects.get(username=username)
-                if not current_poll.vote_set.filter(Q (user=request.user)):
+                if not current_poll.vote_set.filter(Q(user=user)) and current_poll.one_vote_per_user:
                     current_vote.user = user
-                    current_vote.name = user.get_displayname ()
+                    current_vote.name = user.get_displayname()
                     current_vote.assigned_by = request.user
                     current_vote.save()
                     return redirect('poll', poll_url)

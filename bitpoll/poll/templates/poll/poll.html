@@ -55,16 +55,16 @@
                                     {% if vote.comment %}
                                         <div class='comment'>{{ vote.comment|force_escape|force_escape }}</div>
                                     {% endif %}
-                                    {% if vote.assigned %}
+                                    {% if vote.assigned_by %}
                                     <div class='assigned'>
-                                        {% blocktrans %}Assigned after voting by {{ vote.assigned_by.name|force_escape|force_escape }} {% endblocktrans %}</div>
+                                        {% trans 'Assigned after voting by' %} {{ vote.assigned_by.get_displayname|force_escape|force_escape }}</div>
                                     {% endif %}">
-                                {% if vote.comment or vote.assigned %}
+                                {% if vote.comment or vote.assigned_by %}
                                     <div class="pull-left vote-extra-icons">
                                         {% if vote.comment %}
                                             <i class="fa fa-comment-o"></i>
                                         {% endif %}
-                                        {% if vote.assigned %}
+                                        {% if vote.assigned_by %}
                                             <i class="fa fa-tag"></i>
                                         {% endif %}
                                     </div>
