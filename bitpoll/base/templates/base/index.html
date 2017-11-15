@@ -105,7 +105,11 @@
                         <div class="col-md-12">
                             <div id="slug" class="form-group">
                                 <div class="slug-right">
-                                    <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>{% trans 'Randomize' %}</span>
+                                    <div class="checkbox-inline">
+                                        <input type="checkbox" name="random_slug" value="test" id="random_slug">
+                                        <label for="random_slug">{% trans 'Randomize Urls' %}</label>
+                                    </div>
+                                    <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>{% trans 'Randomize Now' %}</span>
                                     </button>
                                 </div>
                                 <label for="slug">URL name</label>

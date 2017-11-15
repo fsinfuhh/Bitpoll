@@ -14,15 +14,6 @@
 {% block content %}
         {% include 'poll/poll_header.html' %}
         <div class="container">
-        {% if perm_error %}
-            <div class="form-errors">
-                <div class="alert alert-danger">
-                    <div class="container">
-                        <i class="fa fa-times"></i>{{ perm_error }}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
 
     <form action="{% url 'poll_settings' poll.url %}" method="post">
     {% csrf_token %}

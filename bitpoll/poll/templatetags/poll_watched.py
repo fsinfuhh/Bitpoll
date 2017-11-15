@@ -6,4 +6,4 @@ register = template.Library()
 
 @register.filter(name="is_watching")
 def is_watching(user: BitpollUser, poll: Poll):
-    return PollWatch.objects.filter(user=user, poll=poll).count() > 0
+    return poll.user_watches(user)

@@ -3,6 +3,7 @@ from smtplib import SMTPRecipientsRefused
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.db import models
+from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import translation
@@ -50,8 +51,8 @@ class Invitation(models.Model):
                 request, _("You have send an Email for {} in the last 12 Hours".format(self.user.username))
             )
 
-    def can_edit(self, user: BitpollUser):
-        return self.poll.can_edit(user)
+    def can_edit(self, user: BitpollUser, request: HttpRequest=None):
+        return self.poll.can_edit(user, request)
 
     def __str__(self):
         return u'Invitation {}'.format(self.id)

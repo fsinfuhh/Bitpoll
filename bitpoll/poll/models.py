@@ -3,9 +3,11 @@ from smtplib import SMTPRecipientsRefused
 
 from django.contrib import messages
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
 from django.db import models
+from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -50,7 +52,7 @@ class Poll(models.Model):
     require_invitation = models.BooleanField(default=False)
     show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete")
     send_mail = models.BooleanField(default=False)
-    one_vote_per_user = models.BooleanField(default=False)
+    one_vote_per_user = models.BooleanField(default=True)
     allow_comments = models.BooleanField(default=True)
     show_invitations = models.BooleanField(default=True)
     timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
@@ -63,11 +65,10 @@ class Poll(models.Model):
         DATE = 0
         NAME = 1
 
-
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
-    def can_vote(self, user: BitpollUser, request, is_edit: bool=False) -> bool:
+    def can_vote(self, user: BitpollUser, request: HttpRequest, is_edit: bool=False) -> bool:
         """
         Determine if the user is allowed to vote
 
@@ -94,24 +95,32 @@ class Poll(models.Model):
     def get_own_vote(self, user: BitpollUser):
         return Vote.objects.filter(user=user, poll=self)[0]
 
-    def can_edit(self, user: BitpollUser):
+    def can_edit(self, user: BitpollUser, request: HttpRequest=None) -> bool:
+        """
+        check if the user can edit this Poll
+
+        :param user: The user to edit the Poll
+        :param request:  The request object,
+                if this is set a error message will be emitted via the django.messages framework
+        :return:
+        """
         has_owner = self.group or self.user
-        is_owner = user == self.user
-        if self.group:
-            is_group_member = user in self.group.user_set.all()
-        else:
-            is_group_member = False
+        is_owner = self.is_owner(user)
 
-        return ((not has_owner) or is_group_member or is_owner) and user.is_authenticated or not has_owner
+        can_edit = ((not has_owner) or is_owner) and user.is_authenticated or not has_owner
+        if request and not can_edit:
+            messages.error(
+                request, _("You are not allowed to edit this Poll.")
+            )
+        return can_edit
 
-    def can_listen(self, user: BitpollUser):
-        if self.public_listening:
-            return True
-        elif user.is_authenticated and user in self.invitation_set.all().values('user'):
-            return True
-        elif self.can_edit(user):
-            return True
-        return False
+    def can_watch(self, user: BitpollUser, request: HttpRequest) -> bool:
+        return (self.can_vote(user, request) or self.has_voted(user)) and self.show_results not in (
+            'never', 'summary after vote', 'complete after vote') or self.has_voted(user) and self.show_results in (
+            'summary after vote', 'complete after vote')
+
+    def is_owner(self, user: BitpollUser):
+        return self.user == user or (self.group and user in self.group.user_set.all())
 
     def get_icon(self):
         if self.type == 'universal':
@@ -173,6 +182,20 @@ class Poll(models.Model):
             return user.timezone
         return tz
 
+    def current_user_is_owner(self, request) -> bool:
+        if request.user.is_authenticated:
+            return self.is_owner(request.user)
+        return False
+
+    def user_watches(self, user: BitpollUser) -> bool:
+        """
+        Check if the user is watching this poll
+
+        :param user: The User in Question
+        :return: True if the User watches the Poll
+        """
+        return user.is_authenticated and PollWatch.objects.filter(poll=self, user=user).count() > 0
+
 
 POLL_RESULT_SORTING = (
     (Poll.ResultSorting.DATE, 'Date'),
@@ -197,8 +220,8 @@ class Choice(models.Model):
     def get_title(self):
         return self.__str__()
 
-    def can_edit(self, user):
-        return self.poll.can_edit(user)
+    def can_edit(self, user: BitpollUser, request: HttpRequest=None) -> bool:
+        return self.poll.can_edit(user, request)
 
     def get_hierarchy(self, tz):
         if self.date:
@@ -222,8 +245,8 @@ class ChoiceValue(models.Model):
     def __str__(self):
         return u'ChoiceValue {}'.format(self.title)
 
-    def can_edit(self, user):
-        return self.poll.can_edit(user)
+    def can_edit(self, user: BitpollUser, request=None) -> bool:
+        return self.poll.can_edit(user, request)
 
     def votechoice_count(self):
         return self.poll.vote_set.filter(votechoice__value=self).count()
