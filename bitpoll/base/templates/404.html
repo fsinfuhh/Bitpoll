@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    {% url 'base_problems' as problemurl %}
+<div class="container">
+<h1>{% trans 'Page Not Found' %}</h1>
+<p>{% trans 'Unfortunally this side was not found on the server' %}</p>
+    <p>{% blocktrans %}If you think this is an error please contact us at <a href="{{ problemurl }}"> Problems</a>{%endblocktrans %}</p>
+</div>
+{% endblock %}
