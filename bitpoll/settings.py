@@ -129,8 +129,7 @@ PIPELINE = {
             'source_filenames': (
                 'css/bootstrap.css',
                 'css/bootstrap-theme.css',
-                'css/jquery-ui.css',
-                'css/jquery-range.css',
+                # 'css/jquery-range.css',  # this belongs to commented out JS class
                 'scss/form.scss',
                 'scss/action.scss',
                 'scss/slider.scss',
@@ -177,8 +176,7 @@ PIPELINE = {
         },
         'base_late': {
             'source_filenames': (
-                'js/lib/jquery-ui.min.js',  # todo: update, missing images
-                'js/lib/jquery-range.min.js',  # TODO: part of jquerry-ui?
+                #'js/lib/jquery-range.min.js',  # TODO: is this needet for the numeric polls?
                 'js/lib/moment-with-locales.min.js',
                 'js/lib/mousetrap.min.js',
                 'js/main.js',
@@ -187,7 +185,7 @@ PIPELINE = {
                 'coffee/common.coffee',
                 'coffee/slider.coffee',
                 'coffee/vote.coffee',
-                'js/lib/jquery.datetimepicker.full.min.js',  # TODO: is this used? part of jquerry.ui
+                'js/lib/jquery.datetimepicker.full.min.js',
 
             ),
             'output_filename': 'js/base_late.js',
@@ -195,6 +193,7 @@ PIPELINE = {
     },
     'COMPILERS': (
         'libsasscompiler.LibSassCompiler',
+        'pipeline.compilers.coffee.CoffeeScriptCompiler',
     ),
     'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',  # TODO
     'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',  # TODO
