@@ -1,0 +1,7 @@
+django>=1.11,<1.12
+django-widget-tweaks
+django-markdown-app
+pytz
+django-simple-csp
+libsasscompiler
+django-pipeline

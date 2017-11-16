@@ -35,10 +35,42 @@ Run Testserver:
 ./manage.py runserver
 ```
 
-In production Senty is used for error reporting:
+# Production
+
+In production Senty is used for error reporting.
+django-auth-ldap is used vor login via ldap
+uwsgi to serve the app
 
 ```
-pip install raven
+pip install -r requirements-production.txt
 ```
 
-for usage with LDAP install django-auth-ldap and configure it (example in `settings_local.py`)
+Configure examples are in `settings_local.py`
+
+our used uwsgi config can be found at
+<https://github.com/fsinfuhh/mafiasi-rkt/blob/master/bitpoll/uwsgi-bitpoll.ini>
+
+For Production systems it is nessesarry to run
+
+```bash
+./manage.py compilemessages
+./manage.py collectstatic
+```
+
+# Management of Dependencies
+
+We use pip-tools to manage the dependencies.
+After modification or the requirements*.in files or for updates of packages run
+
+```bash
+pip-compile --upgrade --output-file requirements.txt requirements.in
+pip-compile --upgrade --output-file requirements-production.txt  requirements-production.in requirements.in
+```
+
+to sync your enviroment with the requirements.tyt just run
+
+```bash
+pip-sync
+```
+
+this will install/deinstall dependencies so that the virtualenv is matching the requirements file
