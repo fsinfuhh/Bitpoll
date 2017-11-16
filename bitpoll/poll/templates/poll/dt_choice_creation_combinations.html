@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load compile_static %}
-{% load static %}
+{% load pipeline %}
 
 {% block title %}Create choice{% endblock %}
 
 {% block css %}
-    <link href="{% static 'scss/calendar.scss'|compile %}" rel="stylesheet" type="text/css" media="screen"/>
+    {% stylesheet 'poll_edit' %}
 {% endblock %}
 
 {% block content %}
@@ -77,5 +76,5 @@
 
 
 {% block additionalJS %}
-<script lang="javascript" type="text/javascript" src="{% static 'js/poll_edit_choices.js' %}"></script>
+    {% javascript 'poll_edit' %}
 {% endblock %}
