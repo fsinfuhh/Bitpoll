@@ -155,7 +155,7 @@ PIPELINE = {
     'JAVASCRIPT': {
         'base': {
             'source_filenames': (
-                'js/lib/jquery.js',
+                'js/lib/jquery-3.2.1.js',
                 'js/lib/bootstrap.js',
             ),
             'output_filename': 'js/base.js',
@@ -255,6 +255,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'base.BitpollUser'
 
+CSRF_COOKIE_HTTPONLY = True
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

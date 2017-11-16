@@ -91,8 +91,9 @@ function updateDateTimeList() {
     });
 
     // $(".date-remove-button, .time-remove-button").tooltip({"placement": "right"});
-
-    calendarSetDate(calendar.data("date"));
+    if (calendar.data("date")) {
+        calendarSetDate(calendar.data("date"));
+    }
 }
 
 function addTime(rawTime) {
@@ -210,12 +211,12 @@ function initCalendar(calendar) {
     calendarSetDate(date);
 
     $("#calendar-next-month").click(function() {
-        calendarSetDate(calendar.data("date").add("months", 1));
+        calendarSetDate(calendar.data("date").add(1, "months"));
         return false;
     });
 
     $("#calendar-prev-month").click(function() {
-        calendarSetDate(calendar.data("date").subtract("months", 1));
+        calendarSetDate(calendar.data("date").subtract(1, "months"));
         return false;
     });
 
@@ -223,7 +224,7 @@ function initCalendar(calendar) {
         toggleDay($(this));
         return false;
     }).on("click", "button.week", function() {
-        var off = $(this).closest("tr").find("button.day.default").size() > 0;
+        var off = $(this).closest("tr").find("button.day.default").length > 0;
         var cls = off ? ".default" : ".success";
 
         $(this).closest("tr").find("button.day" + cls).each(function() {
@@ -293,7 +294,7 @@ function makeWeek(week) {
             var datetime = date.format("YYYY-MM-DD");
             // alert(datetime);
             var enabled = dates.contains(datetime);
-            var past = date.isBefore(moment());
+            past = date.isBefore(moment());
             var t = (past && !enabled ? 'span' : 'button');
             btn = '<' + t + ' class="day ' + (enabled ? 'action icon success' : (past ? '' : 'action icon default')) + '">' + week[i] + '</' + t + '>';
         }
