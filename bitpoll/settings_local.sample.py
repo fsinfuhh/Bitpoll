@@ -20,6 +20,10 @@ DEBUG = True
 #        ]
 INSTALLED_APPS_LOCAL = []
 
+# Compress the JS and CSS files, for more Options see https://django-pipeline.readthedocs.io/en/latest/compressors.html
+# the Compressor have to be installed in the system
+#PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
+#PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.cssmin.CSSMinCompressor'
 
 #LANGUAGE_CODE = 'en-us'
 #TIME_ZONE = 'Europe/Berlin'

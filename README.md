@@ -13,12 +13,6 @@ Get the code:
 git clone https://github.com/fsinfuhh/Bitpoll
 ~~~
 
-Install the System Dependencies:
-
-```
-apt install coffeescript ruby-sass python3-dev
-```
-
 Generate a Python virtualenv and install dependencies:
 
 ```
