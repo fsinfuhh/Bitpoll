@@ -324,3 +324,4 @@ PUBLIC_POLLS = True
 from .settings_local import *
 
 INSTALLED_APPS += INSTALLED_APPS_LOCAL
+PIPELINE.update(PIPELINE_LOCAL)

@@ -357,7 +357,7 @@ class PollWatch(models.Model):
             'user': username if self.poll.show_results == "complete" else _("by an user"),
             'poll': self.poll.title,
             'link': link,
-            'hide_participants': self.poll.hide_participants
+            'hide_participants': self.poll.hide_participants  # TODO: simplify merge with usernameshadowing above
         })
         try:
             send_mail(_("New votes for {}".format(self.poll.title)), email_content, None,

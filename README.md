@@ -44,7 +44,7 @@ uwsgi to serve the app
 Install Dependencies for Production:
 
 ```bash
-sudo apt install g++ make python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev
+sudo apt install g++ make python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev
 ```
 
 Install Python Dependencies
