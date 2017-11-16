@@ -162,8 +162,8 @@ PIPELINE = {
         },
         'create_poll': {
             'source_filenames': (
-                'coffee/create.coffee',
-                'coffee/slug.coffee',
+                'js/create.js',
+                'js/slug.js',
             ),
             'output_filename': 'js/index.js',
         },
@@ -182,9 +182,9 @@ PIPELINE = {
                 'js/main.js',
                 'js/util.js',
                 'js/custom-select.jquery.js',
-                'coffee/common.coffee',
-                'coffee/slider.coffee',
-                'coffee/vote.coffee',
+                'js/common.js',
+                'js/slider.js',
+                'js/vote.js',
                 'js/lib/jquery.datetimepicker.full.min.js',
 
             ),
@@ -193,7 +193,6 @@ PIPELINE = {
     },
     'COMPILERS': (
         'libsasscompiler.LibSassCompiler',
-        'pipeline.compilers.coffee.CoffeeScriptCompiler',
     ),
     'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',  # TODO
     'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',  # TODO

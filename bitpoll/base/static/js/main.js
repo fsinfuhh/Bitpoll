@@ -8,7 +8,7 @@ $(document).ready(function() {
 
     $(".btn-js-back").click(function() {
         history.back();
-    })
+    });
 
     // Enable bootstrap popovers
     $('[data-toggle="popover"]').popover({
