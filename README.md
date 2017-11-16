@@ -41,6 +41,14 @@ In production Senty is used for error reporting.
 django-auth-ldap is used vor login via ldap
 uwsgi to serve the app
 
+Install Dependencies for Production:
+
+```bash
+sudo apt install g++ make python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev
+```
+
+Install Python Dependencies
+
 ```
 pip install -r requirements-production.txt
 ```
