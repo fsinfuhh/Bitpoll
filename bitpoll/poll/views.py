@@ -58,7 +58,7 @@ def poll(request, poll_url):
     invitations = current_poll.invitation_set.filter(vote=None)
     # The next block is limiting the visibility of the results
     summary = True
-    if current_poll.current_user_is_owner(request):
+    if current_poll.current_user_is_owner(request) and current_poll.show_results != "complete":
         messages.info(request, _("You can see the results because you are the owner of the Poll"))
     else:
         if current_poll.show_results in ("summary", "never"):

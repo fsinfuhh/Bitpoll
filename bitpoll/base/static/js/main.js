@@ -87,7 +87,7 @@ $(document).ready(function() {
     });
 
     $('#datetimepicker').datetimepicker({
-        format: 'd.m.Y H:i'
+        format: 'Y-m-d H:i' //TODO: can we localize the format?
     });
 
 });
