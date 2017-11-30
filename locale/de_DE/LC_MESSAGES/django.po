@@ -1440,7 +1440,7 @@ msgstr ""
 
 #: bitpoll/poll/templates/poll/settings.html:70
 msgid "Timezone"
-msgstr "Zeitzohne"
+msgstr "Zeitzone"
 
 #: bitpoll/poll/templates/poll/settings.html:82
 msgid "Translate all times to the users timezone"
