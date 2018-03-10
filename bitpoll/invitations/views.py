@@ -67,7 +67,7 @@ def invitation_send(request, poll_url):
             except ObjectDoesNotExist:
                 try:
                     group = Group.objects.get(name=receiver)
-                    for group_user in group.user_set:
+                    for group_user in group.user_set.all():
                         try:
                             invitation = Invitation(user=group_user, poll=current_poll, date_created=now(),
                                                     creator=request.user, vote=None)
