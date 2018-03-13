@@ -1444,7 +1444,7 @@ msgstr "Zeitzone"
 
 #: bitpoll/poll/templates/poll/settings.html:82
 msgid "Translate all times to the users timezone"
-msgstr ""
+msgstr "Zeiten in der Zeitzone des Benutzers anzeigen"
 
 #: bitpoll/poll/templates/poll/settings.html:98
 msgid "Save changes"
@@ -1468,7 +1468,7 @@ msgstr "Zeige Einladungen als leere Stimmen an"
 
 #: bitpoll/poll/templates/poll/settings.html:138
 msgid "hide participants"
-msgstr ""
+msgstr "Teilnehmerliste verbergen"
 
 #: bitpoll/poll/templates/poll/settings.html:147
 msgid ""
