@@ -4,18 +4,19 @@
 #
 #    pip-compile --output-file requirements-production.txt requirements-production.in requirements.in
 #
-django-auth-ldap==1.2.16
-django-markdown-app==0.11.1
-django-pipeline==1.6.13
+django-auth-ldap==1.4.0
+django-markdown-app==0.9.4.1
+django-pipeline==1.6.14
 django-simple-csp==0.2.dev1
-django-widget-tweaks==1.4.1
-django==1.11.7
-futures==3.1.1            # via django-pipeline
-libsass==0.13.4           # via libsasscompiler
+django-widget-tweaks==1.4.2
+django==2.0.4
+libsass==0.14.2           # via libsasscompiler
 libsasscompiler==0.1.5
-markdown==2.6.9           # via django-markdown-app
-pyldap==2.4.37
-pytz==2017.3
-raven==6.3.0
+markdown==2.6.11          # via django-markdown-app
+pyasn1-modules==0.2.1     # via python-ldap
+pyasn1==0.4.2             # via pyasn1-modules, python-ldap
+python-ldap==3.0.0        # via django-auth-ldap
+pytz==2018.3
+raven==6.6.0
 six==1.11.0               # via libsass
-uwsgi==2.0.15
+uwsgi==2.0.17

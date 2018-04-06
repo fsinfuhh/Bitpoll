@@ -6,7 +6,7 @@
 SECRET_KEY = '...'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ## If Bitpoll is served via HTTPS enable the next two options
 #SESSION_COOKIE_SECURE = True

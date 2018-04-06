@@ -1,12 +1,12 @@
 from smtplib import SMTPRecipientsRefused
 
 from django.core import signing
-from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from django.template.response import TemplateResponse
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import login
 from django.contrib.auth.forms import PasswordChangeForm
