@@ -2,6 +2,14 @@ var times = [];
 var dates = [];
 var calendar;
 
+
+/* ========================================================================== */
+/* Checkbox stuff */
+
+function updateCheckbox(e) {
+    $(this).closest(".checkbox-cell").removeClass("on off").addClass($(this).prop("checked") ? "on" : "off");
+}
+
 $(function() {
     calendar = $("#calendar");
 
@@ -65,12 +73,6 @@ $(function() {
 
 });
 
-/* ========================================================================== */
-/* Checkbox stuff */
-
-function updateCheckbox(e) {
-    $(this).closest(".checkbox-cell").removeClass("on off").addClass($(this).prop("checked") ? "on" : "off");
-}
 
 /* ========================================================================== */
 /* Time and date stuff */
