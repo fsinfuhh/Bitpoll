@@ -124,7 +124,7 @@ def tecnical(request):
 
 def problems(request):
     team_email = settings.TEAM_EMAIL
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         team_email = team_email.replace(u'@', u' (AT) ')
     return TemplateResponse(request, 'base/problems.html', {
         'team_email': team_email
