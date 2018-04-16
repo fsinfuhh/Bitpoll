@@ -6,9 +6,9 @@ var calendar;
 /* ========================================================================== */
 /* Checkbox stuff */
 
-function updateCheckbox(e) {
+window.updateCheckbox = function(e) {
     $(this).closest(".checkbox-cell").removeClass("on off").addClass($(this).prop("checked") ? "on" : "off");
-}
+};
 
 $(function() {
     calendar = $("#calendar");
