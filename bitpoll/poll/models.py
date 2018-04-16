@@ -265,7 +265,7 @@ class Comment(models.Model):
     def can_edit(self, user: BitpollUser) -> bool:
         is_owner = user == self.user
 
-        return user.is_authenticated() and is_owner
+        return user.is_authenticated and is_owner
 
     def can_delete(self, user: BitpollUser) -> bool:
         is_poll_owner = self.poll.user == user
