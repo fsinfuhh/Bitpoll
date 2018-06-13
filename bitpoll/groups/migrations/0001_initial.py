@@ -19,9 +19,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('date_invited', models.DateTimeField(default=django.utils.timezone.now)),
-                ('group', models.ForeignKey(related_name=b'invitations', to='auth.Group', on_delete=models.CASCADE)),
-                ('invited_by', models.ForeignKey(related_name=b'given_invitations', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
-                ('invitee', models.ForeignKey(related_name=b'invitations', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
+                ('group', models.ForeignKey(related_name='invitations', to='auth.Group', on_delete=models.CASCADE)),
+                ('invited_by', models.ForeignKey(related_name='given_invitations', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
+                ('invitee', models.ForeignKey(related_name='invitations', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -32,8 +32,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('public_members', models.BooleanField(default=False)),
-                ('admins', models.ManyToManyField(related_name=b'admin_of', to=settings.AUTH_USER_MODEL)),
-                ('group', models.OneToOneField(related_name=b'properties', to='auth.Group', on_delete=models.CASCADE)),
+                ('admins', models.ManyToManyField(related_name='admin_of', to=settings.AUTH_USER_MODEL)),
+                ('group', models.OneToOneField(related_name='properties', to='auth.Group', on_delete=models.CASCADE)),
             ],
             options={
             },
