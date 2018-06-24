@@ -2,28 +2,40 @@
 {% load i18n %}
 {% load static %}
 {% load csp %}
-{% load raven %} {# TODO: nur wen raven/sentry aktiviert ist #}
+{% load friendly_loader %}
+{% friendly_load raven %}
+
 {% block wtitle %}{% block ptitle %}{% trans "Internal server error" %}{% endblock %}{% endblock %}
 {% block headJS %}<script src="{% static 'js/lib/raven.min.js' %}"></script>{% endblock %}
-{% sentry_public_dsn 'https' %}
+
+{% if_has_tag sentry_public_dsn %}
+        {% sentry_public_dsn 'https' %}
+{% endif_has_tag %}
+
 {% block content %}
-<script nonce="{% csp_js_nonce %}">Raven.config('{% sentry_public_dsn %}').install()</script>
+    {% if_has_tag sentry_public_dsn %}
+        {% if request.sentry %}
+            <script nonce="{% csp_js_nonce %}">Raven.config('{% sentry_public_dsn %}').install()</script>
+        {% endif %}
+    {% endif_has_tag %}
 {% url 'base_problems' as problems_url %}
     <div class="container"><section class="section">
     <div class="col-md-5">
     <h1>Internal Server Error (500)</h1>
 <p>{% blocktrans %}We're sorry, but we didn't expect this to happen. Our error reporting tool should have sent an email to us with some technical details. Please try again later. If the problem persists, see our <a href="{{ problems_url }}">problem reporting page</a>.{% endblocktrans %}</p>
-    {% if request.sentry.id %}
-        {% with request.sentry.id as errorid %}
-            <p>{% blocktrans %}We have recorded the error under the Identifier {{ errorid }}.{% endblocktrans %}</p>
-            <script nonce="{% csp_js_nonce %}">
-                Raven.showReportDialog({
-                    eventId: '{{ errorid }}',
-                    dsn: '{% sentry_public_dsn %}'
-                });{# TODO: User ausfüllen wen angemeldet? #}
-            </script>
-        {% endwith %}
-    {% endif %}
+    {% if_has_tag sentry_public_dsn %}
+        {% if request.sentry.id %}
+            {% with request.sentry.id as errorid %}
+                <p>{% blocktrans %}We have recorded the error under the Identifier {{ errorid }}.{% endblocktrans %}</p>
+                <script nonce="{% csp_js_nonce %}">
+                    Raven.showReportDialog({
+                        eventId: '{{ errorid }}',
+                        dsn: '{% sentry_public_dsn %}'
+                    });{# TODO: User ausfüllen wen angemeldet? #}
+                </script>
+            {% endwith %}
+        {% endif %}
+    {% endif_has_tag %}
     </div><div class="col-md-offset-1 col-md-5"><img src="{% static 'gfx/server-Bit.png' %}"></div>
 </section> </div>
 {% endblock %}
