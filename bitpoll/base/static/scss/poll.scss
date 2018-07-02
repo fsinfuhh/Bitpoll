@@ -46,11 +46,6 @@ table.poll {
     font-size: 9pt;
 }
 
-table.vote label {
-    margin-top: 8px;
-}
-
-
 .poll .choice-text,
 .poll .choice-sum,
 .vote .choice-text {
@@ -157,7 +152,6 @@ table.vote label {
 }
 
 
-td.vote-choice span,
 td.control {
     text-shadow: 0px 1px 6px rgba(0, 0, 0, 0.7);
 }
@@ -177,17 +171,13 @@ td.control {
     margin-right: 1em;
 }
 
-td.off {
-    background-color: #D6D6D6 !important;
-}
-
-td.off, td.none {
-    text-shadow: none;
-}
-
 table.poll td.none {
     border: 1px solid #DDD !important;
     color: #DDD;
+    background-color: #fff !important;
+    span {
+      padding: 7px 0 !important;
+    }
 }
 
 table.poll td.numeric {
@@ -198,6 +188,12 @@ table.poll td.numeric {
 
 .vote-comment span:hover {
     color: black;
+}
+
+td.vote-comment {
+    display: block;
+    max-width: 300px;
+    padding: 2px !important;
 }
 
 .vote-comment input {
@@ -397,4 +393,27 @@ td.vote-header {
             display: none;
         }
     }
+}
+
+.table tbody > tr > td.vote-choice {
+    padding: 0;
+    background-color: #D6D6D6;
+    label, span {
+        //width: 100%;
+        //height: 100%;
+        cursor: pointer;
+        padding: 8px 0;
+        margin: 0;
+        display: block;
+        line-height: 1.428571429; // weil bootstrap
+    }
+
+    input[type=radio] {
+        display: none;
+
+    }
+}
+
+td.vote-choice span, td.control {
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
 }

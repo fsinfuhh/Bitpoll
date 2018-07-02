@@ -45,7 +45,7 @@
                     {% endfor %}
                 </tr>
                 {% for row, choice, comment, vote in choices_matrix %}
-                    <tr class="vote" data-vote-choice="{{ choice.id }}">
+                    <tr class="vote">
                         {% for item in row %}
                             {% if item.0 != None %}
                                 <td class="choice-group" colspan="{{ item.1 }}" rowspan="{{ item.2 }}">
@@ -54,16 +54,13 @@
                             {% endif %}
                         {% endfor %}
                         <td class="vote-choice-form">
-                            {% for value in values %}
-                                <input type="radio" value="{{ value.id }}" name="{{ choice.id }}" title=""
+                        {% for value in values %}
+                            <td class="vote-choice control bg-{{ value.color }}" title="{{ value.title }}">
+                            <input type="radio" id="{{ choice.id }}_{{ value.id }}" value="{{ value.id }}" name="{{ choice.id }}" title=""
                                     {% if value == vote %} checked {% endif %}
                                 />
-                                {{ value.title }}
-                            {% endfor %}</td>
-                        {% for value in values %}
-                            <td class="vote-choice control {% if value != vote %}off{% endif %} script-only bg-{{ value.color }}"
-                                data-choice="{{ value.id }}" title="{{ value.title }}">
-                                <span class="fa fa-{{ value.icon }}"></span></td>
+                                <label for="{{ choice.id }}_{{ value.id }}" class="fa fa-{{ value.icon }}"></label>
+                            </td>
                         {% endfor %}
                         <td class="vote-comment">
                             <div class="script-only">

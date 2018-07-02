@@ -1,7 +1,9 @@
 {% load csp %}
 {% csp_css_hash %}
         {% for choice_value in choice_values %}
-            .bg-{{ choice_value.color }} {background-color: #{{ choice_value.color }};}
+            .bg-{{ choice_value.color }} input[type=radio]:checked ~ label, span.bg-{{ choice_value.color }} {
+                background-color: #{{ choice_value.color }};
+            }
         {% endfor %}
     .choice-deleted {
         background-color: lightgrey

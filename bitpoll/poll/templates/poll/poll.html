@@ -81,14 +81,14 @@
                                 <td class="vote-choice text-center {% if vote_choice.comment %}comment{% endif %}
                                     {% if not vote_choice.value %}none{% endif %}
                                     {% if vote_choice.value.deleted %}choice-deleted{% else %}
-                                        bg-{{ vote_choice.value.color }}{% endif %}"
+                                        {% endif %}"
                                     data-toggle="popover"
                                     data-trigger="hover"
                                     data-container="body"
                                     data-title="{{ vote_choice.choice.get_title|force_escape|force_escape }}"
                                     data-content="{{ vote.display_name|force_escape|force_escape }}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
                                     data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
-                                    <span class="fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
+                                    <span class="bg-{{ vote_choice.value.color }} fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
                                 </td>
                                 {% endif %}
                             {% endfor %}

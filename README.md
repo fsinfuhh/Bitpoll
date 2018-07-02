@@ -75,7 +75,7 @@ pip-compile --upgrade --output-file requirements.txt requirements.in
 pip-compile --upgrade --output-file requirements-production.txt  requirements-production.in requirements.in
 ```
 
-to sync your enviroment with the requirements.tyt just run
+to sync your enviroment with the requirements.txt just run
 
 ```bash
 pip-sync

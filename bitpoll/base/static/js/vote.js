@@ -1,6 +1,6 @@
 // language=JQuery-CSS
 (function () {
-    var resetChoiceByCell, setChoice, setChoiceByCell, showComment;
+    var setChoiceByCell, showComment;
 
     showComment = function () {
         $(this).hide().closest("td").find("input").css("width", 0).show().animate({
@@ -10,20 +10,7 @@
     };
 
     setChoiceByCell = function (cell) {
-        return setChoice($(cell).parents("tr").data("vote-choice"), $(cell).data("choice"));
-    };
-
-    resetChoiceByCell = function (cell) {
-        return setChoice($(cell).parents("tr").data("vote-choice"), 0);
-    };
-
-    setChoice = function (voteChoice, choice) {
-        var $tr;
-        $tr = $("[data-vote-choice=\"" + voteChoice + "\"]");
-        $tr.find("input[type=\"radio\"]").prop("checked", false);
-        $tr.find("input[type=\"radio\"][value=\"" + choice + "\"]").prop("checked", true);
-        $tr.find("td.vote-choice").addClass("off");
-        return $tr.find("td.vote-choice[data-choice=\"" + choice + "\"]").removeClass("off");
+        return cell.control.checked = true;
     };
 
     $(function () {
@@ -53,7 +40,7 @@
         $(".vote-choice-column").click(function () {
             var choice;
             choice = $(this).data("choice");
-            return $('.vote-choice[data-choice="' + choice + '"]').each(function () {
+            return $('.vote-choice input[value="' + choice + '"] ~ label').each(function () {
                 return setChoiceByCell(this);
             });
         });
@@ -61,22 +48,16 @@
         // Fast selecting of voting cells
         draggingMouse = false;
         draggingStartCell = null;
-        $("td.vote-choice").mousedown(function () {
+        $("td.vote-choice label").mousedown(function () {
             draggingMouse = true;
             draggingStartCell = this;
             $('table.vote').disableSelect();
-            // set starting choice
-            if ($(this).hasClass("off")) {
-                setChoiceByCell(this);
-            } else {
-                resetChoiceByCell(this);
-            }
             return $('body').on('mouseup', function () {
                 draggingMouse = false;
                 return $('table.vote').enableSelect();
             });
         });
-        $("td.vote-choice").mouseenter(function () {
+        $("td.vote-choice label").mouseenter(function () {
             if (draggingMouse) {
                 if (draggingStartCell) {
                     setChoiceByCell(draggingStartCell);
@@ -84,9 +65,6 @@
                 }
                 return setChoiceByCell(this);
             }
-        });
-        $(".vote-choice-radio").change(function () {
-            return setChoice($(this).parents("tr").data("vote-choice"), $(this).val());
         });
         $table = $("table.vote");
         min = ((ref = $table.attr("data-minimum")) != null ? ref.toNumber() : void 0) || 0;
