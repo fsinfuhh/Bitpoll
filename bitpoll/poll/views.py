@@ -18,6 +18,7 @@ from django.utils.timezone import activate as tz_activate, localtime, now, make_
 from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST
 
+from bitpoll.caldav.utils import get_caldav
 from .forms import PollCopyForm, DateChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, CommentForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS, PollWatch
@@ -852,11 +853,14 @@ def vote(request, poll_url, vote_id=None):
         choices.append(choice)
         comments.append(cur_comment)
         choice_votes.append(value)
+
+    events = get_caldav(choices, current_poll, request.user)
+
     return TemplateResponse(request, 'poll/vote_creation.html', {
         'poll': current_poll,
         'matrix': matrix,
         'matrix_len': len(matrix[0]),
-        'choices_matrix': zip(matrix, choices, comments, choice_votes),
+        'choices_matrix': zip(matrix, choices, comments, choice_votes, events),
         'choices': current_poll.choice_set.all(),
         'choices_matrix_len': len(choices),
         'values': current_poll.choicevalue_set.filter(deleted=False).all(),
@@ -864,7 +868,7 @@ def vote(request, poll_url, vote_id=None):
         'current_vote': current_vote,
         'timezone_warning': (request.user.is_authenticated and
                              current_poll.get_tz_name(request.user) != request.user.timezone),
-        'choice_values': ChoiceValue.objects.filter(poll=current_poll)
+        'choice_values': ChoiceValue.objects.filter(poll=current_poll),
     })
 
 

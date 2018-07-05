@@ -6,3 +6,6 @@ django-simple-csp
 libsasscompiler
 django-pipeline
 django-friendly-tag-loader
+
+caldav
+icalendar

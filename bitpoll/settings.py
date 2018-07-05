@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'bitpoll.invitations',
     'bitpoll.registration',
     'bitpoll.groups',
+    'bitpoll.caldav',
     'django.contrib.admin',
     'friendlytagloader'
 ]

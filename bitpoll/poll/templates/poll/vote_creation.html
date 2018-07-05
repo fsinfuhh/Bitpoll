@@ -44,7 +44,7 @@
                         </td>
                     {% endfor %}
                 </tr>
-                {% for row, choice, comment, vote in choices_matrix %}
+                {% for row, choice, comment, vote, events in choices_matrix %}
                     <tr class="vote">
                         {% for item in row %}
                             {% if item.0 != None %}
@@ -70,6 +70,11 @@
                             </div>
                             <input type="text" class="vote-choice-comment form-control" name="comment_{{ choice.id }}" title=""
                                    value="{{ comment }}"/>
+                        </td>
+                        <td>
+                            {% for event in events %}
+                                <span class="label label-info">{{ event.DTSTART }} - {{ event.DTEND }}: <b>{{ event.NAME }}</b></span>
+                            {% endfor %}
                         </td>
                     </tr>
                 {% endfor %}
