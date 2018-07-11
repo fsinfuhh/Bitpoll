@@ -5,15 +5,57 @@
 <h3>Add a Calendar</h3>
 <form action="{% url 'change_calendar' %}" method="post">
     {% csrf_token %}
-    {# TODO: show errors #}
+    {% if calendar_form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in calendar_form.non_field_errors %}
+            {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
     {{ calendar_form.name.label_tag }}
     {% render_field calendar_form.name class+='form-control'%}
+    {% if calendar_form.name.errors %}
+        <div class="form-errors">
+            <div class="alert alert-danger">
+                <div class="container">
+                    <i class="fa fa-times"></i>{{ calendar_form.name.errors }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
     {{ calendar_form.url.label_tag }}
     {% render_field calendar_form.url class+='form-control'%}
+    {% if calendar_form.url.errors %}
+        <div class="form-errors">
+            <div class="alert alert-danger">
+                <div class="container">
+                    <i class="fa fa-times"></i>{{ calendar_form.url.errors }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
     {{ calendar_form.user.label_tag }}
     {% render_field calendar_form.user class+='form-control'%}
+    {% if calendar_form.user.errors %}
+        <div class="form-errors">
+            <div class="alert alert-danger">
+                <div class="container">
+                    <i class="fa fa-times"></i>{{ calendar_form.user.errors }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
     {{ calendar_form.password.label_tag }}
     {% render_field calendar_form.password class+='form-control'%}
+    {% if calendar_form.password.errors %}
+        <div class="form-errors">
+            <div class="alert alert-danger">
+                <div class="container">
+                    <i class="fa fa-times"></i>{{ calendar_form.password.errors }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
     <input type="submit" name="submit" value="{% trans 'Save' %}" class="action primary">
 </form>
 <form action="{% url 'change_calendar' %}" method="post">
