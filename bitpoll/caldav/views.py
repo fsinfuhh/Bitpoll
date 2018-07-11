@@ -15,7 +15,7 @@ from .forms import DavCalendarForm
 @require_POST
 @login_required
 def change_callendar(request):
-    form = DavCalendarForm(request.POST)
+    form = DavCalendarForm(request.POST, user=request.user)
     if form.is_valid():
         # todo ratelimiting (code in dashboard?)
         caldav_obj = form.save(commit=False)

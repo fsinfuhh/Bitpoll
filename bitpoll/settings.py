@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'friendlytagloader',
     'encrypted_model_fields',
+    'django_token_bucket'
 ]
 
 MIDDLEWARE = [
@@ -335,6 +336,9 @@ MAIL_SIGNATURE = "Bitpoll Team"
 TEAM_EMAIL = "mail@example.com"
 
 PUBLIC_POLLS = True
+
+CALENDAR_MAX_TOKENS = 2
+CALENDAR_FILL_RATE = 500
 
 from .settings_local import *
 
