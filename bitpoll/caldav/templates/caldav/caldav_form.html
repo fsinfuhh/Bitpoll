@@ -1,0 +1,30 @@
+{% load widget_tweaks %}
+{% load i18n %}
+
+<p>TODO: Caldav description</p>
+<h3>Add a Calendar</h3>
+<form action="{% url 'change_calendar' %}" method="post">
+    {% csrf_token %}
+    {# TODO: show errors #}
+    {{ calendar_form.name.label_tag }}
+    {% render_field calendar_form.name class+='form-control'%}
+    {{ calendar_form.url.label_tag }}
+    {% render_field calendar_form.url class+='form-control'%}
+    {{ calendar_form.user.label_tag }}
+    {% render_field calendar_form.user class+='form-control'%}
+    {{ calendar_form.password.label_tag }}
+    {% render_field calendar_form.password class+='form-control'%}
+    <input type="submit" name="submit" value="{% trans 'Save' %}" class="action primary">
+</form>
+<form action="{% url 'change_calendar' %}" method="post">
+{% csrf_token %}
+<ul>
+    {% for calendar in calendars %}
+        <li>{{ calendar.name }}
+            <button  name="delete" value="{{ calendar.id }}" class="btn btn-default btn-xs">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </li>
+    {% endfor %}
+</ul>
+</form>

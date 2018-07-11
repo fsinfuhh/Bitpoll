@@ -6,6 +6,6 @@ django-simple-csp
 libsasscompiler
 django-pipeline
 django-friendly-tag-loader
-
+django-encrypted-model-fields
 caldav
 icalendar

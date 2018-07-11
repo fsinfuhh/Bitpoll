@@ -84,7 +84,8 @@ INSTALLED_APPS = [
     'bitpoll.groups',
     'bitpoll.caldav',
     'django.contrib.admin',
-    'friendlytagloader'
+    'friendlytagloader',
+    'encrypted_model_fields',
 ]
 
 MIDDLEWARE = [
@@ -233,6 +234,16 @@ DATABASES = {
     }
 }
 
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 60 * 30,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
+        }
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

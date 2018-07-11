@@ -4,20 +4,37 @@
 #
 #    pip-compile --output-file requirements-production.txt requirements-production.in requirements.in
 #
+asn1crypto==0.24.0        # via cryptography
+caldav==0.5.0
+certifi==2018.4.16        # via requests
+cffi==1.11.5              # via cryptography
+chardet==3.0.4            # via requests
+coverage==4.5.1           # via caldav
+cryptography==2.2.2       # via django-encrypted-model-fields
 django-auth-ldap==1.6.1
+django-encrypted-model-fields==0.5.5
 django-friendly-tag-loader==1.3
 django-markdown-app==0.9.4.1
 django-pipeline==1.6.14
 django-simple-csp==0.2.dev1
 django-widget-tweaks==1.4.2
-django==2.0.6
+django==2.0.7
+icalendar==4.0.2
+idna==2.7                 # via cryptography, requests
 libsass==0.14.5           # via libsasscompiler
 libsasscompiler==0.1.5
+lxml==4.2.3               # via caldav
 markdown==2.6.11          # via django-markdown-app
-pyasn1-modules==0.2.1     # via python-ldap
+nose==1.3.7               # via caldav
+pyasn1-modules==0.2.2     # via python-ldap
 pyasn1==0.4.3             # via pyasn1-modules, python-ldap
+pycparser==2.18           # via cffi
+python-dateutil==2.7.3    # via icalendar, vobject
 python-ldap==3.1.0        # via django-auth-ldap
-pytz==2018.4
+pytz==2018.5
 raven==6.9.0
-six==1.11.0               # via libsass
-uwsgi==2.0.17
+requests==2.19.1          # via caldav
+six==1.11.0               # via caldav, cryptography, django-encrypted-model-fields, libsass, python-dateutil
+urllib3==1.23             # via requests
+uwsgi==2.0.17.1
+vobject==0.9.6            # via caldav

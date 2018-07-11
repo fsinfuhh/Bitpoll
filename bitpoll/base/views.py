@@ -9,6 +9,8 @@ from django.db import IntegrityError
 
 from bitpoll.base.autocomplete import autocomplete_users
 from bitpoll.base.models import BitpollUser
+from bitpoll.caldav.forms import DavCalendarForm
+from bitpoll.caldav.models import DavCalendar
 
 from bitpoll.poll.forms import PollCreationForm
 from bitpoll.poll.models import ChoiceValue, Poll, Vote, PollWatch
@@ -96,6 +98,8 @@ def user_settings(request):
         'user_form': user_form,
         'languages': USER_LANG,
         'timezones': all_timezones,
+        'calendar_form': DavCalendarForm(),
+        'calendars': DavCalendar.objects.filter(user=request.user),
     })
 
 
