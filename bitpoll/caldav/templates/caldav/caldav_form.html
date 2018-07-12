@@ -1,7 +1,14 @@
 {% load widget_tweaks %}
 {% load i18n %}
 
-<p>TODO: Caldav description</p>
+<p>This is a <b>BETA</b> feature, it is possible that it will change substantially in the future.
+   Some features like editing Calendars are not implemented yet. Please give us feedback on
+   the feature</p>
+<p>The data provided here will be saved into the Database to retrieve the calendar on voting in Polls.
+   The column is encrypted on the server side with a global key.</p>
+<p>You can enter either a world readable CalDav calendar Url, or provide user and password to login to
+   the CalDav Server. If you make the calendar world readable check that the url is not predictable by
+   other people</p>
 <h3>Add a Calendar</h3>
 <form action="{% url 'change_calendar' %}" method="post">
     {% csrf_token %}
@@ -60,6 +67,7 @@
 </form>
 <form action="{% url 'change_calendar' %}" method="post">
 {% csrf_token %}
+<h3>Current Calendars:</h3>
 <ul>
     {% for calendar in calendars %}
         <li>{{ calendar.name }}

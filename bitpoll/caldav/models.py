@@ -12,6 +12,3 @@ class DavCalendar(models.Model):
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE)
     url = EncryptedURLField()
     name = models.CharField(max_length=80)
-
-    class Meta:
-        unique_together = ('url', 'user')

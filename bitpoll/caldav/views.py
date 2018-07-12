@@ -17,7 +17,6 @@ from .forms import DavCalendarForm
 def change_callendar(request):
     form = DavCalendarForm(request.POST, user=request.user)
     if form.is_valid():
-        # todo ratelimiting (code in dashboard?)
         caldav_obj = form.save(commit=False)
         user = urlencode(form.cleaned_data['user'])
         passwd = urlencode(form.cleaned_data['password'])
@@ -37,21 +36,31 @@ def change_callendar(request):
                 fragment=parsed.fragment
             )
         if parsed.scheme.startswith('http'):
-            try:
-                calendar = Calendar(client=DAVClient(parsed.url),
-                                    url=parsed.url)
-                calendar.date_search(now(), now())
-                caldav_obj.url = parsed.url
-                caldav_obj.user = request.user
-                caldav_obj.save()
-                return redirect('settings')
-            except Exception as e:
-                form.add_error(None, str(e))
+            old_calendars = DavCalendar.objects.filter(user=request.user)
+            exists = False
+            # This is necessary as the urls are encrypted in the DB and can't filtered wherefore
+            for old_calendar in old_calendars:
+                if old_calendar.url == parsed.url:
+                    exists = True
+                    break
+            if not exists:
+                try:
+                    calendar = Calendar(client=DAVClient(parsed.url),
+                                        url=parsed.url)
+                    calendar.date_search(now(), now())
+                    caldav_obj.url = parsed.url
+                    caldav_obj.user = request.user
+                    caldav_obj.save()
+                    return redirect('settings')
+                except Exception as e:
+                    form.add_error(None, "Error getting Calendar: {}".format(str(e)))
+            else:
+                form.add_error(None, "This calendar is already configured")
     elif 'delete' in request.POST:
-        obj = get_object_or_404(DavCalendar, id=request.POST['delete'])
+        obj = get_object_or_404(DavCalendar, id=request.POST['delete'], user=request.user)
         obj.delete()
         return redirect('settings')
-    #todo: extract user/password from url?
+    # todo: extract user/password from url?
     return TemplateResponse(request, "caldav/caldav.html", {
         'calendar_form': form,
         'calendars': DavCalendar.objects.filter(user=request.user),

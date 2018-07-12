@@ -30,5 +30,7 @@ class DavCalendarForm(ModelForm):
         try:
             bucket.consume(1)
         except bucket.TokensExceeded as e:
-            raise forms.ValidationError(e.get_message())
+            raise forms.ValidationError(str(e))
+        if DavCalendar.objects.filter(user=self.db_user).count() > 10:
+            raise forms.ValidationError("Maximum count of calendars reached (10)")
         return cleaned_data
