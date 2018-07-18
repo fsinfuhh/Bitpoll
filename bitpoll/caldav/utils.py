@@ -10,7 +10,7 @@ from bitpoll.poll.models import Choice, Poll
 def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser):
     # calendar stuff
     events2 = []
-    if current_poll.type == 'datetime':
+    if user.is_authenticated and current_poll.type == 'datetime':
         start = choices[0].date
         end = choices[-1].date
 
@@ -49,4 +49,7 @@ def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser):
                     if event['DTSTART'] <= choice.date.date() <= event['DTEND']:
                         ev_tmp.append(event)
             events2.append(ev_tmp)
+    else:
+        for _ in choices:
+            events2.append([])
     return events2
