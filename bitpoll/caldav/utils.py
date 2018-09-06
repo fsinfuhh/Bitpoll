@@ -10,7 +10,7 @@ from bitpoll.poll.models import Choice, Poll
 def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser):
     # calendar stuff
     events2 = []
-    if user.is_authenticated and current_poll.type == 'datetime':
+    if user.is_authenticated and current_poll.type == 'datetime' and choices:
         start = choices[0].date
         end = choices[-1].date
 
