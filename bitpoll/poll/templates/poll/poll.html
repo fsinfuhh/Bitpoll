@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load poll_filter vote_permissions comment_permissions %}
+{% load poll_filter vote_permissions comment_permissions poll_permissions %}
 {% load tz %}
 {% block title %}{{ poll.title }}{% endblock %}
 {% load django_markdown django_markdown_static %}
@@ -42,8 +42,8 @@
                     {% for vote, vote_choices in votes %}
                         <tr class="vote {% if not request.user.is_anonymous and vote.user_id == request.user.id %} mine{% endif %}"
                                 {# data-author="{{ vote.display_name|force_escape|force_escape }}"#}>
-                            {% if poll.hide_participants and user != poll.user and user != vote.user %}
-                            <td class="author author-hidden">{% trans "Hidden" %}</td>
+                            {% if poll.hide_participants and not poll|poll_is_owner:request.user and user != vote.user %}
+                            <td class="author author-hidden">{% trans "Hidden User" %}</td>
                             {% else %}
                             <td class="author"
                                 data-toggle="popover"
@@ -73,11 +73,6 @@
                             </td>
                             {% endif %}
                             {% for vote_choice in vote_choices %}
-                                {% if poll.hide_participants and user != poll.user and user != vote.user %}
-                                <td class="vote-choice text-center none">
-                                    <span class="fa fa-question"></span>
-                                </td>
-                                {% else %}
                                 <td class="vote-choice text-center {% if vote_choice.comment %}comment{% endif %}
                                     {% if not vote_choice.value %}none{% endif %}
                                     {% if vote_choice.value.deleted %}choice-deleted{% else %}
@@ -86,11 +81,12 @@
                                     data-trigger="hover"
                                     data-container="body"
                                     data-title="{{ vote_choice.choice.get_title|force_escape|force_escape }}"
-                                    data-content="{{ vote.display_name|force_escape|force_escape }}{% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
+                                    data-content="{% if poll.hide_participants and not poll|poll_is_owner:request.user and user != vote.user %}
+                                            {% trans 'Hidden User' %}{% else %}{{ vote.display_name|force_escape|force_escape }}{% endif %}
+                                            {% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
                                     data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
                                     <span class="bg-{{ vote_choice.value.color }} fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
                                 </td>
-                                {% endif %}
                             {% endfor %}
                             <td class="noprint vote-actions">
                                 {% if vote|vote_can_edit:request.user %}
