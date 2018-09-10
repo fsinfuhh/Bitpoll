@@ -130,10 +130,13 @@ class Poll(models.Model):
         if self.type == 'date':
             return 'calendar'
 
+    @property
+    def ordered_choices(self):
+        return self.choice_set.filter(deleted=False).order_by('sort_key')
+
     def get_choice_group_matrix(self, tz):
         matrix = [
-            choice.get_hierarchy(tz) for choice in self.choice_set.filter(deleted=False).order_by(
-                'sort_key')]
+            choice.get_hierarchy(tz) for choice in self.ordered_choices]
         matrix = [[[item, 1, 1] for item in row] for row in matrix]
         if not matrix:
             return [[]]
