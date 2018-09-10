@@ -204,8 +204,9 @@
             {# TODO: Add legend for choice values #}
         </div>
 
-        {#<a href="{% url 'poll_voteEdit' poll.url vote.id %}"> Edit </a> #}
-        {#<a href="{% url 'poll_voteDelete' poll.url vote.id %}"> Delete </a> #}
+        <div class="pull-right">
+            <a href="{% url 'poll_export_csv' poll.url %}">{% trans 'Export as CSV' %}</a>
+        </div>
 
         <br/><br/>{% if poll.comment_set.all %}<h1 class="print-only">{% trans 'Comments' %}</h1>{% endif %}
         <div class="comments">

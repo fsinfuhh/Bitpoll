@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^([a-zA-Z0-9_\-]+)/$', views.poll, name='poll'),
+    url(r'^([a-zA-Z0-9_\-]+).csv$', views.poll, {'export': True}, name='poll_export_csv'),
     url(r'^([a-zA-Z0-9_\-]+)/comment/$', views.comment, name='poll_comment'),
     url(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/edit/$', views.comment, name='poll_comment_edit'),
     url(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/delete/$', views.delete_comment, name='poll_deleteComment'),
