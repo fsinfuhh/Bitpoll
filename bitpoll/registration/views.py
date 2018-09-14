@@ -9,16 +9,15 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import login
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.decorators.http import require_POST
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
 from bitpoll.base.models import BitpollUser
 from bitpoll.registration.forms import (RegisterForm,
-                                        PasswordForm, NickChangeForm,
+                                        NickChangeForm,
                                         EmailChangeForm)
 
 TOKEN_MAX_AGE = 3600 * 24
@@ -35,8 +34,8 @@ def request_account(request):
         form = RegisterForm()
 
     return TemplateResponse(request, 'registration/request_account.html', {
-            'user_form': form,
-        })
+        'user_form': form,
+    })
 
 
 def request_successful(request, email):
@@ -46,7 +45,7 @@ def request_successful(request, email):
 
 
 def create_account(request, info_token):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect('home')
     try:
         info = signing.loads(info_token, max_age=TOKEN_MAX_AGE)
@@ -58,11 +57,12 @@ def create_account(request, info_token):
     username = info['username']
 
     if BitpollUser.objects.filter(username=username).exists():
-        messages.warning(request,_("This User already exists"))
+        messages.warning(request, _("This User already exists"))
         return redirect('login')
 
     if request.method == 'POST':
-        form = PasswordForm(request.POST)
+        # using None as User as we do not have the user, we can not call form.save() as a result
+        form = SetPasswordForm(None, request.POST)
         if form.is_valid():
             first_name = info.get('first_name')
             last_name = info.get('last_name')
@@ -74,16 +74,16 @@ def create_account(request, info_token):
                                first_name=first_name,
                                last_name=last_name,
                                email_invitation=info['email_invitation'],
-                               #TODO: weitere felder??
+                               #  TODO: more fields?
                                )
-            user.set_password(form.cleaned_data['password1'])
+            user.set_password(form.cleaned_data['new_password2'])
             user.save()
-            user.backend='django.contrib.auth.backends.ModelBackend'
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
 
             login(request, user)
             return redirect('home')
     else:
-        form = PasswordForm()
+        form = SetPasswordForm(None)
 
     return TemplateResponse(request, 'registration/create_account.html', {
         'form': form,
@@ -116,7 +116,7 @@ def account_settings(request):
         if email_change_form.is_valid():
             return _verify_email(request,
                                  email_change_form.cleaned_data['email'])
-    
+
     return TemplateResponse(request, 'registration/account.html', {
         'password_change_form': password_change_form,
         'nick_change_form': nick_change_form,
@@ -178,9 +178,6 @@ def _finish_account_request(request, info):
 def _send_mail_or_error_page(subject, content, address, request):
     try:
         send_mail(subject, content, None, [address])
-        if settings.DEBUG:
-            print(u"VALIDATION MAIL to {0}\nSubject: {1}\n{2}".format(
-                address, subject, content))
     except SMTPRecipientsRefused as e:
         wrong_email, (error_code, error_msg) = e.recipients.items()[0]
         unknown = 'User unknown' in error_msg
@@ -188,10 +185,10 @@ def _send_mail_or_error_page(subject, content, address, request):
             error_email_content = u'{0}: {1}'.format(e.__class__.__name__,
                                                      repr(e.recipients))
             send_mail(
-                    _('Registration: Sending mail failed: {}'.format(address)),
-                    error_email_content,
-                    None,
-                    [settings.TEAM_EMAIL])
+                _('Registration: Sending mail failed: {}'.format(address)),
+                error_email_content,
+                None,
+                [settings.TEAM_EMAIL])
         return TemplateResponse(request, 'registration/email_error.html', {
             'unknown': unknown,
             'error_code': error_code,

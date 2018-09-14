@@ -9,7 +9,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 
-from bitpoll import settings
 
 from bitpoll.base.models import BitpollUser
 
@@ -19,27 +18,7 @@ class RegisterForm(forms.ModelForm):
         model = BitpollUser
         fields = ['username', 'first_name', 'last_name', 'email', 'auto_watch',
                   'email_invitation']
-        # TODO for later: 'timezone', 'language',
-
-
-class PasswordForm(forms.Form):
-    password1 = forms.CharField(
-        label=_("Password"),
-        widget=forms.PasswordInput
-    )
-    password2 = forms.CharField(
-        label=_("Password confirmation"),
-        widget=forms.PasswordInput
-    )
-
-    def clean_password2(self):
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
-        if password1 and password2:
-            if password1 != password2:
-                raise forms.ValidationError(
-                    _("The two password fields didn't match."))
-        return password2
+        #  TODO for later: 'timezone', 'language',
 
 
 class CheckPasswordForm(forms.Form):
