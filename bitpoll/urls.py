@@ -17,10 +17,8 @@ Including another URLconf
 from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.http import HttpResponseServerError
 from django.shortcuts import redirect, render
 import django.conf.urls.i18n
-from django.template import Context, RequestContext, loader
 
 from bitpoll import settings
 
@@ -30,7 +28,7 @@ urlpatterns = [
     url(r'^invitations/', include('bitpoll.invitations.urls')),
     url(r'^$', lambda req: redirect('index'), name='home'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login', ),
-    url(r'^logout/$', auth_views.logout, {
+    url(r'^logout/$', auth_views.LogoutView.as_view(), {
         'next_page': '/'
     }, name='logout'),
     url(r'^markdown/', include('django_markdown.urls')),

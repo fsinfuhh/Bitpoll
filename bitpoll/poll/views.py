@@ -183,7 +183,7 @@ def comment(request, poll_url, comment_id=None):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     if not current_poll.allow_comments:
-        messages.error(_("Comments are disabled for this Poll"))
+        messages.error(request, _("Comments are disabled for this Poll"))
         return redirect('poll', poll_url)
     user = None
     if not request.user.is_anonymous:
@@ -194,9 +194,9 @@ def comment(request, poll_url, comment_id=None):
             text = form.cleaned_data['text']
             name = form.cleaned_data['name']
             if not text:
-                messages.error(_("A Comment should have a text"))
+                messages.error(request, _("A Comment should have a text"))
             if not user and not name:
-                messages.error(_("Provide a name"))
+                messages.error(request, _("Provide a name"))
             if user:
                 name = user.get_displayname()
             if comment_id:
