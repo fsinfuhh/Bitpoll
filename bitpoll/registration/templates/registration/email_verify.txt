@@ -1,4 +1,4 @@
-{% load i18n %}{% load settings_value %}{% autoescape off %}{% value_from_settings PROJECT_NAME as project_name%}{% value_from_settings MAIL_SIGNATURE as signature %}
+{% load i18n %}{% load settings_value %}{% autoescape off %}{% value_from_settings SITE_NAME as project_name%}{% value_from_settings MAIL_SIGNATURE as signature %}
 {% blocktrans %}Hi,
 
 you requested to associate the email address

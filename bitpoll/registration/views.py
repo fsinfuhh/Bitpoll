@@ -8,12 +8,13 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.views.decorators.debug import sensitive_post_parameters
 
 from bitpoll.base.models import BitpollUser
 from bitpoll.registration.forms import (RegisterForm,
@@ -92,6 +93,7 @@ def create_account(request, info_token):
 
 
 @login_required
+@sensitive_post_parameters('old_password', 'new_password1', 'new_password2')
 def account_settings(request):
     password_change_form = PasswordChangeForm(request.user)
     nick_change_form = NickChangeForm(request.user)
@@ -102,6 +104,7 @@ def account_settings(request):
         password_change_form = PasswordChangeForm(request.user, request.POST)
         if password_change_form.is_valid():
             password_change_form.save()
+            update_session_auth_hash(request, request.user)
             messages.success(request, _("Password was changed."))
             return redirect('registration_account')
     elif form == 'change_nick':
