@@ -6,129 +6,134 @@
 {% block wtitle %}{% trans "Account" %}{% endblock %}
 
 {% block content %}
+    <section class="section">
+        <div class="container">
+            <div class="page-header">
+                <h1>{% trans "Account" %}</h1>
+            </div>
 
-<div class="page-header">
-    <h1>{% trans "Account" %}</h1>
-</div>
+            {% if not user.is_guest %}
+                {% url 'guests_index' as guests_url %}
+                <p>
+                    {% value_from_settings SITE_NAME as project_name %}
+                    {% comment %} {% blocktrans %}You want to use {{ project_name }} with your friends? You can <a href="{{ guests_url }}">invite guests</a>.{% endblocktrans %}{% endcomment %}
+                </p>
+            {% endif %}
+            <div class="row">
+                <div class="col-sm-6">
+                    {% comment %}
+                    {# TODO: wollen wir den displaynamen ändern können? #}
+                    <form method="post" class="form-inline">
+                        <div class="panel panel-default" id="panel-settings-nickname">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    {% trans "Nickname" %}
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <p>{% trans 'If you choose a nickname, it will be shown instead of your first name (e.g. when you vote in Dudle)' %}</p>
+                                {% csrf_token %}
+                                <input type="hidden" name="form" value="change_nick" />
+                                <div class="form-group{% if nick_change_form.nickname.errors %} has-error{% endif %}">
+                                    <div class="input-group">
+                                        {% render_field nick_change_form.nickname class+="form-control" style="width:20em" %}
+                                        <span class="input-group-addon"> ({{ username }})</span>
+                                    </div>
+                                    {% if nick_change_form.nickname.errors %}
+                                    <div class="help-block">
+                                    {% for error in nick_change_form.nickname.errors %}{{ error }} {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <button type="submit" class="btn btn-primary btn-xs">
+                                    {% trans "Change Nickname" %}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endcomment %}
 
-{% if not user.is_guest %}
-{% url 'guests_index' as guests_url %}
-<p>
-{% value_from_settings SITE_NAME as project_name %}
-{% comment %} {% blocktrans %}You want to use {{ project_name }} with your friends? You can <a href="{{ guests_url }}">invite guests</a>.{% endblocktrans %}{% endcomment %}
-</p>
-{% endif %}
-<div class="row">
-    <div class="col-sm-6">
-            {% comment %}
-                {# TODO: wollen wir den displaynamen ändern können? #}
-        <form method="post" class="form-inline">
-            <div class="panel panel-default" id="panel-settings-nickname">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        {% trans "Nickname" %}
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    <p>{% trans 'If you choose a nickname, it will be shown instead of your first name (e.g. when you vote in Dudle)' %}</p>
-                    {% csrf_token %}
-                    <input type="hidden" name="form" value="change_nick" />
-                    <div class="form-group{% if nick_change_form.nickname.errors %} has-error{% endif %}">
-                        <div class="input-group">
-                            {% render_field nick_change_form.nickname class+="form-control" style="width:20em" %}
-                            <span class="input-group-addon"> ({{ username }})</span>
+                    <form method="post">
+                        <div class="panel panel-default" id="panel-settings-email">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    {% trans "Email" %}
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                {% csrf_token %}
+                                <input type="hidden" name="form" value="change_email"/>
+                                <div class="form-group{% if email_change_form.email.errors %} has-error{% endif %}">
+                                    <label class="control-label">{% trans "New Email Address" %}</label>
+                                    {% render_field email_change_form.email class+="form-control" %}
+                                    {% if email_change_form.email.errors %}
+                                        <div class="help-block">
+                                            {% for error in email_change_form.email.errors %}{{ error }} {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <button type="submit" class="btn btn-primary btn-xs">
+                                    {% trans "Change Email" %}
+                                </button>
+                            </div>
                         </div>
-                        {% if nick_change_form.nickname.errors %}
-                        <div class="help-block">
-                        {% for error in nick_change_form.nickname.errors %}{{ error }} {% endfor %}
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <form method="post">
+                        <div class="panel panel-default" id="panel-settings-password">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    {% trans "Password" %}
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                {% csrf_token %}
+                                <input type="hidden" name="form" value="change_pw"/>
+                                <div class="form-group{% if password_change_form.old_password.errors %} has-error{% endif %}">
+                                    <label class="control-label">{% trans "Old password" %}</label>
+                                    {% render_field password_change_form.old_password class+="form-control" %}
+                                    {% if password_change_form.old_password.errors %}
+                                        <div class="help-block">
+                                            {% for error in password_change_form.old_password.errors %}
+                                                {{ error }} {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group{% if password_change_form.new_password1.errors %} has-error{% endif %}">
+                                    <label class="control-label">{% trans "New password" %}</label>
+                                    {% render_field password_change_form.new_password1 class+="form-control" %}
+                                    {% if password_change_form.new_password1.errors %}
+                                        <div class="help-block">
+                                            {% for error in password_change_form.new_password1.errors %}
+                                                {{ error }} {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group{% if password_change_form.new_password2.errors %} has-error{% endif %}">
+                                    <label class="control-label">{% trans "New password confirmation" %}</label>
+                                    {% render_field password_change_form.new_password2 class+="form-control" %}
+                                    {% if password_change_form.new_password2.errors %}
+                                        <div class="help-block">
+                                            {% for error in password_change_form.new_password2.errors %}
+                                                {{ error }} {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <button type="submit" class="btn btn-primary btn-xs">
+                                    {% trans "Change password" %}
+                                </button>
+                            </div>
                         </div>
-                        {% endif %}
-                    </div>
+                    </form>
                 </div>
-                <div class="panel-footer">
-                    <button type="submit" class="btn btn-primary btn-xs">
-                        {% trans "Change Nickname" %}
-                    </button>
-                </div>
-            </div>
-        </form>
-{% endcomment %}
-
-        <form method="post">
-            <div class="panel panel-default" id="panel-settings-email">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        {% trans "Email" %}
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    {% csrf_token %}
-                    <input type="hidden" name="form" value="change_email" />
-                    <div class="form-group{% if email_change_form.email.errors %} has-error{% endif %}">
-                        <label class="control-label">{% trans "New Email Address" %}</label>
-                        {% render_field email_change_form.email class+="form-control" %}
-                        {% if email_change_form.email.errors %}
-                        <div class="help-block">
-                        {% for error in email_change_form.email.errors %}{{ error }} {% endfor %}
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <button type="submit" class="btn btn-primary btn-xs">
-                        {% trans "Change Email" %}
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="col-sm-6">
-        <form method="post">
-        <div class="panel panel-default" id="panel-settings-password">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Password" %}
-                </h3>
-            </div>
-            <div class="panel-body">
-                <p>{% trans 'Note: You can "change" your password to the current password to synchronize it with other services (e.g. Jabber)' %}</p>
-                {% csrf_token %}
-                <input type="hidden" name="form" value="change_pw" />
-                <div class="form-group{% if password_change_form.old_password.errors %} has-error{% endif %}">
-                    <label class="control-label">{% trans "Old password" %}</label>
-                    {% render_field password_change_form.old_password class+="form-control" %}
-                    {% if password_change_form.old_password.errors %}
-                    <div class="help-block">
-                    {% for error in password_change_form.old_password.errors %}{{ error }} {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="form-group{% if password_change_form.new_password1.errors %} has-error{% endif %}">
-                    <label class="control-label">{% trans "New password" %}</label>
-                    {% render_field password_change_form.new_password1 class+="form-control" %}
-                    {% if password_change_form.new_password1.errors %}
-                    <div class="help-block">
-                    {% for error in password_change_form.new_password1.errors %}{{ error }} {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="form-group{% if password_change_form.new_password2.errors %} has-error{% endif %}">
-                    <label class="control-label">{% trans "New password confirmation" %}</label>
-                    {% render_field password_change_form.new_password2 class+="form-control" %}
-                    {% if password_change_form.new_password2.errors %}
-                    <div class="help-block">
-                    {% for error in password_change_form.new_password2.errors %}{{ error }} {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="panel-footer">
-                <button type="submit" class="btn btn-primary btn-xs">
-                    {% trans "Change password" %}
-                </button>
             </div>
         </div>
-        </form>
-    </div>
-</div>
+    </section>
 {% endblock %}

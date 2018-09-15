@@ -4,62 +4,62 @@
 {% load settings_value %}
 {% block title %}{% trans "Login" %}{% endblock %}
 
-{%  value_from_settings REGISTER_ENABLED as register %}
+{% value_from_settings REGISTER_ENABLED as register %}
 
 {% block content %}
     <section class="section create-poll">
         <div class="container">
-          <div class="halfsize">
-              {% block messages %}
-                {% for message in messages %}
-                  <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
-                {% endfor %}
-              {% endblock messages %}
-            {% if next %}
-                {% if user.is_authenticated %}
-                <p>{% trans "Your account doesn't have access to this page. To proceed, please login with an account that has access." %}</p>
-            {% else %}
-                <p>{% trans 'Please login to see this page.' %}</p>
-                {% endif %}
-            {% endif %}
-            <form method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-                {% if form.non_field_errors %}
-                <div class="alert alert-danger">
-                    {% for error in form.non_field_errors %}
-                    {{ error }}
+            <div class="halfsize">
+                {% block messages %}
+                    {% for message in messages %}
+                        <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
                     {% endfor %}
-                </div>
+                {% endblock messages %}
+                {% if next %}
+                    {% if user.is_authenticated %}
+                        <p>{% trans "Your account doesn't have access to this page. To proceed, please login with an account that has access." %}</p>
+                    {% else %}
+                        <p>{% trans 'Please login to see this page.' %}</p>
+                    {% endif %}
                 {% endif %}
-                <div class="form-group{% if form.username.errors %} has-error{% endif %}">
-                    <label class="control-label">{% trans "Username" %}</label>
-                    {% render_field form.username class+="form-control" %}
-                    <div class="help-block">
-                        {% if form.username.errors %}
-                        <p>{% for error in form.username.errors %}{{ error }} {% endfor %}</p>
-                        {% endif %}
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="form-group{% if form.username.errors %} has-error{% endif %}">
+                        <label class="control-label">{% trans "Username" %}</label>
+                        {% render_field form.username class+="form-control" %}
+                        <div class="help-block">
+                            {% if form.username.errors %}
+                                <p>{% for error in form.username.errors %}{{ error }} {% endfor %}</p>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                <div class="form-group{% if form.password.errors %} has-error{% endif %}">
-                    <label class="control-label">{% trans "Password" %}</label>
-                    {% render_field form.password class+="form-control" %}
-                    {% if form.password.errors %}
-                    <span class="help-block">
+                    <div class="form-group{% if form.password.errors %} has-error{% endif %}">
+                        <label class="control-label">{% trans "Password" %}</label>
+                        {% render_field form.password class+="form-control" %}
+                        {% if form.password.errors %}
+                            <span class="help-block">
                         {% for error in form.password.errors %}{{ error|escape }} {% endfor %}
                     </span>
-                    {% endif %}
-                </div>
-                <input type="hidden" name="next" value="{{ next }}" />
-                <div class="form-group">
-                  <button type="submit" class="primary action">{% trans "Login" %}</button>
-              </div>
-            </form>
-              {% if register %}{# TODO: link to central account management? #}
-                <p><a href="{% url 'password_reset' %}">{% trans "Did you forget your password?" %}</a></p>
-              {% else %}
-                  <p>{% trans 'You can not reset your password here, as the account management is centraliced' %}</p>
-              {% endif %}
-          </div>
+                        {% endif %}
+                    </div>
+                    <input type="hidden" name="next" value="{{ next }}"/>
+                    <div class="form-group">
+                        <button type="submit" class="primary action">{% trans "Login" %}</button>
+                    </div>
+                </form>
+                {% if register %}{# TODO: link to central account management? #}
+                    <p><a href="{% url 'password_reset' %}">{% trans "Did you forget your password?" %}</a></p>
+                {% else %}
+                    <p>{% trans 'You can not reset your password here, as the account management is centraliced' %}</p>
+                {% endif %}
+            </div>
         </div>
     </section>
 {% endblock %}
