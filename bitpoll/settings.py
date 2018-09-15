@@ -60,6 +60,7 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
 ]
 
 LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = '/login/'
 
 SITE_NAME = 'Bitpoll'
 BASE_URL = 'https://bitpoll.mafiasi.de'

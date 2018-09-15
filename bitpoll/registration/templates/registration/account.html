@@ -8,6 +8,13 @@
 {% block content %}
     <section class="section">
         <div class="container">
+            {% block messages %}
+                {% for message in messages %}
+                    <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            {% endblock messages %}
+        </div>
+        <div class="container">
             <div class="page-header">
                 <h1>{% trans "Account" %}</h1>
             </div>
