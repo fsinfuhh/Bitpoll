@@ -4,5 +4,9 @@
 {% block wtitle %}{% block ptitle %}{% trans "Invalid token" %}{% endblock %}{% endblock %}
 
 {% block content %}
-<p>{% trans "Sorry, but the provided token is invalid." %}</p>
+    <section class="section">
+        <div class="container">
+            <p>{% trans "Sorry, but the provided token is invalid." %}</p>
+        </div>
+    </section>
 {% endblock content %}
