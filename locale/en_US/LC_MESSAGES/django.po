@@ -123,9 +123,9 @@ msgid ""
 "After some time, some shortcomings in the architecture were discovered, "
 "especially with ldap and very big\n"
 "                    polls.\n"
-"                    We decided to rewrite it again, this time using Django, "
+"                    We decided to rewrite it, this time using Django, "
 "also in Python. As a starting point,\n"
-"                    most styles and javascript artifacts were imported from "
+"                    most styles and JavaScript artifacts were imported from "
 "the Dudel project."
 msgstr ""
 
@@ -1736,8 +1736,8 @@ msgid "No individual results are shown due to Poll settings"
 msgstr "No individual results are shown due to Poll settings"
 
 #: bitpoll/poll/views.py:75
-msgid "Results are only sown after (authenticated) Voting"
-msgstr "Results are only sown after (authenticated) Voting"
+msgid "Results are only shown after (authenticated) voting"
+msgstr "Results are only shown after (authenticated) voting"
 
 #: bitpoll/poll/views.py:79
 msgid "Only the Summary is shown due to the Poll settings"
@@ -1767,7 +1767,7 @@ msgid ""
 msgstr ""
 
 #: bitpoll/poll/views.py:188
-msgid "A Comment should have a text"
+msgid "A comment must contain text"
 msgstr ""
 
 #: bitpoll/poll/views.py:190
@@ -1775,7 +1775,7 @@ msgid "Provide a name"
 msgstr ""
 
 #: bitpoll/poll/views.py:201 bitpoll/poll/views.py:216
-msgid "You can't edit this Comment"
+msgid "You can't edit this comment"
 msgstr ""
 
 #: bitpoll/poll/views.py:259 bitpoll/poll/views.py:985
@@ -1792,8 +1792,8 @@ msgstr "You are not allowed to listen."
 #: bitpoll/poll/views.py:492 bitpoll/poll/views.py:556
 #: bitpoll/poll/views.py:625 bitpoll/poll/views.py:677
 #: bitpoll/poll/views.py:1111
-msgid "You are not allowed to edit this Poll."
-msgstr "You are not allowed to edit this Poll."
+msgid "You are not allowed to edit this poll."
+msgstr "You are not allowed to edit this poll."
 
 #: bitpoll/poll/views.py:358 bitpoll/poll/views.py:362
 #: bitpoll/poll/views.py:515 bitpoll/poll/views.py:519
@@ -1805,17 +1805,17 @@ msgid "The title \"{}\" is to long. The maximum is 80 characters"
 msgstr ""
 
 #: bitpoll/poll/views.py:767
-msgid "This Poll is past the due date, voting is no longer possible"
-msgstr "This Poll is past the due date, voting is no longer possible"
+msgid "This poll is past the ending date, voting is no longer possible"
+msgstr "This poll is past the ending date, voting is no longer possible"
 
 #: bitpoll/poll/views.py:810
-msgid "The Name is longer than the allowed name length of 80 characters"
+msgid "The name is longer than the allowed name length of 80 characters"
 msgstr ""
 
 #: bitpoll/poll/views.py:817
 #| msgid "You are not allowed to edit this Poll."
-msgid "Anonymous votes are not allowed for this poll."
-msgstr "Anonymous votes are not allowed for this poll."
+msgid "Anonymous votes are not enabled for this poll."
+msgstr "Anonymous votes are not enabled for this poll."
 
 #: bitpoll/poll/views.py:852
 msgid ""
@@ -1829,8 +1829,8 @@ msgid ""
 msgstr ""
 
 #: bitpoll/poll/views.py:871
-msgid "Vote has been recorded"
-msgstr "Vote has been recorded"
+msgid "Your vote has been recorded"
+msgstr "Your vote has been recorded"
 
 #: bitpoll/poll/views.py:880
 msgid "You need to either provide a name or post an anonymous vote."
@@ -1845,8 +1845,8 @@ msgid "The user {} does not exists"
 msgstr ""
 
 #: bitpoll/poll/views.py:1132
-msgid "User {} not Found"
-msgstr "User {} not Found"
+msgid "User {} not found"
+msgstr "User {} not found"
 
 #: bitpoll/poll/views.py:1145
 msgid "Settings have been changed"
@@ -1882,11 +1882,11 @@ msgid "Account"
 msgstr ""
 
 #: bitpoll/registration/templates/registration/account.html:69
-msgid "New Email Address"
+msgid "New email address"
 msgstr ""
 
 #: bitpoll/registration/templates/registration/account.html:80
-msgid "Change Email"
+msgid "Change email"
 msgstr ""
 
 #: bitpoll/registration/templates/registration/account.html:95
@@ -1978,7 +1978,7 @@ msgstr ""
 #: bitpoll/registration/templates/registration/login.html:60
 msgid ""
 "You can not reset your password here, as the account management is "
-"centraliced"
+"centralized"
 msgstr ""
 
 #: bitpoll/registration/templates/registration/password_reset_complete.html:4
@@ -2032,7 +2032,7 @@ msgstr ""
 #: bitpoll/registration/templates/registration/password_reset_done.html:7
 msgid ""
 "We've emailed you instructions for setting your password to the email "
-"address you submitted. You should be receiving it shortly."
+"address you submitted. You should receive it shortly."
 msgstr ""
 
 #: bitpoll/registration/templates/registration/password_reset_email.html:5
@@ -2056,7 +2056,7 @@ msgstr ""
 
 #: bitpoll/registration/templates/registration/password_reset_form.html:11
 msgid ""
-"Forgotten your password? Enter your email address below, and we'll email "
+"Forgot your password? Enter your email address below, and we'll email you"
 "instructions for setting a new one."
 msgstr ""
 
@@ -2116,8 +2116,8 @@ msgstr ""
 
 #: bitpoll/registration/views.py:61
 #| msgid "The user {} was already invited"
-msgid "This User already exists"
-msgstr "This User already exists"
+msgid "This user already exists"
+msgstr "This user already exists"
 
 #: bitpoll/registration/views.py:105
 msgid "Password was changed."
