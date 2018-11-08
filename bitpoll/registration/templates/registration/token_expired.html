@@ -4,5 +4,9 @@
 {% block wtitle %}{% block ptitle %}{% trans "Token expired" %}{% endblock %}{% endblock %}
 
 {% block content %}
-<p>{% trans "Sorry, but the provided token is expired." %}</p>
+    <section class="section">
+        <div class="container">
+            <p>{% trans "Sorry, but the provided token is expired." %}</p>
+        </div>
+    </section>
 {% endblock %}

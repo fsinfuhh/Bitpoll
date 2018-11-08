@@ -1,3 +1,5 @@
+import csv
+
 import re
 
 from django.contrib import messages
@@ -7,7 +9,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import transaction, IntegrityError
 
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.db.models import F, Sum, Count, Q
 from django.template.response import TemplateResponse
@@ -31,8 +33,9 @@ from pytz import all_timezones, timezone
 from django.utils.dateparse import parse_datetime
 
 
-def poll(request, poll_url):
+def poll(request, poll_url: str, export: bool=False):
     """
+    :param export: if the view is exported to csv
     :param request
     :param poll_url: url of poll
 
@@ -142,6 +145,20 @@ def poll(request, poll_url):
         if max_score_list:
             max_score = max(max_score_list)
 
+    if export:
+        response = HttpResponse()
+        response['Content-Disposition'] = 'attachment; filename="poll.csv"'
+        writer = csv.writer(response)
+        a = [choice.get_title for choice in current_poll.ordered_choices]
+        row = ['Name']
+        row.extend(a)
+        writer.writerow(row)
+        for vote, votechoices in zip(poll_votes, vote_choice_matrix):
+            row = [vote.display_name if not current_poll.hide_participants else _('Hidden')]
+            row.extend([choice['value'].title if choice else '' for choice in votechoices])
+            writer.writerow(row)
+        return response
+
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
         'matrix': matrix,
@@ -167,7 +184,7 @@ def comment(request, poll_url, comment_id=None):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     if not current_poll.allow_comments:
-        messages.error(_("Comments are disabled for this Poll"))
+        messages.error(request, _("Comments are disabled for this Poll"))
         return redirect('poll', poll_url)
     user = None
     if not request.user.is_anonymous:
@@ -178,9 +195,9 @@ def comment(request, poll_url, comment_id=None):
             text = form.cleaned_data['text']
             name = form.cleaned_data['name']
             if not text:
-                messages.error(_("A Comment should have a text"))
+                messages.error(request, _("A Comment should have a text"))
             if not user and not name:
-                messages.error(_("Provide a name"))
+                messages.error(request, _("Provide a name"))
             if user:
                 name = user.get_displayname()
             if comment_id:

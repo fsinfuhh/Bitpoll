@@ -2,7 +2,7 @@ import enum
 from smtplib import SMTPRecipientsRefused
 
 from django.contrib import messages
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, AbstractUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
@@ -68,7 +68,7 @@ class Poll(models.Model):
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
-    def can_vote(self, user: BitpollUser, request: HttpRequest, is_edit: bool=False) -> bool:
+    def can_vote(self, user: AbstractUser, request: HttpRequest, is_edit: bool=False) -> bool:
         """
         Determine if the user is allowed to vote
 
@@ -89,13 +89,13 @@ class Poll(models.Model):
             return False
         return True
 
-    def has_voted(self, user: BitpollUser) -> bool:
+    def has_voted(self, user: AbstractUser) -> bool:
         return user.is_authenticated and Vote.objects.filter(user=user, poll=self).count() > 0
 
-    def get_own_vote(self, user: BitpollUser):
+    def get_own_vote(self, user: AbstractUser):
         return Vote.objects.filter(user=user, poll=self)[0]
 
-    def can_edit(self, user: BitpollUser, request: HttpRequest=None) -> bool:
+    def can_edit(self, user: AbstractUser, request: HttpRequest=None) -> bool:
         """
         check if the user can edit this Poll
 
@@ -114,12 +114,12 @@ class Poll(models.Model):
             )
         return can_edit
 
-    def can_watch(self, user: BitpollUser, request: HttpRequest) -> bool:
+    def can_watch(self, user: AbstractUser, request: HttpRequest) -> bool:
         return (self.can_vote(user, request) or self.has_voted(user)) and self.show_results not in (
             'never', 'summary after vote', 'complete after vote') or self.has_voted(user) and self.show_results in (
             'summary after vote', 'complete after vote')
 
-    def is_owner(self, user: BitpollUser):
+    def is_owner(self, user: AbstractUser):
         return self.user == user or (self.group and user in self.group.user_set.all())
 
     def get_icon(self):
@@ -130,10 +130,13 @@ class Poll(models.Model):
         if self.type == 'date':
             return 'calendar'
 
+    @property
+    def ordered_choices(self):
+        return self.choice_set.filter(deleted=False).order_by('sort_key')
+
     def get_choice_group_matrix(self, tz):
         matrix = [
-            choice.get_hierarchy(tz) for choice in self.choice_set.filter(deleted=False).order_by(
-                'sort_key')]
+            choice.get_hierarchy(tz) for choice in self.ordered_choices]
         matrix = [[[item, 1, 1] for item in row] for row in matrix]
         if not matrix:
             return [[]]
