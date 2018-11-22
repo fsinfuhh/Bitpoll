@@ -145,7 +145,7 @@ def poll(request, poll_url: str, export: bool=False):
             max_score = max(max_score_list)
 
     if export:
-        response = HttpResponse()
+        response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="poll.csv"'
         writer = csv.writer(response)
         a = [choice.get_title for choice in current_poll.ordered_choices]
