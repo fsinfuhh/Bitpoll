@@ -1,5 +1,6 @@
 import enum
 from smtplib import SMTPRecipientsRefused
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.models import Group, AbstractUser
@@ -68,24 +69,27 @@ class Poll(models.Model):
     def __str__(self):
         return u'Poll {}'.format(self.title)
 
-    def can_vote(self, user: AbstractUser, request: HttpRequest, is_edit: bool=False) -> bool:
+    def can_vote(self, user: AbstractUser, request: Optional[HttpRequest] = None, is_edit: bool=False) -> bool:
         """
         Determine if the user is allowed to vote
 
         :param is_edit: if the vote is an edit
         :param user:
-        :param request:
+        :param request: the request object or None. if None no messages are printed
         :return:
         """
         has_voted = self.has_voted(user)
         if self.one_vote_per_user and has_voted and not is_edit:
-            messages.error(request, _("It is only one vote allowed. You have already voted."))
+            if request:
+                messages.error(request, _("It is only one vote allowed. You have already voted."))
             return False
         elif self.require_login and not user.is_authenticated:
-            messages.error(request, _("Login required to vote."))
+            if request:
+                messages.error(request, _("Login required to vote."))
             return False
         elif self.require_invitation and (not user.is_authenticated or user not in self.invitation_set.all().values('user')):
-            messages.error(request, _("You are not allowed to vote in this poll. You have to be invited"))
+            if request:
+                messages.error(request, _("You are not allowed to vote in this poll. You have to be invited"))
             return False
         return True
 
@@ -114,10 +118,14 @@ class Poll(models.Model):
             )
         return can_edit
 
-    def can_watch(self, user: AbstractUser, request: HttpRequest) -> bool:
-        return (self.can_vote(user, request) or self.has_voted(user)) and self.show_results not in (
-            'never', 'summary after vote', 'complete after vote') or self.has_voted(user) and self.show_results in (
-            'summary after vote', 'complete after vote')
+    def can_watch(self, user: AbstractUser) -> bool:
+        if self.can_vote(user) and self.show_results not in ('never', 'summary after vote', 'complete after vote'):
+            # If the user can vote and the results are not restricted
+            return True
+        if self.has_voted(user) and self.show_results not in ('never', ):
+            # If the user has voted and can view the results
+            return True
+        return False
 
     def is_owner(self, user: AbstractUser):
         return self.user == user or (self.group and user in self.group.user_set.all())
