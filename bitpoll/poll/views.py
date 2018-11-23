@@ -283,7 +283,7 @@ def delete_comment(request, poll_url, comment_id):
 def watch(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
 
-    if not current_poll.can_watch(request.user, request):
+    if not current_poll.can_watch(request.user):
         messages.error(
             request, _("You are not allowed to watch this poll.")
         )
