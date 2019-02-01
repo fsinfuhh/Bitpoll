@@ -1,4 +1,4 @@
-from urllib.parse import urlparse, urlencode
+from urllib.parse import quote_plus
 
 from caldav import DAVClient, Calendar
 from django.contrib.auth.decorators import login_required
@@ -18,8 +18,8 @@ def change_callendar(request):
     form = DavCalendarForm(request.POST, user=request.user)
     if form.is_valid():
         caldav_obj = form.save(commit=False)
-        user = urlencode(form.cleaned_data['user'])
-        passwd = urlencode(form.cleaned_data['password'])
+        user = quote_plus(form.cleaned_data['user'])
+        passwd = quote_plus(form.cleaned_data['password'])
         auth = user
         if passwd:
             auth += ':'
