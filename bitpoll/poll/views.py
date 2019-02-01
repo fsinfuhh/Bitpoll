@@ -154,7 +154,7 @@ def poll(request, poll_url: str, export: bool=False):
         writer.writerow(row)
         for vote, votechoices in zip(poll_votes, vote_choice_matrix):
             row = [vote.display_name if not current_poll.hide_participants else _('Hidden')]
-            row.extend([choice['value'].title if choice else '' for choice in votechoices])
+            row.extend([choice['value'].title if choice and choice['value'] else '' for choice in votechoices])
             writer.writerow(row)
         return response
 
