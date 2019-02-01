@@ -13,7 +13,9 @@
                 {% if request.user|is_watching:poll %}
                     <button class="action noprint" type="submit"><i class="fa fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
                 {% else %}
-                    <button class="action noprint" type="submit"><i class="fa fa-eye"></i> {% trans 'Watch Poll' %}</button>
+                    {% if request.user|can_watch:poll %}
+                        <button class="action noprint" type="submit"><i class="fa fa-eye"></i> {% trans 'Watch Poll' %}</button>
+                    {% endif %}
                 {% endif %}
             </form>
         {% endif %}

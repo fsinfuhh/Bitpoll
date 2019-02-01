@@ -6,6 +6,7 @@
 {% friendly_load raven %}
 
 {% block wtitle %}{% block ptitle %}{% trans "Internal server error" %}{% endblock %}{% endblock %}
+{% block css %}<link href="{% static 'css/sentry.css' %}" rel="stylesheet" type="text/css">{%  endblock %}
 {% block headJS %}<script src="{% static 'js/lib/raven.min.js' %}"></script>{% endblock %}
 
 {% if_has_tag sentry_public_dsn %}

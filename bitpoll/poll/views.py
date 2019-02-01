@@ -146,7 +146,7 @@ def poll(request, poll_url: str, export: bool=False):
             max_score = max(max_score_list)
 
     if export:
-        response = HttpResponse()
+        response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="poll.csv"'
         writer = csv.writer(response)
         a = [choice.get_title for choice in current_poll.ordered_choices]
@@ -155,7 +155,7 @@ def poll(request, poll_url: str, export: bool=False):
         writer.writerow(row)
         for vote, votechoices in zip(poll_votes, vote_choice_matrix):
             row = [vote.display_name if not current_poll.hide_participants else _('Hidden')]
-            row.extend([choice['value'].title if choice else '' for choice in votechoices])
+            row.extend([choice['value'].title if choice and choice['value'] else '' for choice in votechoices])
             writer.writerow(row)
         return response
 
@@ -284,7 +284,7 @@ def delete_comment(request, poll_url, comment_id):
 def watch(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
 
-    if not current_poll.can_watch(request.user, request):
+    if not current_poll.can_watch(request.user):
         messages.error(
             request, _("You are not allowed to watch this poll.")
         )
