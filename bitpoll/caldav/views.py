@@ -1,3 +1,4 @@
+from datetime import timedelta
 from urllib.parse import quote_plus
 
 from caldav import DAVClient, Calendar
@@ -47,7 +48,7 @@ def change_callendar(request):
                 try:
                     calendar = Calendar(client=DAVClient(parsed.url),
                                         url=parsed.url)
-                    calendar.date_search(now(), now())
+                    calendar.date_search(now(), now() + timedelta(hours=1))
                     caldav_obj.url = parsed.url
                     caldav_obj.user = request.user
                     caldav_obj.save()
