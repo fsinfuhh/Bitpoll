@@ -30,9 +30,13 @@ def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser):
                     ical = calendar.from_ical(appointment.data)
                     for event in ical.walk():
                         if event.name == "VEVENT":
+                            if "DTEND" in event:
+                                end = event.decoded('DTEND')
+                            else:
+                                end = event.decoded('DTSTART') + event.decoded("DURATION")
                             events_calendar.append({
-                                "DTSTART": event.get('DTSTART').dt,
-                                "DTEND": event.get('DTEND').dt,
+                                "DTSTART": event.decoded('DTSTART'),
+                                "DTEND": end,
                                 "NAME": event.get('summary').title(),
                             })
                 cache.set(cache_key, events_calendar)
