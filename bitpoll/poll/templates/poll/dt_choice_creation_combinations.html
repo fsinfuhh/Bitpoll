@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load pipeline %}
+{% load poll_filter %}
 
 {% block title %}Create choice{% endblock %}
 
@@ -33,9 +34,18 @@
                         <tr>
                         <th class="author">{{ day }}</th>
                         {% for time in times %}
-                            <td class="checkbox-cell on">
-                                <input type="checkbox" checked="[]" value="{{ day }} {{ time }}" name="datetimes[]"> {# TODO: autofill from database if checked! #}
-                            </td>
+                            {% is_initial_choice initial=initial_choices date=day time=time as is_initial %}
+
+                            {% if not initial_choices or is_initial %}
+                                <td class="checkbox-cell on">
+                                    <input type="checkbox" checked="[]" value="{{ day }} {{ time }}" name="datetimes[]">
+                                </td>
+                            {% else %}
+                                <td class="checkbox-cell off">
+                                    <input type="checkbox" value="{{ day }} {{ time }}" name="datetimes[]">
+                                </td>
+                            {% endif %}
+
                         {% endfor %}
                         <td class="choice-text script-only">
                             <button class="action icon toggle toggle-select toggle-row"><i class="fa fa-check-square-o"></i>

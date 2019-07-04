@@ -330,7 +330,7 @@ def edit_date_choice(request, poll_url):
     initial = {
         'dates': ','.join(set(list(
             date_format(localtime(c.date), format='Y-m-d')
-            for c in current_poll.choice_set.order_by('sort_key')))),
+            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
     }
     if request.method == 'POST':
         form = DateChoiceCreationForm(request.POST, initial=initial)
@@ -402,10 +402,10 @@ def edit_dt_choice_date(request, poll_url):
     initial = {
         'dates': ','.join(set(list(
             date_format(localtime(c.date), format='Y-m-d')
-            for c in current_poll.choice_set.order_by('sort_key')))),
+            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
         'times': ','.join(set(list(
             date_format(localtime(c.date), format='H:i')
-            for c in current_poll.choice_set.order_by('sort_key')))),
+            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
     }
     form = DTChoiceCreationDateForm(initial=initial)
     if request.method == 'POST':
@@ -448,10 +448,10 @@ def edit_dt_choice_time(request, poll_url):
     initial = {
         'dates': ','.join(
             date_format(localtime(c.date), format='Y-m-d')
-            for c in current_poll.choice_set.order_by('sort_key')),
+            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')),
         'times': ','.join(set(list(
             date_format(localtime(c.date), format='H:i')
-            for c in current_poll.choice_set.order_by('sort_key')))),
+            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
     }
     if request.method == 'POST':
         form = DTChoiceCreationTimeForm(request.POST, initial=initial)
@@ -459,9 +459,15 @@ def edit_dt_choice_time(request, poll_url):
             times = form.cleaned_data['times'].split(',')
             dates = form.cleaned_data['dates'].split(',')
 
+            initial_choices = current_poll.choice_set.filter(deleted=False).values_list('date')
+            initial_choices = list(initial_choices)
+            initial_choices = [(date_format(localtime(elem[0]), format='Y-m-d'),
+                                date_format(localtime(elem[0]), format='H:i')) for elem in initial_choices]
+
             return TemplateResponse(request, "poll/dt_choice_creation_combinations.html", {
                 'times': times,
                 'dates': dates,
+                'initial_choices': initial_choices,
                 'poll': current_poll,
                 'page': 'Choices',
                 'step': 3,
@@ -482,6 +488,11 @@ def edit_dt_choice_combinations(request, poll_url):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
+    initial_choices = current_poll.choice_set.filter(deleted=False).values_list('date')
+    initial_choices = list(initial_choices)
+    initial_choices = [(date_format(localtime(elem[0]), format='Y-m-d'),
+                        date_format(localtime(elem[0]), format='H:i')) for elem in initial_choices]
+
     if request.method == 'POST':
         # getlist does not raise an exception if datetimes[] is not in request.POST
         chosen_combinations = request.POST.getlist('datetimes[]')

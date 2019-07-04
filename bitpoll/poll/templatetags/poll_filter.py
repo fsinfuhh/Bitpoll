@@ -44,3 +44,11 @@ def get_own_vote_pk(poll: Poll, user: BitpollUser) -> int:
 @register.filter
 def get_tz_name_no_date_utc(poll: Poll, user: BitpollUser) -> str:
     return poll.get_tz_name_no_date_utc(user)
+
+
+@register.simple_tag
+def is_initial_choice(initial: list, date, time):
+    if (date, time) in initial:
+        return True
+
+    return False
