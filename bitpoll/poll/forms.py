@@ -16,6 +16,7 @@ class PollCreationForm(ModelForm):
             'anonymous_allowed',
             'require_login',
             'require_invitation',
+            'allow_unauthenticated_vote_changes',
             'one_vote_per_user',
             'vote_all',
         ]
@@ -63,6 +64,7 @@ class PollSettingsForm(ModelForm):
             'anonymous_allowed',
             'require_login',
             'require_invitation',
+            'allow_unauthenticated_vote_changes',
             'one_vote_per_user',
             'show_invitations',
             'group',
