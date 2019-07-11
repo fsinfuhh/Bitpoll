@@ -123,6 +123,11 @@ def poll(request, poll_url: str, export: bool=False):
                 stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
         } for stat in stats]
 
+    if current_poll.current_user_is_owner(request) and current_poll.allow_unauthenticated_vote_changes:
+        messages.warning(request, _("Currently, unauthenticated users are allowed to change votes. This means, "
+                                    "that everyone is able to change every vote that has not been assigned to a user. "
+                                    "If you want to prevent this, change the settings."))
+
     if request.user.is_authenticated:
         # warn the user if the Timezone is not the same on the Poll and in his settings
         different_timezone = current_poll.timezone_name != request.user.timezone

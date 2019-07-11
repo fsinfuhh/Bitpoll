@@ -165,6 +165,10 @@
                                 <label for="require_invitation">{% trans 'invitation required to vote' %}</label>
                             </div>
                             <div class="checkbox">
+                                <input type="checkbox" id="allow_unauthenticated_vote_changes" name="{{ poll_form.allow_unauthenticated_vote_changes.name }}" {% if poll_form.allow_unauthenticated_vote_changes.value %} checked {% endif %}>
+                                <label for="allow_unauthenticated_vote_changes">{% trans 'allow unauthenticated vote changes' %}</label>
+                            </div>
+                            <div class="checkbox">
                                 <input type="checkbox" id="one_vote_per_user" name="{{ poll_form.one_vote_per_user.name }}" {% if poll_form.one_vote_per_user.value %} checked {% endif %}>
                                 <label for="one_vote_per_user">{% trans 'one vote per user' %}</label>
                             </div>
