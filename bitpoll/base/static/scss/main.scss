@@ -212,6 +212,10 @@ td.not-padded {
     display: none;
 }
 
+.script-hidden {
+    // This is here to have better autocomplete support in IDEs
+}
+
 footer {
     width:100%;
     position:absolute;

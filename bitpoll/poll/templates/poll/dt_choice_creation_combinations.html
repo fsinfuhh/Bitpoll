@@ -37,7 +37,7 @@
                                 <input type="checkbox" checked="[]" value="{{ day }} {{ time }}" name="datetimes[]"> {# TODO: autofill from database if checked! #}
                             </td>
                         {% endfor %}
-                        <td class="choice-text">
+                        <td class="choice-text script-only">
                             <button class="action icon toggle toggle-select toggle-row"><i class="fa fa-check-square-o"></i>
                             </button>
                             <button class="action icon toggle toggle-deselect toggle-row"><i class="fa fa-square-o"></i>
@@ -49,14 +49,14 @@
                 <tr>
                     <td></td>
                     {% for time in times %}
-                    <td class="choice-text">
+                    <td class="choice-text script-only">
                         <button class="action icon toggle toggle-select toggle-column"><i class="fa fa-check-square-o"></i>
                         </button>
                         <button class="action icon toggle toggle-deselect toggle-column"><i class="fa fa-square-o"></i>
                         </button>
                     </td>
                     {% endfor %}
-                    <td class="choice-text">
+                    <td class="choice-text script-only">
                         <button class="action icon toggle toggle-select toggle-all"><i class="fa fa-check-square-o"></i>
                         </button>
                         <button class="action icon toggle toggle-deselect toggle-all"><i class="fa fa-square-o"></i>
