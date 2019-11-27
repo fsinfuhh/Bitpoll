@@ -113,6 +113,10 @@
                 <label for="public_listening">{% trans 'Show in public poll list' %}</label>
             </div>
             <div class="checkbox">
+                <input type="checkbox" id="allow_unauthenticated_vote_changes" name="{{ form.allow_unauthenticated_vote_changes.name }}" {% if form.allow_unauthenticated_vote_changes.value %} checked {% endif %}>
+                <label for="allow_unauthenticated_vote_changes">{% trans 'allow unauthenticated vote changes' %}</label>
+            </div>
+            <div class="checkbox">
                 <input type="checkbox" id="one_vote_per_user" name="{{ form.one_vote_per_user.name }}" {% if form.one_vote_per_user.value %} checked {% endif %}>
                 <label for="one_vote_per_user">{% trans 'one vote per user' %}</label>
             </div>
