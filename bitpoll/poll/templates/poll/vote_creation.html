@@ -28,7 +28,7 @@
         {% endif %}
             {% csrf_token %}
             <table class="table poll vote auto-width">
-                <tr class="script-only vote-header">
+                <tr class="vote-header">
                     <td colspan="{{ matrix_len }}"></td>
                     {% for value in values %}
                         <td class="vote-header text-center">
@@ -53,7 +53,6 @@
                                 </td>
                             {% endif %}
                         {% endfor %}
-                        <td class="vote-choice-form">
                         {% for value in values %}
                             <td class="vote-choice control bg-{{ value.color }}" title="{{ value.title }}">
                             <input type="radio" id="{{ choice.id }}_{{ value.id }}" value="{{ value.id }}" name="{{ choice.id }}" title=""

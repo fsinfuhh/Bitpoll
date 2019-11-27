@@ -1,4 +1,6 @@
 import json
+import string
+import random
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -35,8 +37,13 @@ def index(request):
     If the input is not valid, the user is directed back for correction.
     """
     public_polls = Poll.objects.filter(public_listening=True)  # TODO: limit & sotierung & pagination oder so?
+    randomize_url = settings.DEFAULT_RANDOM_SLUG == 'true'  # this settings value is a javascript true/false
     if request.method == 'POST':
-        form = PollCreationForm(request.POST)
+        randomize_url = 'random_slug' in request.POST
+        post_data = request.POST.copy()
+        if randomize_url and request.POST.get('url', '') == '':
+            post_data['url'] = generate_random_slug()
+        form = PollCreationForm(post_data)
         if form.is_valid():
             current_poll = form.save()
             if request.user.is_authenticated:
@@ -64,7 +71,13 @@ def index(request):
         'votes_count': Vote.objects.all().count(),
         'user_count': BitpollUser.objects.count(),
         'public_polls': public_polls,
+        'randomize_url': randomize_url,
+        'random_url': generate_random_slug() if randomize_url else '',
     })
+
+
+def generate_random_slug():
+    return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(10))
 
 
 @login_required
