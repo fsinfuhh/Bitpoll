@@ -965,8 +965,7 @@ msgid ""
 "Please select the days that you want to\n"
 "                    be able to choose."
 msgstr ""
-"Bitte wähle die Tage, über die abgestimmt werden soll. Im nächsten Schritt "
-"kannst du die Uhrzeiten hinzufügen."
+"Bitte wähle die Tage, über die abgestimmt werden soll."
 
 #: bitpoll/poll/templates/poll/choice_creation_date.html:56
 msgid "Mo"
