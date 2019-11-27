@@ -7,7 +7,7 @@
 django-auth-ldap==2.0.0
 django==2.1.11            # via django-auth-ldap
 pyasn1-modules==0.2.7     # via python-ldap
-pyasn1==0.4.7             # via pyasn1-modules, python-ldap
+pyasn1==0.4.8             # via pyasn1-modules, python-ldap
 python-ldap==3.2.0        # via django-auth-ldap
 pytz==2019.1              # via django
 raven==6.10.0
