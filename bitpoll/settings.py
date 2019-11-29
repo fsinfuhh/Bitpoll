@@ -325,6 +325,8 @@ TEAM_EMAIL = "mail@example.com"
 
 PUBLIC_POLLS = True
 
+ANTI_SPAM_CHALLENGE_TTL = 60 * 60 * 24 * 7  # Defaults to 7 days
+
 from .settings_local import *
 
 INSTALLED_APPS += INSTALLED_APPS_LOCAL

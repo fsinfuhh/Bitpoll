@@ -1,4 +1,4 @@
-from django.forms import ModelForm, CharField, Form
+from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField
 
 from .models import Poll, Choice, ChoiceValue, Comment
 
@@ -95,6 +95,9 @@ class ChoiceValueForm(ModelForm):
 
 
 class CommentForm(ModelForm):
+    spam_key = CharField(widget=HiddenInput(), required=False)
+    spam_answer = IntegerField(required=False)
+
     class Meta:
         model = Comment
         fields = ['name', 'text']

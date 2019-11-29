@@ -11,7 +11,7 @@ from django.db import transaction, IntegrityError
 
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
-from django.db.models import F, Sum, Count, Q
+from django.db.models import Sum, Count, Q
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -20,6 +20,7 @@ from django.utils.timezone import activate as tz_activate, localtime, now, make_
 from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST
 
+from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
 from .forms import PollCopyForm, DateChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, CommentForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS, PollWatch
@@ -175,6 +176,7 @@ def poll(request, poll_url: str, export: bool=False):
         'summary': summary,
         'comment_form': CommentForm(),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
+        'spam_challenge': create_anti_spam_challenge(current_poll.id),
     })
 
 
@@ -196,45 +198,70 @@ def comment(request, poll_url, comment_id=None):
     if request.POST:
         form = CommentForm(request.POST)
         if form.is_valid():
-            text = form.cleaned_data['text']
-            name = form.cleaned_data['name']
-            if not text:
-                messages.error(request, _("A Comment should have a text"))
-            if not user and not name:
-                messages.error(request, _("Provide a name"))
-            if user:
-                name = user.get_displayname()
-            if comment_id:
-                comment = get_object_or_404(Comment, pk=comment_id)
-                if comment.can_edit(request.user):
-                    comment.text = text
-                    #comment.name = name # TODO: wenn wir das erlauben wollen mit angemeldet/nicht angemeldet aufpassen
-                    # das die namen nicht durcheinander kommen.
-                    comment.save()
+            try:
+                spam_ok = True
+                if not user:
+                    if 'spam_answer' in form.cleaned_data and 'spam_key' in form.cleaned_data:
+                        spam_ok = check_anti_spam_challange(
+                            form.cleaned_data['spam_key'],
+                            form.cleaned_data['spam_answer'],
+                            current_poll.id
+                        )
+                    else:
+                        spam_ok, err_message = False, _('This Field is rquired')
+                text = form.cleaned_data['text']
+                name = form.cleaned_data['name']
+                spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
+                if spam_ok:
+                    if user or name:
+                        if user:
+                            name = user.get_displayname()
+                        if comment_id:
+                            comment_obj = get_object_or_404(Comment, pk=comment_id)
+                            if comment_obj.can_edit(request.user):
+                                comment_obj.text = text
+                                # comment.name = name # TODO: wenn wir das erlauben wollen mit angemeldet/nicht angemeldet aufpassen
+                                # das die namen nicht durcheinander kommen.
+                                comment_obj.save()
+                            else:
+                                messages.error(request, _("You can't edit this Comment"))
+                        else:
+                            new_comment = Comment(text=text,
+                                                  date_created=now(),
+                                                  name=name,
+                                                  poll=current_poll,
+                                                  user=user)
+                            new_comment.save()
+                        return redirect('poll', poll_url)
+                    else:
+                        form.add_error('name', _("Provide a name"))
                 else:
-                    messages.error(request, _("You can't edit this Comment"))
+                    form.add_error('spam_answer', _("Wrong result"))
+            except ValidationError as e:
+                # if the anti spam challenge faild we generate a new one.
+                spam_challenge = create_anti_spam_challenge(current_poll.id)
+                form.add_error('spam_answer', e.message)
+        else:
+            if 'spam_key' in request.POST:
+                spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
             else:
-                new_comment = Comment(text=text,
-                                      date_created=now(),
-                                      name=name,
-                                      poll=current_poll,
-                                      user=user)
-                new_comment.save()
-            return redirect('poll', poll_url)
+                spam_challenge = create_anti_spam_challenge(current_poll.id)
     else:
         if comment_id:
-            comment = get_object_or_404(Comment, pk=comment_id)
-            if comment.can_edit(request.user):
-                form = CommentForm(instance=comment)
+            comment_obj = get_object_or_404(Comment, pk=comment_id)
+            if comment_obj.can_edit(request.user):
+                form = CommentForm(instance=comment_obj)
             else:
                 messages.error(request, _("You can't edit this Comment"))
                 return redirect('poll', poll_url)
         else:
             form = CommentForm()
+        spam_challenge = create_anti_spam_challenge(current_poll.id)
     return TemplateResponse(request, 'poll/comment_edit.html', {
         'comment_form': form,
         'comment_edit_id': comment_id,
-        'poll': current_poll
+        'poll': current_poll,
+        'spam_challenge': spam_challenge,
     })
 
 
