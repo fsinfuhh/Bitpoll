@@ -179,11 +179,9 @@ PIPELINE = {
             'source_filenames': (
                 #'js/lib/jquery-range.min.js',  # TODO: is this needet for the numeric polls?
                 'js/lib/moment-with-locales.min.js',
-                'js/lib/mousetrap.min.js',
                 'js/main.js',
                 'js/util.js',
                 'js/custom-select.jquery.js',
-                'js/common.js',
                 'js/slider.js',
                 'js/vote.js',
                 'js/lib/jquery.datetimepicker.full.min.js',

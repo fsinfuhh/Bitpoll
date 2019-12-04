@@ -73,34 +73,30 @@
         {% endif %}
         <nav>
             <ul class="poll-tabs noprint">
-                <li class="{% if page == "" %}active{% endif %}"><a data-shortcut="g o"
-                                                                    href="{% url 'poll' poll.url %}"><i
+                <li class="{% if page == "" %}active{% endif %}"><a href="{% url 'poll' poll.url %}"><i
                         class="fa fa-table"></i>
                     <span>{% trans 'Overview' %}</span></a>
                 </li>
             {% comment %}
-                <li class="{% if page == "Activity" %}active{% endif %}"><a data-shortcut="g a" href="{# TODO #}"><i
+                <li class="{% if page == "Activity" %}active{% endif %}"><a href="{# TODO #}"><i
                     class="fa fa-comments-o"></i><span>{% trans 'Activity' %}</span></a>
                 </li>
             {%  endcomment %}
                 {% if poll|poll_can_edit:request.user %}
-                     <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s"
-                                                                                href="{% url 'poll_settings' poll.url %}">
+                     <li class="{% if page == "Settings" %}active{% endif %}"><a href="{% url 'poll_settings' poll.url %}">
                         <i class="fa fa-wrench"></i><span>{% trans 'Settings' %}</span></a>
                     </li>
                     <li class="{% if page == "Choices" %}active{% endif %}">
-                        <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
+                        <a href="{% url 'poll_editChoice' poll.url %}"><i
                                 class="fa fa-list"></i><span>{% trans 'Choices' %}</span></a>
                     </li>
                 {% endif %}
                 {% if poll.one_vote_per_user and poll|has_voted:request.user %}
-                    <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
-                                                                                 href="{% url 'poll_voteEdit' poll.url poll|get_own_vote_pk:request.user %}"><i
+                    <li class="vote {% if page == "Vote" %}active{% endif %}"><a href="{% url 'poll_voteEdit' poll.url poll|get_own_vote_pk:request.user %}"><i
                         class="fa fa-check"></i><span>{% trans 'Edit Vote' %}</span></a>
                     </li>
                 {% else %}
-                    <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
-                                                                                 href="{% url 'poll_vote' poll.url %}"><i
+                    <li class="vote {% if page == "Vote" %}active{% endif %}"><a href="{% url 'poll_vote' poll.url %}"><i
                         class="fa fa-check"></i><span>{% trans 'Vote' %}</span></a>
                     </li>
                 {% endif %}
