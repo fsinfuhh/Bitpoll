@@ -47,7 +47,7 @@ ul.help-list {
             margin-left: -1.2em;
             width: 1.2em;
             display: inline-block;
-            font-family: "entypo";
+            //font-family: "entypo";
         }
     }
 }
@@ -117,7 +117,7 @@ section.section {
     border: 1px solid #CCC;
     background: #FFF;
 
-    > li {
+    > label {
         background: none;
         cursor: pointer;
         transition: background 0.2s, border 0.2s;
@@ -138,22 +138,6 @@ section.section {
 
         }
 
-        &.current {
-            color: $primary-color;
-
-            // mobile
-            // .title {
-            //     background: $primary-color;
-            //     color: white;
-            // }
-
-            // mobile
-            .fa {
-                background: $primary-color;
-                color: white;
-            }
-        }
-
         .title {
             display: block;
             font-weight: bold;
@@ -165,7 +149,7 @@ section.section {
             // padding: 8px;
         }
 
-        .icon {
+        .create-icon {
             display: block;
             padding: 8px;
             color: inherit;
@@ -189,10 +173,38 @@ section.section {
         }
 
         .description {
-            font-size: 0.9em;
+            font-size: 0.8em;
 
             // mobile
             // padding: 8px;
+        }
+    }
+}
+
+.create-type-select {
+    &:checked {
+        & ~ .description {
+            color: $primary-color;
+        }
+
+        & ~ .title {
+            background-color: $primary-color;
+            color: white;
+        }
+
+        &~ .create-icon > .fa {
+            color: $primary-color;
+        }
+    }
+}
+
+@media #{$media-desktop} {
+    .create-type-select {
+        &:checked {
+            .fa {
+                background: none;
+                color: inherit;
+            }
         }
     }
 }
@@ -201,7 +213,7 @@ section.section {
     .type-choices {
         display: flex;
 
-        > li {
+        > label {
             flex: 1 1 100px;
 
             border-bottom: 0;
@@ -210,37 +222,35 @@ section.section {
             display: block;
             text-align: center;
 
-            &.current {
-                .title {
-                    background: $primary-color;
-                    color: white;
-                }
-
-                .fa {
-                    background: none;
-                    color: inherit;
-                }
-            }
-
             .title {
                 border-radius: 2px;
                 margin: 0 8px;
                 padding: 8px;
             }
 
-            .icon {
-                // mobile
-                margin-right: 0;
-            }
-
             .description {
-                height: 60px;
                 padding: 8px;
+                display: inline-block;
             }
         }
 
     }
 
+}
+
+#advanced_open_checkbox {
+    &:checked {
+        & ~ div > .more {
+            display: none;
+        }
+    }
+    &:not(:checked) ~ div > .less {
+        display: none;
+    }
+
+    &:not(:checked) ~ #advanced-open {
+        display: none;
+    }
 }
 
 .form-step {
@@ -268,4 +278,8 @@ section.section {
         content: " ";
         vertical-align: middle;
     }
+}
+
+.boxes {
+    margin-top: 1em;
 }

@@ -15,7 +15,7 @@
     $(function () {
         var $randomSlug, $randomizeButton, $slugInput, $title, update, updateRandom, updateRandomSlug, updateTitle;
         $randomizeButton = $('#slug-randomize');
-        $title = $('#title-input');
+        $title = $('#id_title');
         $slugInput = $('#slug-input');
         $randomSlug = $('#random_slug');
 
@@ -24,7 +24,7 @@
             return;
         }
 
-        $randomSlug.prop('checked', RANDOM_SLUGS);
+        $randomSlug.prop('checked');
         update = function (random) {
             var slug, title;
             title = $title.val();
@@ -58,7 +58,6 @@
         $randomizeButton.on("click", updateRandom);
         $title.on("input", updateTitle);
         $randomSlug.on("click", updateRandomSlug);
-        return update(false);
     });
 
 }).call();

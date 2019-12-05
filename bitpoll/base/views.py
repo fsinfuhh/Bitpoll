@@ -3,6 +3,7 @@ import string
 import random
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
@@ -73,6 +74,7 @@ def index(request):
         'public_polls': public_polls,
         'randomize_url': randomize_url,
         'random_url': generate_random_slug() if randomize_url else '',
+        'login_form': AuthenticationForm,
     })
 
 

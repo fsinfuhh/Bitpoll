@@ -72,7 +72,16 @@
         </nav>
     </header>
     <section id="main-content">
-        {% block content %}
+        {% block wide-content %}
+            <div class="container">
+                <div class="columns">
+                    <div class="column col-2 col-xl-1 col-lg-1 hide-md"></div>
+                    <div class="column col-8 col-xl-10 col-lg-10 col-md-12" id="content-container">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
         {% endblock %}
     </section>
 
@@ -85,11 +94,9 @@
            class="separator"></span>
         <form class="form-inline" action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
-            <p>
-                <button name="language" value="de" class="btn-link lang-btn" type="submit">Deutsch</button>
+                <button name="language" value="de" class="btn btn-link lang-btn" type="submit">Deutsch</button>
                 &middot;
-                <button name="language" value="en" class="btn-link lang-btn" type="submit">English</button>
-            </p>
+                <button name="language" value="en" class="btn btn-link lang-btn" type="submit">English</button>
         </form>
 
             {% if debug %}

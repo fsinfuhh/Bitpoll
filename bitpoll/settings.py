@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django-simple-csp',
+    'django-spectre-css',
     'django_markdown',
     'widget_tweaks',
     'pipeline',
@@ -84,7 +85,7 @@ INSTALLED_APPS = [
     'bitpoll.registration',
     'bitpoll.groups',
     'django.contrib.admin',
-    'friendlytagloader'
+    'friendlytagloader',
 ]
 
 MIDDLEWARE = [
@@ -128,8 +129,11 @@ PIPELINE = {
         },
         'base_screen': {
             'source_filenames': (
-                'css/bootstrap.css',
-                'css/bootstrap-theme.css',
+                #'css/bootstrap.css',
+                #'css/bootstrap-theme.css',
+                'css/lib/spectre.css',
+                'css/lib/spectre-exp.css',
+                'css/lib/spectre-icons.css',
                 # 'css/jquery-range.css',  # this belongs to commented out JS class
                 'scss/form.scss',
                 'scss/action.scss',
@@ -163,7 +167,6 @@ PIPELINE = {
         },
         'create_poll': {
             'source_filenames': (
-                'js/create.js',
                 'js/slug.js',
             ),
             'output_filename': 'js/index.js',
