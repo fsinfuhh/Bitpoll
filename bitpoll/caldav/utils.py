@@ -30,15 +30,26 @@ def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser):
                     ical = calendar.from_ical(appointment.data)
                     for event in ical.walk():
                         if event.name == "VEVENT":
-                            if "DTEND" in event:
-                                end = event.decoded('DTEND')
-                            else:
-                                end = event.decoded('DTSTART') + event.decoded("DURATION")
-                            events_calendar.append({
-                                "DTSTART": event.decoded('DTSTART'),
-                                "DTEND": end,
-                                "NAME": event.get('summary').title(),
-                            })
+                            try:
+                                if "DTEND" in event:
+                                    end = event.decoded('DTEND')
+                                else:
+                                    duration = event.decoded("DURATION")
+                                    if isinstance(duration, list):
+                                        duration = duration[0]  # todo: use all elements?? what does it mean if there are more than one element?
+                                    end = event.decoded('DTSTART') + duration
+                                events_calendar.append({
+                                    "DTSTART": event.decoded('DTSTART'),
+                                    "DTEND": end,
+                                    "NAME": event.get('summary').title(),
+                                })
+                            except (AttributeError, ValueError, TypeError) as e:
+                                # we ignore the event we can not parse, but send it to sentry
+                                try:
+                                    from raven.contrib.django.raven_compat.models import client
+                                    client.captureException()
+                                except ImportError:
+                                    pass
                 cache.set(cache_key, events_calendar)
             events += events_calendar
         for choice in choices:
