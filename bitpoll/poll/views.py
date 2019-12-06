@@ -871,7 +871,7 @@ def vote(request, poll_url, vote_id=None):
         comments.append(cur_comment)
         choice_votes.append(value)
 
-    events = get_caldav(choices, current_poll, request.user)
+    events = get_caldav(choices, current_poll, request.user, request)
 
     return TemplateResponse(request, 'poll/vote_creation.html', {
         'poll': current_poll,
