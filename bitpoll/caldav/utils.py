@@ -1,5 +1,8 @@
 from caldav import Calendar as DavCalendar, DAVClient
+from caldav.lib.error import AuthorizationError
 from django.core.cache import cache
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy
 from icalendar import Calendar
 from typing import List
 
@@ -7,7 +10,7 @@ from bitpoll.base.models import BitpollUser
 from bitpoll.poll.models import Choice, Poll
 
 
-def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser):
+def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser, request):
     # calendar stuff
     events2 = []
     if user.is_authenticated and current_poll.type == 'datetime' and choices:
@@ -20,37 +23,40 @@ def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser):
             cache_key = "calendar_{}_events_{}-{}".format(calendar_obj.id, start, end).replace(' ', '_')
             events_calendar = cache.get(cache_key)
             if events_calendar is None:
-                print("not chached")
                 events_calendar = []
-                calendar = DavCalendar(client=DAVClient(calendar_obj.url),
-                                       url=calendar_obj.url)
-                appointments = calendar.date_search(start, end)
-                calendar = Calendar()
-                for appointment in appointments:
-                    ical = calendar.from_ical(appointment.data)
-                    for event in ical.walk():
-                        if event.name == "VEVENT":
-                            try:
-                                if "DTEND" in event:
-                                    end = event.decoded('DTEND')
-                                else:
-                                    duration = event.decoded("DURATION")
-                                    if isinstance(duration, list):
-                                        duration = duration[0]  # todo: use all elements?? what does it mean if there are more than one element?
-                                    end = event.decoded('DTSTART') + duration
-                                events_calendar.append({
-                                    "DTSTART": event.decoded('DTSTART'),
-                                    "DTEND": end,
-                                    "NAME": event.get('summary').title(),
-                                })
-                            except (AttributeError, ValueError, TypeError) as e:
-                                # we ignore the event we can not parse, but send it to sentry
+                try:
+                    calendar = DavCalendar(client=DAVClient(calendar_obj.url),
+                                           url=calendar_obj.url)
+                    appointments = calendar.date_search(start, end)
+                    calendar = Calendar()
+                    for appointment in appointments:
+                        ical = calendar.from_ical(appointment.data)
+                        for event in ical.walk():
+                            if event.name == "VEVENT":
                                 try:
-                                    from raven.contrib.django.raven_compat.models import client
-                                    client.captureException()
-                                except ImportError:
-                                    pass
-                cache.set(cache_key, events_calendar)
+                                    if "DTEND" in event:
+                                        end = event.decoded('DTEND')
+                                    else:
+                                        duration = event.decoded("DURATION")
+                                        if isinstance(duration, list):
+                                            duration = duration[0]  # todo: use all elements?? what does it mean if there are more than one element?
+                                        end = event.decoded('DTSTART') + duration
+                                    events_calendar.append({
+                                        "DTSTART": event.decoded('DTSTART'),
+                                        "DTEND": end,
+                                        "NAME": event.get('summary').title(),
+                                    })
+                                except (AttributeError, ValueError, TypeError) as e:
+                                    # we ignore the event we can not parse, but send it to sentry
+                                    try:
+                                        from raven.contrib.django.raven_compat.models import client
+                                        client.captureException()
+                                    except Exception:
+                                        # if the sending of the error does fail we ignore it
+                                        pass
+                    cache.set(cache_key, events_calendar)
+                except AuthorizationError as e:
+                    messages.warning(request, ugettext_lazy('Could not access your calendar "%s" due to an authorization error' % calendar_obj.name))
             events += events_calendar
         for choice in choices:
             ev_tmp = []
@@ -65,6 +71,6 @@ def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser):
                         ev_tmp.append(event)
             events2.append(ev_tmp)
     else:
-        for _ in choices:
+        for choice in choices:
             events2.append([])
     return events2
