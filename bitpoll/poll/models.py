@@ -88,7 +88,7 @@ class Poll(models.Model):
             if request:
                 messages.error(request, _("Login required to vote."))
             return False
-        elif self.require_invitation and (not user.is_authenticated or user not in self.invitation_set.all().values('user')):
+        elif self.require_invitation and (not user.is_authenticated or not self.invitation_set.filter(user=user).exists()):
             if request:
                 messages.error(request, _("You are not allowed to vote in this poll. You have to be invited"))
             return False
