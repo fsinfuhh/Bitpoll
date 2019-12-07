@@ -53,6 +53,22 @@
                 {% endif %}
         </p>
     </div>
+    {% if not request.user.is_authenticated %}
+        <div class="form-group">
+            <label for="{{ comment_form.spam_answer.name }}">{{ spam_challenge.x }} {{ spam_challenge.op }} {{ spam_challenge.y }} =</label>
+            <input class="form-control" type="text" title="Challenge" name="{{ comment_form.spam_answer.name }}" value="{{ comment_form.spam_answer.value|default_if_none:'' }}">
+            {% if comment_form.spam_answer.errors %}
+                <div class="form-errors">
+                    <div class="alert alert-danger">
+                        <div class="container">
+                            <i class="fa fa-times"></i>{{ comment_form.spam_answer.errors }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <input type="hidden" name="{{ comment_form.spam_key.name }}" value="{{ spam_challenge.key }}">
+        </div>
+    {% endif %}
     <div class="form-group">
         <input class="action primary" type="submit" title="Save Comment" value="{% trans 'Save Comment' %}">
     </div>

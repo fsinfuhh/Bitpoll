@@ -341,6 +341,8 @@ PUBLIC_POLLS = True
 CALENDAR_MAX_TOKENS = 2
 CALENDAR_FILL_RATE = 500
 
+ANTI_SPAM_CHALLENGE_TTL = 60 * 60 * 24 * 7  # Defaults to 7 days
+
 from .settings_local import *
 
 INSTALLED_APPS += INSTALLED_APPS_LOCAL
