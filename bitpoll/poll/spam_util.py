@@ -48,7 +48,7 @@ def check_anti_spam_challange(key: str, answer: str, poll_id: int) -> bool:
         if spam_data.get('type') != 'anti_spam':
             raise ValidationError(_("Error while checking response"))
     except BadSignature:
-        raise ValueError(_("Error while checking response"))
+        raise ValidationError(_("Error while checking response"))
     if spam_data['poll_id'] != poll_id:
         raise ValidationError(_("Error while checking response"))
     if spam_data['time'] <= time.time() - django_settings.ANTI_SPAM_CHALLENGE_TTL:
