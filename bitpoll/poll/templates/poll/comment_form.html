@@ -6,6 +6,15 @@
 {%  endif %}
     {% csrf_token %}
     <div class="form-group">
+        {% if comment_form.non_field_errors %}
+            <div class="row">
+            <div class="alert alert-danger" role="alert">
+                {% for error in comment_form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+            </div>
+        {% endif %}
         <div class="row">
             <div class="col-sm-4">
                 {% if request.user.is_authenticated %}
