@@ -1,4 +1,4 @@
-from django.forms import ModelForm, CharField, Form
+from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField
 
 from .models import Poll, Choice, ChoiceValue, Comment
 
@@ -16,6 +16,7 @@ class PollCreationForm(ModelForm):
             'anonymous_allowed',
             'require_login',
             'require_invitation',
+            'allow_unauthenticated_vote_changes',
             'one_vote_per_user',
             'vote_all',
         ]
@@ -63,6 +64,7 @@ class PollSettingsForm(ModelForm):
             'anonymous_allowed',
             'require_login',
             'require_invitation',
+            'allow_unauthenticated_vote_changes',
             'one_vote_per_user',
             'show_invitations',
             'group',
@@ -93,6 +95,9 @@ class ChoiceValueForm(ModelForm):
 
 
 class CommentForm(ModelForm):
+    spam_key = CharField(widget=HiddenInput(), required=False)
+    spam_answer = IntegerField(required=False)
+
     class Meta:
         model = Comment
         fields = ['name', 'text']

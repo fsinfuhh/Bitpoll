@@ -54,6 +54,7 @@ class Poll(models.Model):
     show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete")
     send_mail = models.BooleanField(default=False)
     one_vote_per_user = models.BooleanField(default=True)
+    allow_unauthenticated_vote_changes = models.BooleanField(default=False)
     allow_comments = models.BooleanField(default=True)
     show_invitations = models.BooleanField(default=True)
     timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
@@ -87,7 +88,7 @@ class Poll(models.Model):
             if request:
                 messages.error(request, _("Login required to vote."))
             return False
-        elif self.require_invitation and (not user.is_authenticated or user not in self.invitation_set.all().values('user')):
+        elif self.require_invitation and (not user.is_authenticated or not self.invitation_set.filter(user=user).exists()):
             if request:
                 messages.error(request, _("You are not allowed to vote in this poll. You have to be invited"))
             return False
@@ -302,7 +303,7 @@ class Vote(models.Model):
         """
         if user.is_authenticated and (self.user == user or self.poll.can_edit(user)):
             return True
-        if not self.user and self.poll.can_edit(user):
+        if not self.user and (self.poll.can_edit(user) or self.poll.allow_unauthenticated_vote_changes):
             return True
         return False
 

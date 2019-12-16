@@ -9,7 +9,7 @@ django-markdown-app==0.9.6
 django-pipeline==1.6.14
 django-simple-csp==0.2.dev1
 django-widget-tweaks==1.4.5
-django==2.1.14
+django==2.1.15
 libsass==0.19.4           # via libsasscompiler
 libsasscompiler==0.1.5
 markdown==3.1.1           # via django-markdown-app

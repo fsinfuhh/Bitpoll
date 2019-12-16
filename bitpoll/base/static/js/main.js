@@ -7,6 +7,7 @@ $(document).ready(function() {
     $("tr.script-only").css("display", "table-row");
     $("table.script-only").css("display", "table");
     $(".script-hidden").hide();
+    $(".script-hidden").addClass('hidden');
 
     $(".btn-js-back").click(function() {
         history.back();
