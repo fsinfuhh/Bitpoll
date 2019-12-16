@@ -1,6 +1,37 @@
+from time import strptime
+
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Poll, Choice, ChoiceValue, Comment
+
+
+class MultipleTemporalBaseField(CharField):
+    format = ""
+    message = ""
+
+    def validate(self, values):
+        super().validate(values)
+        for value in values.split(','):
+            try:
+                strptime(value.strip(), self.format)
+            except (ValueError, TypeError):
+                raise ValidationError(
+                    self.message,
+                    code='invalid',
+                    params={'value': value.strip()}
+                )
+
+
+class DatesField(MultipleTemporalBaseField):
+    format = "%Y-%m-%d"
+    message = _('could not parse the date: "%(value)s", the format is YYY-MM-DD separated by commas.')
+
+
+class TimesField(MultipleTemporalBaseField):
+    format = "%H:%M"
+    message = _('could not parse the time: "%(value)s", the format is HH:MM separated by commas.')
 
 
 class PollCreationForm(ModelForm):
@@ -29,7 +60,7 @@ class PollCopyForm(ModelForm):
 
 
 class DateChoiceCreationForm(Form):
-    dates = CharField()
+    dates = DatesField()
 
 
 class UniversalChoiceCreationForm(ModelForm):
@@ -39,7 +70,7 @@ class UniversalChoiceCreationForm(ModelForm):
 
 
 class DTChoiceCreationDateForm(Form):
-    dates = CharField()
+    dates = DatesField()
 
 
 class DTChoiceCreationTimeForm(Form):
@@ -47,8 +78,8 @@ class DTChoiceCreationTimeForm(Form):
         super(DTChoiceCreationTimeForm, self).__init__(*args, **kwargs)
         self.date.initial = date"""
 
-    dates = CharField()
-    times = CharField()
+    dates = DatesField()
+    times = TimesField()
 
 
 class PollSettingsForm(ModelForm):
@@ -79,7 +110,7 @@ class PollSettingsForm(ModelForm):
 class PollDeleteForm(ModelForm):
     class Meta:
         model = Poll
-        fields = ['title', 'due_date', 'description'] #TODO: das sollte kein model form sein
+        fields = ['title', 'due_date', 'description']  # TODO: das sollte kein model form sein
 
 
 class ChoiceValueForm(ModelForm):

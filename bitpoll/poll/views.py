@@ -1,6 +1,7 @@
 import csv
 
 import re
+from typing import Dict, Set
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -384,11 +385,11 @@ def edit_date_choice(request, poll_url):
                         dates.append(date)
                     else:
                         error = True
-                        messages.error(_("There was en error interpreting the provided dates and times"))
+                        messages.error(request, _("There was en error interpreting the provided dates and times"))
                 except ValueError:
                     # This will most likely only happen with users turning of JS
                     error = True
-                    messages.error(_("There was en error interpreting the provided dates and times"))
+                    messages.error(request, _("There was en error interpreting the provided dates and times"))
             if not error:
                 for i, datum in enumerate(sorted(dates)):
                     choice_objs = Choice.objects.filter(poll=current_poll, date=datum)
@@ -416,6 +417,18 @@ def edit_date_choice(request, poll_url):
     })
 
 
+def get_dt_initial_data(current_poll: Poll) -> Dict[str, str]:
+    choices = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
+    return {
+        'dates': ', '.join(sorted(set(list(
+            date_format(localtime(c.date), format='Y-m-d')
+            for c in choices)))),
+        'times': ', '.join(sorted(set(list(
+            date_format(localtime(c.date), format='H:i')
+            for c in choices)))),
+    }
+
+
 def edit_dt_choice_date(request, poll_url):
     """
     :param request:
@@ -431,14 +444,7 @@ def edit_dt_choice_date(request, poll_url):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
-    initial = {
-        'dates': ','.join(set(list(
-            date_format(localtime(c.date), format='Y-m-d')
-            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
-        'times': ','.join(set(list(
-            date_format(localtime(c.date), format='H:i')
-            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
-    }
+    initial = get_dt_initial_data(current_poll)
     form = DTChoiceCreationDateForm(initial=initial)
     if request.method == 'POST':
         form = DTChoiceCreationDateForm(
@@ -477,34 +483,25 @@ def edit_dt_choice_time(request, poll_url):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
-    initial = {
-        'dates': ','.join(
-            date_format(localtime(c.date), format='Y-m-d')
-            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')),
-        'times': ','.join(set(list(
-            date_format(localtime(c.date), format='H:i')
-            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
-    }
     if request.method == 'POST':
-        form = DTChoiceCreationTimeForm(request.POST, initial=initial)
+        form = DTChoiceCreationTimeForm(request.POST, initial=get_dt_initial_data(current_poll))
         if form.is_valid():
-            times = form.cleaned_data['times'].split(',')
-            dates = form.cleaned_data['dates'].split(',')
+            times = [value.strip() for value in form.cleaned_data['times'].split(',')]
+            dates = [value.strip() for value in form.cleaned_data['dates'].split(',')]
 
             initial_choices = current_poll.choice_set.filter(deleted=False).values_list('date')
-            initial_choices = list(initial_choices)
             initial_choices = [(date_format(localtime(elem[0]), format='Y-m-d'),
-                                date_format(localtime(elem[0]), format='H:i')) for elem in initial_choices]
+                                date_format(localtime(elem[0]), format='H:i')) for elem in list(initial_choices)]
 
             return TemplateResponse(request, "poll/dt_choice_creation_combinations.html", {
-                'times': times,
-                'dates': dates,
+                'times': sorted(times),
+                'dates': sorted(dates),
                 'initial_choices': initial_choices,
                 'poll': current_poll,
                 'page': 'Choices',
                 'step': 3,
             })
-        elif form.cleaned_data['dates'] != "":
+        elif form.data.get('dates') != "":
             return TemplateResponse(request, "poll/dt_choice_creation_time.html", {
                 'time': form,
                 'poll': current_poll,
@@ -520,10 +517,6 @@ def edit_dt_choice_combinations(request, poll_url):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
-    initial_choices = current_poll.choice_set.filter(deleted=False).values_list('date')
-    initial_choices = list(initial_choices)
-    initial_choices = [(date_format(localtime(elem[0]), format='Y-m-d'),
-                        date_format(localtime(elem[0]), format='H:i')) for elem in initial_choices]
 
     if request.method == 'POST':
         # getlist does not raise an exception if datetimes[] is not in request.POST
@@ -531,7 +524,7 @@ def edit_dt_choice_combinations(request, poll_url):
 
         chosen_times = []
         new_choices = []
-        old_choices = []
+        existing_choices = []
         choices = current_poll.choice_set.all()
         # List of the Old Ids, used for detection what has to be deleted
         old_choices_ids = [c.pk for c in choices]
@@ -542,21 +535,20 @@ def edit_dt_choice_combinations(request, poll_url):
                 timestamp = parse_datetime(combination)
                 if timestamp:
                     chosen_times.append(tz.localize(timestamp))
-                else:
+                else:  # should only happen if somebody have tampered with the form
                     messages.error(request, _("There was en error interpreting the provided dates and times"))
                     return redirect('poll_editDTChoiceDate', current_poll.url)
-            except ValueError:
-                # at least one invalid time/date has been specified. Redirect to first step # TODO: error message spezifizierne
+            except ValueError:  # should only happen if somebody have tampered with the form
                 messages.error(request, _("There was en error interpreting the provided dates and times"))
                 return redirect('poll_editDTChoiceDate', current_poll.url)
         # Search for already existing Choices
         for i, date_time in enumerate(sorted(chosen_times)):
-            choice_obj = current_poll.choice_set.filter(date=date_time)
+            choice_obj = current_poll.choice_set.filter(date=date_time)  #TODO: dboptimize? or does django cache
             if choice_obj:
                 old_choices_ids.remove(choice_obj[0].pk)
                 choice_obj[0].sort_key = i
                 choice_obj[0].deleted = False  # Mark as not deleted
-                old_choices.append(choice_obj[0])
+                existing_choices.append(choice_obj[0])
             else:
                 new_choices.append(Choice(
                     date=date_time, poll=current_poll, sort_key=i))
@@ -564,7 +556,7 @@ def edit_dt_choice_combinations(request, poll_url):
         with transaction.atomic():
             # Save the new Choices
             Choice.objects.bulk_create(new_choices)
-            for choice in old_choices:
+            for choice in existing_choices:
                 choice.save()
             Choice.objects.filter(pk__in=old_choices_ids).update(deleted=True)
         return redirect('poll', current_poll.url)
