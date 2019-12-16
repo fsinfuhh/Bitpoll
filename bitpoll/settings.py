@@ -84,7 +84,8 @@ INSTALLED_APPS = [
     'bitpoll.registration',
     'bitpoll.groups',
     'django.contrib.admin',
-    'friendlytagloader'
+    'friendlytagloader',
+    'django_token_bucket',
 ]
 
 MIDDLEWARE = [

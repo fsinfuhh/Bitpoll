@@ -19,6 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import activate as tz_activate, localtime, now, make_naive, make_aware
 from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST
+from django_token_bucket.models import TokenBucket
 
 from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
 from .forms import PollCopyForm, DateChoiceCreationForm, \
@@ -198,6 +199,7 @@ def comment(request, poll_url, comment_id=None):
     if request.POST:
         form = CommentForm(request.POST)
         if form.is_valid():
+            token_bucket = TokenBucket.get("Comments", current_poll, 5, 1800, 'commenting')
             try:
                 spam_ok = True
                 if not user:
@@ -213,6 +215,8 @@ def comment(request, poll_url, comment_id=None):
                 name = form.cleaned_data['name']
                 spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
                 if spam_ok:
+                    if not user:
+                        token_bucket.consume(1)
                     if user or name:
                         if user:
                             name = user.get_displayname()
@@ -237,6 +241,9 @@ def comment(request, poll_url, comment_id=None):
                         form.add_error('name', _("Provide a name"))
                 else:
                     form.add_error('spam_answer', _("Wrong result"))
+            except token_bucket.TokensExceeded as e:
+                form.add_error(None, e)
+                spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
             except ValidationError as e:
                 # if the anti spam challenge faild we generate a new one.
                 spam_challenge = create_anti_spam_challenge(current_poll.id)

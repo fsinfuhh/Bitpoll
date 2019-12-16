@@ -6,3 +6,4 @@ django-simple-csp
 libsasscompiler
 django-pipeline
 django-friendly-tag-loader
+django-token-bucket
