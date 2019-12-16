@@ -88,7 +88,12 @@ function updateDateTimeList() {
 
     $("#calendar-list").html("");
     dates.forEach(function(date) {
-        var formatDate = moment(date).format("ddd D MMM");
+        var format = "ddd D MMM";
+        var date_obj = moment(date);
+        if (date_obj.year() !== moment().year()) {
+            format = "ddd D MMM YYYY"
+        }
+        var formatDate = date_obj.format(format);
         $("#calendar-list").append('<li><button class="action date-remove-button" title="remove date" data-date="' + date +'"><span>' + formatDate + '</span><i class="fa fa-times"></i></button></li> ');
     });
 
