@@ -36,32 +36,30 @@ POLL_RESULTS = (
 
 
 class Poll(models.Model):
-    title = models.CharField(max_length=80)
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=80, verbose_name=_('Title'))
+    description = models.TextField(blank=True, verbose_name=_('Description'))
     url = models.SlugField(max_length=80, unique=True)
     type = models.CharField(max_length=20, choices=POLL_TYPES)
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(BitpollUser, null=True, blank=True, on_delete=models.SET_NULL)
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
-    """owner_id = models.ForeignKey(Member)"""
+    user = models.ForeignKey(BitpollUser, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=_('owning user'))
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=_('owning group'))
 
     # === Extra settings ==
-    due_date = models.DateTimeField(null=True, blank=True)
-    anonymous_allowed = models.BooleanField(default=True)
-    public_listening = models.BooleanField(default=False)
-    require_login = models.BooleanField(default=False)
-    require_invitation = models.BooleanField(default=False)
-    show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete")
-    send_mail = models.BooleanField(default=False)
-    one_vote_per_user = models.BooleanField(default=True)
-    allow_unauthenticated_vote_changes = models.BooleanField(default=False)
-    allow_comments = models.BooleanField(default=True)
-    show_invitations = models.BooleanField(default=True)
-    timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
-    use_user_timezone = models.BooleanField(default=False)
-    vote_all = models.BooleanField(default=False)
-    sorting = models.IntegerField(default=0)
-    hide_participants = models.BooleanField(default=False)
+    due_date = models.DateTimeField(null=True, blank=True, verbose_name=_('due date'))
+    anonymous_allowed = models.BooleanField(default=True, verbose_name=_('allow anonymous votes'))
+    public_listening = models.BooleanField(default=False, verbose_name=_('public listening'))
+    require_login = models.BooleanField(default=False, verbose_name=_('login required'))
+    require_invitation = models.BooleanField(default=False, verbose_name=_('invitation required to vote'))
+    show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete", verbose_name=_('Show Results'), help_text=_('Owners of this poll and administrators will always see all votes.'))
+    one_vote_per_user = models.BooleanField(default=True, verbose_name=_('one vote per user'))
+    allow_unauthenticated_vote_changes = models.BooleanField(default=False, verbose_name=_('allow unauthenticated vote changes'))
+    allow_comments = models.BooleanField(default=True, verbose_name=_('allow comments'))
+    show_invitations = models.BooleanField(default=True, verbose_name=_('show invitations as empty votes'))
+    timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone], verbose_name=_('Timezone'))
+    use_user_timezone = models.BooleanField(default=False, verbose_name=_('Translate all times to the users timezone'))
+    vote_all = models.BooleanField(default=False, verbose_name=_('forbid empty choices'))
+    sorting = models.IntegerField(default=0, verbose_name=_('Sort results by'))  # todo: use enum!
+    hide_participants = models.BooleanField(default=False, verbose_name=_('hide participants'))
 
     class ResultSorting(enum.IntEnum):
         DATE = 0
