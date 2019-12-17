@@ -42,14 +42,14 @@
                                     <span class="description">{% trans 'Schedule an all-day event' %}</span>
                                 </label>
                                 <label>
-                                    <input name="{{ poll_form.type.name }}" type="radio" value="date" class="d-hide create-type-select"
+                                    <input name="{{ poll_form.type.name }}" type="radio" value="universal" class="d-hide create-type-select"
                                         {% if poll_form.type.value == "universal" %}checked{% endif %}>
                                     <span class="create-icon"><i class="fa fa-list"></i></span>
                                     <span class="title">{% trans 'Normal Poll' %}</span>
                                     <span class="description">{% trans 'Retrieve opinions on various choices' %}</span>
                                 </label>
                                 <label class="d-hide">
-                                    <input name="{{ poll_form.type.name }}" type="radio" value="date" class="d-hide create-type-select"
+                                    <input name="{{ poll_form.type.name }}" type="radio" value="numeric" class="d-hide create-type-select"
                                         {% if poll_form.type.value == "numeric" %}checked{% endif %}>
                                     <span class="create-icon"><i class="fa fa-sliders"></i></span>
                                     <span class="title">{% trans 'Numeric' %}</span>

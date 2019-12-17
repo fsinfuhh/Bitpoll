@@ -20,7 +20,9 @@
     </div>
     <form class="form" action="{% url 'poll_editDTChoiceCombinations' poll.url %}" method="POST">
         {% csrf_token %}
-        {# TODO: maybe we need the imput data fields to this view here for recreation on error #}
+
+                <div class="columns">
+                    <div class="column col-mx-auto col-auto">
         <div class="table-responsive choice-combinations-table">
             <table class="table auto-width poll">
                 <tbody>
@@ -36,21 +38,17 @@
                         {% for time in times %}
                             {% is_initial_choice initial=initial_choices date=day time=time as is_initial %}
 
-                            {% if not initial_choices or is_initial %}
-                                <td class="checkbox-cell on">
-                                    <input type="checkbox" checked="" value="{{ day }} {{ time }}" name="datetimes[]">
+
+                                <td class="checkbox-cell control">
+                                    <input type="checkbox" {% if not initial_choices or is_initial %} checked {% endif %} value="{{ day }} {{ time }}" name="datetimes[]" id="chk_{{ day }}_{{ time }}">
+                                    <label for="chk_{{ day }}_{{ time }}"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i> </label>
                                 </td>
-                            {% else %}
-                                <td class="checkbox-cell off">
-                                    <input type="checkbox" value="{{ day }} {{ time }}" name="datetimes[]">
-                                </td>
-                            {% endif %}
 
                         {% endfor %}
                         <td class="choice-text script-only">
-                            <button class="action icon toggle toggle-select toggle-row"><i class="fa fa-check-square-o"></i>
+                            <button class="btn btn-sm toggle toggle-select toggle-row"><i class="fa fa-check-square-o"></i>
                             </button>
-                            <button class="action icon toggle toggle-deselect toggle-row"><i class="fa fa-square-o"></i>
+                            <button class="btn btn-sm toggle toggle-deselect toggle-row"><i class="fa fa-square-o"></i>
                             </button>
                         </td>
                         </tr>
@@ -60,16 +58,16 @@
                     <td></td>
                     {% for time in times %}
                     <td class="choice-text script-only">
-                        <button class="action icon toggle toggle-select toggle-column"><i class="fa fa-check-square-o"></i>
+                        <button class="btn btn-sm toggle toggle-select toggle-column"><i class="fa fa-check-square-o"></i>
                         </button>
-                        <button class="action icon toggle toggle-deselect toggle-column"><i class="fa fa-square-o"></i>
+                        <button class="btn btn-sm toggle toggle-deselect toggle-column"><i class="fa fa-square-o"></i>
                         </button>
                     </td>
                     {% endfor %}
                     <td class="choice-text script-only">
-                        <button class="action icon toggle toggle-select toggle-all"><i class="fa fa-check-square-o"></i>
+                        <button class="btn btn-sm toggle toggle-select toggle-all"><i class="fa fa-check-square-o"></i>
                         </button>
-                        <button class="action icon toggle toggle-deselect toggle-all"><i class="fa fa-square-o"></i>
+                        <button class="btn btn-sm toggle toggle-deselect toggle-all"><i class="fa fa-square-o"></i>
                         </button>
                     </td>
                     <td></td>
@@ -77,8 +75,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="form-actions"><a class="action btn-js-back script-only" href="">{% trans 'Back' %}</a>
-          <input type="submit" class="action primary" value="{% trans 'Next' %}">
+                    </div>
+                </div>
+        <div class="form-actions"><a class="btn btn-js-back script-only" href="">{% trans 'Back' %}</a>
+          <input type="submit" class="btn btn-primary pull-right" value="{% trans 'Next' %}">
         </div>
     </form>
     </div>

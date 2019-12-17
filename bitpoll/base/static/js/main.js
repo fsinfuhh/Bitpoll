@@ -14,30 +14,9 @@ $(document).ready(function() {
     });
 
     // Enable bootstrap popovers
-    $('[data-toggle="popover"]').popover({
-        html: true
-    });
-
-    $(".toggle").click(function() {
-        var selected = $(this).hasClass("toggle-select");
-        var cells;
-        if($(this).hasClass("toggle-column")) {
-            var index = $(this).closest("td").index() + 1;
-            cells = $(this).closest("table").find("tr td:nth-child(" + index + ")");
-        } else if($(this).hasClass("toggle-row")) {
-            cells = $(this).closest("tr").find("td");
-        } else {
-            cells = $(this).closest("table").find("td");
-        }
-        updateCheckbox.call(cells.find(":checkbox").prop("checked", selected));
-    });
-
-    $(".time-remove-button").click(function() {
-        var split = $(this).val().split(":");
-        $("#time-hour").val(split[0]);
-        $("#time-minute").val(split[1]);
-        $("#time-slider-form").submit();
-    });
+    // $('[data-toggle="popover"]').popover({
+    //     html: true
+    // });
 
     $(".icon-preview button").click(function() {
         $("#id_icon").val($(this).data("icon"));

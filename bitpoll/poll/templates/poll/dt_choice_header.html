@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="visible-xs visible-sm">
+<div class="hide show-md show-xs">
     <ul class="steps">
         <li class="{% ifequal step 1 %}current{% endifequal %}"><span>{% trans 'Step 1' %}</span>{% trans 'Days' %}
         </li>
@@ -9,7 +9,7 @@
         </li>
     </ul>
 </div>
-<div class="hidden-xs hidden-sm">
+<div class="hide-md">
     <ul class="steps">
         <li class="{% ifequal step 1 %}current{% endifequal %}"><span>{% trans 'Step 1' %}</span>{% trans 'Select days' %}
         </li>

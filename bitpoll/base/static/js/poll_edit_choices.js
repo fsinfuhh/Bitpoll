@@ -6,25 +6,8 @@ var calendar;
 /* ========================================================================== */
 /* Checkbox stuff */
 
-window.updateCheckbox = function(e) {
-    $(this).closest(".checkbox-cell").removeClass("on off").addClass($(this).prop("checked") ? "on" : "off");
-};
-
 $(function() {
     calendar = $("#calendar");
-
-    // Checkbox stuff
-    $(".checkbox-cell :checkbox").on("click", updateCheckbox).on("click", function(e) {
-        e.stopPropagation();
-    });
-
-    $(".checkbox-cell").on("click", function(e){
-        var checkbox = $(this).find(":checkbox");
-        checkbox.prop("checked", !checkbox.prop("checked"));
-        updateCheckbox.call(checkbox);
-    });
-
-    $(".checkbox-cell :checkbox").each(updateCheckbox);
 
     // Checkbox all/none toggles
     $(".toggle").click(function() {
@@ -39,7 +22,7 @@ $(function() {
         } else {
             cells = $(this).closest("table").find("td");
         }
-        updateCheckbox.call(cells.find(":checkbox").prop("checked", selected));
+        cells.find(":checkbox").prop("checked", selected);
         return false;
     });
 
@@ -83,7 +66,7 @@ function updateDateTimeList() {
 
     $(".time-slots").html("");
     times.forEach(function(time) {
-        $(".time-slots").append('<li><button class="action time-remove-button" title="remove time" data-time="' + time + '"><span>' + time + '</span><i class="fa fa-times"></i></button></li>');
+        $(".time-slots").append('<li><button class="btn time-remove-button" title="remove time" data-time="' + time + '"><span>' + time + '</span> <i class="fa fa-times"></i></button></li>');
     });
 
     $("#calendar-list").html("");
@@ -94,7 +77,7 @@ function updateDateTimeList() {
             format = "ddd D MMM YYYY"
         }
         var formatDate = date_obj.format(format);
-        $("#calendar-list").append('<li><button class="action date-remove-button" title="remove date" data-date="' + date +'"><span>' + formatDate + '</span><i class="fa fa-times"></i></button></li> ');
+        $("#calendar-list").append('<li><button class="btn date-remove-button" title="remove date" data-date="' + date +'"><span>' + formatDate + '</span> <i class="fa fa-times"></i></button></li> ');
     });
 
     // $(".date-remove-button, .time-remove-button").tooltip({"placement": "right"});
@@ -232,7 +215,7 @@ function initCalendar(calendar) {
         return false;
     }).on("click", "button.week", function() {
         var off = $(this).closest("tr").find("button.day.default").length > 0;
-        var cls = off ? ".default" : ".success";
+        var cls = off ? ".default" : ".btn-success";
 
         $(this).closest("tr").find("button.day" + cls).each(function() {
             toggleDay($(this));
@@ -290,7 +273,7 @@ function makeWeek(week) {
     if(past && !future) {
         tr.append($('<td class="left"></td>'))
     } else {
-        tr.append($('<td class="left"><button class="week action icon default"><i class="fa fa-angle-double-right"></i></button></td>'))
+        tr.append($('<td class="left"><button class="week btn btn-sm"><i class="fa fa-angle-double-right"></i></button></td>'))
     }
 
     for(var i = 0; i < 7; ++i) {
@@ -303,7 +286,7 @@ function makeWeek(week) {
             var enabled = dates.contains(datetime);
             past = date.isBefore(moment());
             var t = (past && !enabled ? 'span' : 'button');
-            btn = '<' + t + ' class="day ' + (enabled ? 'action icon success' : (past ? '' : 'action icon default')) + '">' + week[i] + '</' + t + '>';
+            btn = '<' + t + ' class="day ' + (enabled ? 'btn btn-sm btn-success' : (past ? '' : 'btn btn-sm default')) + '">' + week[i] + '</' + t + '>';
         }
         tr.append($('<td>' + btn + '</td>'));
     }
