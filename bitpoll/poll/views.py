@@ -178,6 +178,7 @@ def poll(request, poll_url: str, export: bool=False):
         'comment_form': CommentForm(),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
         'spam_challenge': create_anti_spam_challenge(current_poll.id),
+        'suppress_messages': True,
     })
 
 
@@ -414,6 +415,7 @@ def edit_date_choice(request, poll_url):
         'new_choice': form,
         'page': 'Choices',
         'is_dt_choice': False,
+        'suppress_messages': True,
     })
 
 
@@ -457,6 +459,7 @@ def edit_dt_choice_date(request, poll_url):
                 'poll': current_poll,
                 'page': 'Choices',
                 'step': 2,
+                'suppress_messages': True,
             })
     return TemplateResponse(request, "poll/choice_creation_date.html", {
         'new_choice': form,
@@ -464,6 +467,7 @@ def edit_dt_choice_date(request, poll_url):
         'step': 1,
         'page': 'Choices',
         'is_dt_choice': True,
+        'suppress_messages': True,
     })
 
 
@@ -500,6 +504,7 @@ def edit_dt_choice_time(request, poll_url):
                 'poll': current_poll,
                 'page': 'Choices',
                 'step': 3,
+                'suppress_messages': True,
             })
         elif form.data.get('dates') != "":
             return TemplateResponse(request, "poll/dt_choice_creation_time.html", {
@@ -507,6 +512,7 @@ def edit_dt_choice_time(request, poll_url):
                 'poll': current_poll,
                 'page': 'Choices',
                 'step': 2,
+                'suppress_messages': True,
             })
     return redirect('poll_editDTChoiceDate', current_poll.url)
 
@@ -634,6 +640,7 @@ def edit_universal_choice(request, poll_url):
         'poll': current_poll,
         'page': 'Choices',
         'next_sort_key': current_poll.choice_set.count() + 1,  # TODO: unter umständen hier max nemen?
+        'suppress_messages': True,
     })
 
 
@@ -916,7 +923,8 @@ def vote(request, poll_url, vote_id=None):
         'current_vote': current_vote,
         'timezone_warning': (request.user.is_authenticated and
                              current_poll.get_tz_name(request.user) != request.user.timezone),
-        'choice_values': ChoiceValue.objects.filter(poll=current_poll)
+        'choice_values': ChoiceValue.objects.filter(poll=current_poll),
+        'suppress_messages': True,
     })
 
 
@@ -1150,6 +1158,7 @@ def settings(request, poll_url):
         'timezones': all_timezones,
         'user_error': user_error,
         'user_select': user,
+        'suppress_messages': True,
     })
 
 
