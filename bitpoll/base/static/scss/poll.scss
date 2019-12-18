@@ -42,13 +42,12 @@ table.poll {
     margin: .7em -3px;
 }
 
-.poll, .vote {
+.poll {
     font-size: 9pt;
 }
 
 .poll .choice-text,
-.poll .choice-sum,
-.vote .choice-text {
+.poll .choice-sum {
     white-space: nowrap;
     font-weight: bold;
     background: #EEE;
@@ -58,17 +57,20 @@ table.poll {
     white-space: nowrap !important;
 }
 
-.vote .choice-text {
+.vote {
     text-align: right;
 }
 
 .poll .choice-group,
 .poll .author,
-.poll .vote-actions,
-.vote .choice-group {
+.poll .vote-actions {
     font-weight: bold;
     background: #EEE;
     vertical-align: middle;
+}
+
+table td.vote-actions {
+    padding: .2rem .6rem;
 }
 
 .vote-extra-icons {
@@ -107,10 +109,6 @@ table.poll {
 .poll .choice-text {
     text-align: center;
     white-space: inherit;
-}
-
-.vote .choice-group {
-    text-align: right;
 }
 
 .poll .choice-sum.maximum {
@@ -158,17 +156,6 @@ td.control {
 
 td.control {
     cursor: pointer;
-}
-
-.vote-choice-radio {
-    padding: 0;
-    list-style: none;
-}
-
-.vote-choice-radio li {
-    display: inline;
-    padding: 0;
-    margin-right: 1em;
 }
 
 table.poll td.none {
@@ -395,25 +382,46 @@ td.vote-header {
     }
 }
 
-.table tbody > tr > td.vote-choice {
-    padding: 0;
-    background-color: #D6D6D6;
-    label, span {
-        //width: 100%;
-        //height: 100%;
-        cursor: pointer;
-        padding: 8px 0;
-        margin: 0;
-        display: block;
-        line-height: 1.428571429; // weil bootstrap
+@supports (-moz-appearance:none) {  // select only FF
+    .poll tbody > tr {
+        & > td.vote-choice {
+            height: 100%; // This has to be 0 so it works in Chrome, in FF only 100% works
+        }
     }
+}
 
-    input[type=radio] {
-        display: none;
+.poll tbody > tr {
+    height: 1px;
 
+    & > td {
+        height: 0; // This has to be 0 so it works in Chrome, in FF 100% also works
+
+        &.choice-group {
+            max-width: 12em;
+        }
+
+        &.vote-choice {
+            padding: 0;
+            background-color: #D6D6D6;
+
+            label, span {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: 100%;
+                cursor: pointer;
+                padding: 8px 0;
+            }
+
+            input[type=radio] {
+                display: none;
+
+            }
+        }
     }
 }
 
 td.vote-choice span, td.control {
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
 }

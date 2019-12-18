@@ -40,7 +40,7 @@
                     <td colspan="{{ matrix_len }}"></td>
                     {% for value in values %}
                         <td class="text-center vote-header">
-                            <input value="all" data-choice="{{ value.id }}" class="action small vote-choice-column" type="button">
+                            <input value="all" data-choice="{{ value.id }}" class="btn btn-sm vote-choice-column" type="button">
                         </td>
                     {% endfor %}
                 </tr>
@@ -67,7 +67,7 @@
                                         title="{{ _('Add a comment') }}"><i
                                         class="fa fa-comment-o"></i></button>
                             </div>
-                            <input type="text" class="vote-choice-comment form-control" name="comment_{{ choice.id }}" title=""
+                            <input type="text" class="vote-choice-comment form-input" name="comment_{{ choice.id }}" title=""
                                    value="{{ comment }}"/>
                         </td>
                     </tr>
@@ -77,11 +77,8 @@
                         <hr/>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="{{ matrix_len }}">
-                      <label for="name">{% trans 'Your name:' %}</label>
-                    </td>
-                    <td colspan="4">
+            </table>
+
                         <input type="text" name="name" title="{% trans 'Your name' %}"
                                 {% if request.user.is_authenticated %}
                                     value="{{ request.user.get_displayname }}" readonly="readonly"
@@ -114,7 +111,7 @@
                 <tr>
                     <td colspan="{{ matrix_len }}"></td>
                     <td colspan="4">
-                        <button class="action primary block" type="submit" name="submit" value="Vote">
+                        <button class="btn  btn-primary block" type="submit" name="submit" value="Vote">
                             <i class="fa fa-check"></i>
                             <span>{% trans 'Save vote' %}</span>
                         </button>
@@ -123,7 +120,7 @@
                 {% if current_vote.pk %}
                     <input type="hidden" name="vote_id" value="{{ current_vote.pk }}" >
                 {% endif %}
-            </table>
+
         </form>
       </div>
 

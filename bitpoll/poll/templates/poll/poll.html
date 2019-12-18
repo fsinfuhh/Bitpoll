@@ -73,10 +73,9 @@
                             </td>
                             {% endif %}
                             {% for vote_choice in vote_choices %}
-                                <td class="vote-choice text-center {% if vote_choice.comment %}comment{% endif %}
+                                <td class="vote-choice {% if vote_choice.comment %}comment{% endif %}
                                     {% if not vote_choice.value %}none{% endif %}
-                                    {% if vote_choice.value.deleted %}choice-deleted{% else %}
-                                        {% endif %}"
+                                    {% if vote_choice.value.deleted %}choice-deleted{% endif %}" {# todo: wann wird das angezeigt???? #}
                                     data-toggle="popover"
                                     data-trigger="hover"
                                     data-container="body"
@@ -91,17 +90,17 @@
                             <td class="noprint vote-actions">
                                 {% if vote|vote_can_edit:request.user %}
                                     <a href="{% url 'poll_voteEdit' poll.url vote.id %}"
-                                       class="btn btn-xs btn-default" title="{{ _('Edit vote') }}"><i
+                                       class="btn btn-sm" title="{{ _('Edit vote') }}"><i
                                             class="fa fa-pencil"></i></a>
                                 {% endif %}
                                 {% if vote|vote_can_delete:request.user %}
                                     <a href="{% url 'poll_voteDelete' poll.url vote.id %}"
-                                       class="btn btn-xs btn-default" title="{{ _('Delete vote') }}"><i
+                                       class="btn btn-sm" title="{{ _('Delete vote') }}"><i
                                             class="fa fa-trash-o"></i></a>
                                 {% endif %}
                                 {% if vote.user == None and vote|vote_can_edit:request.user %}
                                     <a href="{% url 'poll_voteAssign' poll.url vote.id %}"
-                                       class="btn btn-xs btn-default" title="{{ _('Assign user') }}">
+                                       class="btn btn-sm" title="{{ _('Assign user') }}">
                                         <i class="fa fa-user"></i></a>
                                 {% endif %}
                                 {% comment %}
@@ -125,7 +124,7 @@
                                 {{ invited.user.get_displayname }}
                             </td>
                             {% for row in matrix.0 %}
-                                <td class="vote-choice text-center none"
+                                <td class="vote-choice none"
                                     data-toggle="popover"
                                     data-trigger="hover"
                                     data-container="body"

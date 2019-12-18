@@ -136,7 +136,7 @@ PIPELINE = {
                 'css/lib/spectre-icons.css',
                 # 'css/jquery-range.css',  # this belongs to commented out JS class
                 'scss/form.scss',
-                'scss/action.scss',
+                #'scss/action.scss',
                 'scss/slider.scss',
                 'scss/timeinput.scss',
                 'css/jquery.datetimepicker.css',
@@ -161,7 +161,7 @@ PIPELINE = {
         'base': {
             'source_filenames': (
                 'js/lib/jquery-3.2.1.js',
-                'js/lib/bootstrap.js',
+                #'js/lib/bootstrap.js',
             ),
             'output_filename': 'js/base.js',
         },
@@ -184,11 +184,10 @@ PIPELINE = {
                 'js/lib/moment-with-locales.min.js',
                 'js/main.js',
                 'js/util.js',
-                'js/custom-select.jquery.js',
+                #'js/custom-select.jquery.js',
                 'js/slider.js',
                 'js/vote.js',
                 'js/lib/jquery.datetimepicker.full.min.js',
-
             ),
             'output_filename': 'js/base_late.js',
         },

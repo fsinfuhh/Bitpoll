@@ -7,11 +7,11 @@
 {% block content %}
     {% include 'poll/poll_header.html' %}
     <div class="container">
-        <div class="row">
-            <div class="col-md-5">
+        <div class="columns">
+            <div class="col-6 column col-sm-12">
                 <form action="{{ request.url }}" class="form form-inline" method="POST">
                     {# This button gets activated if the user press enter (browsers should use the first button)#}
-                    <input type="submit" class="hidden" name="Save" value="{% trans 'Save' %}"/>
+                    <input type="submit" class="d-hide" name="Save" value="{% trans 'Save' %}"/>
                     {% csrf_token %}
                     <table class="table">
                         <tbody>
@@ -25,7 +25,7 @@
                                 <td class="choice">
                                     {% if not choice.deleted %}
                                         <div class="input-group input-group-sm">
-                                            <input class="form-control" name="choice_text_{{ choice.pk }}"
+                                            <input class="input-sm form-input" name="choice_text_{{ choice.pk }}"
                                                    placeholder="{% trans 'Choice text ...' %}"
                                                    value="{{ choice.text }}"/>
                                             <input name="choice_sort_key_{{ choice.pk }}" class="choice-sort-key"
@@ -33,7 +33,7 @@
                                         </div>
                                     {% else %}
                                         {{ choice.text }}
-                                        <input class="form-control" name="choice_text_{{ choice.pk }}"
+                                        <input class="input-sm form-input" name="choice_text_{{ choice.pk }}"
                                                type="hidden" placeholder="{% trans 'Choice text ...' %}"
                                                value="{{ choice.text }}"/>
                                         <input name="choice_sort_key_{{ choice.pk }}" class="choice-sort-key"
@@ -44,13 +44,13 @@
                                     <strong>{{ choice.votechoice_count }}</strong> / {{ poll.vote_set.count }}
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-default btn-xs choice-move-up">
+                                    <a href="#" class="btn btn-sm choice-move-up">
                                         <i class="fa fa-arrow-up"></i>
                                     </a>
-                                    <a href="#" class="btn btn-default btn-xs choice-move-down">
+                                    <a href="#" class="btn btn-sm choice-move-down">
                                         <i class="fa fa-arrow-down"></i>
                                     </a>
-                                    <button name="delete" value="{{ choice.pk }}" class="btn btn-default btn-xs">
+                                    <button name="delete" value="{{ choice.pk }}" class="btn btn-sm">
                                         {% if not choice.deleted %}
                                             <i class="fa fa-trash-o"></i>
                                         {% else %}
@@ -62,14 +62,12 @@
                         {% endfor %}
                         <tr class="choice-row">
                             <td class="choice">
-                                <div class="input-group input-group-sm">
-                                    <input class="form-control" name="choice_text" placeholder="{% trans 'Choice text ...' %}"/>
+                                <div class="input-group">
+                                    <input class="form-input input-sm" name="choice_text" placeholder="{% trans 'Choice text ...' %}"/>
                                     <input name="choice_sort_key" class="choice-sort-key" type="hidden"
                                            value="{{ next_sort_key }}">
-                                    <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-primary" name="submit"><i
+                                        <button type="submit" class="btn btn-primary input-group-btn btn-sm" name="submit"><i
                                                 class="fa fa-plus"></i></button>
-                                    </span>
                                 </div>
                             </td>
                             <td></td>
@@ -90,8 +88,8 @@
                         <tfoot>
                         <tr>
                             <td>
-                                <input type="submit" class="action" name="Save" value="{% trans 'Save' %}"/>
-                                <button class="action primary" name="next">{% trans 'Save & Next' %}</button>
+                                <input type="submit" class="btn" name="Save" value="{% trans 'Save' %}"/>
+                                <button class="btn btn-primary" name="next">{% trans 'Save & Next' %}</button>
                             </td>
                             <td></td>
                             <td></td>
@@ -100,9 +98,10 @@
                     </table>
                 </form>
             </div>
-            <div class="col-md-7">
-                <div class="well">
-                    <h3>{% trans 'Help' %}</h3>
+            <div class="column col-ml-auto col-sm-12 col-5">
+                <div class="hero hero-sm bg-gray">
+                <div class="hero-body">
+                    <h1>{% trans 'Help' %}</h1>
                     <h4>{% trans 'Deleted Choices' %}</h4>
                     <p>{% blocktrans %}Deleted choices will stay in this list, so votes that have already been made are not lost.{% endblocktrans %}</p>
 
@@ -115,7 +114,7 @@
                         <li>{% trans 'Some-Group/Another-Choice' %}</li>
                         <li>{% trans 'Some-Group/Third-Choice' %}</li>
                     </ul>
-                </div>
+                </div></div>
             </div>
         </div>
     </div>

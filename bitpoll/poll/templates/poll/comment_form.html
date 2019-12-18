@@ -8,7 +8,7 @@
 {%  endif %}
     {% csrf_token %}
         {% if request.user.is_authenticated %}
-            {% render_form_field comment_form.name %} TODO: disable + value set
+            {% render_form_field comment_form.name %} TODO: disable + value set {# TODO #}
         {% else %}
             {% render_form_field comment_form.name %}
         {% endif %}
@@ -18,6 +18,6 @@
             {{ comment_form.spam_key }}
         {% endif %}
     <div class="form-group">
-        <input class="action primary" type="submit" title="Save Comment" value="{% trans 'Save Comment' %}">
+        <input class="btn btn-primary" type="submit" title="Save Comment" value="{% trans 'Save Comment' %}">
     </div>
 </form>
