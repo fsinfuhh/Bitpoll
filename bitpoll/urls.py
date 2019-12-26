@@ -31,12 +31,16 @@ urlpatterns = [
     url(r'^logout/$', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
     url(r'^markdown/', include('django_markdown.urls')),
     url(r'^registration/', include('bitpoll.registration.urls')),
-    url(r'^caldav/', include('bitpoll.caldav.urls')),
 
     url(r'^i18n/', include(django.conf.urls.i18n)),
     url(r'^admin/', admin.site.urls),
 
 ]
+
+if settings.CALENDAR_ENABLED:
+    urlpatterns += [
+        url(r'^caldav/', include('bitpoll.caldav.urls')),
+    ]
 
 if settings.GROUP_MANAGEMENT:
     urlpatterns += [

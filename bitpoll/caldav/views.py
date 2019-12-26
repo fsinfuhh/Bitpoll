@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy
 from django.views.decorators.http import require_POST
 from urllib3.util import parse_url, Url
 
@@ -15,7 +16,7 @@ from .forms import DavCalendarForm
 
 @require_POST
 @login_required
-def change_callendar(request):
+def change_calendar(request):
     form = DavCalendarForm(request.POST, user=request.user)
     if form.is_valid():
         caldav_obj = form.save(commit=False)
@@ -36,7 +37,7 @@ def change_callendar(request):
                 query=parsed.query,
                 fragment=parsed.fragment
             )
-        if parsed.scheme.startswith('http'):
+        if parsed.scheme in ('http', 'https'):
             old_calendars = DavCalendar.objects.filter(user=request.user)
             exists = False
             # This is necessary as the urls are encrypted in the DB and can't filtered wherefore
@@ -54,9 +55,11 @@ def change_callendar(request):
                     caldav_obj.save()
                     return redirect('settings')
                 except Exception as e:
-                    form.add_error(None, "Error getting Calendar: {}".format(str(e)))
+                    form.add_error(None, ugettext_lazy("Error getting Calendar: {}".format(str(e))))
             else:
-                form.add_error(None, "This calendar is already configured")
+                form.add_error(None, ugettext_lazy("This calendar is already configured"))
+        else:
+            form.add_error('url', ugettext_lazy("The URL should start with http:// or https://"))
     elif 'delete' in request.POST:
         obj = get_object_or_404(DavCalendar, id=request.POST['delete'], user=request.user)
         obj.delete()
