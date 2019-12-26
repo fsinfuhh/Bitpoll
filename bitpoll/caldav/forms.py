@@ -23,7 +23,7 @@ class DavCalendarForm(ModelForm):
     def clean(self):
         cleaned_data = super(DavCalendarForm, self).clean()
         bucket = TokenBucket.get(identifier='calendars_added',
-                                 user=self.db_user,
+                                 ref_object=self.db_user,
                                  max_tokens=settings.CALENDAR_MAX_TOKENS,  # TODO: better name
                                  fill_rate=settings.CALENDAR_FILL_RATE,
                                  whatfor=_('adding Calendars'))
