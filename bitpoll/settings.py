@@ -87,7 +87,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'friendlytagloader',
     'encrypted_model_fields',
-    'django_token_bucket'
+    'django_token_bucket',
 ]
 
 MIDDLEWARE = [
