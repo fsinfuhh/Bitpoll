@@ -208,9 +208,9 @@
             <a href="{% url 'poll_export_csv' poll.url %}">{% trans 'Export as CSV' %}</a>
         </div>
 
-        <br/><br/>{% if poll.comment_set.all %}<h1 class="print-only">{% trans 'Comments' %}</h1>{% endif %}
+        <br/><br/>{% if comments %}<h1 class="print-only">{% trans 'Comments' %}</h1>{% endif %}
         <div class="comments">
-            {% for comment in poll.comment_set.all %}
+            {% for comment in comments %}
             <div class="comment">
                 <div class="meta">
                     <div class="author">{% if comment.user %}{{ comment.user.get_displayname }}{% else %}{{ comment.name }}{% endif %}</div>

@@ -176,6 +176,7 @@ def poll(request, poll_url: str, export: bool=False):
         'invitations': invitations if current_poll.show_invitations else [],
         'summary': summary,
         'comment_form': CommentForm(),
+        'comments': current_poll.comment_set.order_by('date_created'),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
         'spam_challenge': create_anti_spam_challenge(current_poll.id),
     })
