@@ -32,9 +32,8 @@ def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser, req
                 calendar = DavCalendar(client=DAVClient(calendar_obj.url),
                                        url=calendar_obj.url)
                 appointments = calendar.date_search(start, end)
-                calendar = Calendar()
                 for appointment in appointments:
-                    ical = calendar.from_ical(appointment.data)
+                    ical = Calendar.from_ical(appointment.data)
                     for event in ical.walk():
                         if event.name == "VEVENT":
                             try:

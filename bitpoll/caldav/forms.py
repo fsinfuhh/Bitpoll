@@ -1,4 +1,4 @@
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urlparse, urlsplit, urlunsplit
 
 from django.conf import settings
 from django.core.validators import URLValidator
@@ -9,13 +9,13 @@ from urllib3.util import Url, parse_url
 
 from django_token_bucket.models import TokenBucket
 from .models import DavCalendar
+from bitpoll.base.models import BitpollUser
 
 
 class URLAuthWidget(MultiWidget):
     """
     A widget that splits datetime input into two <input type="text"> boxes.
     """
-    template_name = 'caldav/url_auth.html'
 
     def __init__(self):
         widgets = (
@@ -30,29 +30,26 @@ class URLAuthWidget(MultiWidget):
 
     def decompress(self, value):
         if value:
-            parsed = parse_url(value)
-            scheme, auth, host, port, path, query, fragment = parsed
-            url = u""
-            user = None
-            passwd = None
+            parsed = urlsplit(value)
+            scheme, netloc, path, query, fragment = parsed
+            user = parsed.username
+            passwd = parsed.password
+            host = parsed.hostname
+            port = parsed.port
+            url = ""
 
-            # We use "is not None" we want things to happen with empty strings (or 0 port)
-            if scheme is not None:
-                url += scheme + u"://"
-            if auth is not None:
-                user = auth.split(':')[0]
-                if ":" in auth:
-                    passwd = auth.split(':')[1]
+            if scheme != "":
+                url += scheme + "://"
             if host is not None:
                 url += host
             if port is not None:
-                url += u":" + str(port)
-            if path is not None:
+                url += ":" + str(port)
+            if path != "":
                 url += path
-            if query is not None:
+            if query != "":
                 url += u"?" + query
-            if fragment is not None:
-                url += u"#" + fragment
+            if fragment != "":
+                url += "#" + fragment
             return [url, user, passwd]
         return [None, None, None]
 
@@ -81,24 +78,23 @@ class URLAuthField(MultiValueField):
         if passwd:
             auth += ':'
             auth += passwd
-        parsed = parse_url(data_list[0])
+        parsed = urlsplit(data_list[0])
         if auth:
-            parsed = Url(
-                scheme=parsed.scheme,
-                auth=auth,
-                host=parsed.host,
-                port=parsed.port,
-                path=parsed.path,
-                query=parsed.query,
-                fragment=parsed.fragment
-            )
+            host = auth + '@' + parsed.netloc
+            return urlunsplit((
+                parsed.scheme,
+                host,
+                parsed.path,
+                parsed.query,
+                parsed.fragment
+            ))
         return parsed.url
 
 
 class DavCalendarForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
-        self.db_user = kwargs.pop('user')
+        self.db_user: BitpollUser = kwargs.pop('user')
         super(DavCalendarForm, self).__init__(*args, **kwargs)
 
     class Meta:
@@ -121,7 +117,7 @@ class DavCalendarForm(ModelForm):
         try:
             bucket.consume(1)
         except bucket.TokensExceeded as e:
-            raise forms.ValidationError(str(e))
+            raise forms.ValidationError(e.get_message(self.db_user.timezone))
         if DavCalendar.objects.filter(user=self.db_user).count() > 10:
             raise forms.ValidationError("Maximum count of calendars reached (10)")
         return cleaned_data

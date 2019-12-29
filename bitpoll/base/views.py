@@ -111,8 +111,8 @@ def user_settings(request):
         'user_form': user_form,
         'languages': USER_LANG,
         'timezones': all_timezones,
-        'calendar_form': DavCalendarForm(user=request.user),
-        'calendars': DavCalendar.objects.filter(user=request.user),
+        'calendar_form': DavCalendarForm(user=request.user) if settings.CALENDAR_ENABLED else None,
+        'calendars': DavCalendar.objects.filter(user=request.user) if settings.CALENDAR_ENABLED else None,
     })
 
 

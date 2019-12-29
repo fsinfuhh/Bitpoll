@@ -1,9 +1,7 @@
 # from https://github.com/treyhunner/django-widget-tweaks/commit/e89ba60899abfce2953bd3f5583645f5d73447a3
 # adapted with snippets from widget_tweaks; modified by Nils Rokita
-# TODO: move to django-spectre-css on redesign
 
 from django import template
-import re
 
 from widget_tweaks.templatetags.widget_tweaks import ATTRIBUTE_RE
 

@@ -17,11 +17,9 @@
 {% endif %}
     {% csrf_token %}
     {% if calendar_form.non_field_errors %}
-        <div class="alert alert-danger">
-            {% for error in calendar_form.non_field_errors %}
-            {{ error }}
-            {% endfor %}
-        </div>
+        {% for error in calendar_form.non_field_errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
     {% endif %}
     {{ calendar_form.name.label_tag }}
     {% render_field calendar_form.name class+='form-control'%}
