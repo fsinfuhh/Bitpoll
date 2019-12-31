@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load widget_tweaks %}
 {% load settings_value %}
+{% load spectre_css %}
 
 {% block wtitle %}{% trans "Account" %}{% endblock %}
 
@@ -31,20 +32,10 @@
                                 </h3>
                             </div>
                             <div class="panel-body">
-                                <p>{% trans 'If you choose a nickname, it will be shown instead of your first name (e.g. when you vote in Dudle)' %}</p>
+                                <p>{% trans 'If you choose a nickname, it will be shown instead of your first name (e.g. when you vote in Bitpoll)' %}</p>
                                 {% csrf_token %}
                                 <input type="hidden" name="form" value="change_nick" />
-                                <div class="form-group{% if nick_change_form.nickname.errors %} has-error{% endif %}">
-                                    <div class="input-group">
-                                        {% render_field nick_change_form.nickname class+="form-control" style="width:20em" %}
-                                        <span class="input-group-addon"> ({{ username }})</span>
-                                    </div>
-                                    {% if nick_change_form.nickname.errors %}
-                                    <div class="help-block">
-                                    {% for error in nick_change_form.nickname.errors %}{{ error }} {% endfor %}
-                                    </div>
-                                    {% endif %}
-                                </div>
+                                {% render_form_field nick_change_form.nickname %}
                             </div>
                             <div class="panel-footer">
                                 <button type="submit" class="btn btn-primary btn-xs">
@@ -65,15 +56,7 @@
                             <div class="panel-body">
                                 {% csrf_token %}
                                 <input type="hidden" name="form" value="change_email"/>
-                                <div class="form-group{% if email_change_form.email.errors %} has-error{% endif %}">
-                                    <label class="control-label">{% trans "New Email Address" %}</label>
-                                    {% render_field email_change_form.email class+="form-control" %}
-                                    {% if email_change_form.email.errors %}
-                                        <div class="help-block">
-                                            {% for error in email_change_form.email.errors %}{{ error }} {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
+                                {% render_form_field email_change_form.email %}
                             </div>
                             <div class="panel-footer">
                                 <button type="submit" class="btn btn-primary btn-xs">
@@ -94,36 +77,9 @@
                             <div class="panel-body">
                                 {% csrf_token %}
                                 <input type="hidden" name="form" value="change_pw"/>
-                                <div class="form-group{% if password_change_form.old_password.errors %} has-error{% endif %}">
-                                    <label class="control-label">{% trans "Old password" %}</label>
-                                    {% render_field password_change_form.old_password class+="form-control" %}
-                                    {% if password_change_form.old_password.errors %}
-                                        <div class="help-block">
-                                            {% for error in password_change_form.old_password.errors %}
-                                                {{ error }} {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group{% if password_change_form.new_password1.errors %} has-error{% endif %}">
-                                    <label class="control-label">{% trans "New password" %}</label>
-                                    {% render_field password_change_form.new_password1 class+="form-control" %}
-                                    {% if password_change_form.new_password1.errors %}
-                                        <div class="help-block">
-                                            {% for error in password_change_form.new_password1.errors %}
-                                                {{ error }} {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group{% if password_change_form.new_password2.errors %} has-error{% endif %}">
-                                    <label class="control-label">{% trans "New password confirmation" %}</label>
-                                    {% render_field password_change_form.new_password2 class+="form-control" %}
-                                    {% if password_change_form.new_password2.errors %}
-                                        <div class="help-block">
-                                            {% for error in password_change_form.new_password2.errors %}
-                                                {{ error }} {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
+                                {% render_form_field password_change_form.old_password %}
+                                {% render_form_field password_change_form.new_password1 %}
+                                {% render_form_field password_change_form.new_password2 %}
                             </div>
                             <div class="panel-footer">
                                 <button type="submit" class="btn btn-primary btn-xs">
