@@ -1,7 +1,7 @@
 import csv
 
 import re
-from typing import Dict, Set
+from typing import Dict
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -24,13 +24,13 @@ from django.views.decorators.http import require_POST
 from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
 from .forms import PollCopyForm, DateChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, CommentForm
-from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS, PollWatch
+from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, PollWatch, ResultSorting
 from bitpoll.base.models import BitpollUser
 from bitpoll.invitations.models import Invitation
 
 from datetime import timedelta
 from decimal import Decimal
-from pytz import all_timezones, timezone
+from pytz import timezone
 from django.utils.dateparse import parse_datetime
 
 
@@ -47,9 +47,9 @@ def poll(request, poll_url: str, export: bool=False):
     tz_activate(current_poll.get_tz_name(request.user))
 
     poll_votes = Vote.objects.filter(poll=current_poll).select_related('user')
-    if current_poll.sorting == Poll.ResultSorting.NAME:
+    if current_poll.sorting == ResultSorting.NAME:
         poll_votes = poll_votes.order_by('name')
-    elif current_poll.sorting == Poll.ResultSorting.DATE:
+    elif current_poll.sorting == ResultSorting.DATE:
         poll_votes = poll_votes.order_by('date_created')
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
@@ -1096,12 +1096,9 @@ def copy(request, poll_url):
     })
 
 
-def settings(request, poll_url):
+def settings(request, poll_url: str):
     """
-
-    :param request:
-    :param poll_url:
-    :return:
+    Renders the settings page of an poll
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     groups = None
@@ -1119,7 +1116,7 @@ def settings(request, poll_url):
         form = PollSettingsForm(request.POST, instance=current_poll)
         if form.is_valid():
             new_poll = form.save(commit=False)
-            user = form.data.get('user', '')
+            user = form.cleaned_data['user']
             with transaction.atomic():
                 if user:
                     try:
@@ -1129,8 +1126,9 @@ def settings(request, poll_url):
                         user_error = _("User {} not Found".format(user))
                 else:
                     new_poll.user = None
-                    current_poll.choice_set.all()
-                if not user_error:
+                if new_poll.group and new_poll.group not in request.user.groups.all():
+                    form.add_error('group', _('You are not in this group'))
+                elif not user_error:
                     # change the Timezone in the Choices, date-polls are in UTC regardles of the timezone
                     if old_timezone_name != new_poll.timezone_name and current_poll.type == 'datetime':
                         new_timezone = timezone(new_poll.timezone_name)
@@ -1141,6 +1139,8 @@ def settings(request, poll_url):
                     new_poll.save()
                     messages.success(request, _('Settings have been changed'))
                     return redirect('poll_settings', current_poll.url)
+                else:
+                    form.add_error('user', user_error)
         else:
             user = form.cleaned_data.get('user', '')
     else:
@@ -1153,10 +1153,7 @@ def settings(request, poll_url):
         'form': form,
         'poll': current_poll,
         'page': 'Settings',
-        'groups': groups,
-        'results': POLL_RESULTS,
-        'timezones': all_timezones,
-        'user_error': user_error,
+        'groups': [(group.id, group.name) for group in groups],
         'user_select': user,
         'suppress_messages': True,
     })

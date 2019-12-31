@@ -21,17 +21,28 @@ from bitpoll.poll.util import DateTimePart, PartialDateTime
 from django.utils import translation
 
 POLL_TYPES = (
-    ('universal', 'Universal'),
-    ('datetime', 'Date-Time'),
-    ('date', 'Date'),
+    ('universal', _('Universal')),
+    ('datetime', _('Date-Time')),
+    ('date', _('Date')),
 )
 
 POLL_RESULTS = (
-    ('summary', 'Summary'),
-    ('complete', 'Complete'),
-    ('never', 'Never'),
-    ('summary after vote', 'Summary after Vote'),
-    ('complete after vote', 'Complete after Vote'),
+    ('summary', _('Summary')),
+    ('complete', _('Complete')),
+    ('never', _('Never')),
+    ('summary after vote', _('Summary after Vote')),
+    ('complete after vote', _('Complete after Vote')),
+)
+
+
+class ResultSorting(enum.IntEnum):
+    DATE = 0
+    NAME = 1
+
+
+POLL_RESULT_SORTING = (
+    (ResultSorting.DATE.value, _('Date')),
+    (ResultSorting.NAME.value, _('Name'))
 )
 
 
@@ -58,12 +69,8 @@ class Poll(models.Model):
     timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone], verbose_name=_('Timezone'))
     use_user_timezone = models.BooleanField(default=False, verbose_name=_('Translate all times to the users timezone'))
     vote_all = models.BooleanField(default=False, verbose_name=_('forbid empty choices'))
-    sorting = models.IntegerField(default=0, verbose_name=_('Sort results by'))  # todo: use enum!
+    sorting = models.IntegerField(default=0, choices=POLL_RESULT_SORTING, verbose_name=_('Sort results by'))
     hide_participants = models.BooleanField(default=False, verbose_name=_('hide participants'))
-
-    class ResultSorting(enum.IntEnum):
-        DATE = 0
-        NAME = 1
 
     def __str__(self):
         return u'Poll {}'.format(self.title)
@@ -205,12 +212,6 @@ class Poll(models.Model):
         :return: True if the User watches the Poll
         """
         return user.is_authenticated and PollWatch.objects.filter(poll=self, user=user).count() > 0
-
-
-POLL_RESULT_SORTING = (
-    (Poll.ResultSorting.DATE, 'Date'),
-    (Poll.ResultSorting.NAME, 'Name')
-)
 
 
 class Choice(models.Model):

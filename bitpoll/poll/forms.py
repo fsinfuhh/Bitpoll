@@ -1,7 +1,8 @@
+from pytz import all_timezones
 from time import strptime
 
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField
+from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField, ChoiceField
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Poll, Choice, ChoiceValue, Comment
@@ -82,7 +83,15 @@ class DTChoiceCreationTimeForm(Form):
     times = TimesField()
 
 
+class TimezoneChoiceField(ChoiceField):
+    def __init__(self, **kwargs):
+        kwargs.pop('max_length')
+        super().__init__(choices=[x for x in zip(all_timezones, all_timezones)], **kwargs)
+
+
 class PollSettingsForm(ModelForm):
+    user = CharField(max_length=100, required=False, label=_('Name'))
+
     class Meta:
         model = Poll
         fields = [
@@ -105,6 +114,9 @@ class PollSettingsForm(ModelForm):
             'use_user_timezone',
             'sorting',
         ]
+        field_classes = {
+            'timezone_name': TimezoneChoiceField,
+        }
 
 
 class PollDeleteForm(ModelForm):
