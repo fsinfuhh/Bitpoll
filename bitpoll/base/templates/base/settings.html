@@ -87,7 +87,6 @@
                         {% endfor %}
                     </select>
                 </div>
-            {{ user.timezone.value }}
                 <div class="form-group">
                     <label for="timezone">{% trans 'Timezone:' %}</label>
                     <select id="timezone" class="form-control" name="{{ user_form.timezone.name }}">
@@ -113,7 +112,13 @@
                 </div>
                 <input type="submit" value="{% trans 'Save' %}" class="action primary" name="create"/>
             </form>
-        </div>
+        <hr>
+        {% value_from_settings CALENDAR_ENABLED as calendar_enabled %}
+        {% if calendar_enabled %}
+            <h2>CalDav Calendars</h2>
+            {% include "caldav/caldav_form.html" %}
+            </div>
+        {% endif %}
       </div>
       </div>
 {% endblock %}

@@ -57,6 +57,7 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'MAIL_SIGNATURE',
     'GROUP_MANAGEMENT',
     'PUBLIC_POLLS',
+    'CALENDAR_ENABLED',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -83,8 +84,10 @@ INSTALLED_APPS = [
     'bitpoll.invitations',
     'bitpoll.registration',
     'bitpoll.groups',
+    'bitpoll.caldav',
     'django.contrib.admin',
     'friendlytagloader',
+    'encrypted_model_fields',
     'django_token_bucket',
 ]
 
@@ -235,6 +238,16 @@ DATABASES = {
 }
 
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 60 * 30,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
+        }
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -325,6 +338,10 @@ MAIL_SIGNATURE = "Bitpoll Team"
 TEAM_EMAIL = "mail@example.com"
 
 PUBLIC_POLLS = True
+
+CALENDAR_ENABLED = True
+CALENDAR_MAX_TOKENS = 2
+CALENDAR_FILL_RATE = 500
 
 ANTI_SPAM_CHALLENGE_TTL = 60 * 60 * 24 * 7  # Defaults to 7 days
 
