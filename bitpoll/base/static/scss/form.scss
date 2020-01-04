@@ -124,6 +124,7 @@ section.section {
         transition: background 0.2s, border 0.2s;
 
         border-bottom: 1px solid #CCC;
+
         &:last-child {
             border: 0;
         }
@@ -182,34 +183,6 @@ section.section {
     }
 }
 
-.create-type-select {
-    &:checked {
-        & ~ .description {
-            color: $primary-color;
-        }
-
-        & ~ .title {
-            background-color: $primary-color;
-            color: white;
-        }
-
-        &~ .create-icon > .fa {
-            color: $primary-color;
-        }
-    }
-}
-
-@media #{$media-desktop} {
-    .create-type-select {
-        &:checked {
-            .fa {
-                background: none;
-                color: inherit;
-            }
-        }
-    }
-}
-
 @media #{$media-desktop} {
     .type-choices {
         display: flex;
@@ -238,6 +211,49 @@ section.section {
     }
 
 }
+
+.create-type-select {
+    &:checked {
+        & + label {
+            background: lightgrey;
+            border: 1px solid darkgray;
+
+            & > span {
+                & > .description {
+                    color: $primary-color;
+                }
+
+                & > .title {
+                    background-color: lightgrey;
+                    color: $primary-color;
+                }
+            }
+
+            & > .create-icon > .fa {
+                background: $primary-color;
+                color: white;
+            }
+        }
+    }
+}
+
+@media #{$media-desktop} {
+    .create-type-select {
+        &:checked + label {
+            & > .create-icon > .fa {
+                color: $primary-color;
+                background: inherit;
+            }
+
+            & > span > .title {
+                background-color: $primary-color;
+                color: white;
+            }
+        }
+    }
+}
+
+
 
 #advanced_open_checkbox {
     &:checked {
@@ -283,4 +299,7 @@ section.section {
 
 .boxes {
     margin-top: 1em;
+    .column {
+        margin-top: 2em;
+    }
 }

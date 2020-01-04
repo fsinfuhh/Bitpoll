@@ -25,7 +25,7 @@
   }
 }
 
-.navbar-center a {
+.navbar-center a { //logo
   color: lightgrey;
   font-size: 1.2em;
   vertical-align: center;
@@ -33,16 +33,10 @@
 }
 
 body nav label {
-  //display: none;
-  //visibility: hidden;
-  span {
-    //transition: visibility 1s ease-in-out, display 1s ease-in-out;
-  }
   span + span {
     display: none;
     visibility: hidden;
   }
-  //padding:0 0 1rem 0;
 }
 
 body nav input {
@@ -64,15 +58,16 @@ body nav input {
       overflow: hidden;
       font-size: 1.2em;
       padding: 1em;
-      li~li {
+      background-color: #027bcb;
+      transition: visibility 0.5s ease-out, max-height 0.5s ease-out, padding 0s ease-out .5s;
+
+      li ~ li { //lines between menue items
         border-top: 2px solid #000;
       }
+
       li {
         padding: 1em;
       }
-      transition: visibility 0.5s ease-out, max-height 0.5s ease-out, padding 0s ease-out .5s;
-      //font-size: 1.25rem;
-      background-color: #027bcb
     }
 
     & label {
@@ -80,8 +75,8 @@ body nav input {
       visibility: visible;
       cursor: pointer;
       font-size: 1.2em;
-    vertical-align: center;
-    padding: 0;
+      vertical-align: center;
+      padding: 0;
       color: #fff;
     }
 
@@ -89,22 +84,24 @@ body nav input {
       content: "\2261\00a0"
     }
 
-    & input:checked ~ label {
-      span {
-        display: none;
-        visibility: hidden;
-      }
-      span + span {
-        display: block;
-        visibility: visible;
-      }
-    }
+    & input:checked {
+      & ~ label {
+        span { //hide the first span (normal menue text)
+          display: none;
+          visibility: hidden;
+        }
 
-    & input:checked ~ .navbar-hamburger {
-      visibility: visible;
-      //padding:1rem 1rem;
-      max-height: 100%;
-      transition-delay: 0s;
+        span + span { //show the second span (hide menue text)
+          display: block;
+          visibility: visible;
+        }
+      }
+
+      & ~ .navbar-hamburger {
+        visibility: visible;
+        max-height: 100%;
+        transition-delay: 0s;
+      }
     }
   }
 }

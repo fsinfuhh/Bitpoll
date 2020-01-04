@@ -25,38 +25,48 @@
                         <div class="number">{% trans 'Step 1' %}</div>
                         <div class="title">{% trans 'Select Type' %}</div>
                     </div>
-                    <div class="form-group">
-                        <div id="create-type-list" class="type-choices">
-                                <label>
-                                    <input name="{{ poll_form.type.name }}" type="radio" value="datetime" class="d-hide create-type-select"
-                                        {% if poll_form.type.value == "datetime" or not poll_form.type.value %}checked{% endif %}>
-                                    <span class="create-icon"><i class="fa fa-clock-o"></i></span>
+                    <div id="create-type-list" class="type-choices">
+                        <input name="{{ poll_form.type.name }}" type="radio" value="datetime"
+                               class="d-hide create-type-select" id="radio-datetime"
+                               {% if poll_form.type.value == "datetime" or not poll_form.type.value %}checked{% endif %}>
+
+                        <label for="radio-datetime">
+                            <span class="create-icon"><i class="fa fa-clock-o"></i></span>
+                            <span>
                                     <span class="title">{% trans 'Date and Time' %}</span>
                                     <span class="description">{% trans 'Schedule date and time for an event' %}</span>
-                                </label>
-                                <label>
-                                    <input name="{{ poll_form.type.name }}" type="radio" value="date" class="d-hide create-type-select"
-                                        {% if poll_form.type.value == "date" %}checked{% endif %}>
-                                    <span class="create-icon"><i class="fa fa-calendar"></i></span>
+                                </span>
+                        </label>
+                        <input name="{{ poll_form.type.name }}" type="radio" value="date"
+                               class="d-hide create-type-select" id="radio-date"
+                               {% if poll_form.type.value == "date" %}checked{% endif %}>
+
+                        <label for="radio-date">
+                            <span class="create-icon"><i class="fa fa-calendar"></i></span>
+                            <span>
                                     <span class="title">{% trans 'Date' %}</span>
                                     <span class="description">{% trans 'Schedule an all-day event' %}</span>
-                                </label>
-                                <label>
-                                    <input name="{{ poll_form.type.name }}" type="radio" value="universal" class="d-hide create-type-select"
-                                        {% if poll_form.type.value == "universal" %}checked{% endif %}>
-                                    <span class="create-icon"><i class="fa fa-list"></i></span>
+                                </span>
+                        </label>
+                        <input name="{{ poll_form.type.name }}" type="radio" value="universal"
+                               class="d-hide create-type-select" id="radio-universal"
+                               {% if poll_form.type.value == "universal" %}checked{% endif %}>
+                        <label for="radio-universal">
+                            <span class="create-icon"><i class="fa fa-list"></i></span>
+                            <span>
                                     <span class="title">{% trans 'Normal Poll' %}</span>
                                     <span class="description">{% trans 'Retrieve opinions on various choices' %}</span>
-                                </label>
-                                <label class="d-hide">
-                                    <input name="{{ poll_form.type.name }}" type="radio" value="numeric" class="d-hide create-type-select"
-                                        {% if poll_form.type.value == "numeric" %}checked{% endif %}>
-                                    <span class="create-icon"><i class="fa fa-sliders"></i></span>
-                                    <span class="title">{% trans 'Numeric' %}</span>
-                                    <span class="description">{% trans 'Rate each choice in a numeric range' %}</span>
-                                </label>
-                            </div>
-                        </div>
+                                </span>
+                        </label>
+                        <input name="{{ poll_form.type.name }}" type="radio" value="numeric"
+                               class="d-hide create-type-select" id="radio-numeric"
+                               {% if poll_form.type.value == "numeric" %}checked{% endif %}>
+                        <label class="d-hide" for="radio-numeric">
+                            <span class="create-icon"><i class="fa fa-sliders"></i></span>
+                            <span class="title">{% trans 'Numeric' %}</span>
+                            <span class="description">{% trans 'Rate each choice in a numeric range' %}</span>
+                        </label>
+                    </div>
                     <div class="form-step">
                         <div class="number">{% trans 'Step 2' %}</div>
                         <div class="title">{% trans 'Enter Title' %}</div>
@@ -94,7 +104,7 @@
                             </div>
                         </div>
                     <div class="columns">
-                        <div class="column col-7">
+                        <div class="column col-7 col-xs-12">
                             <label class="form-label" for="due-date-input">{% trans 'Due date' %}</label>
                             <div class="form-group">
                                 {# TODO #}
@@ -111,7 +121,7 @@
                             </div>
                             {% render_form_field poll_form.description %}
                         </div>
-                        <div class="column col-4 col-ml-auto">
+                        <div class="column col-4 col-ml-auto col-xs-12">
                             <p></p>
                             {% render_form_checkbox poll_form.anonymous_allowed True %}
                             {% render_form_checkbox poll_form.require_login True %}
@@ -156,7 +166,7 @@
         <div class="columns">
             {% value_from_settings REGISTER_ENABLED as register %}
             {% if request.user.is_anonymous and register %}
-            <div class="column col-4">
+            <div class="column col-4 col-xs-12 col-lg-6">
                 <h4>{% trans 'Register for more' %}</h4>
                 <p>{% blocktrans %}Registered users have access to the full width of features available.{% endblocktrans %}
                 </p>
@@ -164,7 +174,7 @@
             </div>
             {% endif %}
         {# TODO: own polls? #}
-            <div class="column col-4">
+            <div class="column col-4 col-xs-12 col-lg-6">
                 <h4>{% trans 'Statistics' %}</h4>
                 <table class="table">
                     <tr>
@@ -183,7 +193,7 @@
             </div>
             {% value_from_settings PUBLIC_POLLS as public_polls_setting %}
             {% if public_polls_setting %}
-                <div class="column col-4">
+                <div class="column col-4 col-xs-12 col-lg-6">
                     <h4>{% trans 'Public polls' %}</h4>
                     {% if not public_polls %}
                         <div class="alert alert-info">
@@ -202,7 +212,7 @@
                 </div>
             {% endif %}
             {% if request.user.is_authenticated %}
-            <div class="column col-4">
+            <div class="column col-4 col-xs-12 col-lg-6">
                 <h4>{% trans 'My Polls' %}</h4>
                 <small>{% trans 'You can find a list of all the polls in which you have participated on your profile page.' %}</small><br>
                 <br>

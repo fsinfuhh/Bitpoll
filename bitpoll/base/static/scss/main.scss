@@ -411,20 +411,6 @@ footer {
     }
 }
 
-.navbar .btn {
-    border: none !important;
-
-    &.btn-default {
-        background: rgba(255, 255, 255, 0.2);
-        color: #FFF;
-        transition: background 0.3s;
-
-        &:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-    }
-}
-
 .red {
     color: red;
 }
@@ -531,7 +517,7 @@ tr.deleted, tr.deleted .color {
 }
 
 #advanced-open {
-    margin: 0 -15px;
+    //margin: 0 -15px;
 }
 
 .public_polls {
