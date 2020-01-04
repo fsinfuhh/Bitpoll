@@ -114,7 +114,8 @@ PIPELINE = {
             'source_filenames': (
                 'css/font-awesome.css',
                 'scss/main.scss',
-                'scss/poll.scss'
+                'scss/poll.scss',
+                'scss/navbar.scss',  # TODO: move to base_scren and hide navbar in print?
             ),
             'output_filename': 'css/base.css',
         },
