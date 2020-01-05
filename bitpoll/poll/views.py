@@ -1153,7 +1153,7 @@ def settings(request, poll_url: str):
         'form': form,
         'poll': current_poll,
         'page': 'Settings',
-        'groups': [(group.id, group.name) for group in groups],
+        'groups': [(group.id, group.name) for group in groups] if request.user.is_authenticated else [],
         'user_select': user,
         'suppress_messages': True,
     })

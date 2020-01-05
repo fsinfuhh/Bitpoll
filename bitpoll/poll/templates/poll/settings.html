@@ -13,70 +13,81 @@
 {% endblock %}
 
 {% block content %}
-        {% include 'poll/poll_header.html' %}
-        <div class="container">
+    {% include 'poll/poll_header.html' %}
+    <div class="container">
 
-    <form action="{% url 'poll_settings' poll.url %}" method="post">
-    {% csrf_token %}
-    <div class="columns">
-        <div class="column col-5 col-xs-12">
-             {% render_form_field form.title %}
-             {% render_form_field form.due_date %}
-             {% render_form_field form.show_results %}
-             {% render_form_field form.timezone_name %}
+        <form action="{% url 'poll_settings' poll.url %}" method="post">
+            {% csrf_token %}
+            <div class="columns">
+                <div class="column col-5 col-md-12">
+                    {% render_form_field form.title %}
+                    {% render_form_field form.due_date %}
+                    {% render_form_field form.show_results %}
+                    {% render_form_field form.timezone_name %}
 
-             {% render_form_field form.use_user_timezone switch=True%}
-             {% render_form_field form.description %}
-            <br>
-            <div class="text " id="description-input">
-                {% blocktrans %}
-                You can use
-                <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
-                syntax for formatting.
-            {% endblocktrans %}
+                    {% render_form_field form.use_user_timezone switch=True %}
+                    {% render_form_field form.description %}
+                    <br>
+                    <div class="text " id="description-input">
+                        {% blocktrans %}
+                            You can use
+                            <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
+                            syntax for formatting.
+                        {% endblocktrans %}
+                    </div>
+                    <br>
+                    <div class="form-group hide-md">
+                        <a href="{% url 'poll' poll.url %}" class="btn">{% trans 'Back to poll' %}</a>
+                        <input type="submit" class="btn btn-primary" name="Save" value="{% trans 'Save changes' %}">
+                    </div>
+                </div>
+
+
+                <div class="column col-5 col-md-12 col-ml-auto">
+                    <h3>{% trans 'additional Settings' %}</h3>
+                    <div class="help-block">
+                        {% blocktrans %}
+                            These settings are not retroactive, meaning that changing them will not modify
+                            votes/comments already created.
+                        {% endblocktrans %}
+                    </div>
+                    {% render_form_field form.allow_comments switch=True %}
+                    {% render_form_field form.anonymous_allowed switch=True %}
+                    {% render_form_field form.require_login switch=True %}
+                    {% render_form_field form.require_invitation switch=True %}
+                    {% render_form_field form.public_listening switch=True %}
+                    {% render_form_field form.allow_unauthenticated_vote_changes switch=True %}
+                    {% render_form_field form.one_vote_per_user switch=True %}
+                    {% render_form_field form.show_invitations switch=True %}
+                    {% render_form_field form.vote_all switch=True %}
+                    {% render_form_field form.hide_participants switch=True %}
+                    {% render_form_field form.sorting %}
+
+                    {% render_form_field form.user value=user_select %}
+
+                    {% render_form_field form.group replace_choices=groups %} {# empty_option='------' #}
+
+                    <div class="help-block">
+                        {% blocktrans %}
+                            Only the owner of a poll, or a member of the owner group, can edit the settings on this
+                            page.
+                            If you set this to "Nobody", then anyone may claim exclusive ownership. Most restrictive
+                            settings above are useless if you do not claim ownership of this poll.
+                        {% endblocktrans %}
+                    </div>
+                    <h3>{% trans 'Very advanced stuff' %}</h3><br>
+                    <a href="{% url 'poll_editchoicevalues' poll.url %}">{% trans 'Edit possible answer values' %}</a><br>
+                    <a href="{% url 'invitations' poll.url %}">{% trans 'Manage invitations' %}</a><br>
+                    <a href="{% url 'poll_copy' poll.url %}">{% trans 'Copy poll' %}</a><br>
+                    <a class="red" href="{% url 'poll_delete' poll.url %}">{% trans 'Delete this poll' %}</a>
+                    <div class="form-group show-md">
+                        <a href="{% url 'poll' poll.url %}" class="btn">{% trans 'Back to poll' %}</a>
+                        <input type="submit" class="btn btn-primary" name="Save" value="{% trans 'Save changes' %}">
+                    </div>
+                </div>
             </div>
-            <br>
-            <a href="{% url 'poll' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
-            <input type="submit" class="btn btn-primary" name="Save" value="{% trans 'Save changes' %}">
-        </div>
-
-
-        <div class="column col-5 col-xs-12 col-ml-auto">
-          <h3>{% trans 'additional Settings' %}</h3>
-            <div class="help-block">
-                {% blocktrans %}
-                These settings are not retroactive, meaning that changing them will not modify votes/comments already created.
-                {% endblocktrans %}
-            </div>
-            {% render_form_field form.allow_comments switch=True %}
-            {% render_form_field form.anonymous_allowed switch=True %}
-            {% render_form_field form.require_login switch=True %}
-            {% render_form_field form.require_invitation switch=True %}
-            {% render_form_field form.public_listening switch=True %}
-            {% render_form_field form.allow_unauthenticated_vote_changes switch=True %}
-            {% render_form_field form.one_vote_per_user switch=True %}
-            {% render_form_field form.show_invitations switch=True %}
-            {% render_form_field form.vote_all switch=True %}
-            {% render_form_field form.hide_participants switch=True %}
-            {% render_form_field form.sorting %}
-
-            {% render_form_field form.user value=user_select %}
-
-            {% render_form_field form.group replace_choices=groups empty_option='------'%}
-
-            <div class="help-block">
-                {% blocktrans %}
-                Only the owner of a poll, or a member of the owner group, can edit the settings on this page.
-                If you set this to "Nobody", then anyone may claim exclusive ownership. Most restrictive settings above are useless if you do not claim ownership of this poll.
-                {% endblocktrans %}
-            </div>
-            <h3>{% trans 'Very advanced stuff' %}</h3><br>
-            <a href="{% url 'poll_editchoicevalues' poll.url %}">{% trans 'Edit possible answer values' %}</a><br>
-            <a href="{% url 'invitations' poll.url %}">{% trans 'Manage invitations' %}</a><br>
-            <a href="{% url 'poll_copy' poll.url %}">{% trans 'Copy poll' %}</a><br>
-            <a class="red" href="{% url 'poll_delete' poll.url %}">{% trans 'Delete this poll' %}</a>
-        </div></div></form>
-        </div>
+        </form>
+    </div>
 {% endblock %}
 
 {% load csp %}
