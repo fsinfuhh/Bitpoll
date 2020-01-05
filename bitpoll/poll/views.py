@@ -59,7 +59,7 @@ def poll(request, poll_url: str, export: bool=False):
 
     # aggregate stats for all columns
     stats = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
-        score=Sum('votechoice__value__weight')).values('score', 'id', 'text')
+        score=Sum('votechoice__value__weight')).values('score', 'id', 'text', 'date')
     votes_count = poll_votes.count()
 
     invitations = current_poll.invitation_set.filter(vote=None)
@@ -115,7 +115,7 @@ def poll(request, poll_url: str, export: bool=False):
             'score': (stat['score'] / Decimal(votes_count)
                       if votes_count > 0 else 0) if stat['score'] is not None else None,
             'count': stat['score'],
-            'text': stat,
+            'text': stat['text'] if current_poll.type == 'universal' else stat['date'],
             'choices': [
                 {
                     'count': stat2['count'],

@@ -98,6 +98,23 @@ table td.vote-actions {
 .poll .author {
     padding: .6rem 2em;
     text-align: right;
+    height: 100%;
+    width: 100%;
+}
+
+.poll .popover-container {
+    text-align: left;
+    font-weight: normal;
+    white-space: normal;
+    color: black;
+
+    .value span {
+        color: white;
+    }
+}
+
+.poll .popover {
+    display: table-cell;
 }
 
 .poll .author-hidden {
@@ -134,11 +151,13 @@ table td.vote-actions {
 
 .vote-choice {
     /*border: 5px solid white;*/
-    color: white;
-    font-size: 16px;
     min-width: 4em;
     max-width: 10em;
     text-align: center;
+    span, label {
+        color: white;
+        font-size: 16px;
+    }
 }
 
 .vote .vote-choice {

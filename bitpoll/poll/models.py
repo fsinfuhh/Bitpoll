@@ -224,8 +224,10 @@ class Choice(models.Model):
     def __str__(self):
         if self.poll.type == 'universal':
             return self.text
+        elif self.poll.type == 'date':
+            return self.date.strftime("%Y-%m-%d")
         else:
-            return str(self.date)
+            return self.date
 
     @cached_property
     def get_title(self):
@@ -288,7 +290,7 @@ class Vote(models.Model):
     name = models.CharField(max_length=80)
     anonymous = models.BooleanField(default=False, help_text=_("Post as anonymous vote"))
     date_created = models.DateTimeField()
-    comment = models.TextField(blank=True, help_text=_('You can use <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a> syntax for formatting.'))
+    comment = models.TextField(blank=True)
     assigned_by = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, related_name='assigning')
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)
