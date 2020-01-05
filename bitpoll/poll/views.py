@@ -23,8 +23,10 @@ from django.views.decorators.http import require_POST
 
 from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
 from .forms import PollCopyForm, DateChoiceCreationForm, \
-    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, CommentForm
+    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, \
+    CommentForm, VoteFormUser, VoteForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, PollWatch, ResultSorting
+
 from bitpoll.base.models import BitpollUser
 from bitpoll.invitations.models import Invitation
 
@@ -779,111 +781,115 @@ def vote(request, poll_url, vote_id=None):
         else:
             return redirect('poll', poll_url)
 
+    if vote_id:
+        current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
+    else:
+        current_vote = Vote(poll=current_poll)
+
     tz_activate(current_poll.get_tz_name(request.user))
 
     if request.method == 'POST':
-        vote_id = request.POST.get('vote_id', None)
-        if vote_id:
-            current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
-            if not current_vote.can_edit(request.user):
-                # the vote belongs to an user and it is not the authenticated user
-                return HttpResponseForbidden()  # todo: better errorpage?
+        if request.user.is_authenticated:
+            form = VoteFormUser(request.POST)
         else:
-            current_vote = Vote(poll=current_poll)
-        current_vote.date_created = now()
-        current_vote.comment = request.POST.get('comment')
-        if vote_id:
-            # leave the name as it was
-            pass
-        elif 'anonymous' in request.POST:
-            current_vote.name = 'Anonymous'
-        elif request.user.is_authenticated:
-            current_vote.name = request.user.get_displayname()
-            current_vote.user = request.user
+            form = VoteForm(request.POST)
+        if form.is_valid():
+            if vote_id and not current_vote.can_edit(request.user):
+                    # the vote belongs to an user and it is not the authenticated user
+                    return HttpResponseForbidden()  # todo: better errorpage?
+            current_vote.date_created = now()
+            current_vote.comment = form.cleaned_data['comment']
 
-            if request.user.auto_watch:
-                try:
-                    poll_watch = PollWatch(poll=current_poll, user=request.user)
-                    poll_watch.save()
-                except IntegrityError:
-                    pass
-        else:
-            current_vote.name = request.POST.get('name').strip()
-
-        if len(current_vote.name) > 80:
-            messages.error(
-                request, _("The Name is longer than the allowed name length of 80 characters")
-            )
-            return redirect('poll', poll_url) #todo: das macht keinen sinn, warum nicht verbessern?
-
-        current_vote.anonymous = 'anonymous' in request.POST
-
-        if not current_poll.anonymous_allowed and current_vote.anonymous:
-            messages.error(request, _("Anonymous votes are not allowed for this poll."))
-        else:
-            if current_vote.anonymous or current_vote.name:
-                # prevent non-anonymous vote without name
-                try:
-                    with transaction.atomic():
-                        new_choices = []
-
-                        current_vote.save()
-
-                        if request.user.is_authenticated:
-                            # check if this user was invited
-                            invitation = current_poll.invitation_set.filter(user=request.user)
-                            if invitation:
-                                invitation = invitation[0]
-                                invitation.vote = current_vote
-                                invitation.save()
-
-                        for choice in current_poll.choice_set.all():
-                            if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
-                                choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
-                                if not choice_value.deleted:
-                                    new_choices.append(VoteChoice(value=choice_value,
-                                                                  vote=current_vote,
-                                                                  choice=choice,
-                                                                  comment=request.POST.get(
-                                                                        'comment_{}'.format(choice.id)) or ''))
-                                else:
-                                    deleted_choicevals = True
-                            else:
-                                if current_poll.vote_all and not choice.deleted:
-                                    if not error_msg:  # TODO: error_msg is used in other places here to, maybe use
-                                        # deduplication for messages?
-                                        # https://stackoverflow.com/questions/23249807/django-remove-duplicate
-                                        # -messages-from-storage
-                                        messages.error(request, _('Due to the the configuration of this poll, '
-                                                                  'you have to fill all choices.'))
-                                    error_msg = True
-
-                        if deleted_choicevals:
-                            error_msg = True
-                            messages.error(request, _('Value for choice does not exist. This is probably due to '
-                                                      'changes in the poll. Please correct your vote.'))
-
-                        if not error_msg:
-                            if vote_id:
-                                VoteChoice.objects.filter(vote=current_vote).delete()
-                                # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
-                                # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
-                            else:
-                                for current_watch in current_poll.pollwatch_set.all():
-                                    current_watch.send(request=request, vote=current_vote)
-
-                            VoteChoice.objects.bulk_create(new_choices)
-                            messages.success(request, _('Vote has been recorded'))
-                            return redirect('poll', poll_url)
-                        else:
-                            raise IntegrityError("An Error while saving the Vote occurred, see message")
-                except IntegrityError as e:
-                    # Nothing todo as the main point in this exception is the database rollback
-                    pass
+            if form.cleaned_data['anonymous']:
+                current_vote.name = 'Anonymous'
+            elif request.user.is_authenticated and (not vote_id or current_vote.user == request.user): #TODO
+                # only set on edit if same user
+                print("hhhh", current_vote.user, request.user)
+                current_vote.name = request.user.get_displayname()
+                current_vote.user = request.user
             else:
-                messages.error(
-                    request, _('You need to either provide a name or post an anonymous vote.'))
+                current_vote.name = form.cleaned_data['name']
+                print(current_vote.name, form.cleaned_data['name'], form, form.cleaned_data, request.POST['name'])
 
+            current_vote.anonymous = form.cleaned_data['anonymous']
+
+            if not current_poll.anonymous_allowed and current_vote.anonymous:
+                messages.error(request, _("Anonymous votes are not allowed for this poll."))
+            else:
+                if current_vote.anonymous or current_vote.name:
+                    # prevent non-anonymous vote without name
+                    try:
+                        with transaction.atomic():
+                            new_choices = []
+                            current_vote.save()
+
+                            if request.user.is_authenticated:
+                                # check if this user was invited
+                                invitation = current_poll.invitation_set.filter(user=request.user)
+                                if invitation:
+                                    invitation = invitation[0]
+                                    invitation.vote = current_vote
+                                    invitation.save()
+
+                            for choice in current_poll.choice_set.all():
+                                if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
+                                    choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+                                    if not choice_value.deleted:
+                                        new_choices.append(VoteChoice(value=choice_value,
+                                                                      vote=current_vote,
+                                                                      choice=choice,
+                                                                      comment=request.POST.get(
+                                                                            'comment_{}'.format(choice.id)) or ''))
+                                    else:
+                                        deleted_choicevals = True
+                                else:
+                                    if current_poll.vote_all and not choice.deleted:
+                                        if not error_msg:
+                                            messages.error(request, _('Due to the the configuration of this poll, '
+                                                                      'you have to fill all choices.'))
+                                        error_msg = True
+
+                            if deleted_choicevals:
+                                error_msg = True
+                                messages.error(request, _('Value for choice does not exist. This is probably due to '
+                                                          'changes in the poll. Please correct your vote.'))
+
+                            if not error_msg:
+                                if vote_id:
+                                    VoteChoice.objects.filter(vote=current_vote).delete()
+                                else:
+                                    for current_watch in current_poll.pollwatch_set.all():
+                                        current_watch.send(request=request, vote=current_vote)
+
+                                VoteChoice.objects.bulk_create(new_choices)
+                                messages.success(request, _('Vote has ben updated') if vote_id else _('Vote has been recorded'))
+                                if request.user.is_authenticated and request.user.auto_watch:
+                                    # todo: currently also watches on edit of other users votes, do we want to suppress that?
+                                    try:
+                                        poll_watch = PollWatch(poll=current_poll, user=request.user)
+                                        poll_watch.save()
+                                    except IntegrityError:
+                                        pass
+                                return redirect('poll', poll_url)
+                            else:
+                                raise IntegrityError("An Error while saving the Vote occurred, see message")
+                    except IntegrityError:
+                        # do nothing as the main point in this exception is the database rollback, the error
+                        # is communicated to the user via messages, selected choices are recunstructed below
+                        pass
+                else:
+                    form.add_error('name', _('You need to either provide a name or post an anonymous vote.'))
+    else:
+        if vote_id:
+            if current_vote.user:
+                form = VoteFormUser(initial={'name': current_vote.user.get_displayname()})
+            else:
+                form = VoteForm(instance=current_vote, initial={'name': current_vote.name})
+        else:
+            if request.user.is_authenticated:
+                form = VoteFormUser(initial={'name': request.user.get_displayname()})
+            else:
+                form = VoteForm()
     # no/invalid POST: show the dialog
     matrix = current_poll.get_choice_group_matrix(get_current_timezone())
     choices = []
@@ -925,6 +931,7 @@ def vote(request, poll_url, vote_id=None):
                              current_poll.get_tz_name(request.user) != request.user.timezone),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
         'suppress_messages': True,
+        'form': form,
     })
 
 

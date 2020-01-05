@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField, ChoiceField
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Poll, Choice, ChoiceValue, Comment
+from .models import Poll, Choice, ChoiceValue, Comment, Vote
 
 
 class MultipleTemporalBaseField(CharField):
@@ -144,3 +144,17 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ['name', 'text']
+
+
+class VoteForm(ModelForm):
+    name = CharField(required=False, max_length=100)
+
+    class Meta:
+        model = Vote
+        fields = ['comment', 'anonymous']
+
+
+class VoteFormUser(VoteForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['readonly'] = True

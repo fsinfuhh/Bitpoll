@@ -28,14 +28,6 @@
                     {% render_form_field form.use_user_timezone switch=True %}
                     {% render_form_field form.description %}
                     <br>
-                    <div class="text " id="description-input">
-                        {% blocktrans %}
-                            You can use
-                            <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
-                            syntax for formatting.
-                        {% endblocktrans %}
-                    </div>
-                    <br>
                     <div class="form-group hide-md">
                         <a href="{% url 'poll' poll.url %}" class="btn">{% trans 'Back to poll' %}</a>
                         <input type="submit" class="btn btn-primary" name="Save" value="{% trans 'Save changes' %}">

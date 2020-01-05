@@ -48,7 +48,7 @@ POLL_RESULT_SORTING = (
 
 class Poll(models.Model):
     title = models.CharField(max_length=80, verbose_name=_('Title'))
-    description = models.TextField(blank=True, verbose_name=_('Description'))
+    description = models.TextField(blank=True, verbose_name=_('Description'), help_text=_('You can use <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a> syntax for formatting.'))
     url = models.SlugField(max_length=80, unique=True)
     type = models.CharField(max_length=20, choices=POLL_TYPES)
     created = models.DateTimeField(auto_now_add=True)
@@ -264,7 +264,7 @@ class ChoiceValue(models.Model):
 
 
 class Comment(models.Model):
-    text = MarkdownField()
+    text = MarkdownField(help_text=_('You can use <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a> syntax for formatting.'))
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)
@@ -286,9 +286,9 @@ class Comment(models.Model):
 
 class Vote(models.Model):
     name = models.CharField(max_length=80)
-    anonymous = models.BooleanField(default=False)
+    anonymous = models.BooleanField(default=False, help_text=_("Post as anonymous vote"))
     date_created = models.DateTimeField()
-    comment = models.TextField()
+    comment = models.TextField(blank=True, help_text=_('You can use <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a> syntax for formatting.'))
     assigned_by = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, related_name='assigning')
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)
