@@ -92,7 +92,7 @@
                             </div>
 
                             <div id="slug" class="form-group{% if poll_form.url.errors %} has-error{% endif %}"> {# TODO: fieldsets in spectre-css module #}
-                                <label class="form-label" for="slug">URL name</label>
+                                <label class="form-label" for="slug-input">URL name</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
                                     <input class="form-input" id="slug-input" name="{{ poll_form.url.name }}" type="text"

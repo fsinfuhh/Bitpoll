@@ -20,6 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import activate as tz_activate, localtime, now, make_naive, make_aware
 from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST
+from django.conf import settings as django_settings
 
 from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
 from .forms import PollCopyForm, DateChoiceCreationForm, \
@@ -34,6 +35,8 @@ from datetime import timedelta
 from decimal import Decimal
 from pytz import timezone
 from django.utils.dateparse import parse_datetime
+
+from bitpoll.base.views import generate_random_slug
 
 
 def poll(request, poll_url: str, export: bool=False):
@@ -1020,7 +1023,7 @@ def copy(request, poll_url):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     date_shift = 0
-    error_msg = ""
+    randomize_url = django_settings.DEFAULT_RANDOM_SLUG == 'true'  # this settings value is a javascript true/false
     if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
@@ -1028,12 +1031,7 @@ def copy(request, poll_url):
         form = PollCopyForm(request.POST)
 
         if form.is_valid():
-            copy_choices = form.data.get('copy_choices', '')
-            copy_invitations = form.data.get('copy_invitations', '')
-            create_invitations_from_votes = form.data.get('create_invitations_from_votes', False)
-            copy_answer_values = form.data.get('copy_ans_values', '')
-            reset_ownership = form.data.get('reset_ownership', '')
-            date_shift = int(form.data.get('date_shift', ''))
+            date_shift = form.cleaned_data['date_shift']
 
             choice_values = current_poll.choicevalue_set.all()
             choices = current_poll.choice_set.all()
@@ -1041,65 +1039,71 @@ def copy(request, poll_url):
             vote_users = current_poll.vote_set.all().values('user')
             invitation_users = invitations.values('user')
 
-            current_poll.pk = None
-            current_poll.title = form.cleaned_data['title']
-            current_poll.url = form.cleaned_data['url']
-            current_poll.due_date = form.cleaned_data['due_date']
+            with transaction.atomic:
+                current_poll.pk = None
+                current_poll.title = form.cleaned_data['title']
+                current_poll.url = form.cleaned_data['url']
+                current_poll.due_date = form.cleaned_data['due_date']
 
-            if date_shift:
-                current_poll.due_date += timedelta(days=date_shift)
+                if date_shift:
+                    current_poll.due_date += timedelta(days=date_shift)
 
-            if reset_ownership:
-                current_poll.user = None
-                current_poll.group = None
+                if form.cleaned_data['reset_ownership']:
+                    current_poll.user = None
+                    current_poll.group = None
 
-            current_poll.save()
+                current_poll.save()
 
-            if copy_invitations:
-                for invitation in invitations:
-                    invitation.pk = None
-                    invitation.poll = current_poll
-                    invitation.date_created = now()
-                    invitation.last_email = None
-                    invitation.creator = request.user
-                    invitation.save()
-                    invitation.send(request)
-
-            if create_invitations_from_votes:
-                for user in vote_users:
-                    if user not in invitation_users:
-                        invitation = Invitation(poll=current_poll, user=user, date_created=now(),
-                                                creator=request.user)
+                if form.cleaned_data['copy_invitations']:
+                    for invitation in invitations:
+                        invitation.pk = None
+                        invitation.poll = current_poll
+                        invitation.date_created = now()
+                        invitation.last_email = None
+                        invitation.creator = request.user
                         invitation.save()
                         invitation.send(request)
 
-            if copy_choices:
-                for choice in choices:
-                    choice.pk = None
-                    choice.poll = current_poll
-                    if date_shift and choice.date:
-                        choice.date += timedelta(days=date_shift)
-                    choice.save()
+                if form.cleaned_data['create_invitations_from_votes']:
+                    for user in vote_users:
+                        if user not in invitation_users:
+                            invitation = Invitation(poll=current_poll, user=user, date_created=now(),
+                                                    creator=request.user)
+                            invitation.save()
+                            invitation.send(request)
 
-            if copy_answer_values:
-                for value in choice_values:
-                    value.pk = None
-                    value.poll = current_poll
-                    value.save()
+                if form.cleaned_data['copy_choices']:
+                    for choice in choices:
+                        choice.pk = None
+                        choice.poll = current_poll
+                        if date_shift and choice.date:
+                            choice.date += timedelta(days=date_shift)
+                        choice.save()
 
-            return redirect('poll', current_poll.url)
+                if form.cleaned_data['copy_ans_values']:
+                    for value in choice_values:
+                        value.pk = None
+                        value.poll = current_poll
+                        value.save()
+
+                return redirect('poll', current_poll.url)
 
     else:
         form = PollCopyForm({
             'title': "Copy of " + current_poll.title,
             'due_date': current_poll.due_date,
-            'url': current_poll.url + '2'})  # we set an url, this will be overwritten by the slug generation JS
+            'url': generate_random_slug() if randomize_url else current_poll.url + '2',
+            'date_shift': 0,
+            'copy_ans_values': True,
+            'copy_choices': True,
+        })
 
     return TemplateResponse(request, 'poll/copy.html', {
         'form': form,
         'poll': current_poll,
         'date_shift': date_shift,
-        'error': error_msg,
+        'randomize_url': randomize_url,
+        'random_url': generate_random_slug() if randomize_url else '',
     })
 
 

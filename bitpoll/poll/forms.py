@@ -2,7 +2,7 @@ from pytz import all_timezones
 from time import strptime
 
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField, ChoiceField
+from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField, ChoiceField, BooleanField
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Poll, Choice, ChoiceValue, Comment, Vote
@@ -55,6 +55,13 @@ class PollCreationForm(ModelForm):
 
 
 class PollCopyForm(ModelForm):
+    copy_choices = BooleanField(required=False, label=_('Copy Choices'))
+    copy_invitations = BooleanField(required=False, label=_('Copy Invitations'))
+    create_invitations_from_votes = BooleanField(required=False, label=_('Create invitations from existing Votes'))
+    copy_answer_values = BooleanField(required=False, label=_('Copy answer values'))
+    reset_ownership = BooleanField(required=False, label=_('Reset ownership'))
+    date_shift = IntegerField(label=_('Shift by X days'), initial=0)
+
     class Meta:
         model = Poll
         fields = ['title', 'due_date', 'url']
