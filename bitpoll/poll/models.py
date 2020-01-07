@@ -248,10 +248,10 @@ class Choice(models.Model):
 
 class ChoiceValue(models.Model):
     title = models.CharField(max_length=80)
-    icon = models.CharField(max_length=64)
+    icon = models.CharField(max_length=64, help_text=_('any FontAwesome icon'))
     color = models.CharField(max_length=7, validators=[RegexValidator('#?[a-fA-F0-9]{6}$',
-                                                                      message=_("Give an HTML color without the #"))])
-    weight = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+                                                                      message=_("Give an HTML color in hex notation (#5500ff)"))])
+    weight = models.DecimalField(max_digits=5, decimal_places=2, default=0.0, verbose_name=_('Weight'), help_text=_('usually between 0 and 1'))
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     deleted = models.BooleanField(default=False)
 

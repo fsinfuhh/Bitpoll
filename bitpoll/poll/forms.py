@@ -2,7 +2,7 @@ from pytz import all_timezones
 from time import strptime
 
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField, ChoiceField, BooleanField
+from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField, ChoiceField, BooleanField, TextInput
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Poll, Choice, ChoiceValue, Comment, Vote
@@ -136,6 +136,9 @@ class ChoiceValueForm(ModelForm):
     class Meta:
         model = ChoiceValue
         fields = ['title', 'icon', 'color', 'weight']
+        widgets = {
+            'color': TextInput(attrs={'type': 'color'}),
+        }
 
     def clean_color(self):
         color = self.cleaned_data['color']
