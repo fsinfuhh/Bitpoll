@@ -18,6 +18,7 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.shortcuts import redirect, render
+from django.urls import path
 import django.conf.urls.i18n
 
 from bitpoll import settings
@@ -52,6 +53,14 @@ if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+
+url_prefix = getattr(settings, 'URL_PREFIX', '')
+if url_prefix not in ('', '/', None):
+    if not url_prefix.endswith('/'):
+        url_prefix += '/'
+    urlpatterns = [
+        path(url_prefix, include(urlpatterns))
+    ]
 
 
 def handler500(request):

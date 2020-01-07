@@ -15,6 +15,8 @@ DEBUG = False
 #SESSION_COOKIE_SECURE = True
 #CSRF_COOKIE_SECURE = True
 
+# The root dir bitpoll appears to be in from the web, as configured in the webserver
+URL_PREFIX = ''
 
 #Add additionall installed apps here
 ## Example for installed raven (Sentry instrumentation)
