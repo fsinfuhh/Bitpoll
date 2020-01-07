@@ -42,6 +42,7 @@ def invite(request, poll_url):
 
     return TemplateResponse(request, 'invitations/Invitation.html', {
         'poll': current_poll,
+        'suppress_messages': True,
     })
 
 
