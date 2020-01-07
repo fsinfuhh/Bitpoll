@@ -215,17 +215,17 @@ section.section {
 .create-type-select {
     &:checked {
         & + label {
-            background: lightgrey;
+            background: $primary-color-light;
             border: 1px solid darkgray;
 
             & > span {
                 & > .description {
-                    color: $primary-color;
+                    color: black;
                 }
 
                 & > .title {
-                    background-color: lightgrey;
-                    color: $primary-color;
+                    background-color: $primary-color-light;
+                    color: black;
                 }
             }
 

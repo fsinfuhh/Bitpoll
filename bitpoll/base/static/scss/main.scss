@@ -290,7 +290,7 @@ footer {
     bottom:0;
     left:0;
     margin: 0;
-    padding: 10px 0;
+    padding: 1em 2em;
     box-sizing: border-box;
     border-top: 1px solid #DDD;
     color: #888;
@@ -302,6 +302,8 @@ footer {
             padding: 0;
             color: #888;
         }
+        height: inherit;
+        vertical-align: inherit;
     }
 
     .separator {
