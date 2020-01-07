@@ -17,9 +17,6 @@
     <div class="alert alert-warning">{% trans 'Shall the following comment be deleted?' %}</div>
     <div class="comments">
     <div class="comment">
-        <div class="avatar">
-            <img src="https://secure.gravatar.com/avatar/b1c328a4d689f21f3299987027b83480?s=48&amp;d=identicon&amp;r=g">{# TODO: #}
-        </div>
         <div class="meta">
             <div class="author">{% if comment.user %}{{ comment.user.name }}{% else %}{{ comment.name }}{% endif %}</div>
             {% trans 'comented at' %}
