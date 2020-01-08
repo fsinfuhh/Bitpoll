@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block title %}{% trans 'CalDav Settings' %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% include "caldav/caldav_form.html" %}
+    </div>
+{% endblock %}

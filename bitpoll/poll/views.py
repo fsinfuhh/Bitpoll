@@ -21,7 +21,9 @@ from django.utils.timezone import activate as tz_activate, localtime, now, make_
 from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST
 from django.conf import settings as django_settings
+from django_token_bucket.models import TokenBucket
 
+from bitpoll.caldav.utils import get_caldav
 from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
 from .forms import PollCopyForm, DateChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, \
@@ -181,6 +183,7 @@ def poll(request, poll_url: str, export: bool=False):
         'invitations': invitations if current_poll.show_invitations else [],
         'summary': summary,
         'comment_form': CommentForm(),
+        'comments': current_poll.comment_set.order_by('date_created'),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
         'spam_challenge': create_anti_spam_challenge(current_poll.id),
         'suppress_messages': True,
@@ -205,6 +208,7 @@ def comment(request, poll_url, comment_id=None):
     if request.POST:
         form = CommentForm(request.POST)
         if form.is_valid():
+            token_bucket = TokenBucket.get("Comments", current_poll, 5, 1800, 'commenting')
             try:
                 spam_ok = True
                 if not user:
@@ -220,6 +224,8 @@ def comment(request, poll_url, comment_id=None):
                 name = form.cleaned_data['name']
                 spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
                 if spam_ok:
+                    if not user:
+                        token_bucket.consume(1)
                     if user or name:
                         if user:
                             name = user.get_displayname()
@@ -244,6 +250,9 @@ def comment(request, poll_url, comment_id=None):
                         form.add_error('name', _("Provide a name"))
                 else:
                     form.add_error('spam_answer', _("Wrong result"))
+            except token_bucket.TokensExceeded as e:
+                form.add_error(None, e)
+                spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
             except ValidationError as e:
                 # if the anti spam challenge faild we generate a new one.
                 spam_challenge = create_anti_spam_challenge(current_poll.id)
@@ -920,11 +929,14 @@ def vote(request, poll_url, vote_id=None):
         choices.append(choice)
         comments.append(cur_comment)
         choice_votes.append(value)
+
+    events = get_caldav(choices, current_poll, request.user, request)
+
     return TemplateResponse(request, 'poll/vote_creation.html', {
         'poll': current_poll,
         'matrix': matrix,
         'matrix_len': len(matrix[0]),
-        'choices_matrix': zip(matrix, choices, comments, choice_votes),
+        'choices_matrix': zip(matrix, choices, comments, choice_votes, events),
         'choices': current_poll.choice_set.all(),
         'choices_matrix_len': len(choices),
         'values': current_poll.choicevalue_set.filter(deleted=False).all(),

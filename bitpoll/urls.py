@@ -37,6 +37,11 @@ urlpatterns = [
 
 ]
 
+if settings.CALENDAR_ENABLED:
+    urlpatterns += [
+        url(r'^caldav/', include('bitpoll.caldav.urls')),
+    ]
+
 if settings.GROUP_MANAGEMENT:
     urlpatterns += [
         url(r'^groups/', include('bitpoll.groups.urls')),

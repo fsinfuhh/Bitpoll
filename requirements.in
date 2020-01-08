@@ -1,8 +1,12 @@
-django>=2.0.0,<2.2
+django>=2.0.0,<2.3
 django-widget-tweaks
 django-markdown-app
 pytz
 django-simple-csp
 libsasscompiler
 django-pipeline
+django-token-bucket>=0.2.1
 django-friendly-tag-loader
+django-encrypted-model-fields
+caldav
+icalendar
