@@ -542,38 +542,38 @@ def edit_dt_choice_combinations(request, poll_url):
         # getlist does not raise an exception if datetimes[] is not in request.POST
         chosen_combinations = request.POST.getlist('datetimes[]')
 
-        chosen_times = []
+        chosen_times = set()
         new_choices = []
         existing_choices = []
-        choices = current_poll.choice_set.all()
-        # List of the Old Ids, used for detection what has to be deleted
-        old_choices_ids = [c.pk for c in choices]
-        # parse datetime objects of chosen combinations
-        for combination in chosen_combinations:
-            try:
-                tz = timezone(current_poll.timezone_name)
-                timestamp = parse_datetime(combination)
-                if timestamp:
-                    chosen_times.append(tz.localize(timestamp))
-                else:  # should only happen if somebody have tampered with the form
+        with transaction.atomic():
+            choices = current_poll.choice_set.all()
+            # List of the Old Ids, used for detection what has to be deleted
+            old_choices_ids = [c.pk for c in choices]
+            # parse datetime objects of chosen combinations
+            for combination in chosen_combinations:
+                try:
+                    tz = timezone(current_poll.timezone_name)
+                    timestamp = parse_datetime(combination)
+                    if timestamp:
+                        chosen_times.add(tz.localize(timestamp))
+                    else:  # should only happen if somebody have tampered with the form
+                        messages.error(request, _("There was en error interpreting the provided dates and times"))
+                        return redirect('poll_editDTChoiceDate', current_poll.url)
+                except ValueError:  # should only happen if somebody have tampered with the form
                     messages.error(request, _("There was en error interpreting the provided dates and times"))
                     return redirect('poll_editDTChoiceDate', current_poll.url)
-            except ValueError:  # should only happen if somebody have tampered with the form
-                messages.error(request, _("There was en error interpreting the provided dates and times"))
-                return redirect('poll_editDTChoiceDate', current_poll.url)
-        # Search for already existing Choices
-        for i, date_time in enumerate(sorted(chosen_times)):
-            choice_obj = current_poll.choice_set.filter(date=date_time)  #TODO: dboptimize? or does django cache
-            if choice_obj:
-                old_choices_ids.remove(choice_obj[0].pk)
-                choice_obj[0].sort_key = i
-                choice_obj[0].deleted = False  # Mark as not deleted
-                existing_choices.append(choice_obj[0])
-            else:
-                new_choices.append(Choice(
-                    date=date_time, poll=current_poll, sort_key=i))
-        # Save new choices to database, Update/Delete old ones
-        with transaction.atomic():
+            # Search for already existing Choices
+            for i, date_time in enumerate(sorted(chosen_times)):
+                choice_obj = current_poll.choice_set.filter(date=date_time)  #TODO: dboptimize? or does django cache
+                if choice_obj:
+                    old_choices_ids.remove(choice_obj[0].pk)  # TODO: wy error
+                    choice_obj[0].sort_key = i
+                    choice_obj[0].deleted = False  # Mark as not deleted
+                    existing_choices.append(choice_obj[0])
+                else:
+                    new_choices.append(Choice(
+                        date=date_time, poll=current_poll, sort_key=i))
+            # Save new choices to database, Update/Delete old ones
             # Save the new Choices
             Choice.objects.bulk_create(new_choices)
             for choice in existing_choices:

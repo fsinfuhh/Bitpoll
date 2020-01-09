@@ -48,8 +48,8 @@ $(function() {
     $("#date-time-form-content").hide();
 
     // Load data
-    if($("#id_times").val()) times = $("#id_times").val().split(",");
-    if($("#id_dates").val()) dates = $("#id_dates").val().split(",");
+    if($("#id_times").val()) times = $("#id_times").val().split(",").map(function(item) {return item.trim();});
+    if($("#id_dates").val()) dates = $("#id_dates").val().split(",").map(function(item) {return item.trim();});
     times.sort();
     dates.sort();
     updateDateTimeList();
