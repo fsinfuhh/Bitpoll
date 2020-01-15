@@ -6,4 +6,4 @@ django-simple-csp
 libsasscompiler
 django-pipeline
 django-friendly-tag-loader
-django-token-bucket>=0.2
+django-token-bucket>=0.2.2
