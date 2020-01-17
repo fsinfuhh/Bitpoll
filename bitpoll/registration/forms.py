@@ -14,6 +14,12 @@ from bitpoll.base.models import BitpollUser
 
 
 class RegisterForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['email'].required = True
+
     class Meta:
         model = BitpollUser
         fields = ['username', 'first_name', 'last_name', 'email', 'auto_watch',
