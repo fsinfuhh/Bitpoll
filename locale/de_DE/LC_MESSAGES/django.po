@@ -2166,7 +2166,7 @@ msgid ""
 "                you can use to verify your address."
 msgstr ""
 "Du solltest jetzt per E-Mail (an <strong>%(email)s</strong>) einen Link "
-"erhalten haben, den du zum verifizieren deiner E-Mail-Adresse verwenden "
+"erhalten haben, den du zum Verifizieren deiner E-Mail-Adresse verwenden "
 "kannst."
 
 #: bitpoll/registration/templates/registration/token_expired.html:4
