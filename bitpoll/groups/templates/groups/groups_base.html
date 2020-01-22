@@ -9,13 +9,13 @@
 {% get_invitations as user_invitations %}
 {% get_user_groups as groups %}
     <section class="section"><div class="container">
-<div class="row">
-  <div class="col-xs-3">
+<div class="columns">
+  <div class="column col-3 panel-space-top">
     {% if user_invitations %}
-    <h4>
+    <h5>
       {% trans 'Invitations' %}
-    </h4>
-    <div class="list-group">
+    </h5>
+    <div class="list-group panel-space-bottom">
       {% for invitation in user_invitations %}
       <div class="list-group-item list-group-item-success" href="#">
         <div>
@@ -24,12 +24,12 @@
           {% endwith %}
           <form method="post" action="{% url 'groups_invitation_action' invitation.pk %}" class="form-inline pull-right">
             {% csrf_token %}
-            <div class="form-group btn-group">
-              <button class="btn btn-success btn-xs" title="{% trans 'Accept invitation' %}" name="accept">
-                <span class="glyphicon glyphicon-ok"></span>
+            <div class="input-group">
+              <button class="btn btn-success btn-sm input-group-btn" title="{% trans 'Accept invitation' %}" name="accept">
+                <span class="fa fa-check"></span>
               </button>
-              <button class="btn btn-danger btn-xs" title="{% trans 'Decline invitation' %}" name="refuse">
-                <span class="glyphicon glyphicon-remove"></span>
+              <button class="btn btn-error btn-sm input-group-btn" title="{% trans 'Decline invitation' %}" name="refuse">
+                <span class="fa fa-close"></span>
               </button>
             </div>
           </form>
@@ -39,13 +39,13 @@
       {% endfor %}
     </div>
     {% endif %}
-    <h4>
+    <h5>
       {% trans 'My Groups' %}
-      <a class="action success btn-xs pull-right" title="{% trans 'Create new group' %}" href="{% url 'groups_create' %}">
-        <span class="glyphicon glyphicon-plus-sign"></span>
+      <a class="btn btn-success btn-sm pull-right" title="{% trans 'Create new group' %}" href="{% url 'groups_create' %}">
+        <span class="fa fa-plus"></span>
         <span class="hidden-sm hidden-xs">{% trans 'New' %}</span>
       </a>
-    </h4>
+    </h5>
     {% block group_list %}
     {% if groups %}
     <div class="list-group">  
@@ -61,11 +61,11 @@
     {% endblock %}
   </div>
     {% value_from_settings SITE_NAME as project_name %}
-  <div class="col-xs-9">
+  <div class="column col-9">
       <h2>{% block group_ptitle %}{% blocktrans %}{{ project_name }} Groups {% endblocktrans %}{% endblock %}</h2>
       <hr/>
     {% block group_content %}
-    <p class="alert alert-info">
+    <p class="toast toast-primary">
       {% blocktrans %}
       Accept an invitation or create a new group and invite
       others to use {{ project_name }} features such as private

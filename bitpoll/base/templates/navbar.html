@@ -32,10 +32,7 @@
                     <li>
                         {% load group_tags %}
                         {% open_invitations as oi %}
-                        {% if oi %}
-                            <span class="badge">{{ oi }}</span>
-                        {% endif %}
-                        <a href="{% url 'groups_index' %}"><i class="fa fa-group"></i>{% trans 'Groups' %}</a></li>
+                        <a {% if oi %}class="badge" data-badge="{{ oi }}"{% endif %} href="{% url 'groups_index' %}"><i class="fa fa-group"></i>{% trans 'Groups' %}</a></li>
                 {% endif %}
                 <li><a href="{% url 'settings' %}"><i class="fa fa-pencil"></i>{% trans 'Settings' %}</a></li>
                 <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>{% trans 'Logout' %}</a></li>
