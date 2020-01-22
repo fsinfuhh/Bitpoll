@@ -1,8 +1,17 @@
 from django import forms
+from django.contrib.auth.models import Group
+from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 
-from bitpoll.groups.models import GroupInvitation
+from bitpoll.groups.models import GroupInvitation, group_name_regex
+
+
+class GroupCreateForm(forms.Form):
+    name = forms.CharField(max_length=100, min_length=3, validators=[RegexValidator(group_name_regex)],
+                           label=_('Group Name'),
+                           help_text=_('Only letters, numbers "." and "-" are allowed. Must start with a letter.'))
+
 
 class InvitationForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -10,7 +19,7 @@ class InvitationForm(forms.Form):
         self.user = kwargs.pop('user')
         super(InvitationForm, self).__init__(*args, **kwargs)
 
-    invitees = forms.CharField()
+    invitees = forms.CharField(label=_('User(s) to invite:'))
     invitee_users = []
 
     def clean_invitees(self):

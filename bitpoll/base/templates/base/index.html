@@ -111,7 +111,7 @@
                                 {% render_field poll_form.due_date class+="form-input" id="datetimepicker" %}
                                 {% if poll_form.due_date.errors %}
                                     <div class="form-errors">
-                                        <div class="alert alert-danger">
+                                        <div class="toast toast-error">
                                             <div class="container">
                                                 <i class="fa fa-times"></i>{{ poll_form.due_date.errors }}
                                             </div>
@@ -196,7 +196,7 @@
                 <div class="column col-4 col-xs-12 col-lg-6">
                     <h4>{% trans 'Public polls' %}</h4>
                     {% if not public_polls %}
-                        <div class="alert alert-info">
+                        <div class="toast toast-primary">
                             <div class="container"><i class="fa fa-exclamation-circle"></i> {% trans 'There are currently no public polls.' %}
                             </div>
                         </div>

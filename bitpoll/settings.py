@@ -120,6 +120,7 @@ PIPELINE = {
                 'scss/main.scss',
                 'scss/poll.scss',
                 'scss/navbar.scss',  # TODO: move to base_scren and hide navbar in print?
+                'scss/list-group.scss',
             ),
             'output_filename': 'css/base.css',
         },
@@ -134,14 +135,10 @@ PIPELINE = {
         },
         'base_screen': {
             'source_filenames': (
-                #'css/bootstrap.css',
-                #'css/bootstrap-theme.css',
                 'css/lib/spectre.css',
                 'css/lib/spectre-exp.css',
                 'css/lib/spectre-icons.css',
-                # 'css/jquery-range.css',  # this belongs to commented out JS class
                 'scss/form.scss',
-                #'scss/action.scss',
                 'scss/slider.scss',
                 'scss/timeinput.scss',
                 'css/jquery.datetimepicker.css',
@@ -166,7 +163,6 @@ PIPELINE = {
         'base': {
             'source_filenames': (
                 'js/lib/jquery-3.2.1.js',
-                #'js/lib/bootstrap.js',
             ),
             'output_filename': 'js/base.js',
         },
@@ -185,11 +181,9 @@ PIPELINE = {
         },
         'base_late': {
             'source_filenames': (
-                #'js/lib/jquery-range.min.js',  # TODO: is this needet for the numeric polls?
                 'js/lib/moment-with-locales.min.js',
                 'js/main.js',
                 'js/util.js',
-                #'js/custom-select.jquery.js',
                 'js/slider.js',
                 'js/vote.js',
                 'js/lib/jquery.datetimepicker.full.min.js',
@@ -299,11 +293,11 @@ ALLOW_CUSTOM_SLUGS = True
 DEFAULT_RANDOM_SLUG = 'true'  # this value is an JS true/false
 
 MESSAGE_TAGS = {
-    messages.DEBUG: 'debug',
-    messages.INFO: 'info',
-    messages.SUCCESS: 'success',
-    messages.WARNING: 'warning',
-    messages.ERROR: 'danger',
+    messages.DEBUG: 'toast',
+    messages.INFO: 'toast toast-primary',
+    messages.SUCCESS: 'toast toast-success',
+    messages.WARNING: 'toast toast-warning',
+    messages.ERROR: 'toast toast-error',
 }
 
 # Url to the Base Homepage and Text on the Link, leave empty to not use this option

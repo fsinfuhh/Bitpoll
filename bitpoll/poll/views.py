@@ -281,6 +281,7 @@ def comment(request, poll_url, comment_id=None):
     })
 
 
+@login_required
 def delete_comment(request, poll_url, comment_id):
     """
     :param request:
@@ -307,17 +308,12 @@ def delete_comment(request, poll_url, comment_id):
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated:
-                # TODO additional possibilities of deleting
-                if current_comment.can_delete(request.user):
-                    current_comment.delete()
-                    return redirect('poll', poll_url)
-                else:
-                    error_msg = _("Deletion not allowed. You are not {}.".format(str(current_comment.name)))
+            # TODO additional possibilities of deleting
+            if current_comment.can_delete(request.user):
+                current_comment.delete()
             else:
-                error_msg = _("Deletion not allowed. You are not authenticated.")
-        else:
-            return redirect('poll', poll_url)
+                messages.error(request, _("Deletion not allowed. You are not {}.".format(str(current_comment.name))))
+        return redirect('poll', poll_url)
 
     return TemplateResponse(request, 'poll/comment_delete.html', {
         'poll': current_poll,
@@ -735,6 +731,7 @@ def edit_choicevalues_create(request, poll_url):
     return redirect('poll_editchoicevalues', current_poll.url)
 
 
+@login_required
 def delete(request, poll_url):
     """
     :param request:
@@ -745,17 +742,15 @@ def delete(request, poll_url):
     Otherwise the user is directed back to the poll's page.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    error_msg = ""
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated:
-                # TODO restriction for deletion same as edit?
-                if current_poll.can_edit(request.user, request):
-                    current_poll.delete()
-                return redirect('index')
+            # TODO restriction for deletion same as edit?
+            if current_poll.can_edit(request.user, request):
+                current_poll.delete()
             else:
-                error_msg = _("Deletion not allowed. You are not authenticated.")
+                messages.error(request, _("You need edit rights to the poll to delete it"))
+            return redirect('index')
         else:
             return redirect('poll', poll_url)
 
@@ -764,7 +759,6 @@ def delete(request, poll_url):
     return TemplateResponse(request, 'poll/poll_delete.html', {
         'poll': current_poll,
         'form': form,
-        'error': error_msg,
     })
 
 

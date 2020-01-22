@@ -46,7 +46,7 @@ body nav {
   }
 }
 
-//only full screen menue
+//only full screen menu
 @media only screen and (min-width: 80rem) {
   body nav label {
     span {
@@ -74,7 +74,7 @@ body nav {
       background-color: #027bcb;
       transition: visibility 0.5s ease-out, max-height 0.5s ease-out, padding 0s ease-out .5s;
 
-      li ~ li { //lines between menue items
+      li ~ li { //lines between menu items
         border-top: 2px solid #000;
       }
 

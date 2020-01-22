@@ -16,7 +16,7 @@ from django.contrib.sites.shortcuts import get_current_site
 
 from .models import (GroupInvitation, GroupProxy, GroupError,
         create_usergroup)
-from .forms import InvitationForm
+from .forms import InvitationForm, GroupCreateForm
 from .signals import GroupOverview, show_group_overview
 
 
@@ -31,20 +31,21 @@ def index(request):
 
 @login_required
 def create(request):
-    error = None
-    group_name = ''
     if request.method == 'POST':
-        group_name = request.POST.get('group_name', '')
-        try:
-            create_usergroup(request.user, group_name)
-            msg = _('Group "{0}" was created.').format(group_name)
-            messages.success(request, msg)
-            return redirect('groups_show', group_name)
-        except GroupError as e:
-            error = e.message
+        form = GroupCreateForm(request.POST)
+        if form.is_valid():
+            group_name = form.cleaned_data['name']
+            try:
+                create_usergroup(request.user, group_name)
+                msg = _('Group "{0}" was created.').format(group_name)
+                messages.success(request, msg)
+                return redirect('groups_show', group_name)
+            except GroupError as e:
+                form.add_error('', e.message)
+    else:
+        form = GroupCreateForm()
     return TemplateResponse(request, 'groups/create.html', {
-        'error': error,
-        'group_name': group_name,
+        'form': form,
     })
 
 

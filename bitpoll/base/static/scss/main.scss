@@ -108,17 +108,12 @@ body {
     text-align: center;
 }
 
-//own alert definitions
+.panel-space-top {
+    margin-top: 2em;
+}
 
-.alert {
-    margin: .7em 0;
-    padding: .7em;
-    font-size: 9pt;
-    .fa {
-        font-size: 20px;
-        vertical-align: middle;
-        margin: -1em 0.2em -0.9em 0;
-    }
+div.panel-space-bottom {
+    margin-bottom: 2em;
 }
 
 .popover-title {
