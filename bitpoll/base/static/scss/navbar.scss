@@ -32,18 +32,31 @@
   padding: 0;
 }
 
-body nav label {
-  span + span {
+body nav {
+  label {
+    span + span {
+      display: none;
+      visibility: hidden;
+    }
+  }
+
+  input {
     display: none;
-    visibility: hidden;
+    visibility: hidden
   }
 }
 
-body nav input {
-  display: none;
-  visibility: hidden
+//only full screen menue
+@media only screen and (min-width: 80rem) {
+  body nav label {
+    span {
+      display: none;
+      visibility: hidden;
+    }
+  }
 }
 
+//mobile view
 @media only screen and (max-width: 80rem) {
   nav.navbar {
     & > .navbar-section {
@@ -78,10 +91,10 @@ body nav input {
       vertical-align: center;
       padding: 0;
       color: #fff;
-    }
 
-    & label span:before {
-      content: "\2261\00a0"
+      span:before {
+        content: "\2261\00a0"
+      }
     }
 
     & input:checked {
