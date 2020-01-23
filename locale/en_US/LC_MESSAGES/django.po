@@ -1465,8 +1465,8 @@ msgid "allow comments"
 msgstr "allow comments"
 
 #: bitpoll/poll/templates/poll/settings.html:113
-msgid "Show in public poll list"
-msgstr "Show in public poll list"
+msgid "show in public poll list"
+msgstr "show in public poll list"
 
 #: bitpoll/poll/templates/poll/settings.html:125
 msgid "show invitations as empty votes"
@@ -1916,7 +1916,7 @@ msgstr ""
 #: bitpoll/registration/templates/registration/login.html:60
 msgid ""
 "You can not reset your password here, as the account management is "
-"centraliced"
+"centralized"
 msgstr ""
 
 #: bitpoll/registration/templates/registration/password_reset_complete.html:4
