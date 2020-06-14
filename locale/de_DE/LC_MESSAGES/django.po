@@ -2136,7 +2136,7 @@ msgstr "E-Mail-Adresse:"
 
 #: bitpoll/registration/templates/registration/password_reset_form.html:27
 msgid "Reset my password"
-msgstr "Mein Passwort zurÃ¼cksetzen"
+msgstr "Mein Passwort zurücksetzen"
 
 #: bitpoll/registration/templates/registration/request_account.html:22
 msgid "First name"

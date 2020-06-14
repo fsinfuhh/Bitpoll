@@ -1,20 +1,20 @@
-from urllib.parse import quote_plus, urlparse, urlsplit, urlunsplit
+from urllib.parse import quote_plus, urlsplit, urlunsplit
 
 from django.conf import settings
 from django.core.validators import URLValidator
 from django.forms import ModelForm, CharField, PasswordInput, forms, MultiValueField, URLField, MultiWidget, URLInput, \
     TextInput
 from django.utils.translation import ugettext as _
-from urllib3.util import Url, parse_url
 
+from bitpoll.base.models import BitpollUser
 from django_token_bucket.models import TokenBucket
 from .models import DavCalendar
-from bitpoll.base.models import BitpollUser
 
 
 class URLAuthWidget(MultiWidget):
     """
-    A widget that splits datetime input into two <input type="text"> boxes.
+    A widget that splits an url input into two <input type="text"> boxes and a <input type="password"> box
+    for url user and password.
     """
 
     def __init__(self):
@@ -75,7 +75,7 @@ class URLAuthField(MultiValueField):
         user = quote_plus(data_list[1])
         passwd = quote_plus(data_list[2])
         auth = user
-        if passwd:
+        if user and passwd:
             auth += ':'
             auth += passwd
         parsed = urlsplit(data_list[0])
@@ -88,7 +88,7 @@ class URLAuthField(MultiValueField):
                 parsed.query,
                 parsed.fragment
             ))
-        return parsed.url
+        return parsed.geturl()
 
 
 class DavCalendarForm(ModelForm):

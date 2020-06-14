@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load widget_tweaks %}
+{% load spectre_css %}
 {% load settings_value %}
 {% load i18n %}
 
@@ -9,116 +9,105 @@
 {% block title %}{% trans 'Settings' %}{% endblock %}
 
 {% block content %}
-      <div class="container container-fluid">
-      <div class="row">
-        <div class="col-md-8">
-            <h1>{% trans 'Poll overview' %}</h1>
-            <p>
-              {% blocktrans %}This list shows all the polls you have participated in, either by owning them, voting on them, being invited, or watching.{% endblocktrans %}
-            </p>
-            <table class="table table-condensed table-striped">
-                <tr>
-                    <th>{% trans 'Poll title' %}</th>
-                    <th>{% trans 'Due-Date' %}</th>
-                    <th colspan="4">{% trans 'Tags' %}</th>
-                </tr>
-                {% for poll in polls %}
+    <div class="container">
+        <div class="columns">
+            <div class="column col-8 col-xl-12">
+                <h1>{% trans 'Poll overview' %}</h1>
+                <p>
+                    {% blocktrans %}This list shows all the polls you have participated in, either by owning them,
+                        voting on them, being invited, or watching.{% endblocktrans %}
+                </p>
+                <table class="table table-condensed table-striped">
                     <tr>
-                        <td>
-                            <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
-                        </td>
-                        <td>
-                            {{ poll.due_date|default_if_none:'' }}
-                        </td>
-                        <td width="10">
-                            {% if user == poll.user %}
-                              <span class="label label-danger form-control"><i class="fa fa-user"></i> {% trans 'Owner' %} </span>
-                            {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not owner' %}</span>
-                            {% endif %}
-                        </td>
-                        <td width="10">
-                            {% if user in poll.group.user_set.all %}
-                                <span class="label label-warning form-control"><i class="fa fa-group"></i> {{ poll.group.name }}</span>
-                            {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not own group' %}</span>
-                            {% endif %}
-                        </td>
-                        <td width="10">
-                            {% if user|has_voted:poll %}  {# TODO korrigieren #}
-                              <span class="label label-success form-control"><i class="fa fa-check"></i> {% trans 'Voted' %} </span>
-                            {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not voted' %} </span>
-                            {% endif %}
-                        </td>
-                        <td width="10">
-                            {% if user|is_watching:poll %}  {# TODO korrigieren #}
-                              <span class="label label-info form-control"><i class="fa fa-eye"></i> {% trans 'Watching' %} </span>
-                            {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-eye-slash"></i> {% trans 'Not watching' %} </span>
-                            {% endif %}
-                        </td>
+                        <th>{% trans 'Poll title' %}</th>
+                        <th>{% trans 'Due-Date' %}</th>
+                        <th colspan="4">{% trans 'Tags' %}</th>
                     </tr>
-                {% endfor %}
-            </table>
-        </div>
-
-        <div class="col-md-4">
-            <h1>{% trans 'Settings' %}</h1>
-            {% value_from_settings REGISTER_ENABLED as register %}
-            {% if register %}
-               {% url 'registration_account' as reg_url %}
-                <p>{% blocktrans %} You can change your email and Password <a href="{{ reg_url }}">here</a> {% endblocktrans %}</p>
-            {% else %}
-            <p>{% blocktrans %}You can edit your account settings in the centralized accounts page{% endblocktrans %}.</p>
-            {% endif %}
-            <form method="post">
-                {% csrf_token %}
-                {{ user_form.errors }}
-                <div class="form-group">
-                    <label for="preferred-language">{% trans 'Language:' %}</label>
-                    <select id="preferred-language" class="form-control" name="{{ user_form.language.name }}">
-                        {% for language in languages %}
-                            {% if language.0 == user_form.language.value %}
-                                <option value="{{ language.0 }}" selected="selected"> {{ language.1 }}</option>
-                            {% else %}
-                                <option value="{{ language.0 }}"> {{ language.1 }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="timezone">{% trans 'Timezone:' %}</label>
-                    <select id="timezone" class="form-control" name="{{ user_form.timezone.name }}">
-                        {% for timezone in timezones %}
-                            {% if timezone == user_form.timezone.value %}
-                                <option value="{{ timezone }}" selected="selected"> {{ timezone }}</option>
-                            {% else %}
-                                <option value="{{ timezone }}"> {{ timezone }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>{% trans 'Various' %}</label>
-                    <div class="checkbox">
-                        <input id="autowatch" name="{{ user_form.auto_watch.name }}" type="checkbox" {% if user_form.auto_watch.value %} checked {% endif %}>
-                        <label for="autowatch">{% trans 'Auto-watch polls then you vote on them' %}</label>
-                    </div>
-                    <div class="checkbox">
-                        <input id="allow-invitation-mails" name="{{ user_form.email_invitation.name }}" type="checkbox" {% if user_form.email_invitation.value %} checked {% endif %}>
-                        <label for="allow-invitation-mails">{% trans 'Allow to receive emails for poll invitations' %}</label>
-                    </div>
-                </div>
-                <input type="submit" value="{% trans 'Save' %}" class="action primary" name="create"/>
-            </form>
-        <hr>
-        {% value_from_settings CALENDAR_ENABLED as calendar_enabled %}
-        {% if calendar_enabled %}
-            <h2>CalDav Calendars</h2>
-            {% include "caldav/caldav_form.html" %}
+                    {% for poll in polls %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'poll' poll.url %}">{{ poll.title }}</a>
+                            </td>
+                            <td>
+                                {{ poll.due_date|default_if_none:'' }}
+                            </td>
+                            <td width="10">
+                                {% if user == poll.user %}
+                                    <span class="label label-error form-control"><i
+                                            class="fa fa-user"></i> {% trans 'Owner' %} </span>
+                                {% else %}
+                                    <span class="label label-default form-control"><i
+                                            class="fa fa-ban"></i> {% trans 'Not owner' %}</span>
+                                {% endif %}
+                            </td>
+                            <td width="10">
+                                {% if user in poll.group.user_set.all %}
+                                    <span class="label label-warning form-control"><i
+                                            class="fa fa-group"></i> {{ poll.group.name }}</span>
+                                {% else %}
+                                    <span class="label label-default form-control"><i
+                                            class="fa fa-ban"></i> {% trans 'Not own group' %}</span>
+                                {% endif %}
+                            </td>
+                            <td width="10">
+                                {% if user|has_voted:poll %}  {# TODO korrigieren #}
+                                    <span class="label label-success form-control"><i
+                                            class="fa fa-check"></i> {% trans 'Voted' %} </span>
+                                {% else %}
+                                    <span class="label label-default form-control"><i
+                                            class="fa fa-ban"></i> {% trans 'Not voted' %} </span>
+                                {% endif %}
+                            </td>
+                            <td width="10">
+                                {% if user|is_watching:poll %}  {# TODO korrigieren #}
+                                    <span class="label label-info form-control"><i
+                                            class="fa fa-eye"></i> {% trans 'Watching' %} </span>
+                                {% else %}
+                                    <span class="label label-default form-control"><i
+                                            class="fa fa-eye-slash"></i> {% trans 'Not watching' %} </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
-        {% endif %}
-      </div>
-      </div>
+
+            <div class="column col-4 col-xl-12">
+                <div class="columns">
+                    <div class="column col-12 col-xl-6 col-sm-12">
+                        <h1>{% trans 'Settings' %}</h1>
+                        {% value_from_settings REGISTER_ENABLED as register %}
+                        {% if register %}
+                            {% url 'registration_account' as reg_url %}
+                            <p>{% blocktrans %} You can change your email and Password
+                                <a href="{{ reg_url }}">here</a> {% endblocktrans %}</p>
+                        {% else %}
+                            <p>{% blocktrans %}You can edit your account settings in the centralized accounts
+                                page{% endblocktrans %}.</p>
+                        {% endif %}
+                        <form method="post">
+                            {% render_form_header user_form %}
+                            {% render_form_field user_form.language %}
+                            {% render_form_field user_form.timezone %}
+                            <div class="form-group">
+                                <h4>{% trans 'Various' %}</h4>
+                                {% render_form_field user_form.auto_watch switch=True %}
+                                {% render_form_field user_form.email_invitation switch=True %}
+                            </div>
+                            <input type="submit" value="{% trans 'Save' %}" class="btn btn-primary" name="create"/>
+                        </form>
+                    </div>
+                    {% value_from_settings CALENDAR_ENABLED as calendar_enabled %}
+
+                        {% if calendar_enabled %}
+                    <div class="column col-12 col-xl-6 col-sm-12">
+                    <hr class="hide-md show-xs">
+                            <h2>CalDav Calendars</h2>
+                            {% include "caldav/caldav_form.html" %}
+                            </div>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

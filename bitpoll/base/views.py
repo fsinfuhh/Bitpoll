@@ -93,9 +93,9 @@ def user_settings(request):
                                 ).distinct().order_by('-due_date')
 
     if request.method == 'POST':
-        form = BitpollUserSettingsForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
+        user_form = BitpollUserSettingsForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
 
             if request.user.auto_watch:
                 for poll in polls.filter(Q(vote__user=request.user)):
@@ -104,8 +104,8 @@ def user_settings(request):
                         poll_watch.save()
                     except IntegrityError:
                         pass
-
-    user_form = BitpollUserSettingsForm(instance=request.user)
+    else:
+        user_form = BitpollUserSettingsForm(instance=request.user)
 
     return TemplateResponse(request, 'base/settings.html', {
         'polls': polls,

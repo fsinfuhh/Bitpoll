@@ -1,14 +1,15 @@
 from datetime import timedelta
-from urllib.parse import quote_plus
 
 from caldav import DAVClient, Calendar
+from caldav.lib.error import AuthorizationError
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy
 from django.views.decorators.http import require_POST
-from urllib3.util import parse_url, Url
+from urllib3.util import parse_url
 
 from bitpoll.caldav.models import DavCalendar
 from .forms import DavCalendarForm
@@ -39,6 +40,9 @@ def change_calendar(request, calendar_id: int = None):
                 caldav_obj.user = request.user
                 caldav_obj.save()
                 return redirect('settings')
+            except AuthorizationError as e:
+                form.add_error(None, ugettext_lazy(
+                    "Error getting Calendar {}: Authorization Required".format(caldav_obj.url)))
             except Exception as e:
                 form.add_error(None, ugettext_lazy("Error getting Calendar: {}".format(str(e))))
         else:
@@ -46,6 +50,7 @@ def change_calendar(request, calendar_id: int = None):
     elif 'delete' in request.POST:
         obj = get_object_or_404(DavCalendar, id=request.POST['delete'], user=request.user)
         obj.delete()
+        messages.success(request, ugettext_lazy("Calendar Deleted"))
         return redirect('settings')
     return TemplateResponse(request, "caldav/caldav.html", {
         'calendar_form': form,
@@ -63,4 +68,18 @@ def edit_calendar(request, calendar_id: int):
         'calendar_form': form,
         'edit': True,
         'calendar_id': calendar_id,
+    })
+
+
+@login_required
+def delete_calendar_confirm(request, calendar_id: int):
+    calendar = get_object_or_404(DavCalendar, id=calendar_id, user=request.user)
+    url_parsed = parse_url(calendar.url)
+    # remove the auth from the url
+    url = "{}://{}{}{}".format(url_parsed.scheme, url_parsed.host,
+                               ":{}".format(url_parsed.port) if url_parsed.port else "", url_parsed.request_uri)
+    return TemplateResponse(request, "caldav/delete_confirm.html", {
+        'calendar_id': calendar_id,
+        'calendar_name': calendar.name,
+        'calendar_url': url,
     })
