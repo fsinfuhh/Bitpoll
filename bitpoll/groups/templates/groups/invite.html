@@ -1,53 +1,28 @@
 {% extends "groups/groups_base.html" %}
 {% load i18n %}
-{% load staticfiles %}
+{% load pipeline %}
 {% load spectre_css %}
 {% load csp %}
 
-{% block wtitle %}{% block group_ptitle %}{% blocktrans with group_name=group.name %}Invite people to {{ group_name }}{% endblocktrans %}{% endblock %}{% endblock %}
+{% block wtitle %}{% block group_ptitle %}{% blocktrans with group_name=group.name %}Invite people to {{ group_name }}
+{% endblocktrans %}{% endblock %}{% endblock %}
+
+{% block headJS %}
+    <script type="text/javascript" nonce="{% csp_js_nonce %}">
+        var search_url = '{% url "base_autocomplete" %}';
+        var search_selector = 'input[name="invitees"]';
+    </script>
+{% endblock %}
 
 {% block group_content %}
-<form method="post" action="">
-    {% csrf_token %}
-    {% render_form_field form.invitees %}
-    <button class="btn btn-primary">{% trans "Invite user" %}</button>
-    <a href="{% url 'groups_show' group.name %}" class="btn">{% trans "Cancel" %}</a>
-</form>
+    <form method="post" action="">
+        {% csrf_token %}
+        {% render_form_field form.invitees %}
+        <button class="btn btn-primary">{% trans "Invite user" %}</button>
+        <a href="{% url 'groups_show' group.name %}" class="btn">{% trans "Cancel" %}</a>
+    </form>
 {% endblock %}
 
 {% block additionalJS %}
-<script type="text/javascript" src="{% static 'select2/select2.js' %}"></script>
-<script type="text/javascript" nonce="{{ csp_js_nonce }}">
-    $(function() {
-        $("#{{ form.invitees.id_for_label }}").select2({
-            tags: [],
-            tokenSeparators: [",", " "],
-            formatNoMatches: "{% trans 'Please enter the account names of the users you want to invite' %}",
-			ajax: {
-				url: "{% url 'base_autocomplete' %}",
-				dataType: "json",
-				delay: 250,
-				data: function(term) {
-					return {
-						term: term
-					};
-				},
-				results: function(data, page) {
-					var results = [];
-					for (var i = 0; i < data.users.length; i++) {
-						var user = data.users[i];
-						results.push({
-							id: user.username,
-							text: user.first_name + " " + user.last_name + " (" + user.username + ")"
-						});
-					}
-					return {
-						results: results
-					};
-				}
-			},
-			minimumInputLength: 2
-        });
-    });
-</script>
+    {% javascript 'search' %}
 {% endblock %}

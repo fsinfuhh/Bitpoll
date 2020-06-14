@@ -190,6 +190,13 @@ PIPELINE = {
             ),
             'output_filename': 'js/base_late.js',
         },
+        'search': {
+            'source_filenames': (
+                'js/lib/auto-complete.js',
+                'js/search.js'
+            ),
+            'output_filename': 'js/autocomplete.js',
+        },
     },
     'COMPILERS': (
         'libsasscompiler.LibSassCompiler',
