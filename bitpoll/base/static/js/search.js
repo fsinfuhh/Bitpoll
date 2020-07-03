@@ -23,7 +23,6 @@ new autoComplete({
         let person = JSON.parse(decodeURIComponent(choice.getAttribute('data-item')));
         document.querySelector("#personen-suche-id").value = person['id'];
         object.value = person['displayname'] + ' (' + person['username'] + ')';
-        //document.querySelector("#reiter-form div #id_vorname").value = person['vorname'];
 
         object.form.elements["submit"].click()
     }

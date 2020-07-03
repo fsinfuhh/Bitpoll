@@ -162,7 +162,7 @@ PIPELINE = {
     'JAVASCRIPT': {
         'base': {
             'source_filenames': (
-                'js/lib/jquery-3.2.1.js',
+                # nothing at the moment
             ),
             'output_filename': 'js/base.js',
         },
@@ -186,7 +186,6 @@ PIPELINE = {
                 'js/util.js',
                 'js/slider.js',
                 'js/vote.js',
-                'js/lib/jquery.datetimepicker.full.min.js',
             ),
             'output_filename': 'js/base_late.js',
         },

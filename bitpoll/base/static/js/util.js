@@ -9,12 +9,12 @@ function get_slug(s) {
 
 Array.prototype.uniquify = function() {
     return this.filter(function(elem, pos, self) {
-        return self.indexOf(elem) == pos;
+        return self.indexOf(elem) === pos;
     });
 };
 
 Array.prototype.removeValue = function(item) {
-    for(var i = this.length; i--;) {
+    for(let i = this.length; i--;) {
         if(this[i] === item) {
             this.splice(i, 1);
         }
@@ -25,27 +25,51 @@ Array.prototype.contains = function(item) {
     return this.indexOf(item) !== -1;
 };
 
-$.fn.rotate = function(degrees) {
-    $(this).css({
-  '-webkit-transform' : 'rotate('+degrees+'deg)',
-     '-moz-transform' : 'rotate('+degrees+'deg)',
-      '-ms-transform' : 'rotate('+degrees+'deg)',
-       '-o-transform' : 'rotate('+degrees+'deg)',
-          'transform' : 'rotate('+degrees+'deg)',
-               'zoom' : 1
-    });
-};
-    
-$.fn.disableSelect = function() {
-    return this
-         .attr('unselectable', 'on')
-         .css('user-select', 'none')
-         .on('selectstart', false);
-};
+function rotate_element(element, degrees) {
+    element.style.cssText =
+        'transform: rotate(' + degrees + 'deg);' +
+        'zoom: 1;';
+}
 
-$.fn.enableSelect = function() {
-    return this
-         .attr('unselectable', 'off')
-         .css('user-select', 'auto')
-         .unbind('selectstart', false);
-};
+function get_elem(selector) {
+    return document.querySelector(selector);
+}
+
+function get_elems(selector) {
+    return document.querySelectorAll(selector);
+}
+
+// Class Handlers
+function hasClass(elem, className) {
+    return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+}
+
+function addClass(elem, className) {
+    if (!hasClass(elem, className)) {
+        elem.className += ' ' + className;
+    }
+}
+
+function removeClass(elem, className) {
+    let newClass = ' ' + elem.className.replace( /[\t\r\n]/g, ' ') + ' ';
+    if (hasClass(elem, className)) {
+        while (newClass.indexOf(' ' + className + ' ') >= 0 ) {
+            newClass = newClass.replace(' ' + className + ' ', ' ');
+        }
+        elem.className = newClass.replace(/^\s+|\s+$/g, '');
+    }
+}
+
+function hide_elems_selector(selector) {
+    get_elems(selector).forEach(function (el) {
+        hide_elem(el);
+    })
+}
+
+function hide_elem(el) {
+    addClass(el, 'd-hide');
+}
+
+function show_elem(el) {
+    removeClass(el, 'd-hide');
+}

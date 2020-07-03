@@ -44,6 +44,7 @@
                             <input value="all" data-choice="{{ value.id }}" class="btn btn-sm vote-choice-column" type="button">
                         </td>
                     {% endfor %}
+                    <td><button type="button" class="vote-choice-edit-all btn pull-left btn-sm">{% trans 'All' %} <i class="fa fa-comment-o"></i></button></td>
                 </tr>
                 {% for row, choice, comment, vote, events in choices_matrix %}
                     <tr class="vote">
@@ -62,13 +63,12 @@
                                 <label for="{{ choice.id }}_{{ value.id }}" class="fa fa-{{ value.icon }}"></label>
                             </td>
                         {% endfor %}
-                        <td class="vote-comment">
-                            <div class="script-only">
-                                <button class="btn btn-sm btn-default vote-choice-edit"
-                                        title="{{ _('Add a comment') }}"><i
-                                        class="fa fa-comment-o"></i></button>
-                            </div>
-                            <input type="text" class="vote-choice-comment form-input" name="comment_{{ choice.id }}" title=""
+                        <td class="vote-comment pull-left">
+                            <button class="btn btn-sm btn-default vote-choice-edit d-hide"
+                                    title="{{ _('Add a comment') }}"><i
+                                    class="fa fa-comment-o"></i></button>
+                            <input type="text" class="vote-choice-comment form-input input-sm"
+                                   name="comment_{{ choice.id }}" title=""
                                    value="{{ comment }}"/>
                         </td>
                         <td>

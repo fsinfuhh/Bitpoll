@@ -197,14 +197,20 @@ table.poll td.numeric {
 }
 
 td.vote-comment {
-    display: block;
     max-width: 300px;
-    padding: 2px !important;
+    padding: 0.5em;
 }
 
 .vote-comment input {
     width: 30em;
     vertical-align: center;
+}
+
+.user-select-none {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .choice.deleted,
@@ -414,6 +420,7 @@ td.vote-header {
 
     & > td {
         height: 0; // This has to be 0 so it works in Chrome, in FF 100% also works
+        min-height: 3.5em;
 
         &.choice-group {
             max-width: 12em;
