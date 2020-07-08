@@ -25,10 +25,5 @@ window.addEventListener('DOMContentLoaded', function () {
             get_elem("#id_icon").value = this.dataset.icon;
         });
     });
-
-    $('#datetimepicker').datetimepicker({
-        format: 'Y-m-d H:i' //TODO: can we localize the format?
-    });
-
 });
 

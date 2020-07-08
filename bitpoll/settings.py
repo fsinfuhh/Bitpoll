@@ -162,7 +162,7 @@ PIPELINE = {
     'JAVASCRIPT': {
         'base': {
             'source_filenames': (
-                # nothing at the moment
+                'js/util.js',
             ),
             'output_filename': 'js/base.js',
         },
@@ -183,8 +183,7 @@ PIPELINE = {
             'source_filenames': (
                 'js/lib/moment-with-locales.min.js',
                 'js/main.js',
-                'js/util.js',
-                'js/slider.js',
+                #'js/slider.js',
                 'js/vote.js',
             ),
             'output_filename': 'js/base_late.js',

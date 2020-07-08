@@ -11,7 +11,7 @@
         return text;
     };
 
-    $(function () {
+    (function () {
         let $randomSlug, $randomizeButton, $slugInput, $title, update, updateRandom, updateRandomSlug, updateTitle;
         $randomizeButton = get_elem('#slug-randomize');
         $title = get_elem('#id_title');
@@ -40,21 +40,20 @@
             update(false);
             return false;
         };
-        updateRandom = function () {
+        updateRandom = function (e) {
             update(true);
             $randomSlug.checked = true;
-            return false;
+            e.preventDefault()
         };
-        updateRandomSlug = function () {
+        updateRandomSlug = function (e) {
             $slugInput.value = '';  // reset the current slug
             update(false);
-            return false;
         };
 
         // Bind events
         $randomizeButton.addEventListener("click", updateRandom);
-        $title.addEventListener("click", updateTitle);
+        $title.addEventListener("keyup", updateTitle);
         $randomSlug.addEventListener("click", updateRandomSlug);
-    });
+    }).call();
 
 }).call();
