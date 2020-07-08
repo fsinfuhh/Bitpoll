@@ -163,6 +163,7 @@ PIPELINE = {
         'base': {
             'source_filenames': (
                 'js/util.js',
+                'js/polyfill.js',
             ),
             'output_filename': 'js/base.js',
         },
