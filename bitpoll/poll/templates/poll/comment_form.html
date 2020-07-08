@@ -6,12 +6,8 @@
 {% else %}
     <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form">
 {%  endif %}
-    {% csrf_token %}
-        {% if request.user.is_authenticated %}
-            {% render_form_field comment_form.name %} TODO: disable + value set {# TODO #}
-        {% else %}
-            {% render_form_field comment_form.name %}
-        {% endif %}
+    {% render_form_header comment_form %}
+        {% render_form_field comment_form.name %}
         {% render_form_field comment_form.text %}
         {% if not request.user.is_authenticated %}
             {% render_form_field comment_form.spam_answer %}
@@ -19,6 +15,5 @@
         {% endif %}
     <div class="form-group">
         <input class="btn btn-primary" type="submit" title="Save Comment" value="{% trans 'Save Comment' %}">
-            <!--<label for="{{ comment_form.spam_answer.name }}">{{ spam_challenge.x }} {{ spam_challenge.op }} {{ spam_challenge.y }} =</label>--> {# TODO! #}
     </div>
 </form>

@@ -1,11 +1,12 @@
+from django.core.exceptions import ValidationError
+from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField, ChoiceField, BooleanField, TextInput, \
+    SplitDateTimeField, SplitDateTimeWidget
+from django.utils.translation import ugettext_lazy as _
 from pytz import all_timezones
 from time import strptime
 
-from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField, ChoiceField, BooleanField, TextInput
-from django.utils.translation import ugettext_lazy as _
-
 from .models import Poll, Choice, ChoiceValue, Comment, Vote
+from .spam_util import get_spam_label
 
 
 class MultipleTemporalBaseField(CharField):
@@ -150,6 +151,20 @@ class ChoiceValueForm(ModelForm):
 class CommentForm(ModelForm):
     spam_key = CharField(widget=HiddenInput(), required=False)
     spam_answer = IntegerField(required=False)
+
+    def __init__(self, user, *args, **kwargs):
+        if user.is_authenticated:
+            initial = {'name': user.get_displayname()}
+        else:
+            initial = None
+        super().__init__(*args, initial=initial, **kwargs)
+        if user.is_authenticated:
+            self.fields['name'].widget.attrs['readonly'] = True
+
+    def set_spam_challenge(self, spam_dict):
+        self.fields['spam_answer'].label = get_spam_label(spam_dict)
+        self.fields['spam_key'].widget.attrs['value'] = spam_dict['key']
+        self.fields['spam_answer'].widget.attrs['required'] = True
 
     class Meta:
         model = Comment

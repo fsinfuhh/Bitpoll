@@ -6,7 +6,7 @@ django-simple-csp
 libsasscompiler
 django-pipeline
 django-token-bucket>=0.2.2
-django-spectre-css
+django-spectre-css>=0.2
 django-friendly-tag-loader
 django-encrypted-model-fields
 caldav

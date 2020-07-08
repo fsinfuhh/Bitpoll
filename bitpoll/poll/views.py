@@ -1,47 +1,42 @@
 import csv
-
 import re
+from datetime import timedelta
+from decimal import Decimal
 from typing import Dict
 
+from django.conf import settings as django_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import transaction, IntegrityError
-
+from django.db.models import Sum, Count, Q
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
-from django.db.models import Sum, Count, Q
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils.dateparse import parse_datetime
 from django.utils.formats import date_format
-from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import activate as tz_activate, localtime, now, make_naive, make_aware
 from django.utils.timezone import get_current_timezone
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
-from django.conf import settings as django_settings
-from django_token_bucket.models import TokenBucket
+from pytz import timezone
 
+from bitpoll.base.models import BitpollUser
+from bitpoll.base.views import generate_random_slug
 from bitpoll.caldav.utils import get_caldav
+from bitpoll.invitations.models import Invitation
 from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
+from django_token_bucket.models import TokenBucket
 from .forms import PollCopyForm, DateChoiceCreationForm, \
     DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, \
     CommentForm, VoteFormUser, VoteForm
 from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, PollWatch, ResultSorting
 
-from bitpoll.base.models import BitpollUser
-from bitpoll.invitations.models import Invitation
 
-from datetime import timedelta
-from decimal import Decimal
-from pytz import timezone
-from django.utils.dateparse import parse_datetime
-
-from bitpoll.base.views import generate_random_slug
-
-
-def poll(request, poll_url: str, export: bool=False):
+def poll(request, poll_url: str, export: bool = False):
     """
     :param export: if the view is exported to csv
     :param request
@@ -172,6 +167,10 @@ def poll(request, poll_url: str, export: bool=False):
             writer.writerow(row)
         return response
 
+    spam_challenge = create_anti_spam_challenge(current_poll.id)
+    comment_form = CommentForm(request.user)
+    comment_form.set_spam_challenge(spam_challenge)
+
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
         'matrix': matrix,
@@ -182,10 +181,10 @@ def poll(request, poll_url: str, export: bool=False):
         'max_score': max_score,
         'invitations': invitations if current_poll.show_invitations else [],
         'summary': summary,
-        'comment_form': CommentForm(),
+        'comment_form': comment_form,
         'comments': current_poll.comment_set.order_by('date_created'),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
-        'spam_challenge': create_anti_spam_challenge(current_poll.id),
+        'spam_challenge': spam_challenge,
         'suppress_messages': True,
     })
 
@@ -206,7 +205,7 @@ def comment(request, poll_url, comment_id=None):
     if not request.user.is_anonymous:
         user = request.user
     if request.POST:
-        form = CommentForm(request.POST)
+        form = CommentForm(request.user, request.POST)
         if form.is_valid():
             token_bucket = TokenBucket.get("Comments", current_poll, 5, 1800, 'commenting')
             try:
@@ -219,7 +218,7 @@ def comment(request, poll_url, comment_id=None):
                             current_poll.id
                         )
                     else:
-                        spam_ok, err_message = False, _('This Field is rquired')
+                        spam_ok, err_message = False, _('This Field is required')
                 text = form.cleaned_data['text']
                 name = form.cleaned_data['name']
                 spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
@@ -254,7 +253,7 @@ def comment(request, poll_url, comment_id=None):
                 form.add_error(None, e)
                 spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
             except ValidationError as e:
-                # if the anti spam challenge faild we generate a new one.
+                # if the anti spam challenge failed we generate a new one.
                 spam_challenge = create_anti_spam_challenge(current_poll.id)
                 form.add_error('spam_answer', e.message)
         else:
@@ -263,16 +262,17 @@ def comment(request, poll_url, comment_id=None):
             else:
                 spam_challenge = create_anti_spam_challenge(current_poll.id)
     else:
+        spam_challenge = create_anti_spam_challenge(current_poll.id)
         if comment_id:
             comment_obj = get_object_or_404(Comment, pk=comment_id)
             if comment_obj.can_edit(request.user):
-                form = CommentForm(instance=comment_obj)
+                form = CommentForm(request.user, instance=comment_obj)
             else:
                 messages.error(request, _("You can't edit this Comment"))
                 return redirect('poll', poll_url)
         else:
-            form = CommentForm()
-        spam_challenge = create_anti_spam_challenge(current_poll.id)
+            form = CommentForm(request.user)
+    form.set_spam_challenge(spam_challenge)
     return TemplateResponse(request, 'poll/comment_edit.html', {
         'comment_form': form,
         'comment_edit_id': comment_id,
