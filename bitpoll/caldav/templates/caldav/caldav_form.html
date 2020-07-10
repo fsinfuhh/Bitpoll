@@ -4,49 +4,46 @@
 
 
 <p>{% blocktrans %}The data provided here will be saved into the Database to retrieve the calendar on voting in Polls.
-   The column is encrypted on the server side with a global key.{% endblocktrans %}</p>
+    The column is encrypted on the server side with a global key.{% endblocktrans %}</p>
 <p>{% blocktrans %}You can enter either a world readable CalDav calendar Url, or provide user and password to login to
-   the CalDav Server. If you make the calendar world readable check that the url is not predictable by
-   other people{% endblocktrans %}</p>
+    the CalDav Server. If you make the calendar world readable check that the url is not predictable by
+    other people{% endblocktrans %}</p>
 {% if edit %}
-    <h3>{% trans "Change Calendar"%}</h3>
-    <form action="{% url 'edit_save_calendar' calendar_id%}" method="post">
+    <h3>{% trans "Change Calendar" %}</h3>
+    <form action="{% url 'edit_save_calendar' calendar_id %}" method="post">
 {% else %}
-    <h3>{% trans "Add a Calendar"%}</h3>
+    <h3>{% trans "Add a Calendar" %}</h3>
     <form action="{% url 'change_calendar' %}" method="post">
 {% endif %}
 
-    {% render_form_header calendar_form %}
+{% render_form_header calendar_form %}
 
-    {% render_form_field calendar_form.name %}
+{% render_form_field calendar_form.name %}
 
-    {% trans "Calendar URL:" as url_label_text %}
-    {% render_multi_fild_part calendar_form.url 0  url_label_text%}
+{% trans "Calendar URL:" as url_label_text %}
+{% render_multi_field_part calendar_form.url 0 url_label_text %}
 
-    {% trans "User:" as url_label_text %}
-    {% render_multi_fild_part calendar_form.url 1 url_label_text%}
+{% trans "User:" as url_label_text %}
+{% render_multi_field_part calendar_form.url 1 url_label_text %}
 
-    {% trans "Password:" as url_label_text %}
-    {% render_multi_fild_part calendar_form.url 2 url_label_text %}
+{% trans "Password:" as url_label_text %}
+{% render_multi_field_part calendar_form.url 2 url_label_text %}
 
-    <input type="submit" name="submit" value="{% trans 'Save' %}" class="btn btn-primary">
+<input type="submit" name="submit" value="{% trans 'Save' %}" class="btn btn-primary">
 </form>
 <br>
 
 {% if not edit %}
-    <form action="{% url 'change_calendar' %}" method="post">
-        {% csrf_token %}
-        <h3>{% trans "Current Calendars:" %}</h3>
-        <ul>
-            {% for calendar in calendars %}
-                <li>{{ calendar.name }}
-                    <a href="{% url 'delete_calendar_confirm' calendar.id %}" class="btn btn-sm">
-                        <i class="fa fa-trash-o"></i>
-                    </a>
-                    <a href="{% url 'edit_calendar' calendar.id %}" class="btn btn-sm"><i
-                            class="fa fa-pencil"></i> </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </form>
+    <h3>{% trans "Current Calendars:" %}</h3>
+    <ul>
+        {% for calendar in calendars %}
+            <li>{{ calendar.name }}
+                <a href="{% url 'delete_calendar_confirm' calendar.id %}" class="btn btn-sm">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+                <a href="{% url 'edit_calendar' calendar.id %}" class="btn btn-sm"><i
+                        class="fa fa-pencil"></i> </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endif %}

@@ -122,9 +122,9 @@ def poll(request, poll_url: str, export: bool = False):
                     'color': stat2['votechoice__value__color'],
                     'icon': stat2['votechoice__value__icon'],
                     'deleted': stat2['votechoice__value__deleted'],
-                    'title': stat2['votechoice__value__title']} for
-                stat2 in stats2 if
-                stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
+                    'title': stat2['votechoice__value__title']
+                } for stat2 in stats2
+                if stat2['id'] == stat['id'] and stat2['votechoice__value__color'] is not None],
         } for stat in stats]
 
     if current_poll.current_user_is_owner(request) and current_poll.allow_unauthenticated_vote_changes:
@@ -560,7 +560,7 @@ def edit_dt_choice_combinations(request, poll_url):
                     return redirect('poll_editDTChoiceDate', current_poll.url)
             # Search for already existing Choices
             for i, date_time in enumerate(sorted(chosen_times)):
-                choice_obj = current_poll.choice_set.filter(date=date_time)  #TODO: dboptimize? or does django cache
+                choice_obj = current_poll.choice_set.filter(date=date_time)  # TODO: dboptimize? or does django cache
                 if choice_obj:
                     old_choices_ids.remove(choice_obj[0].pk)  # TODO: wy error
                     choice_obj[0].sort_key = i
@@ -634,9 +634,10 @@ def edit_universal_choice(request, poll_url):
                         db_choice.full_clean()
                         db_choice.save()
                     except ValidationError:
-                        #TODO: können hier auch andere fehler auftreten?
+                        # TODO: können hier auch andere fehler auftreten?
                         # TODO: reentry text in form? / Use normal ModelForm?
-                        messages.error(request, _('The title "{}" is to long. The maximum is 80 characters'.format(choice_text)))
+                        messages.error(request,
+                                       _('The title "{}" is to long. The maximum is 80 characters'.format(choice_text)))
                         error = True
         if 'next' in request.POST and not error:
             return redirect('poll', poll_url)
@@ -801,14 +802,14 @@ def vote(request, poll_url, vote_id=None):
             form = VoteForm(request.POST)
         if form.is_valid():
             if vote_id and not current_vote.can_edit(request.user):
-                    # the vote belongs to an user and it is not the authenticated user
-                    return HttpResponseForbidden()  # todo: better errorpage?
+                # the vote belongs to an user and it is not the authenticated user
+                return HttpResponseForbidden()  # todo: better errorpage?
             current_vote.date_created = now()
             current_vote.comment = form.cleaned_data['comment']
 
             if form.cleaned_data['anonymous']:
                 current_vote.name = 'Anonymous'
-            elif request.user.is_authenticated and (not vote_id or current_vote.user == request.user): #TODO
+            elif request.user.is_authenticated and (not vote_id or current_vote.user == request.user):  # TODO
                 # only set on edit if same user
                 print("hhhh", current_vote.user, request.user)
                 current_vote.name = request.user.get_displayname()
@@ -845,7 +846,7 @@ def vote(request, poll_url, vote_id=None):
                                                                       vote=current_vote,
                                                                       choice=choice,
                                                                       comment=request.POST.get(
-                                                                            'comment_{}'.format(choice.id)) or ''))
+                                                                          'comment_{}'.format(choice.id)) or ''))
                                     else:
                                         deleted_choicevals = True
                                 else:
@@ -868,7 +869,8 @@ def vote(request, poll_url, vote_id=None):
                                         current_watch.send(request=request, vote=current_vote)
 
                                 VoteChoice.objects.bulk_create(new_choices)
-                                messages.success(request, _('Vote has ben updated') if vote_id else _('Vote has been recorded'))
+                                messages.success(request,
+                                                 _('Vote has ben updated') if vote_id else _('Vote has been recorded'))
                                 if request.user.is_authenticated and request.user.auto_watch:
                                     # todo: currently also watches on edit of other users votes, do we want to suppress that?
                                     try:
@@ -1045,14 +1047,19 @@ def copy(request, poll_url):
             vote_users = current_poll.vote_set.all().values('user')
             invitation_users = invitations.values('user')
 
-            with transaction.atomic:
+            with transaction.atomic():
                 current_poll.pk = None
                 current_poll.title = form.cleaned_data['title']
                 current_poll.url = form.cleaned_data['url']
                 current_poll.due_date = form.cleaned_data['due_date']
 
-                if date_shift:
-                    current_poll.due_date += timedelta(days=date_shift)
+                if form.cleaned_data['due_date']:
+                    due_date = form.cleaned_data['due_date']
+                    if due_date == current_poll.due_date:
+                        if date_shift and current_poll.due_date:
+                            current_poll.due_date += timedelta(days=date_shift)
+                    else:
+                        current_poll.due_date = due_date
 
                 if form.cleaned_data['reset_ownership']:
                     current_poll.user = None
@@ -1086,7 +1093,7 @@ def copy(request, poll_url):
                             choice.date += timedelta(days=date_shift)
                         choice.save()
 
-                if form.cleaned_data['copy_ans_values']:
+                if form.cleaned_data['copy_answer_values']:
                     for value in choice_values:
                         value.pk = None
                         value.poll = current_poll
