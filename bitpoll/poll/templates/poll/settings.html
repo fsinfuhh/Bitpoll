@@ -17,7 +17,7 @@
     <div class="container">
 
         <form action="{% url 'poll_settings' poll.url %}" method="post">
-            {% csrf_token %}
+            {% render_form_header form %}
             <div class="columns">
                 <div class="column col-5 col-md-12">
                     {% render_form_field form.title %}

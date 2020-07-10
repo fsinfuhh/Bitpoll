@@ -84,7 +84,7 @@
             <h2>{% trans 'Add choice value' %}</h2>
 
             <form method="post" action="{% url 'poll_editchoicevalues_create' poll.url %}">
-                {% csrf_token %}
+                {% render_form_header form %}
                     {% render_form_field form.title %}
                 {% render_form_field form.color value='#90db45'%}
 

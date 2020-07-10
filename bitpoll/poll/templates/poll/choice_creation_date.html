@@ -19,7 +19,7 @@
             {% include "poll/noscript_date_time.html" %}
         {% endif %}
         <form action="{{ request.url }}" method="POST" id="date-time-form">
-            {% csrf_token %}
+            {% render_form_header new_choice %}
             <div id="date-time-form-content">
                 {% render_form_field new_choice.dates %}
             </div>

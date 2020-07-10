@@ -16,7 +16,7 @@
 
 {% block group_content %}
     <form method="post" action="">
-        {% csrf_token %}
+        {% render_form_header form %}
         {% render_form_field form.invitees %}
         <button class="btn btn-primary">{% trans "Invite user" %}</button>
         <a href="{% url 'groups_show' group.name %}" class="btn">{% trans "Cancel" %}</a>

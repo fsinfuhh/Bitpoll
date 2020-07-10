@@ -36,6 +36,20 @@ class TimesField(MultipleTemporalBaseField):
     message = _('could not parse the time: "%(value)s", the format is HH:MM separated by commas.')
 
 
+class CustomDateTimeWidget(SplitDateTimeWidget):
+    def __init__(self):
+        super().__init__(date_attrs={'placeholder': _("Date")},
+                         time_attrs={'placeholder': _("Time"), 'pattern': '[0-2][0-9]:[0-5][0-9]:[0-5][0-9]',
+                                     'step': 1},
+                         date_format="%Y-%m-%d")
+        self.widgets[0].input_type = 'date'
+        self.widgets[1].input_type = 'time'
+
+
+class CustomDateTimeField(SplitDateTimeField):
+    widget = CustomDateTimeWidget
+
+
 class PollCreationForm(ModelForm):
     class Meta:
         model = Poll
@@ -53,6 +67,9 @@ class PollCreationForm(ModelForm):
             'one_vote_per_user',
             'vote_all',
         ]
+        field_classes = {
+            'due_date': CustomDateTimeField
+        }
 
 
 class PollCopyForm(ModelForm):
@@ -66,6 +83,9 @@ class PollCopyForm(ModelForm):
     class Meta:
         model = Poll
         fields = ['title', 'due_date', 'url']
+        field_classes = {
+            'due_date': CustomDateTimeField
+        }
 
 
 class DateChoiceCreationForm(Form):
@@ -124,6 +144,7 @@ class PollSettingsForm(ModelForm):
         ]
         field_classes = {
             'timezone_name': TimezoneChoiceField,
+            'due_date': CustomDateTimeField
         }
 
 

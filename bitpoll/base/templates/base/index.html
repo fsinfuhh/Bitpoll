@@ -20,7 +20,7 @@
                 <h1>{% trans 'Create a poll' %}</h1>
                 <hr/>
                 <form method="POST" class="form" action="{% url 'index' %}">
-                    {% csrf_token %}
+                    {% render_form_header poll_form %}
                     <div class="form-step">
                         <div class="number">{% trans 'Step 1' %}</div>
                         <div class="title">{% trans 'Select Type' %}</div>
@@ -105,20 +105,7 @@
                         </div>
                     <div class="columns">
                         <div class="column col-7 col-xs-12">
-                            <label class="form-label" for="due-date-input">{% trans 'Due date' %}</label>
-                            <div class="form-group">
-                                {# TODO #}
-                                {% render_field poll_form.due_date class+="form-input" id="datetimepicker" %}
-                                {% if poll_form.due_date.errors %}
-                                    <div class="form-errors">
-                                        <div class="toast toast-error">
-                                            <div class="container">
-                                                <i class="fa fa-times"></i>{{ poll_form.due_date.errors }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </div>
+                            {% render_form_field poll_form.due_date %}
                             {% render_form_field poll_form.description %}
                         </div>
                         <div class="column col-4 col-ml-auto col-xs-12">
@@ -152,7 +139,7 @@
             <div class="halfsize">
                 <form method="POST" action="{% url 'login' %}" class="form">
                     <h1>{% trans 'Log in' %}</h1>
-                    {% csrf_token %}
+                    {% render_form_header login_form %}
                     {% render_form login_form %}
                     <div class="form-group">
                       <input type="submit" value="{% trans 'Login' %}" class="btn"/>
