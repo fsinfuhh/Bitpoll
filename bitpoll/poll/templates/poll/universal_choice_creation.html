@@ -60,7 +60,7 @@
                                 </td>
                             </tr>
                         {% endfor %}
-                        <tr class="choice-row">
+                        <tr id="choice_texts">
                             <td class="choice">
                                 <div class="input-group">
                                     <input class="form-input input-sm" name="choice_text" placeholder="{% trans 'Choice text ...' %}"/>
@@ -73,17 +73,14 @@
                             <td></td>
                             <td></td>
                         </tr>
-                        {% comment %}
-                            <tr class="choice-row">
+                            <tr class="script-only">
                                 <td class="choice">
-                                    <button type="button" class="action"
+                                    <button type="button" class="btn btn-primary"
                                             id="choice_add">{% trans 'Add choice field' %}</button>
-                                    TODO: mit JS wieder anbieten?
                                 </td>
                                 <td></td>
                                 <td></td>
                             </tr>
-                        {% endcomment %}
                         </tbody>
                         <tfoot>
                         <tr>

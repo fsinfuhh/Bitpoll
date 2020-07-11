@@ -258,6 +258,7 @@ function initCalendar(calendar) {
 
     get_elem("#calendar-prev-month").addEventListener("click", function () {
         calendarSetDate(calendar_data.subtract(1, "months"));
+        e.preventDefault();
         return false;
     });
 

@@ -4,9 +4,12 @@
      */
     function add_choice_field(event) {
         event.preventDefault();
-        var new_entry = document.createElement('input');
-        new_entry.name = "choice_text";
-        get_elem('#choice_texts').appendChild(new_entry);
+        const field = get_elem('#choice_texts');
+        const new_field = field.cloneNode(true);
+        field.id = "";
+        new_field.querySelector('.choice-sort-key').value = field.querySelector('.choice-sort-key').value + 1;
+        new_field.querySelector('.form-input').value = "";
+        new_field.insertAfter(field)
     }
 
     function move_choice_field_up(event) {
@@ -24,10 +27,10 @@
      */
     function move_choice_field(event, direction) {
         event.preventDefault();
-        var elem = this;
-        var row = elem.parentNode.parentNode;
+        const elem = event.currentTarget;
+        const row = elem.parentNode.parentNode;
 
-        var exchange, first, second;
+        let exchange, first, second;
 
         if (direction === 1) {
             exchange = row.nextElementSibling;
@@ -38,24 +41,31 @@
             second = exchange;
             first = row;
         }
-        if (!exchange.hasClass('choice-row')) {
+        if (!hasClass(exchange, 'choice-row')) {
             // can not be moved, already either first or last.
             return;
         }
         second.insertAfter(first);
-        var first_sort_key_elem = first.querySelector('.choice-sort-key');
-        var first_sort_key = first_sort_key_elem.value;
-        var second_sort_key_elem = second.querySelector('.choice-sort-key');
+        const first_sort_key_elem = first.querySelector('.choice-sort-key');
+        const first_sort_key = first_sort_key_elem.value;
+        const second_sort_key_elem = second.querySelector('.choice-sort-key');
         first_sort_key_elem.value = second_sort_key_elem.value;
         second_sort_key_elem.value = first_sort_key;
     }
 
     (function () {
         const choice_add = get_elem('#choice_add');
-        if (choice_add){
+        if (choice_add) {
             choice_add.addEventListener("click", add_choice_field);
-            get_elem('.choice-move-up').addEventListener("click", move_choice_field_up);
-            get_elem('.choice-move-down').addEventListener("click", move_choice_field_down);
+        }
+        const move_up = get_elems('.choice-move-up');
+        if (move_up) {
+            move_up.forEach(function (elem) {
+                elem.addEventListener("click", move_choice_field_up)
+            });
+            get_elems('.choice-move-down').forEach(function (elem) {
+                elem.addEventListener("click", move_choice_field_down)
+            });
         }
     })();
 })();

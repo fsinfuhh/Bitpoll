@@ -39,7 +39,6 @@ table.poll td, table.poll th, table.poll tr {
 table.poll {
     border-collapse: separate !important;
     border-spacing: 3px !important;
-    margin: .7em -3px;
 }
 
 .poll {
@@ -126,6 +125,10 @@ table td.vote-actions {
 .poll .choice-text {
     text-align: center;
     white-space: inherit;
+}
+
+.checkbox-cell ~ .choice-text {
+    min-width: 6em;
 }
 
 .poll .choice-sum.maximum {
@@ -274,15 +277,10 @@ tr.choice td {
     .comment {
         padding: .7em;
         min-height: 68px;
-        border: 1px solid #F6F6F6;
-        border-width: 0 2px;
+        border: 2px solid #F6F6F6;
 
         &:nth-child(2n+1) {
             background-color: #F6F6F6;
-        }
-
-        &:nth-child(2n):last-child {
-            border-bottom-width: 2px;
         }
 
         .meta {

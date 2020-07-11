@@ -25,6 +25,10 @@ Array.prototype.contains = function(item) {
     return this.indexOf(item) !== -1;
 };
 
+Element.prototype.insertAfter = function (element) {
+  element.parentNode.insertBefore(this, element.nextSibling);
+},false;
+
 function rotate_element(element, degrees) {
     element.style.cssText =
         'transform: rotate(' + degrees + 'deg);' +
