@@ -44,12 +44,12 @@
                                     <strong>{{ choice.votechoice_count }}</strong> / {{ poll.vote_set.count }}
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-sm choice-move-up">
+                                    <button  name="up" value="{{ choice.pk }}" class="btn btn-sm choice-move-up">
                                         <i class="fa fa-arrow-up"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-sm choice-move-down">
+                                    </button>
+                                    <button name="down" value="{{ choice.pk }}" href="#" class="btn btn-sm choice-move-down">
                                         <i class="fa fa-arrow-down"></i>
-                                    </a>
+                                    </button>
                                     <button name="delete" value="{{ choice.pk }}" class="btn btn-sm">
                                         {% if not choice.deleted %}
                                             <i class="fa fa-trash-o"></i>

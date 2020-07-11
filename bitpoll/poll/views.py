@@ -620,7 +620,7 @@ def edit_universal_choice(request, poll_url):
                 if not choice:
                     continue
                 pk = choice.group(1)
-                db_choice = get_object_or_404(Choice, poll=current_poll, pk=pk)
+                db_choice = get_object_or_404(Choice.objects.select_for_update(), poll=current_poll, pk=pk)
                 choice_text = request.POST.get(choice_id).strip()
                 if choice_text == '':
                     db_choice.deleted = True
@@ -639,6 +639,29 @@ def edit_universal_choice(request, poll_url):
                         messages.error(request,
                                        _('The title "{}" is to long. The maximum is 80 characters'.format(choice_text)))
                         error = True
+
+        if 'down' in request.POST or 'up' in request.POST:
+            with transaction.atomic():
+                if 'up' in request.POST:
+                    elem = get_object_or_404(Choice.objects.select_for_update(),
+                                             pk=request.POST['up'],
+                                             poll=current_poll)
+                    other_elem = Choice.objects.select_for_update().filter(poll=current_poll,
+                                                                           sort_key__lt=elem.sort_key).order_by(
+                        '-sort_key').first()
+                else:
+                    elem = get_object_or_404(Choice.objects.select_for_update(),
+                                             pk=request.POST['down'],
+                                             poll=current_poll)
+                    other_elem = Choice.objects.select_for_update().filter(poll=current_poll,
+                                                                           sort_key__gt=elem.sort_key).order_by(
+                        'sort_key').first()
+                if other_elem:
+                    orig_sort_key = elem.sort_key
+                    elem.sort_key = other_elem.sort_key
+                    other_elem.sort_key = orig_sort_key
+                    elem.save()
+                    other_elem.save()
         if 'next' in request.POST and not error:
             return redirect('poll', poll_url)
         if 'delete' in request.POST:
