@@ -128,9 +128,9 @@ def poll(request, poll_url: str, export: bool = False):
         } for stat in stats]
 
     if current_poll.current_user_is_owner(request) and current_poll.allow_unauthenticated_vote_changes:
-        messages.warning(request, _("Currently, unauthenticated users are allowed to change votes. This means, "
-                                    "that everyone is able to change every vote that has not been assigned to a user. "
-                                    "If you want to prevent this, change the settings."))
+        messages.info(request, _("Currently, unauthenticated users are allowed to change votes. This means, "
+                                 "that everyone is able to change every vote that has not been assigned to a user. "
+                                 "If you want to prevent this, change the settings."))
 
     if request.user.is_authenticated:
         # warn the user if the Timezone is not the same on the Poll and in his settings
@@ -139,8 +139,8 @@ def poll(request, poll_url: str, export: bool = False):
             messages.info(request, _("This poll was transferred from {} to your local timezone {}".format(
                 current_poll.timezone_name, request.user.timezone)))
         elif different_timezone:
-            messages.warning(request, _("This poll has a different timezone ({}) than you.".format(
-                current_poll.timezone_name)))
+            messages.warning(request, _("This poll has a different timezone ({}) than you ({}).".format(
+                current_poll.timezone_name, request.user.timezone)))
 
     deleted_choicevals_count = VoteChoice.objects.filter(choice__poll=current_poll, value__deleted=True).count()
     if deleted_choicevals_count > 0:
@@ -834,12 +834,10 @@ def vote(request, poll_url, vote_id=None):
                 current_vote.name = 'Anonymous'
             elif request.user.is_authenticated and (not vote_id or current_vote.user == request.user):  # TODO
                 # only set on edit if same user
-                print("hhhh", current_vote.user, request.user)
                 current_vote.name = request.user.get_displayname()
                 current_vote.user = request.user
             else:
                 current_vote.name = form.cleaned_data['name']
-                print(current_vote.name, form.cleaned_data['name'], form, form.cleaned_data, request.POST['name'])
 
             current_vote.anonymous = form.cleaned_data['anonymous']
 
@@ -951,6 +949,10 @@ def vote(request, poll_url, vote_id=None):
 
     events = get_caldav(choices, current_poll, request.user, request)
 
+    if request.user.is_authenticated and current_poll.get_tz_name(request.user) != request.user.timezone:
+        messages.warning(request, _("This poll has a different timezone ({}) than you ({}).".format(
+            current_poll.timezone_name, request.user.timezone)))
+
     return TemplateResponse(request, 'poll/vote_creation.html', {
         'poll': current_poll,
         'matrix': matrix,
@@ -961,8 +963,6 @@ def vote(request, poll_url, vote_id=None):
         'values': current_poll.choicevalue_set.filter(deleted=False).all(),
         'page': 'Vote',
         'current_vote': current_vote,
-        'timezone_warning': (request.user.is_authenticated and
-                             current_poll.get_tz_name(request.user) != request.user.timezone),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
         'suppress_messages': True,
         'form': form,
