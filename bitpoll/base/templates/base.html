@@ -4,16 +4,18 @@
 {% load settings_value %}
 {% load tz %}
 
-{%  value_from_settings SITE_NAME as site_name %}
-{%  value_from_settings DEBUG as debug %}
-{%  value_from_settings HOME_URL as home_url %}
-{%  value_from_settings HOME_URL_NAME as home_url_name %}
-{%  value_from_settings BASE_URL as base_url %}
-{%  value_from_settings REGISTER_ENABLED as register %}
-{%  value_from_settings GROUP_MANAGEMENT as group_management_enabled %}
+{% value_from_settings SITE_NAME as site_name %}
+{% value_from_settings DEBUG as debug %}
+{% value_from_settings HOME_URL as home_url %}
+{% value_from_settings HOME_URL_NAME as home_url_name %}
+{% value_from_settings BASE_URL as base_url %}
+{% value_from_settings REGISTER_ENABLED as register %}
+{% value_from_settings GROUP_MANAGEMENT as group_management_enabled %}
+
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html>
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,12 +24,12 @@
     {% stylesheet 'base' %}
     {% stylesheet 'base_print' %}
     {% javascript 'base' %}
-    {% block css %}{%  endblock %}
+    {% block css %}{% endblock %}
     {% block headJS %}{% endblock %}
 </head>
 <body>
 <div id="wrapper">
-    {% include 'navbar.html'%}
+    {% include 'navbar.html' %}
 
     <section id="main-content">
         {% if not suppress_messages %}
@@ -53,35 +55,38 @@
     </section>
 
     <footer>
-        <div class="container"><a href="{% url 'about' %}">{% trans 'About' %}</a><span class="separator"></span><a href="{% url 'imprint' %}"
-            target="_blank">{% trans 'Imprint' %}</a><span
-                    class="separator"></span><a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
-           class="separator"></span>
-            {% trans 'Current timezone is' %} {% get_current_timezone as TIME_ZONE %}{{ TIME_ZONE }}<span
-           class="separator"></span>
-        <form class="form-inline" action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
+        <div class="container"><a href="{% url 'about' %}">{% trans 'About' %}</a><span class="separator"></span><a
+                href="{% url 'imprint' %}"
+                target="_blank">{% trans 'Imprint' %}</a><span
+                class="separator"></span><a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
+                class="separator"></span>
+            {% trans 'Current timezone is' %} {% if request.user.is_authenticated %}{% timezone request.user.timezone %}
+                {% get_current_timezone as TIME_ZONE %}{% endtimezone %}{% else %}
+                {% get_current_timezone as TIME_ZONE %}{% endif %}{{ TIME_ZONE }}<span
+                    class="separator"></span>
+            <form class="form-inline" action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
                 <button name="language" value="de" class="btn btn-link lang-btn" type="submit">Deutsch</button>
                 &middot;
                 <button name="language" value="en" class="btn btn-link lang-btn" type="submit">English</button>
-        </form>
+            </form>
 
             {% if debug %}
                 <div class="footer-warning">
                     {% blocktrans %}
-                    <b>Warning!</b> {{ site_name }} is configured with <code>DEBUG = True</code>.
+                        <b>Warning!</b> {{ site_name }} is configured with <code>DEBUG = True</code>.
                     {% endblocktrans %}
                 </div>
             {% endif %}
         </div>
     </footer>
 </div>
-    {% javascript 'base_late' %}
+{% javascript 'base_late' %}
 {% comment %}
     <script src="{% static 'coffee/votefilter.coffee'|compile %}"  type="text/javascript" ></script>
 {% endcomment %}
-    <script nonce="{% csp_js_nonce %}">moment.locale("{{ request.LANGUAGE_CODE }}")</script>
-    {% block additionalJS %}
-    {% endblock %}
+<script nonce="{% csp_js_nonce %}">moment.locale("{{ LANGUAGE_CODE }}")</script>
+{% block additionalJS %}
+{% endblock %}
 </body>
 </html>
