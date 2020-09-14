@@ -6,7 +6,7 @@
 SECRET_KEY = '...'
 
 # generate via: ./manage.py generate_encryption_key
-FIELD_ENCRYPTION_KEY = "generate a new one"
+FIELD_ENCRYPTION_KEY = "this+is+an+example+key+please+generate+one+="
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
