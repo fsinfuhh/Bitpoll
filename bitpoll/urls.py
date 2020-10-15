@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
+from django.views.static import serve 
 from django.contrib import admin
 from django.shortcuts import redirect, render
 from django.urls import path
@@ -62,6 +63,12 @@ if url_prefix not in ('', '/', None):
         path(url_prefix, include(urlpatterns))
     ]
 
+if not settings.DEBUG:
+    # serve static files anyway
+    urlpatterns += [
+        url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
+        url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
+    ]
 
 def handler500(request):
     """500 error handler which includes ``request`` in the context.

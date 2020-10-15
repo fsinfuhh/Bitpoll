@@ -1,0 +1,7 @@
+_static
+venv
+.pyenv
+__pycache__
+*.sqlite3
+.git
+bitpoll/settings_local.py

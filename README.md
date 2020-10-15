@@ -15,7 +15,7 @@ git clone https://github.com/fsinfuhh/Bitpoll
 
 Generate a Python virtualenv and install dependencies:
 
-```
+```bash
 virtualenv -p $(which python3) .pyenv
 source .pyenv/bin/activate
 pip install -r requirements.txt
@@ -25,22 +25,23 @@ Copy `bitpoll/settings_local.sample.py` to `bitpoll/settings_local.py` and custo
 
 Initialise Database:
 
-```
+```bash
 ./manage.py migrate
 ```
 
 Run Testserver:
 
-```
+```bash
 ./manage.py runserver
 ```
 
 # Production
 
 In production Senty is used for error reporting.
-django-auth-ldap is used vor login via ldap
-uwsgi to serve the app
+django-auth-ldap is used vor login via LDAP
+uwsgi to serve the app.
 
+## Run locally
 Install Dependencies for Production:
 
 ```bash
@@ -49,7 +50,7 @@ sudo apt install g++ make python3-psycopg2 python3-ldap3 gettext gcc python3-dev
 
 Install Python Dependencies
 
-```
+```bash
 pip install -r requirements-production.txt
 ```
 
@@ -63,6 +64,31 @@ For Production systems it is nessesarry to run
 ```bash
 ./manage.py compilemessages
 ./manage.py collectstatic
+```
+
+## Run with Docker
+Build image:
+
+```bash
+docker build . -t bitpoll:latest
+```
+
+Run container:
+
+```bash
+docker run -d -p 8000:8000 \
+    -e 'BITPOLL_SECRET_KEY=your-secret-key' \
+    -e 'BITPOLL_FIELD_ENCRYPTION_KEY=your-encryption-key' \
+    --name bitpoll
+    bitpoll
+```
+
+## Run with Docker Compose:
+```bash
+export BITPOLL_SECRET_KEY=your-secret-key
+export BITPOLL_FIELD_ENCRYPTION_KEY=your-encryption-key
+
+docker-compose up
 ```
 
 # Management of Dependencies
