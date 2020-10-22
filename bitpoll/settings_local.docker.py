@@ -26,19 +26,11 @@ CSRF_COOKIE_SECURE = os.environ.get(f'{ENV_PREFIX}_CSRF_COOKIE_SECURE', 'false')
 URL_PREFIX = os.environ.get(f'{ENV_PREFIX}_URL_PREFIX', '')
 
 # Specify which hosts are allowed to access the application
-ALLOWED_HOSTS = os.environ.get(f'{ENV_PREFIX}_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get(f'{ENV_PREFIX}_ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').split(',')
 
 INSTALLED_APPS_LOCAL = []
 
 PIPELINE_LOCAL = {}
-
-if os.environ.get(f'{ENV_PREFIX}_COMPRESS_JS', 'false').lower() == 'true':
-    PIPELINE_LOCAL['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
-if os.environ.get(f'{ENV_PREFIX}_COMPRESS_CSS', 'false').lower() == 'true':
-    PIPELINE_LOCAL['CSS_COMPRESSOR'] = 'pipeline.compressors.cssmin.CSSMinCompressor'
-if len(PIPELINE_LOCAL) > 0:
-    PIPELINE_ENABLED = True
-
 
 LANGUAGE_CODE = os.environ.get(f'{ENV_PREFIX}_LANGUAGE_CODE', 'en-US')
 TIME_ZONE = os.environ.get(f'{ENV_PREFIX}_TIME_ZONE', 'Europe/Berlin')
@@ -47,7 +39,7 @@ TIME_ZONE = os.environ.get(f'{ENV_PREFIX}_TIME_ZONE', 'Europe/Berlin')
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.sqlite3',
-       'NAME': os.path.join(ROOT_DIR, '_data', 'db.sqlite3'),
+       'NAME': os.path.join(ROOT_DIR, '../_data', 'db.sqlite3'),
    }
 }
 
