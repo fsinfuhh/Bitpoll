@@ -69,5 +69,21 @@ def handler500(request):
     Templates: `500.html`
     Context: None
     """
-    return render(request, '500.html', status=500)
+    use_sentry = False
+    sentry_dsn = None
+    event_id = None
+    try:
+        import sentry_sdk
+        if sentry_sdk.Hub.current.client:
+            use_sentry = True
+            sentry_dsn = sentry_sdk.Hub.current.client.dsn
+            event_id = sentry_sdk.last_event_id()
+    except ImportError:
+        pass
+
+    return render(request, '500.html', status=500, context={
+        'use_sentry': use_sentry,
+        'sentry_dsn': sentry_dsn,
+        'event_id': event_id,
+    })
 
