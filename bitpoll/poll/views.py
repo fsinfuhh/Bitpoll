@@ -931,7 +931,7 @@ def vote(request, poll_url, vote_id=None):
         'choices_matrix': zip(matrix, choices, comments, choice_votes, events),
         'choices': current_poll.choice_set.all(),
         'choices_matrix_len': len(choices),
-        'values': current_poll.choicevalue_set.filter(deleted=False).all().order_by('-weight', 'title'),
+        'values': current_poll.choicevalue_set.filter(deleted=False).order_by('-weight', 'title'),
         'page': 'Vote',
         'current_vote': current_vote,
         'timezone_warning': (request.user.is_authenticated and
