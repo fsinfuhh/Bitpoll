@@ -688,7 +688,7 @@ def edit_choicevalues(request, poll_url):
         'poll': current_poll,
         'form': form,
         'choiceval_select': choiceval_select,
-        'choice_values': ChoiceValue.objects.filter(poll=current_poll)
+        'choice_values': current_poll.choicevalue_set.order_by('-weight', 'title')
     })
 
 
@@ -727,6 +727,7 @@ def edit_choicevalues_create(request, poll_url):
             'poll': current_poll,
             'form': form,
             'choiceval_select': choiceval_select,
+            'choice_values': current_poll.choicevalue_set.order_by('-weight', 'title')
         })
     return redirect('poll_editchoicevalues', current_poll.url)
 

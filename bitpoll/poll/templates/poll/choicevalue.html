@@ -47,7 +47,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for choiceval in poll.choicevalue_set.all %}
+                    {% for choiceval in choice_values %}
                         <tr class="choice vote {% if choiceval.deleted %}deleted{% endif %}">
                             <td class="author choice">{{ choiceval.title }}</td>
                             <td class="vote-choice text-center">
