@@ -688,7 +688,7 @@ def edit_choicevalues(request, poll_url):
         'poll': current_poll,
         'form': form,
         'choiceval_select': choiceval_select,
-        'choice_values': ChoiceValue.objects.filter(poll=current_poll)
+        'choice_values': current_poll.choicevalue_set.order_by('-weight', 'title')
     })
 
 
@@ -727,6 +727,7 @@ def edit_choicevalues_create(request, poll_url):
             'poll': current_poll,
             'form': form,
             'choiceval_select': choiceval_select,
+            'choice_values': current_poll.choicevalue_set.order_by('-weight', 'title')
         })
     return redirect('poll_editchoicevalues', current_poll.url)
 
@@ -931,7 +932,7 @@ def vote(request, poll_url, vote_id=None):
         'choices_matrix': zip(matrix, choices, comments, choice_votes, events),
         'choices': current_poll.choice_set.all(),
         'choices_matrix_len': len(choices),
-        'values': current_poll.choicevalue_set.filter(deleted=False).all(),
+        'values': current_poll.choicevalue_set.filter(deleted=False).order_by('-weight', 'title'),
         'page': 'Vote',
         'current_vote': current_vote,
         'timezone_warning': (request.user.is_authenticated and
