@@ -4,6 +4,10 @@ from .models import Poll, Choice, ChoiceValue, Comment
 
 
 class PollCreationForm(ModelForm):
+    # TODO: same as for CommentForm, maybe simplify/merge?
+    spam_key = CharField(widget=HiddenInput(), required=False)
+    spam_answer = IntegerField(required=False)
+
     class Meta:
         model = Poll
         fields = [

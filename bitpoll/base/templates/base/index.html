@@ -19,6 +19,26 @@
                 <h1>{% trans 'Create a poll' %}</h1>
                 <hr/>
                 <form method="POST" class="form" action="{% url 'index' %}">
+                    {% if not request.user.is_authenticated %}
+                    <div class="form-step">
+                        <div class="number">{% trans 'Step 0' %}</div>
+                        <div class="title">{% trans 'Antispam' %}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ poll_form.spam_answer.name }}">{{ spam_challenge.x }} {{ spam_challenge.op }} {{ spam_challenge.y }} =</label>
+                        <input class="form-control" type="text" title="Challenge" name="{{ poll_form.spam_answer.name }}" value="{{ poll_form.spam_answer.value|default_if_none:'' }}">
+                        {% if poll_form.spam_answer.errors %}
+                            <div class="form-errors">
+                                <div class="alert alert-danger">
+                                    <div class="container">
+                                        <i class="fa fa-times"></i>{{ poll_form.spam_answer.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <input type="hidden" name="{{ poll_form.spam_key.name }}" value="{{ spam_challenge.key }}">
+                    </div>
+                    {% endif %}
                     {% csrf_token %}
                     <div class="form-step">
                         <div class="number">{% trans 'Step 1' %}</div>

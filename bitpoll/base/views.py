@@ -8,6 +8,8 @@ from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.db.models import Q
 from django.db import IntegrityError
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 from bitpoll.base.autocomplete import autocomplete_users
 from bitpoll.base.models import BitpollUser
@@ -16,6 +18,7 @@ from bitpoll.caldav.models import DavCalendar
 
 from bitpoll.poll.forms import PollCreationForm
 from bitpoll.poll.models import ChoiceValue, Poll, Vote, PollWatch
+from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
 
 from bitpoll.base.models import USER_LANG
 from bitpoll.base.forms import BitpollUserSettingsForm
@@ -26,6 +29,10 @@ from bitpoll.settings import IMPRINT_URL
 from django.core import signing
 from django.conf import settings
 
+
+# FIXME: when creating a poll, we don't have a poll_id, so we use this pseudo
+# one, as the antispam stuff expects a `poll_id`
+ANTISPAM_PSEUDO_POLL_ID = 0
 
 def index(request):
     """
@@ -47,26 +54,54 @@ def index(request):
             post_data['url'] = generate_random_slug()
         form = PollCreationForm(post_data)
         if form.is_valid():
-            current_poll = form.save()
-            if request.user.is_authenticated:
-                current_poll.user = request.user
-                current_poll.save()
-            # TODO: lazy translation
-            # TODO: load from config
-            ChoiceValue(title="yes", icon="check", color="90db46", weight=1, poll=current_poll).save()
-            ChoiceValue(title="no", icon="ban", color="c43131", weight=0, poll=current_poll).save()
-            ChoiceValue(title="maybe", icon="question", color="ffe800", weight=0.5, poll=current_poll).save()
-            ChoiceValue(title="Only if absolutely necessary", icon="thumbs-down", color="B0E", weight=0.25,
-                        poll=current_poll).save()
+            try:
+                spam_ok = True
+                if not request.user.is_authenticated:
+                    if 'spam_answer' in form.cleaned_data and 'spam_key' in form.cleaned_data:
+                        spam_ok = check_anti_spam_challange(
+                                form.cleaned_data['spam_key'],
+                                form.cleaned_data['spam_answer'],
+                                ANTISPAM_PSEUDO_POLL_ID)
+                    else:
+                        # FIXME: the typo in the message is so the translation
+                        # keeps working, it's wrong in bitpoll/poll/views.py
+                        # for comment anti-spam as well
+                        spam_ok, err_message = False, _('This Field is rquired')
 
-            if current_poll.type == 'universal':  # TODO: heir könnte auch auf die algemeine edit url weitergeleitet werden
-                return redirect('poll_editUniversalChoice', current_poll.url)
-            elif current_poll.type == 'date':
-                return redirect('poll_editDateChoice', current_poll.url)
+                if spam_ok:
+                    current_poll = form.save()
+                    if request.user.is_authenticated:
+                        current_poll.user = request.user
+                        current_poll.save()
+                    # TODO: lazy translation
+                    # TODO: load from config
+                    ChoiceValue(title="yes", icon="check", color="90db46", weight=1, poll=current_poll).save()
+                    ChoiceValue(title="no", icon="ban", color="c43131", weight=0, poll=current_poll).save()
+                    ChoiceValue(title="maybe", icon="question", color="ffe800", weight=0.5, poll=current_poll).save()
+                    ChoiceValue(title="Only if absolutely necessary", icon="thumbs-down", color="B0E", weight=0.25,
+                                poll=current_poll).save()
+
+                    if current_poll.type == 'universal':  # TODO: heir könnte auch auf die algemeine edit url weitergeleitet werden
+                        return redirect('poll_editUniversalChoice', current_poll.url)
+                    elif current_poll.type == 'date':
+                        return redirect('poll_editDateChoice', current_poll.url)
+                    else:
+                        return redirect('poll_editDTChoiceDate', current_poll.url)
+                else:
+                    form.add_error('spam_answer', _("Wrong result"))
+                    spam_challenge = create_anti_spam_challenge(ANTISPAM_PSEUDO_POLL_ID)
+            except ValidationError as e:
+                spam_challenge = create_anti_spam_challenge(ANTISPAM_PSEUDO_POLL_ID)
+                form.add_error('spam_answer', _("Wrong result"))
+        else:
+            if 'spam_key' in request.POST:
+                spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], ANTISPAM_PSEUDO_POLL_ID)
             else:
-                return redirect('poll_editDTChoiceDate', current_poll.url)
+                spam_challenge = create_anti_spam_challenge(ANTISPAM_PSEUDO_POLL_ID)
     else:
         form = PollCreationForm()
+        spam_challenge = create_anti_spam_challenge(ANTISPAM_PSEUDO_POLL_ID)
+
     return TemplateResponse(request, "base/index.html", {
         'poll_form': form,
         'poll_count': Poll.objects.all().count(),
@@ -75,6 +110,7 @@ def index(request):
         'public_polls': public_polls,
         'randomize_url': randomize_url,
         'random_url': generate_random_slug() if randomize_url else '',
+        'spam_challenge': spam_challenge,
     })
 
 
