@@ -51,7 +51,7 @@
                                 data-container="body"
                                 data-title="{{ vote.display_name|force_escape|force_escape }}"
                                 data-content="
-                                    {{ vote.date_created|date }}
+                                    {{ vote.date_created }}
                                     {% if vote.comment %}
                                         <div class='comment'>{{ vote.comment|force_escape|force_escape }}</div>
                                     {% endif %}
