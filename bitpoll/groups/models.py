@@ -80,7 +80,7 @@ class GroupInvitation(models.Model):
     def refuse(self):
         self.delete()
 
-_group_name_re = re.compile(r'^[a-zA-Z]([a-zA-Z0-9-]*)$')
+_group_name_re = re.compile(r'^[a-zA-Z]([a-zA-Z0-9\-\.]*)$')
 
 
 def create_usergroup(user, name):
