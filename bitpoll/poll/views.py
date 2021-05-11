@@ -78,7 +78,7 @@ def poll(request, poll_url: str, export: bool=False):
         elif current_poll.show_results in ("summary after vote", "complete after vote") \
                 and (request.user.is_anonymous or not poll_votes.filter(Q(user=request.user))):
             poll_votes = []
-            messages.info(request, _("Results are only sown after (authenticated) Voting"))
+            messages.info(request, _("Results are only shown after (authenticated) Voting"))
             summary = False
         elif current_poll.show_results == "summary after vote":
             poll_votes = poll_votes.filter(user=request.user)
