@@ -337,34 +337,34 @@ msgstr "Beschreibung"
 
 #: bitpoll/base/templates/base/index.html:158
 #: bitpoll/poll/templates/poll/settings.html:101
-msgid "allow anonymous votes"
-msgstr "erlaube anonymes Abstimmen"
+msgid "Allow anonymous votes"
+msgstr "Erlaube anonymes Abstimmen"
 
 #: bitpoll/base/templates/base/index.html:162
 #: bitpoll/poll/templates/poll/poll_header.html:62
 #: bitpoll/poll/templates/poll/settings.html:105
-msgid "login required"
+msgid "Login required"
 msgstr "Login erforderlich"
 
 #: bitpoll/base/templates/base/index.html:166
 #: bitpoll/poll/templates/poll/settings.html:109
-msgid "invitation required to vote"
+msgid "Invitation required to vote"
 msgstr "Einladung zur Abstimmung erforderlich"
 
 #: bitpoll/base/templates/base/index.html:170
 #: bitpoll/poll/templates/poll/settings.html:117
-msgid "allow unauthenticated vote changes"
-msgstr "erlaube unangemeldete Änderungen an Stimmen"
+msgid "Allow unauthenticated vote changes"
+msgstr "Erlaube unangemeldete Änderungen an Stimmen"
 
 #: bitpoll/base/templates/base/index.html:174
 #: bitpoll/poll/templates/poll/settings.html:121
-msgid "one vote per user"
-msgstr "eine Stimme pro Benutzer"
+msgid "One vote per user"
+msgstr "Eine Stimme pro Benutzer"
 
 #: bitpoll/base/templates/base/index.html:178
 #: bitpoll/poll/templates/poll/settings.html:129
-msgid "forbid empty choices"
-msgstr "verbiete leere Wahlmöglichkeiten"
+msgid "Forbid empty choices"
+msgstr "Verbiete leere Wahlmöglichkeiten"
 
 #: bitpoll/base/templates/base/index.html:185
 msgid "More options"
@@ -1457,15 +1457,15 @@ msgid "Anonymous voting allowed"
 msgstr "Anonymes Abstimmen erlaubt"
 
 #: bitpoll/poll/templates/poll/poll_header.html:54
-msgid "anonymous voting"
-msgstr "anonym abstimmen"
+msgid "Anonymous voting"
+msgstr "Anonym abstimmen"
 
 #: bitpoll/poll/templates/poll/poll_header.html:57
 msgid "Invitation required"
 msgstr "Einladung erforderlich"
 
 #: bitpoll/poll/templates/poll/poll_header.html:58
-msgid "invitation required"
+msgid "Invitation required"
 msgstr "Einladung erforderlich"
 
 #: bitpoll/poll/templates/poll/poll_header.html:61
@@ -1475,7 +1475,7 @@ msgstr "Login erforderlich"
 #: bitpoll/poll/templates/poll/poll_header.html:65
 #: bitpoll/poll/templates/poll/poll_header.html:66
 msgid "Empty choices forbidden"
-msgstr "leere Wahlmöglichkeiten verboten"
+msgstr "Leere Wahlmöglichkeiten verboten"
 
 #: bitpoll/poll/templates/poll/poll_header.html:79
 msgid "Overview"
@@ -1517,23 +1517,23 @@ msgid "Save changes"
 msgstr "Speichere Änderungen"
 
 #: bitpoll/poll/templates/poll/settings.html:94
-msgid "additional Settings"
-msgstr "zusätzliche Einstellungen"
+msgid "Additional Settings"
+msgstr "Zusätzliche Einstellungen"
 
 #: bitpoll/poll/templates/poll/settings.html:97
-msgid "allow comments"
+msgid "Allow comments"
 msgstr "Kommentare erlaubt"
 
 #: bitpoll/poll/templates/poll/settings.html:113
-msgid "show in public poll list"
-msgstr "in öffentlicher Umfrageliste anzeigen"
+msgid "Show in public poll list"
+msgstr "In öffentlicher Umfrageliste anzeigen"
 
 #: bitpoll/poll/templates/poll/settings.html:125
-msgid "show invitations as empty votes"
-msgstr "zeige Einladungen als leere Stimmen an"
+msgid "Show invitations as empty votes"
+msgstr "Zeige Einladungen als leere Stimmen an"
 
 #: bitpoll/poll/templates/poll/settings.html:133
-msgid "hide participants"
+msgid "Hide participants"
 msgstr "Teilnehmerliste verbergen"
 
 #: bitpoll/poll/templates/poll/settings.html:142
@@ -1566,8 +1566,8 @@ msgstr ""
 "Umfrage in Besitz genommen hast."
 
 #: bitpoll/poll/templates/poll/settings.html:185
-msgid "Very advanced stuff"
-msgstr "Sehr fortgeschrittene Einstellungen"
+msgid "Advanced Options"
+msgstr "Fortgeschrittene Optionen"
 
 #: bitpoll/poll/templates/poll/settings.html:186
 msgid "Edit possible answer values"

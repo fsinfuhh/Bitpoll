@@ -56,8 +56,7 @@ def index(request):
             ChoiceValue(title="yes", icon="check", color="90db46", weight=1, poll=current_poll).save()
             ChoiceValue(title="no", icon="ban", color="c43131", weight=0, poll=current_poll).save()
             ChoiceValue(title="maybe", icon="question", color="ffe800", weight=0.5, poll=current_poll).save()
-            ChoiceValue(title="Only if absolutely necessary", icon="thumbs-down", color="B0E", weight=0.25,
-                        poll=current_poll).save()
+            ChoiceValue(title="rather not", icon="thumbs-down", color="B0E", weight=0.25, poll=current_poll).save()
 
             if current_poll.type == 'universal':  # TODO: heir könnte auch auf die algemeine edit url weitergeleitet werden
                 return redirect('poll_editUniversalChoice', current_poll.url)

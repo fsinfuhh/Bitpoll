@@ -51,15 +51,15 @@
             {% endif %}
             {% if poll.anonymous_allowed %}
                 <li title="{% trans 'Anonymous voting allowed' %}"><i class="fa fa-check"></i>
-                    <span class="content">{% trans 'anonymous voting' %}</span></li>
+                    <span class="content">{% trans 'Anonymous voting' %}</span></li>
             {% endif %}
             {% if poll.require_invitation %}
                 <li title="{% trans 'Invitation required' %}"><i class="fa fa-check"></i>
-                    <span class="content">{% trans 'invitation required' %}</span></li>
+                    <span class="content">{% trans 'Invitation required' %}</span></li>
             {% endif %}
             {% if poll.require_login %}
                 <li title="{% trans 'Login required' %}"><i class="fa fa-check"></i>
-                    <span class="content">{% trans 'login required' %}</span></li>
+                    <span class="content">{% trans 'Login required' %}</span></li>
             {% endif %}
                 {% if poll.vote_all %}
                     <li title="{% trans 'Empty choices forbidden' %}"><i class="fa fa-ban"></i>

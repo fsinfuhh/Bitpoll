@@ -91,46 +91,46 @@
 
 
         <div class="col-md-5 col-md-offset-1">
-          <label>{% trans 'additional Settings' %}</label>
+          <label>{% trans 'Additional Settings' %}</label>
             <div class="checkbox">
                 <input type="checkbox" id="allow_comments" name="{{ form.allow_comments.name }}" {% if form.allow_comments.value %} checked {% endif %}>
-                <label for="allow_comments">{% trans 'allow comments' %}</label>
+                <label for="allow_comments">{% trans 'Allow comments' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="anonymous_allowed" name="{{ form.anonymous_allowed.name }}" {% if form.anonymous_allowed.value %} checked {% endif %}>
-                <label for="anonymous_allowed">{% trans 'allow anonymous votes' %}</label>
+                <label for="anonymous_allowed">{% trans 'Allow anonymous votes' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="require_login" name="{{ form.require_login.name }}" {% if form.require_login.value %} checked {% endif %}>
-                <label for="require_login">{% trans 'login required' %}</label>
+                <label for="require_login">{% trans 'Login required' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="require_invitation" name="{{ form.require_invitation.name }}" {% if form.require_invitation.value %} checked {% endif %}>
-                <label for="require_invitation">{% trans 'invitation required to vote' %}</label>
+                <label for="require_invitation">{% trans 'Invitation required to vote' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="public_listening" name="{{ form.public_listening.name }}" {% if form.public_listening.value %} checked {% endif %}>
-                <label for="public_listening">{% trans 'show in public poll list' %}</label>
+                <label for="public_listening">{% trans 'Show in public poll list' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="allow_unauthenticated_vote_changes" name="{{ form.allow_unauthenticated_vote_changes.name }}" {% if form.allow_unauthenticated_vote_changes.value %} checked {% endif %}>
-                <label for="allow_unauthenticated_vote_changes">{% trans 'allow unauthenticated vote changes' %}</label>
+                <label for="allow_unauthenticated_vote_changes">{% trans 'Allow unauthenticated vote changes' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="one_vote_per_user" name="{{ form.one_vote_per_user.name }}" {% if form.one_vote_per_user.value %} checked {% endif %}>
-                <label for="one_vote_per_user">{% trans 'one vote per user' %}</label>
+                <label for="one_vote_per_user">{% trans 'One vote per user' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="show_invitations" name="{{ form.show_invitations.name }}" {% if form.show_invitations.value %} checked {% endif %}>
-                <label for="show_invitations">{% trans 'show invitations as empty votes' %}</label>
+                <label for="show_invitations">{% trans 'Show invitations as empty votes' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="vote_all" name="{{ form.vote_all.name }}" {% if form.vote_all.value %} checked {% endif %}>
-                <label for="vote_all">{% trans 'forbid empty choices' %}</label>
+                <label for="vote_all">{% trans 'Forbid empty choices' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="vote_hide_participants" name="{{ form.hide_participants.name }}" {% if form.hide_participants.value %} checked {% endif %}>
-                <label for="vote_hide_participants">{% trans 'hide participants' %}</label>
+                <label for="vote_hide_participants">{% trans 'Hide participants' %}</label>
             </div>
             <div class="">
                 Sort results by:
@@ -182,7 +182,7 @@
                 If you set this to "Nobody", then anyone may claim exclusive ownership. Most restrictive settings above are useless if you do not claim ownership of this poll.
                 {% endblocktrans %}
             </div>
-            <label>{% trans 'Very advanced stuff' %}</label><br>
+            <label>{% trans 'Advanced Options' %}</label><br>
             <a href="{% url 'poll_editchoicevalues' poll.url %}">{% trans 'Edit possible answer values' %}</a><br>
             <a href="{% url 'invitations' poll.url %}">{% trans 'Manage invitations' %}</a><br>
             <a href="{% url 'poll_copy' poll.url %}">{% trans 'Copy poll' %}</a><br>
