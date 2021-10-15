@@ -1774,7 +1774,7 @@ msgstr ""
 "nicht angezeigt"
 
 #: bitpoll/poll/views.py:79
-msgid "Results are only sown after (authenticated) Voting"
+msgid "Results are only shown after (authenticated) voting"
 msgstr "Ergebnisse werden erst nach (angemeldetem) Abstimmen angezeigt"
 
 #: bitpoll/poll/views.py:83

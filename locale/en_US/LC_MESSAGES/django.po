@@ -1690,8 +1690,8 @@ msgid "No individual results are shown due to Poll settings"
 msgstr "No individual results are shown due to Poll settings"
 
 #: bitpoll/poll/views.py:79
-msgid "Results are only sown after (authenticated) Voting"
-msgstr "Results are only sown after (authenticated) Voting"
+msgid "Results are only shown after (authenticated) voting"
+msgstr "Results are only shown after (authenticated) voting"
 
 #: bitpoll/poll/views.py:83
 msgid "Only the Summary is shown due to the Poll settings"
