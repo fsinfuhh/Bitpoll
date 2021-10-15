@@ -300,34 +300,34 @@ msgstr "Description"
 
 #: bitpoll/base/templates/base/index.html:158
 #: bitpoll/poll/templates/poll/settings.html:101
-msgid "allow anonymous votes"
-msgstr "allow anonymous votes"
+msgid "Allow anonymous votes"
+msgstr "Allow anonymous votes"
 
 #: bitpoll/base/templates/base/index.html:162
 #: bitpoll/poll/templates/poll/poll_header.html:62
 #: bitpoll/poll/templates/poll/settings.html:105
-msgid "login required"
-msgstr "login required"
+msgid "Login required"
+msgstr "Login required"
 
 #: bitpoll/base/templates/base/index.html:166
 #: bitpoll/poll/templates/poll/settings.html:109
-msgid "invitation required to vote"
-msgstr "invitation required to vote"
+msgid "Invitation required to vote"
+msgstr "Invitation required to vote"
 
 #: bitpoll/base/templates/base/index.html:170
 #: bitpoll/poll/templates/poll/settings.html:117
-msgid "allow unauthenticated vote changes"
-msgstr ""
+msgid "Allow unauthenticated vote changes"
+msgstr "Allow unauthenticated vote changes"
 
 #: bitpoll/base/templates/base/index.html:174
 #: bitpoll/poll/templates/poll/settings.html:121
-msgid "one vote per user"
-msgstr "one vote per user"
+msgid "One vote per user"
+msgstr "One vote per user"
 
 #: bitpoll/base/templates/base/index.html:178
 #: bitpoll/poll/templates/poll/settings.html:129
-msgid "forbid empty choices"
-msgstr "forbid empty choices"
+msgid "Forbid empty choices"
+msgstr "Forbid empty choices"
 
 #: bitpoll/base/templates/base/index.html:185
 msgid "More options"
@@ -1395,16 +1395,16 @@ msgid "Anonymous voting allowed"
 msgstr "Anonymous voting allowed"
 
 #: bitpoll/poll/templates/poll/poll_header.html:54
-msgid "anonymous voting"
-msgstr "anonymous voting"
+msgid "Anonymous voting"
+msgstr "Anonymous voting"
 
 #: bitpoll/poll/templates/poll/poll_header.html:57
 msgid "Invitation required"
 msgstr "Invitation required"
 
 #: bitpoll/poll/templates/poll/poll_header.html:58
-msgid "invitation required"
-msgstr "invitation required"
+msgid "Invitation required"
+msgstr "Invitation required"
 
 #: bitpoll/poll/templates/poll/poll_header.html:61
 msgid "Login required"
@@ -1457,24 +1457,24 @@ msgid "Save changes"
 msgstr "Save changes"
 
 #: bitpoll/poll/templates/poll/settings.html:94
-msgid "additional Settings"
-msgstr "additional Settings"
+msgid "Additional Settings"
+msgstr "Additional Settings"
 
 #: bitpoll/poll/templates/poll/settings.html:97
-msgid "allow comments"
-msgstr "allow comments"
+msgid "Allow comments"
+msgstr "Allow comments"
 
 #: bitpoll/poll/templates/poll/settings.html:113
-msgid "show in public poll list"
-msgstr "show in public poll list"
+msgid "Show in public poll list"
+msgstr "Show in public poll list"
 
 #: bitpoll/poll/templates/poll/settings.html:125
-msgid "show invitations as empty votes"
-msgstr "show invitations as empty votes"
+msgid "Show invitations as empty votes"
+msgstr "Show invitations as empty votes"
 
 #: bitpoll/poll/templates/poll/settings.html:133
-msgid "hide participants"
-msgstr ""
+msgid "Hide participants"
+msgstr "Hide participants"
 
 #: bitpoll/poll/templates/poll/settings.html:142
 msgid ""
@@ -1507,8 +1507,8 @@ msgstr ""
 "                "
 
 #: bitpoll/poll/templates/poll/settings.html:185
-msgid "Very advanced stuff"
-msgstr "Very advanced stuff"
+msgid "Advanced Options"
+msgstr "Advanced Options"
 
 #: bitpoll/poll/templates/poll/settings.html:186
 msgid "Edit possible answer values"
