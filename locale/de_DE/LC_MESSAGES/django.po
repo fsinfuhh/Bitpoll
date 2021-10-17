@@ -1464,14 +1464,6 @@ msgstr "Anonym abstimmen"
 msgid "Invitation required"
 msgstr "Einladung erforderlich"
 
-#: bitpoll/poll/templates/poll/poll_header.html:58
-msgid "Invitation required"
-msgstr "Einladung erforderlich"
-
-#: bitpoll/poll/templates/poll/poll_header.html:61
-msgid "Login required"
-msgstr "Login erforderlich"
-
 #: bitpoll/poll/templates/poll/poll_header.html:65
 #: bitpoll/poll/templates/poll/poll_header.html:66
 msgid "Empty choices forbidden"
