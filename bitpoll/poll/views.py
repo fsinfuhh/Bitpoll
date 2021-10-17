@@ -1053,7 +1053,7 @@ def copy(request, poll_url):
             current_poll.url = form.cleaned_data['url']
             current_poll.due_date = form.cleaned_data['due_date']
 
-            if date_shift:
+            if date_shift and current_poll.due_date:
                 current_poll.due_date += timedelta(days=date_shift)
 
             if reset_ownership:
