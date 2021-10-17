@@ -5,7 +5,6 @@ from django.core.validators import URLValidator
 from django.forms import ModelForm, CharField, PasswordInput, forms, MultiValueField, URLField, MultiWidget, URLInput, \
     TextInput
 from django.utils.translation import ugettext as _
-from urllib3.util import Url, parse_url
 
 from django_token_bucket.models import TokenBucket
 from .models import DavCalendar
@@ -88,7 +87,7 @@ class URLAuthField(MultiValueField):
                 parsed.query,
                 parsed.fragment
             ))
-        return parsed.url
+        return parsed.geturl()
 
 
 class DavCalendarForm(ModelForm):
