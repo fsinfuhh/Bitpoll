@@ -38,7 +38,7 @@
                             {% endif %}
                         </td>
                         <td width="10">
-                            {% if user in poll.group.user_set.all %}
+                            {% if poll.id in polls_group %}
                                 <span class="label label-warning form-control"><i class="fa fa-group"></i> {{ poll.group.name }}</span>
                             {% else %}
                               <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not own group' %}</span>
