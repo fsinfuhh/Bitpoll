@@ -104,8 +104,16 @@ def user_settings(request):
 
     user_form = BitpollUserSettingsForm(instance=request.user)
 
+    # List of polls the user has voted on
+    polls_voted = Vote.objects.filter(user=request.user, poll__in=polls).values_list('poll_id', flat=True)
+
+    # List of polls the user watches
+    polls_watched = PollWatch.objects.filter(user=request.user, poll__in=polls).values_list('poll_id', flat=True)
+
     return TemplateResponse(request, 'base/settings.html', {
         'polls': polls,
+        'polls_voted': polls_voted,
+        'polls_watched': polls_watched,
         'user': request.user,
         'user_form': user_form,
         'languages': USER_LANG,
