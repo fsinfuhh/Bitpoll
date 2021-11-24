@@ -87,7 +87,7 @@ def user_settings(request):
                                 | Q(vote__user=request.user)
                                 | Q(group__user=request.user)
                                 | Q(pollwatch__user=request.user)
-                                ).distinct().order_by('-due_date')
+                                ).distinct().order_by('-due_date').select_related('user')
 
     if request.method == 'POST':
         form = BitpollUserSettingsForm(request.POST, instance=request.user)

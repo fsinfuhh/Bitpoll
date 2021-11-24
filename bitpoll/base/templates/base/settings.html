@@ -44,20 +44,6 @@
                               <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not own group' %}</span>
                             {% endif %}
                         </td>
-                        <td width="10">
-                            {% if user|has_voted:poll %}  {# TODO korrigieren #}
-                              <span class="label label-success form-control"><i class="fa fa-check"></i> {% trans 'Voted' %} </span>
-                            {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not voted' %} </span>
-                            {% endif %}
-                        </td>
-                        <td width="10">
-                            {% if user|is_watching:poll %}  {# TODO korrigieren #}
-                              <span class="label label-info form-control"><i class="fa fa-eye"></i> {% trans 'Watching' %} </span>
-                            {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-eye-slash"></i> {% trans 'Not watching' %} </span>
-                            {% endif %}
-                        </td>
                     </tr>
                 {% endfor %}
             </table>
