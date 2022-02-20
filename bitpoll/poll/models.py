@@ -62,6 +62,7 @@ class Poll(models.Model):
     vote_all = models.BooleanField(default=False)
     sorting = models.IntegerField(default=0)
     hide_participants = models.BooleanField(default=False)
+    show_score_in_summary = models.BooleanField(default=False)
 
     class ResultSorting(enum.IntEnum):
         DATE = 0

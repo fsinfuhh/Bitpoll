@@ -69,8 +69,8 @@
                     {% endfor %}
                 </select>
                 <div class="checkbox">
-                    <input type="checkbox" id="public_listening" name="{{ form.use_user_timezone.name }}" {% if form.use_user_timezone.value %} checked {% endif %}>
-                    <label for="public_listening">{% trans 'Translate all times to the users timezone' %}</label>
+                    <input type="checkbox" id="use_user_timezone" name="{{ form.use_user_timezone.name }}" {% if form.use_user_timezone.value %} checked {% endif %}>
+                    <label for="use_user_timezone">{% trans 'Translate all times to the users timezone' %}</label>
                 </div>
             </div>
 
@@ -131,6 +131,10 @@
             <div class="checkbox">
                 <input type="checkbox" id="vote_hide_participants" name="{{ form.hide_participants.name }}" {% if form.hide_participants.value %} checked {% endif %}>
                 <label for="vote_hide_participants">{% trans 'Hide participants' %}</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="vote_show_score_in_summary" name="{{ form.show_score_in_summary.name }}" {% if form.show_score_in_summary.value %} checked {% endif %}>
+                <label for="vote_show_score_in_summary">{% trans 'Show score instead of percentage' %}</label>
             </div>
             <div class="">
                 Sort results by:
