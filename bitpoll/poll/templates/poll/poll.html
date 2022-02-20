@@ -149,12 +149,14 @@
                     {% if summary %}
                     <tr id="scores">
                         <th>
-                                <span class="print-only"><b>{% trans 'Percent' %}<br/></b></span>
+                            <span class="print-only"><b>{% trans 'Scores' %}<br/></b></span>
                         </th>
                         {#                            {% set scores, counts, totals, max_score = poll.get_stats() %}#}
                         {% for choice in stats %}
                             <th class="choice-sum {% if choice.score == max_score %}maximum{% endif %}"
-                                data-toggle="popover" data-trigger="hover" data-container="body"
+                                data-toggle="popover"
+                                data-trigger="hover"
+                                data-container="body"
                                 data-title="{{ choice.text.text|force_escape|force_escape }}"
                                 data-content="{% for choice_value in choice.choices %}
                                         <div class='value'>{{ choice_value.count|force_escape|force_escape }}
@@ -167,9 +169,14 @@
                                         <div class='score'>
                                         {% trans 'Score' %}: {{ choice.count|or_none }}</div>"
                                 data-placement="top"
-                                data-score="{{ choice.score|percentage }}">
+                                {% if poll.show_score_in_summary %}
+                                    data-score="{{ choice.count }}">
+                                    {{ choice.count }}
+                                {% else %}
+                                    data-score="{{ choice.score|percentage }}">
+                                    {{ choice.score|percentage }}
+                                    {% endif %}
                                 {# if vote.score != 0 else 1  TODO: das if soll glaube ich ob da übrhaupt was da ist #}
-                                {{ choice.score|percentage }}
                             </th>
                         {% endfor %}
                     </tr>

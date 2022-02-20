@@ -73,6 +73,7 @@ class PollSettingsForm(ModelForm):
             'hide_participants',
             'use_user_timezone',
             'sorting',
+            'show_score_in_summary',
         ]
 
 
