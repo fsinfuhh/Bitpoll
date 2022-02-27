@@ -1379,8 +1379,8 @@ msgid "Vote"
 msgstr "Abstimmen"
 
 #: bitpoll/poll/templates/poll/poll.html:153
-msgid "Percent"
-msgstr "Prozent"
+msgid "Scores"
+msgstr "Auswertungen"
 
 #: bitpoll/poll/templates/poll/poll.html:169
 #: bitpoll/poll/templates/poll/poll.html:179
@@ -1528,7 +1528,11 @@ msgstr "Zeige Einladungen als leere Stimmen an"
 msgid "Hide participants"
 msgstr "Teilnehmerliste verbergen"
 
-#: bitpoll/poll/templates/poll/settings.html:142
+#: bitpoll/poll/templates/poll/settings.html:137
+msgid "Show score instead of percentage"
+msgstr "Zeige Score statt Prozentsatz"
+
+#: bitpoll/poll/templates/poll/settings.html:146
 msgid ""
 "\n"
 "                These settings are not retroactive, meaning that changing "
@@ -2206,6 +2210,9 @@ msgstr "Account Erstellung auf %s"
 #: bitpoll/registration/views.py:191
 msgid "Registration: Sending mail failed: {}"
 msgstr "Registration: Das senden der E-Mail ist fehlgeschlagen: {}"
+
+#~ msgid "Percent"
+#~ msgstr "Prozent"
 
 #~ msgid ""
 #~ "Assigned after voting by %(vote.assigned_by.name|force_escape|"

@@ -1317,8 +1317,8 @@ msgid "Vote"
 msgstr "Vote"
 
 #: bitpoll/poll/templates/poll/poll.html:153
-msgid "Percent"
-msgstr "Percent"
+msgid "Scores"
+msgstr "Scores"
 
 #: bitpoll/poll/templates/poll/poll.html:169
 #: bitpoll/poll/templates/poll/poll.html:179
@@ -1468,7 +1468,11 @@ msgstr "Show invitations as empty votes"
 msgid "Hide participants"
 msgstr "Hide participants"
 
-#: bitpoll/poll/templates/poll/settings.html:142
+#: bitpoll/poll/templates/poll/settings.html:137
+msgid "Show score instead of percentage"
+msgstr "Show score instead of percentage"
+
+#: bitpoll/poll/templates/poll/settings.html:146
 msgid ""
 "\n"
 "                These settings are not retroactive, meaning that changing "
@@ -2069,6 +2073,9 @@ msgstr ""
 #: bitpoll/registration/views.py:191
 msgid "Registration: Sending mail failed: {}"
 msgstr ""
+
+#~ msgid "Percent"
+#~ msgstr "Percent"
 
 #~ msgid ""
 #~ "Assigned after voting by %(vote.assigned_by.name|force_escape|"
