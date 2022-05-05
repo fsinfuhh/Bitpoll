@@ -71,6 +71,7 @@ class Poll(models.Model):
     vote_all = models.BooleanField(default=False, verbose_name=_('forbid empty choices'))
     sorting = models.IntegerField(default=0, choices=POLL_RESULT_SORTING, verbose_name=_('Sort results by'))
     hide_participants = models.BooleanField(default=False, verbose_name=_('hide participants'))
+    show_score_in_summary = models.BooleanField(default=False, verbose_name=_('Show score instead of percentage'))
 
     def __str__(self):
         return u'Poll {}'.format(self.title)

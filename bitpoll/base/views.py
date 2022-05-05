@@ -57,8 +57,7 @@ def index(request):
             ChoiceValue(title="yes", icon="check", color="90db46", weight=1, poll=current_poll).save()
             ChoiceValue(title="no", icon="ban", color="c43131", weight=0, poll=current_poll).save()
             ChoiceValue(title="maybe", icon="question", color="ffe800", weight=0.5, poll=current_poll).save()
-            ChoiceValue(title="Only if absolutely necessary", icon="thumbs-down", color="B0E", weight=0.25,
-                        poll=current_poll).save()
+            ChoiceValue(title="rather not", icon="thumbs-down", color="B0E", weight=0.25, poll=current_poll).save()
 
             if current_poll.type == 'universal':  # TODO: heir könnte auch auf die algemeine edit url weitergeleitet werden
                 return redirect('poll_editUniversalChoice', current_poll.url)
@@ -90,7 +89,7 @@ def user_settings(request):
                                 | Q(vote__user=request.user)
                                 | Q(group__user=request.user)
                                 | Q(pollwatch__user=request.user)
-                                ).distinct().order_by('-due_date')
+                                ).distinct().order_by('-due_date').select_related('user', 'group')
 
     if request.method == 'POST':
         user_form = BitpollUserSettingsForm(request.POST, instance=request.user)
@@ -107,8 +106,20 @@ def user_settings(request):
     else:
         user_form = BitpollUserSettingsForm(instance=request.user)
 
+    # List of polls the user has voted on
+    polls_voted = Vote.objects.filter(user=request.user, poll__in=polls).values_list('poll_id', flat=True)
+
+    # List of polls the user watches
+    polls_watched = PollWatch.objects.filter(user=request.user, poll__in=polls).values_list('poll_id', flat=True)
+
+    # List of polls that come from the group
+    polls_group = Poll.objects.filter(group__user=request.user).values_list('id', flat=True)
+
     return TemplateResponse(request, 'base/settings.html', {
         'polls': polls,
+        'polls_voted': polls_voted,
+        'polls_watched': polls_watched,
+        'polls_group': polls_group,
         'user': request.user,
         'user_form': user_form,
         'languages': USER_LANG,

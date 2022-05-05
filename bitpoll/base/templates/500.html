@@ -12,7 +12,7 @@
 
 {% block content %}
     {% if use_sentry %}
-        <script nonce="{% csp_js_nonce %}">Sentry.init({ dsn: '{% sentry_public_dsn %}');</script>
+        <script nonce="{% csp_js_nonce %}">Sentry.init({ dsn: '{{ sentry_dsn }}');</script>
     {% endif %}
 {% url 'base_problems' as problems_url %}
     <div class="container"><section class="section">

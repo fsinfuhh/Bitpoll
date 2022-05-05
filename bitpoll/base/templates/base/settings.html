@@ -4,7 +4,7 @@
 {% load settings_value %}
 {% load i18n %}
 
-{% load poll_watched poll_voted %}
+{% load poll_watched %}
 
 {% block title %}{% trans 'Settings' %}{% endblock %}
 
@@ -41,7 +41,7 @@
                                 {% endif %}
                             </td>
                             <td width="10">
-                                {% if user in poll.group.user_set.all %}
+                                {% if poll.id in polls_group %}
                                     <span class="label label-warning form-control"><i
                                             class="fa fa-group"></i> {{ poll.group.name }}</span>
                                 {% else %}
@@ -50,7 +50,7 @@
                                 {% endif %}
                             </td>
                             <td width="10">
-                                {% if user|has_voted:poll %}  {# TODO korrigieren #}
+                                {% if poll.id in polls_voted %}
                                     <span class="label label-success form-control"><i
                                             class="fa fa-check"></i> {% trans 'Voted' %} </span>
                                 {% else %}
@@ -59,7 +59,7 @@
                                 {% endif %}
                             </td>
                             <td width="10">
-                                {% if user|is_watching:poll %}  {# TODO korrigieren #}
+                                {% if poll.id in polls_watched %}
                                     <span class="label label-info form-control"><i
                                             class="fa fa-eye"></i> {% trans 'Watching' %} </span>
                                 {% else %}
