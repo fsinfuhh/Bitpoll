@@ -76,13 +76,13 @@
                     </td>
                 </tr>
             </table>
-            <div class="">
+            <div class="vote-options">
                 {% render_form_field form.name %}
                 {% if poll.anonymous_allowed %}
                     {% render_form_checkbox form.anonymous True%}
                 {% endif %}
                 {% render_form_field form.comment %}
-                <button class="btn  btn-primary" type="submit" name="submit" value="Vote">
+                <button class="btn btn-primary" type="submit" name="submit" value="Vote">
                     <i class="fa fa-check"></i>
                     <span>{% trans 'Save vote' %}</span>
                 </button>

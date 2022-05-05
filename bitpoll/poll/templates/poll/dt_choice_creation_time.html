@@ -23,6 +23,15 @@
                     want to be able to choose. In the next step, you will match them against the selected days. {% endblocktrans %}
                     </div>
                 </div>
+                {#  render form errors manually for JS enabled view #}
+                {% if time.times.errors %}
+                    <div class="toast toast-warning script-only">
+                        <div class="container"><i class="fa fa-exclamation-circle"></i>
+                            {% blocktrans %}Please select at least one Time{% endblocktrans %}
+                    </div>
+                </div>
+                {% endif %}
+
                 <div class="time-input">
                     <div id="time-slider">
                         <div id="time-slider-knob"></div>

@@ -181,6 +181,10 @@ class CommentForm(ModelForm):
         super().__init__(*args, initial=initial, **kwargs)
         if user.is_authenticated:
             self.fields['name'].widget.attrs['readonly'] = True
+        else:
+            self.fields['name'].widget.attrs['placeholder'] = _("Display Name")
+        self.fields['text'].widget.attrs['placeholder'] = _("Comment Text")
+        self.fields['spam_answer'].widget.attrs['placeholder'] = _("Result of equation above")
 
     def set_spam_challenge(self, spam_dict):
         self.fields['spam_answer'].label = get_spam_label(spam_dict)

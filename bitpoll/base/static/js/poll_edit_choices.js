@@ -81,7 +81,12 @@ let calendar_data = null;
     }
     times.sort();
     dates.sort();
-    if (id_dates || id_times) get_elem("#date-time-form-content").style.display = "none";
+
+    if (id_dates || id_times) {
+        if (id_dates || id_times) get_elem("#date-time-form-content").style.display = "none";
+        //to disable browser behaviour as form is not visible
+        get_elems("#date-time-form-content input").forEach(function (el) {el.required = false;})
+    }
     updateDateTimeList();
 
 })();
@@ -256,7 +261,7 @@ function initCalendar(calendar) {
         return false;
     });
 
-    get_elem("#calendar-prev-month").addEventListener("click", function () {
+    get_elem("#calendar-prev-month").addEventListener("click", function (e) {
         calendarSetDate(calendar_data.subtract(1, "months"));
         e.preventDefault();
         return false;

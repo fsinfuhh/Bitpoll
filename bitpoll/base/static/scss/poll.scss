@@ -98,7 +98,11 @@ table td.vote-actions {
     padding: .6rem 2em;
     text-align: right;
     height: 100%;
-    width: 100%;
+    //width: 100%;
+}
+
+.vote-options {
+    width: 20em;
 }
 
 .poll .popover-container {
@@ -128,7 +132,11 @@ table td.vote-actions {
 }
 
 .checkbox-cell ~ .choice-text {
-    min-width: 6em;
+    min-width: 7em;
+}
+
+.btn-sm {
+    min-width: 1.4rem;
 }
 
 .poll .choice-sum.maximum {
