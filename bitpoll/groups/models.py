@@ -82,7 +82,7 @@ class GroupInvitation(models.Model):
 
 
 # also used in the URL so if you no longer allow something
-# existing groups are no longer accessabel
+# existing groups are no longer accessible
 group_name_regex = r'[a-zA-Z][a-zA-Z0-9\-\.]*'
 _group_name_re = re.compile("^{}$".format(group_name_regex))
 

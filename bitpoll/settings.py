@@ -344,6 +344,9 @@ CALENDAR_ENABLED = True
 CALENDAR_MAX_TOKENS = 2
 CALENDAR_FILL_RATE = 500
 
+# The root dir bitpoll appears to be in from the web, as configured in the webserver
+URL_PREFIX = ''
+
 ANTI_SPAM_CHALLENGE_TTL = 60 * 60 * 24 * 7  # Defaults to 7 days
 
 from .settings_local import *

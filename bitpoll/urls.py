@@ -18,6 +18,7 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.shortcuts import redirect, render
+from django.urls import path
 import django.conf.urls.i18n
 
 from bitpoll import settings
@@ -53,6 +54,14 @@ if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
 
+url_prefix = getattr(settings, 'URL_PREFIX', '')
+if url_prefix not in ('', '/', None):
+    if not url_prefix.endswith('/'):
+        url_prefix += '/'
+    urlpatterns = [
+        path(url_prefix, include(urlpatterns))
+    ]
+
 
 def handler500(request):
     """500 error handler which includes ``request`` in the context.
@@ -60,5 +69,21 @@ def handler500(request):
     Templates: `500.html`
     Context: None
     """
-    return render(request, '500.html', status=500)
+    use_sentry = False
+    sentry_dsn = None
+    event_id = None
+    try:
+        import sentry_sdk
+        if sentry_sdk.Hub.current.client:
+            use_sentry = True
+            sentry_dsn = sentry_sdk.Hub.current.client.dsn
+            event_id = sentry_sdk.last_event_id()
+    except ImportError:
+        pass
+
+    return render(request, '500.html', status=500, context={
+        'use_sentry': use_sentry,
+        'sentry_dsn': sentry_dsn,
+        'event_id': event_id,
+    })
 

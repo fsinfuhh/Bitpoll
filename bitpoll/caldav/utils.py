@@ -52,8 +52,8 @@ def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser, req
                             except (AttributeError, ValueError, TypeError) as e:
                                 # we ignore the event we can not parse, but send it to sentry
                                 try:
-                                    from raven.contrib.django.raven_compat.models import client
-                                    client.captureException()
+                                    from sentry_sdk import capture_exception
+                                    capture_exception(e)
                                 except Exception:
                                     # if the sending of the error does fail we ignore it
                                     pass

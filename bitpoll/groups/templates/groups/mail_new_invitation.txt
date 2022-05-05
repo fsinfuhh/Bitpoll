@@ -2,7 +2,7 @@
 
 {{ user }} invited you to join the group "{{ invitation.group.name }}". To accept this invitation and join the group, visit
 
-  https://{{ base_url }}{{ url }}
+  {{ base_url }}{{ url }}
 
 Greetings,
 

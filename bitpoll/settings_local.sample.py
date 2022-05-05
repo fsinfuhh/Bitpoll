@@ -6,7 +6,7 @@
 SECRET_KEY = '...'
 
 # generate via: ./manage.py generate_encryption_key
-FIELD_ENCRYPTION_KEY = "generate a new one"
+FIELD_ENCRYPTION_KEY = "this+is+an+example+key+please+generate+one+="
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -15,6 +15,8 @@ DEBUG = False
 #SESSION_COOKIE_SECURE = True
 #CSRF_COOKIE_SECURE = True
 
+# The root dir bitpoll appears to be in from the web, as configured in the webserver
+URL_PREFIX = ''
 
 #Add additionall installed apps here
 ## Example for installed raven (Sentry instrumentation)
