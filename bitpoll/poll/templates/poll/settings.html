@@ -55,10 +55,7 @@
                     {% render_form_field form.hide_participants switch=True %}
                     {% render_form_field form.sorting %}
 
-                    {% render_form_field form.user value=user_select %}
-
-                    {% render_form_field form.group replace_choices=groups %} {# empty_option='------' #}
-
+                    <h4>{% trans 'Owner of the Poll' %}</h4>
                     <div class="help-block">
                         {% blocktrans %}
                             Only the owner of a poll, or a member of the owner group, can edit the settings on this
@@ -67,6 +64,11 @@
                             settings above are useless if you do not claim ownership of this poll.
                         {% endblocktrans %}
                     </div>
+                    {% render_form_field form.user value=user_select %}
+
+                    {% render_form_field form.group replace_choices=groups empty_option='------' %}
+
+
                     <h3>{% trans 'Very advanced stuff' %}</h3><br>
                     <a href="{% url 'poll_editchoicevalues' poll.url %}">{% trans 'Edit possible answer values' %}</a><br>
                     <a href="{% url 'invitations' poll.url %}">{% trans 'Manage invitations' %}</a><br>
