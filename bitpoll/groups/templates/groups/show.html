@@ -117,12 +117,12 @@
                     {% endif %}
                     {% else %}
                     <td>
-                        {% ifequal user member %}
+                        {% if user == member %}
                         <form class="form-inline pull-right" method="post" action="{% url 'groups_leave' group.name %}">
                         {% csrf_token %}
                         <button class="btn btn-danger btn-xs">{% trans "Leave group" %}</button>
                         </form>
-                        {% endifequal %}
+                        {% endif %}
                         {% endif %}
                     </td>
                 </tr>
