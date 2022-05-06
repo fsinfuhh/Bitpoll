@@ -79,7 +79,7 @@ INSTALLED_APPS = [
     'django_markdown',
     'widget_tweaks',
     'pipeline',
-    'bitpoll.poll',
+    'bitpoll.poll.apps.BitpollConfig',
     'bitpoll.base',
     'bitpoll.invitations',
     'bitpoll.registration',
