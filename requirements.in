@@ -1,4 +1,4 @@
-django>=2.0.0,<2.3
+django<4.1
 django-widget-tweaks
 django-markdownify
 pytz
