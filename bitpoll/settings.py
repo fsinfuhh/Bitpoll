@@ -75,7 +75,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'django-simple-csp',
+    'django_simple_csp',
     'markdownify',
     'widget_tweaks',
     'pipeline',
@@ -109,7 +109,7 @@ STATICFILES_FINDERS = [
     'pipeline.finders.PipelineFinder',
 ]
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
 
 PIPELINE = {
     'STYLESHEETS': {
