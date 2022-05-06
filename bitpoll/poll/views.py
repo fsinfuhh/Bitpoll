@@ -15,7 +15,7 @@ from django.db.models import Sum, Count, Q
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.formats import date_format
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import activate as tz_activate, localtime, now, make_naive, make_aware
 from django.utils.timezone import get_current_timezone
 from django.views.decorators.http import require_POST

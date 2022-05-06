@@ -6,7 +6,7 @@ from django.conf import settings as django_settings
 from django.core import signing
 from django.core.exceptions import ValidationError
 from django.core.signing import BadSignature
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 def create_anti_spam_challenge(poll_id: int) -> Dict:

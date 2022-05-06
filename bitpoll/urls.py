@@ -15,7 +15,7 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.contrib.auth import views as auth_views
-from django.conf.urls import url, include
+from django.urls import include, path, re_path
 from django.contrib import admin
 from django.shortcuts import redirect, render
 from django.urls import path
@@ -24,34 +24,33 @@ import django.conf.urls.i18n
 from bitpoll import settings
 
 urlpatterns = [
-    url(r'^poll/', include('bitpoll.poll.urls')),
-    url(r'^', include('bitpoll.base.urls')),
-    url(r'^invitations/', include('bitpoll.invitations.urls')),
-    url(r'^$', lambda req: redirect('index'), name='home'),
-    url(r'^login/$', auth_views.LoginView.as_view(), name='login', ),
-    url(r'^logout/$', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
-    url(r'^markdown/', include('django_markdown.urls')),
-    url(r'^registration/', include('bitpoll.registration.urls')),
+    path('poll/', include('bitpoll.poll.urls')),
+    path('', include('bitpoll.base.urls')),
+    path('invitations/', include('bitpoll.invitations.urls')),
+    path('', lambda req: redirect('index'), name='home'),
+    path('login/', auth_views.LoginView.as_view(), name='login', ),
+    path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
+    path(r'registration/', include('bitpoll.registration.urls')),
 
-    url(r'^i18n/', include(django.conf.urls.i18n)),
-    url(r'^admin/', admin.site.urls),
+    path(r'i18n/', include(django.conf.urls.i18n)),
+    path(r'admin/', admin.site.urls),
 
 ]
 
 if settings.CALENDAR_ENABLED:
     urlpatterns += [
-        url(r'^caldav/', include('bitpoll.caldav.urls')),
+        path('caldav/', include('bitpoll.caldav.urls')),
     ]
 
 if settings.GROUP_MANAGEMENT:
     urlpatterns += [
-        url(r'^groups/', include('bitpoll.groups.urls')),
+        path('groups/', include('bitpoll.groups.urls')),
         ]
 
 if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
     urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
 
 url_prefix = getattr(settings, 'URL_PREFIX', '')
