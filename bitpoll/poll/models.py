@@ -265,7 +265,7 @@ class ChoiceValue(models.Model):
 
 
 class Comment(models.Model):
-    text = MarkdownField()
+    text = models.TextField()
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)

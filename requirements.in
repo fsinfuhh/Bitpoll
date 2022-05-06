@@ -1,6 +1,6 @@
 django>=2.0.0,<2.3
 django-widget-tweaks
-django-markdown-app
+django-markdownify
 pytz
 django-simple-csp
 libsasscompiler

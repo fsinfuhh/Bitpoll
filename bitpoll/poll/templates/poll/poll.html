@@ -3,7 +3,7 @@
 {% load poll_filter vote_permissions comment_permissions poll_permissions %}
 {% load tz %}
 {% block title %}{{ poll.title }}{% endblock %}
-{% load django_markdown django_markdown_static %}
+{% load markdownify %}
 
 {% block css %}
     {% include "poll/choice_style.html" %}
@@ -238,7 +238,7 @@
                     </div>
 
                 </div>
-                <div class="text"><p>{{ comment.text|markdown_safe }}</p></div> {# TODO:  #}
+                <div class="text"><p>{{ comment.text|markdownify }}</p></div> {# TODO:  #}
             </div>
             {% endfor %}
 
