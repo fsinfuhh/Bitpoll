@@ -1048,24 +1048,25 @@ def copy(request, poll_url):
             vote_users = current_poll.vote_set.all().values('user')
             invitation_users = invitations.values('user')
 
-            current_poll.pk = None
-            current_poll.title = form.cleaned_data['title']
-            current_poll.url = form.cleaned_data['url']
-            current_poll.due_date = form.cleaned_data['due_date']
+            new_poll = get_object_or_404(Poll, url=poll_url)
+            new_poll.pk = None
+            new_poll.title = form.cleaned_data['title']
+            new_poll.url = form.cleaned_data['url']
+            new_poll.due_date = form.cleaned_data['due_date']
 
             if date_shift and current_poll.due_date:
-                current_poll.due_date += timedelta(days=date_shift)
+                new_poll.due_date += timedelta(days=date_shift)
 
             if reset_ownership:
-                current_poll.user = None
-                current_poll.group = None
+                new_poll.user = None
+                new_poll.group = None
 
-            current_poll.save()
+            new_poll.save()
 
             if copy_invitations:
                 for invitation in invitations:
                     invitation.pk = None
-                    invitation.poll = current_poll
+                    invitation.poll = new_poll
                     invitation.date_created = now()
                     invitation.last_email = None
                     invitation.creator = request.user
@@ -1075,7 +1076,7 @@ def copy(request, poll_url):
             if create_invitations_from_votes:
                 for user in vote_users:
                     if user not in invitation_users:
-                        invitation = Invitation(poll=current_poll, user=user, date_created=now(),
+                        invitation = Invitation(poll=new_poll, user=user, date_created=now(),
                                                 creator=request.user)
                         invitation.save()
                         invitation.send(request)
@@ -1083,7 +1084,7 @@ def copy(request, poll_url):
             if copy_choices:
                 for choice in choices:
                     choice.pk = None
-                    choice.poll = current_poll
+                    choice.poll = new_poll
                     if date_shift and choice.date:
                         choice.date += timedelta(days=date_shift)
                     choice.save()
@@ -1091,10 +1092,10 @@ def copy(request, poll_url):
             if copy_answer_values:
                 for value in choice_values:
                     value.pk = None
-                    value.poll = current_poll
+                    value.poll = new_poll
                     value.save()
 
-            return redirect('poll', current_poll.url)
+            return redirect('poll', new_poll.url)
 
     else:
         form = PollCopyForm({
