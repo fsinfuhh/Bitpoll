@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.validators import URLValidator
 from django.forms import ModelForm, CharField, PasswordInput, forms, MultiValueField, URLField, MultiWidget, URLInput, \
     TextInput
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from django_token_bucket.models import TokenBucket
 from .models import DavCalendar

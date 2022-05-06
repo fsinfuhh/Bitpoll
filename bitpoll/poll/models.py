@@ -12,8 +12,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
-from django_markdown.models import MarkdownField
+from django.utils.translation import gettext_lazy as _
 
 from bitpoll.base.models import BitpollUser
 from bitpoll.base.validators import validate_timezone
