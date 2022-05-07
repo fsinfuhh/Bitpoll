@@ -5,7 +5,22 @@ Bitpoll is a software to conduct polls about Dates, Times or general Questions.
 
 This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <mafiasi.de>, rewritten using the Django framework as a backend.
 
-# Install
+# Using Docker
+
+~~~
+docker build --tag <imagename>
+cd <workdir>
+mkdir -p run/{log,static,config}
+cp <original_dir>/bitpoll/settings_local.py run/config/settings.py
+vim run/config/settings.py
+docker run -a stdout -a stderr --rm --name bitpoll -p 3008:3008 -p 3009:3009 --volume `pwd`/run/static:/opt/static --volume `pwd`/run/config:/opt/config --volume `pwd`/run/log/:/opt/log <image_name>
+~~~
+The Static assets from <workdir>/run/static have to be served from the Webserver at /static/.
+The Container listens for uwsgi traffic on Port 3008 and for HTTP traffic on Port 8009
+
+TODO: add example nginx Config
+
+# Manual Install
 
 Get the code:
 

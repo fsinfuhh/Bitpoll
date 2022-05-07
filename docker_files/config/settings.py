@@ -28,3 +28,4 @@ DATABASES = {
 }
 
 CSP_ADDITIONAL_SCRIPT_SRC = ['sentry.mafiasi.de']
+INSTALLED_APPS_LOCAL = []
