@@ -101,6 +101,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django-simple-csp.middleware.csp.CSPMiddleware',
+    'pipeline.middleware.MinifyHTMLMiddleware',
 ]
 
 STATICFILES_FINDERS = [

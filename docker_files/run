@@ -1,0 +1,5 @@
+#!/bin/sh -e
+export USER=www-data HOME=/opt/bitpoll
+python3 /opt/bitpoll/manage.py migrate
+cp -r /opt/bitpoll/_static /opt/static/
+exec uwsgi /etc/uwsgi/bitpoll.ini
