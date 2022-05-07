@@ -58,6 +58,8 @@ markdown==3.3.7
     # via django-markdownify
 packaging==21.3
     # via bleach
+psycopg2-binary==2.9.3
+    # via -r requirements-production.in
 pyasn1==0.4.8
     # via
     #   pyasn1-modules

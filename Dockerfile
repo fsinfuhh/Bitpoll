@@ -17,9 +17,9 @@ RUN pip install -U pip setuptools
 
 FROM base-builder as dependencies
 
-COPY requirements-production.txt .
+RUN apt-get update && apt-get -y --no-install-recommends install g++ wget python3-pip make gettext gcc python3-dev libldap2-dev gpg gpg-agent curl libsasl2-dev npm
 
-RUN apt update && apt-get -y --no-install-recommends install g++ wget python3-pip make gettext gcc python3-dev libldap2-dev gpg gpg-agent curl libsasl2-dev npm
+COPY requirements-production.txt .
 
 RUN pip install --no-warn-script-location --prefix=/install -U -r requirements-production.txt uwsgi
 
