@@ -51,7 +51,7 @@
     {% if groups %}
     <div class="list-group">  
       {% for group in groups %}      
-      <a class="list-group-item{% ifequal active_group_name group.name %} active{% endifequal %}" href="{% url 'groups_show' group.name %}">
+      <a class="list-group-item{% if active_group_name == group.name %} active{% endif %}" href="{% url 'groups_show' group.name %}">
         {{ group.name }}
       </a>
       {% endfor %}

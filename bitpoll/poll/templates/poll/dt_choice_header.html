@@ -1,21 +1,21 @@
 {% load i18n %}
 <div class="hide show-md show-xs">
     <ul class="steps">
-        <li class="{% ifequal step 1 %}current{% endifequal %}"><span>{% trans 'Step 1' %}</span>{% trans 'Days' %}
+        <li class="{% if step == 1 %}current{% endif %}"><span>{% trans 'Step 1' %}</span>{% trans 'Days' %}
         </li>
-        <li class="{% ifequal step 2 %}current{% endifequal %}"><span>{% trans 'Step 2' %}</span>{% trans 'Times' %}
+        <li class="{% if step == 2 %}current{% endif %}"><span>{% trans 'Step 2' %}</span>{% trans 'Times' %}
         </li>
-        <li class="{% ifequal step 3 %}current{% endifequal %}"><span>{% trans 'Step 3' %}</span>{% trans 'Combine' %}
+        <li class="{% if step == 3 %}current{% endif %}"><span>{% trans 'Step 3' %}</span>{% trans 'Combine' %}
         </li>
     </ul>
 </div>
 <div class="hide-md">
     <ul class="steps">
-        <li class="{% ifequal step 1 %}current{% endifequal %}"><span>{% trans 'Step 1' %}</span>{% trans 'Select days' %}
+        <li class="{% if step == 1 %}current{% endif %}"><span>{% trans 'Step 1' %}</span>{% trans 'Select days' %}
         </li>
-        <li class="{% ifequal step 2 %}current{% endifequal %}"><span>{% trans 'Step 2' %}</span>{% trans 'Select time slots' %}
+        <li class="{% if step == 2 %}current{% endif %}"><span>{% trans 'Step 2' %}</span>{% trans 'Select time slots' %}
         </li>
-        <li class="{% ifequal step 3 %}current{% endifequal %}"><span>{% trans 'Step 3' %}</span>{% trans 'Choose combinations' %}
+        <li class="{% if step == 3 %}current{% endif %}"><span>{% trans 'Step 3' %}</span>{% trans 'Choose combinations' %}
         </li>
     </ul>
 </div>

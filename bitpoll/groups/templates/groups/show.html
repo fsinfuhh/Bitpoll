@@ -106,7 +106,6 @@
                                                 {% csrf_token %}
                                                 <button class="btn btn-error btn-sm"
                                                         name="kick">{% trans "Remove" %}</button>
-
                                                 {% if member.is_groupadmin %}
                                                     <button class="btn btn-warning btn-sm"
                                                             name="revoke_admin">{% trans "Revoke admin" %}</button>
@@ -119,13 +118,13 @@
                                     {% endif %}
                                 {% else %}
                                     <td>
-                                    {% ifequal user member %}
+                                    {% if user == member %}
                                         <form class="form-inline pull-right" method="post"
                                               action="{% url 'groups_leave' group.name %}">
                                             {% csrf_token %}
                                             <button class="btn btn-error btn-sm">{% trans "Leave group" %}</button>
                                         </form>
-                                    {% endifequal %}
+                                    {% endif %}
                                 {% endif %}
                                 </td>
                             </tr>

@@ -12,8 +12,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
-from django_markdown.models import MarkdownField
+from django.utils.translation import gettext_lazy as _
 
 from bitpoll.base.models import BitpollUser
 from bitpoll.base.validators import validate_timezone
@@ -267,7 +266,7 @@ class ChoiceValue(models.Model):
 
 
 class Comment(models.Model):
-    text = MarkdownField(help_text=_('You can use <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a> syntax for formatting.'))
+    text = models.TextField(help_text=_('You can use <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a> syntax for formatting.'))
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)

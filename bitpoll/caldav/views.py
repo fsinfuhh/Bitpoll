@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 from django.views.decorators.http import require_POST
 from urllib3.util import parse_url
 
@@ -44,9 +44,9 @@ def change_calendar(request, calendar_id: int = None):
                 form.add_error(None, ugettext_lazy(
                     "Error getting Calendar {}: Authorization Required".format(caldav_obj.url)))
             except Exception as e:
-                form.add_error(None, ugettext_lazy("Error getting Calendar: {}".format(str(e))))
+                form.add_error(None, gettext_lazy("Error getting Calendar: {}".format(str(e))))
         else:
-            form.add_error(None, ugettext_lazy("This calendar is already configured"))
+            form.add_error(None, gettext_lazy("This calendar is already configured"))
     elif 'delete' in request.POST:
         obj = get_object_or_404(DavCalendar, id=request.POST['delete'], user=request.user)
         obj.delete()

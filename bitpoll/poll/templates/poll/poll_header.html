@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load django_markdown django_markdown_static %}
+{% load markdownify %}
 {% load poll_filter poll_permissions poll_watched%}
 {% load tz %}
 {% timezone poll|get_tz_name_no_date_utc:request.user %}
@@ -68,7 +68,7 @@
         </ul>
         {% if  poll.description %}
             <div class="description">
-                {{ poll.description|markdown_safe }}
+                {{ poll.description|markdownify }}
             </div>
         {% endif %}
         <nav>

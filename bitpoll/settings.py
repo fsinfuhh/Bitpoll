@@ -75,12 +75,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'django-simple-csp',
-    'django-spectre-css',
-    'django_markdown',
+    'django_spectre_css',
+    'django_simple_csp',
+    'markdownify',
     'widget_tweaks',
     'pipeline',
-    'bitpoll.poll',
+    'bitpoll.poll.apps.BitpollConfig',
     'bitpoll.base',
     'bitpoll.invitations',
     'bitpoll.registration',
@@ -110,7 +110,7 @@ STATICFILES_FINDERS = [
     'pipeline.finders.PipelineFinder',
 ]
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
 
 PIPELINE = {
     'STYLESHEETS': {
@@ -343,6 +343,49 @@ PUBLIC_POLLS = True
 CALENDAR_ENABLED = True
 CALENDAR_MAX_TOKENS = 2
 CALENDAR_FILL_RATE = 500
+
+#See https://django-markdownify.readthedocs.io/en/latest/settings.html
+MARKDOWNIFY = {
+    "default": {
+        "WHITELIST_TAGS": [
+            'a',
+            'abbr',
+            'acronym',
+            'b',
+            'blockquote',
+            'em',
+            'i',
+            'li',
+            'ol',
+            'p',
+            'strong',
+            'ul',
+            'h1',
+            'h2',
+            'h3',
+        ],
+        "WHITELIST_ATTRS": [
+            'href',
+        #    'src',
+        #    'alt',
+        ],
+        "WHITELIST_PROTOCOLS": [
+            'https',
+        ],
+        "WHITELIST_STYLES": [
+        #    'color',
+        #    'font-weight',
+        ],
+        "LINKIFY_TEXT": {
+            "PARSE_URLS": True,
+
+            # Next key/value-pairs only have effect if "PARSE_URLS" is True
+            "PARSE_EMAIL": False,
+            "CALLBACKS": [],
+            "SKIP_TAGS": [],
+        }
+    }
+}
 
 # The root dir bitpoll appears to be in from the web, as configured in the webserver
 URL_PREFIX = ''

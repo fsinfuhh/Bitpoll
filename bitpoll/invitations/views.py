@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from bitpoll.base.models import BitpollUser
 from bitpoll.invitations.models import Invitation
 from bitpoll.poll.models import Poll
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 def invite(request, poll_url):
