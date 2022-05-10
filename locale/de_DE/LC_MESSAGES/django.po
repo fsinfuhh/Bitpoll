@@ -2094,7 +2094,7 @@ msgid ""
 "We've emailed you instructions for setting your password to the email "
 "address you submitted. You should be receiving it shortly."
 msgstr ""
-"Wir haben dir Anweisungen zum setzen des Passwortes an deine angegebene E-"
+"Wir haben dir Anweisungen zum Setzen des Passwortes an deine angegebene E-"
 "Mail-Adresse geschickt. Du solltest die Mail bald erhalten."
 
 #: bitpoll/registration/templates/registration/password_reset_email.html:2
