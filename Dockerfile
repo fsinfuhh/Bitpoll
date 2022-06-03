@@ -25,8 +25,6 @@ RUN pip install --no-warn-script-location --prefix=/install -U -r requirements-p
 
 FROM dependencies as collect-static
 
-#TODO: replace with linked files or Path/LD/Python ENV variables
-RUN cp -r /install/* /usr/local
 
 RUN npm install cssmin uglify-js -g
 
@@ -35,7 +33,9 @@ COPY bitpoll bitpoll
 COPY locale locale
 COPY docker_files/config/settings.py bitpoll/settings_local.py
 
-RUN python3 /opt/bitpoll/manage.py collectstatic --noinput && \
+# Set Pythonpath tro the packages installed with pip bevore so they are aviable in this step
+RUN export PYTHONPATH=/install/lib/python$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1,2)/site-packages && \
+    python3 /opt/bitpoll/manage.py collectstatic --noinput && \
     python3 manage.py compilemessages &&\
     rm bitpoll/settings_local.py
 
