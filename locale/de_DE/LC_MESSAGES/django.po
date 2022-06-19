@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-07 15:18+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Nils Rokita <0rokita@informatik.uni-hamburg.de>\n"
+"Last-Translator: Timon Engelke <timon.engelke@uni-hamburg.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgid ""
 "If you think this is an error please contact us at <a href=\"%(problemurl)s"
 "\"> Problems</a>"
 msgstr ""
-"Wenn du denkst das dies ein Fehler ist kontaktiere uns bitte über unsere <a "
+"Wenn du denkst, dass dies ein Fehler ist, kontaktiere uns bitte über unsere <a "
 "href=\"%(problemurl)s\"> Probleme</a> Seite."
 
 #: bitpoll/base/templates/500.html:8
@@ -138,7 +138,7 @@ msgid ""
 "                    Paul's version is written in Flask, a Python web "
 "framework."
 msgstr ""
-"Bitpoll ist eine freie Software alternative zur Doodle Webseite. Der "
+"Bitpoll ist eine Freie-Software-Alternative zur Doodle-Webseite. Der "
 "Ursprung ist das \n"
 "                    <a href=\"https://github.com/kellerben/dudle\">Dudle</a> "
 "der TU-Dresden.\n"
@@ -159,13 +159,13 @@ msgid ""
 "                    most styles and javascript artifacts were imported from "
 "the Dudel project."
 msgstr ""
-"Nach einiger Zeit haben sich Probleme mit dieser Version gezeigt, vorallem "
-"mit ldap und sehr großen\n"
+"Nach einiger Zeit haben sich Probleme mit dieser Version gezeigt, vor allem "
+"mit LDAP und sehr großen\n"
 "                    Abstimmungen.\n"
 "                    Wir haben uns deswegen entschieden, das Projekt noch "
 "einmal in Python mit Django umzusetzen. Für den Anfang\n"
 "                    haben wir die meisten Styles und JavaScript Dateien aus "
-"dem alten Dudel Projekt genommen."
+"dem alten Dudel-Projekt genommen."
 
 #: bitpoll/base/templates/base/about.html:22
 msgid ""
@@ -178,7 +178,7 @@ msgid ""
 "                    The source code can be found on <a href=\"https://github."
 "com/fsinfuhh/BitPoll\">GitHub</a>. "
 msgstr ""
-"BitPoll wurde von Studenten am Fachbereich Informatik der Universität "
+"BitPoll wurde von Studierenden am Fachbereich Informatik der Universität "
 "Hamburg entwickelt.\n"
 "                    Haupt-Anwendungszweck ist, BitPoll als einen der "
 "Services auf <a href=\"https://mafiasi.de\">mafiasi.de</a>\n"
@@ -219,7 +219,7 @@ msgid ""
 "the University of Hamburg for their testing\n"
 "                    of BitPoll"
 msgstr ""
-"Wir möchten uns bei den Studenten des Fachbereichs Informatik für ihr "
+"Wir möchten uns bei den Studierenden des Fachbereichs Informatik für ihr "
 "ausführliches Testen von BitPoll bedanken"
 
 #: bitpoll/base/templates/base/about.html:45
@@ -229,7 +229,7 @@ msgid ""
 "                    <a href=\"https://github.com/fsinfuhh/BitPoll\">GitHub</"
 "a>."
 msgstr ""
-"Wenn du mithelfen möchtest, kann du dies bei <a href=\"https://github.com/"
+"Wenn du mithelfen möchtest, kannst du dies bei <a href=\"https://github.com/"
 "fsinfuhh/BitPoll\">GitHub</a> tun."
 
 #: bitpoll/base/templates/base/index.html:19
@@ -432,7 +432,7 @@ msgstr "Öffentliche Umfragen"
 
 #: bitpoll/base/templates/base/index.html:255
 msgid "There are currently no public polls."
-msgstr "Zur Zeit gibt es keine öffentlichen Umfragen."
+msgstr "Zurzeit gibt es keine öffentlichen Umfragen."
 
 #: bitpoll/base/templates/base/index.html:271 bitpoll/registration/tests.py:44
 msgid "My Polls"
@@ -465,7 +465,7 @@ msgid ""
 "email to <strong><a href=\"mailto:%(team_email)s\">%(team_email)s</a></"
 "strong> and describe your problem.</p>"
 msgstr ""
-"<p>Du hattest ein technisches Problem beim benutzen dieser Seite? Dann "
+"<p>Du hattest ein technisches Problem beim Benutzen dieser Seite? Dann "
 "schreibe uns eine E-Mail an <strong><a href=\"mailto:%(team_email)s\">"
 "%(team_email)s</a></strong> und beschreibe dein Problem.</p>"
 
@@ -684,7 +684,7 @@ msgid ""
 "      "
 msgstr ""
 "\n"
-"Akzeptiere eine Einladung oder erstelle eine neue Gruppe und lade andere ein "
+"Akzeptiere eine Einladung oder erstelle eine neue Gruppe und lade andere ein, "
 "um Features von %(project_name)s wie private Umfragen zu nutzen. "
 
 #: bitpoll/groups/templates/groups/invitations.html:18
@@ -733,7 +733,7 @@ msgstr "Abbrechen"
 
 #: bitpoll/groups/templates/groups/invite.html:38
 msgid "Please enter the account names of the users you want to invite"
-msgstr "Bitte gib die Accountnamen der Nutzer ein welche zu einladen möchtest"
+msgstr "Bitte gib die Accountnamen der Nutzer ein, welche zu einladen möchtest"
 
 #: bitpoll/groups/templates/groups/mail_new_invitation.txt:1
 #, python-format
@@ -752,7 +752,7 @@ msgstr ""
 "Hallo %(invitation.invitee.get_full_name)s,\n"
 "\n"
 "%(user)s hat dich zur Gruppe \"%(invitation.group.name)s\" eingeladen. Um "
-"die Einladung zu akzeptieren beuche\n"
+"die Einladung zu akzeptieren, beuche\n"
 "\n"
 "  https://%(base_url)s%(url)s\n"
 "\n"
@@ -926,7 +926,7 @@ msgid ""
 msgstr ""
 "Hallo %(receiver)s.\n"
 "\n"
-"Du bist eingeladen an einer von %(creator)s erstellten Umfrage teilzunehmen\n"
+"Du bist eingeladen, an einer von %(creator)s erstellten Umfrage teilzunehmen\n"
 "Du kannst hier abstimmen: %(base_url)s%(link)s\n"
 "\n"
 "Viele Grüße\n"
@@ -934,7 +934,7 @@ msgstr ""
 "Dein %(signature)s\n"
 "\n"
 "--\n"
-"Du bekommst diese Benachrichtigung weil du Einladungen per E-Mail in deinen "
+"Du bekommst diese Benachrichtigung, weil du Einladungen per E-Mail in deinen "
 "Einstellungen aktiviert hast.\n"
 "Du kannst diese Einstellung hier ändern: %(base_url)s%(settings_url)s.\n"
 
@@ -944,11 +944,11 @@ msgstr "Du darfst diese Umfrage nicht verändern"
 
 #: bitpoll/invitations/views.py:66
 msgid "The user {} was already invited"
-msgstr "Der User {} ist bereits eingeladen"
+msgstr "Der Nutzer {} ist bereits eingeladen"
 
 #: bitpoll/invitations/views.py:83
 msgid "The following User/Groups could not be found:  {}"
-msgstr "Der folgende User oder Gruppe konnte nicht gefunden werden: {}"
+msgstr "Der folgende Nutzer oder Gruppe konnte nicht gefunden werden: {}"
 
 #: bitpoll/poll/models.py:85
 msgid "It is only one vote allowed. You have already voted."
@@ -971,7 +971,7 @@ msgstr "Du kannst diese Umfrage nicht ändern."
 
 #: bitpoll/poll/models.py:252
 msgid "Give an HTML color without the #"
-msgstr "Bitte gib eine HTML Farbe ohne das # an"
+msgstr "Bitte gib eine HTML-Farbe ohne das # an"
 
 #: bitpoll/poll/models.py:327
 msgid "Anonymous"
@@ -1067,14 +1067,14 @@ msgstr "Nächste"
 msgid ""
 "Here you can edit which options the voters have for each choice you give "
 "them. By default,\n"
-"                <b>yes</b>, <b>no</b> and <b>maybe</b> are always enabled, "
+"                <b>yes</b>, <b>no</b>, <b>maybe</b> and <b>rather not</b> are always enabled, "
 "but you can disable or change any of these.\n"
 "                You should have at least one value in this list for the "
 "voting to make sense."
 msgstr ""
 "Hier kannst du die Antworten bearbeiten, die den Teilnehmern für jede "
 "Wahlmöglichkeit zur Verfügung stehen. Standardmäßig sind die Antworten "
-"<b>ja</b>, <b>nein</b> und <b>vielleicht</b> aktiviert, aber du kannst jede "
+"<b>ja</b>, <b>nein</b>, <b>vielleicht</b> und <b>lieber nicht</b> aktiviert, aber du kannst jede "
 "davon bearbeiten oder deaktivieren. Es sollte mindestens eine Antwort in der "
 "Liste geben, damit die Abstimmung sinnvoll ist."
 
@@ -1089,7 +1089,7 @@ msgid ""
 msgstr ""
 "Gewichtungen sind Faktoren, die bestimmen, wie die Gesamtwertung berechnet "
 "wird. Gewichtungen sind normalerweise Werte zwischen 0 und 1. Die "
-"Gesamtwertung wird angezeigt als Summe und Anteil, also kannst du auch "
+"Gesamtwertung wird als Summe und Anteil angezeigt, also kannst du auch "
 "andere Werte verwenden."
 
 #: bitpoll/poll/templates/poll/choicevalue.html:37
@@ -1304,14 +1304,14 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Besuche diese Seite um die Umfrage zu sehen: %(base_url)s%(link)s\n"
+"Besuche diese Seite, um die Umfrage zu sehen: %(base_url)s%(link)s\n"
 "\n"
-"viele Grüße\n"
+"Viele Grüße\n"
 "Dein %(signature)s\n"
 "\n"
 "--\n"
-"Du bekommst diese Benachrichtigung da du die Umfrage \"%(poll)s\" "
-"beobachtest. Besuche den folgenden Link um diese Benachrichtigungen zu "
+"Du bekommst diese Benachrichtigung, da du die Umfrage \"%(poll)s\" "
+"beobachtest. Besuche den folgenden Link, um diese Benachrichtigungen zu "
 "deaktivieren: %(base_url)s%(link)s\n"
 
 #: bitpoll/poll/templates/poll/noscript_date_time.html:3
@@ -1325,9 +1325,9 @@ msgid ""
 msgstr ""
 "Du hast <b>JavaScript</b> nicht aktiviert, von daher musst du selbstständig "
 "kommaseparierte Einträge im korrekten Format vornehmen. Es sind keine "
-"Leerzeichen erlaubt. Oder Du schaltest einfach JavaScript für diese Seite "
-"an. Dann erhältst Du eine sicher ziemlich tolle Oberfläche zur Eingabe von "
-"Daten und Zeiten ..."
+"Leerzeichen erlaubt. Oder du schaltest einfach JavaScript für diese Seite "
+"an. Dann erhältst du eine sicher ziemlich tolle Oberfläche zur Eingabe von "
+"Daten und Zeiten..."
 
 #: bitpoll/poll/templates/poll/noscript_date_time.html:7
 msgid ""
@@ -1612,7 +1612,7 @@ msgid ""
 "Deleted choices will stay in this list, so votes that have already been made "
 "are not lost."
 msgstr ""
-"Entfernte Antworten verbleiben in dieser Liste, so dass Stimmen, die bereits "
+"Entfernte Antworten verbleiben in dieser Liste, sodass Stimmen, die bereits "
 "abgegeben wurden, nicht verloren gehen."
 
 #: bitpoll/poll/templates/poll/universal_choice_creation.html:110
@@ -1761,7 +1761,7 @@ msgstr "Löschen nicht erlaubt. Du bist nicht angemeldet."
 #: bitpoll/poll/views.py:66
 msgid "You can see the results because you are the owner of the Poll"
 msgstr ""
-"Du kannst die Ergebnisse sehen weil du der Eigentümer dieser Umfrage bist"
+"Du kannst die Ergebnisse sehen, weil du der Eigentümer dieser Umfrage bist"
 
 #: bitpoll/poll/views.py:75
 msgid "No individual results are shown due to Poll settings"
@@ -1789,9 +1789,9 @@ msgid ""
 "that everyone is able to change every vote that has not been assigned to a "
 "user. If you want to prevent this, change the settings."
 msgstr ""
-"Zurzeit ist es unangemeldeten Nutzern erlaubt Stimmen zu verändern. Das "
-"bedeutet, dass jeder die Stimmen ändern kann die nicht einem Nutzer "
-"zugewiesen sind. Wenn du das nicht möchtest kannst du es in den "
+"Zurzeit ist es unangemeldeten Nutzern erlaubt, Stimmen zu verändern. Das "
+"bedeutet, dass jeder die Stimmen ändern kann, die nicht einem Nutzer "
+"zugewiesen sind. Wenn du das nicht möchtest, kannst du es in den "
 "Einstellungen ändern."
 
 #: bitpoll/poll/views.py:136
@@ -1836,12 +1836,12 @@ msgstr "Löschen nicht erlaubt. Du bist nicht {}."
 
 #: bitpoll/poll/views.py:320
 msgid "You are not allowed to watch this poll."
-msgstr "Du bist nicht berechtigt diese Umfrage zu beobachten."
+msgstr "Du bist nicht berechtigt, diese Umfrage zu beobachten."
 
 #: bitpoll/poll/views.py:387 bitpoll/poll/views.py:391
 #: bitpoll/poll/views.py:546 bitpoll/poll/views.py:550
 msgid "There was en error interpreting the provided dates and times"
-msgstr "Es ist ein Fehler beim interpretieren der Zeiten und Daten aufgetreten"
+msgstr "Es ist ein Fehler beim Interpretieren der Zeiten und Daten aufgetreten"
 
 #: bitpoll/poll/views.py:603 bitpoll/poll/views.py:631
 msgid "The title \"{}\" is to long. The maximum is 80 characters"
@@ -2008,7 +2008,7 @@ msgstr ""
 "  %(email)s\n"
 "mit dem %(project_name)s Nutzer %(username)s verbinden.\n"
 "\n"
-"Wenn dies korrekt ist besuche den folgenden Link:\n"
+"Wenn dies korrekt ist, besuche den folgenden Link:\n"
 "  %(link)s\n"
 "Der Link ist für 24 Stunden gültig.\n"
 "\n"
@@ -2022,7 +2022,7 @@ msgid ""
 "Your account doesn't have access to this page. To proceed, please login with "
 "an account that has access."
 msgstr ""
-"Du hast keinen zugriff auf diese Seite. Um fortzufahren melde dich bitte mit "
+"Du hast keinen Zugriff auf diese Seite. Um fortzufahren melde dich bitte mit "
 "einem Nutzer an, welcher die benötigten Rechte hat."
 
 #: bitpoll/registration/templates/registration/login.html:22
@@ -2082,7 +2082,7 @@ msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
 msgstr ""
-"Der Link zum Passwort zurücksetzen ist ungültig. Wahrscheinlich wurde er "
+"Der Link zum Zurücksetzen des Passworts ist ungültig. Wahrscheinlich wurde er "
 "bereits verwendet. Bitte fordere einen neuen Link an."
 
 #: bitpoll/registration/templates/registration/password_reset_done.html:4
@@ -2094,7 +2094,7 @@ msgid ""
 "We've emailed you instructions for setting your password to the email "
 "address you submitted. You should be receiving it shortly."
 msgstr ""
-"Wir haben dir Anweisungen zum setzen des Passwortes an deine angegebene E-"
+"Wir haben dir Anweisungen zum Setzen des Passwortes an deine angegebene E-"
 "Mail-Adresse geschickt. Du solltest die Mail bald erhalten."
 
 #: bitpoll/registration/templates/registration/password_reset_email.html:2
@@ -2116,7 +2116,7 @@ msgstr "Dein Nutzernahme, falls du ihn vergessen hast:"
 
 #: bitpoll/registration/templates/registration/password_reset_email.html:10
 msgid "Thanks for using our site!"
-msgstr "Danke dass du unsere Seite benutzt!"
+msgstr "Danke, dass du unsere Seite benutzt!"
 
 #: bitpoll/registration/templates/registration/password_reset_form.html:12
 msgid ""
@@ -2124,7 +2124,7 @@ msgid ""
 "instructions for setting a new one."
 msgstr ""
 "Passwort vergessen? Gib unten deine E-Mail-Adresse ein und wir senden dir "
-"Anweisungen um ein neues Passwort zu setzen."
+"Anweisungen, um ein neues Passwort zu setzen."
 
 #: bitpoll/registration/templates/registration/password_reset_form.html:19
 msgid "Email address:"
@@ -2205,11 +2205,11 @@ msgstr "Verifiziere die Adresse für %s"
 #: bitpoll/registration/views.py:177
 #, python-format
 msgid "Account creation at %s"
-msgstr "Account Erstellung auf %s"
+msgstr "Accounterstellung auf %s"
 
 #: bitpoll/registration/views.py:191
 msgid "Registration: Sending mail failed: {}"
-msgstr "Registration: Das senden der E-Mail ist fehlgeschlagen: {}"
+msgstr "Registration: Das Senden der E-Mail ist fehlgeschlagen: {}"
 
 #~ msgid "Percent"
 #~ msgstr "Prozent"
