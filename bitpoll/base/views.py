@@ -159,6 +159,10 @@ def problems(request):
     })
 
 
+def privacy(request):
+    return TemplateResponse(request, 'base/privacy.html')
+
+
 @login_required
 def autocomplete(request):
     term = request.GET.get('term', '')
