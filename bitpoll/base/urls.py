@@ -11,4 +11,5 @@ urlpatterns = [
     path('technical_info/', views.tecnical, name='technical'),
     path('autocomplete', views.autocomplete, name='base_autocomplete'),
     path('problems', views.problems, name='base_problems'),
+    path('privacy/', views.privacy, name='privacy'),
 ]
