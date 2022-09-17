@@ -13,6 +13,10 @@ This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel
  * Poll can be created for full day event or just a few hours. Custom classes can also be defined
  * URL can be set manually or randomly choosen
 
+# DEMO
+
+https://bitpoll.de 
+
 # GUI
 
 Poll creation pannel
