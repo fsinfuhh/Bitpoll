@@ -4,8 +4,26 @@ Bitpoll is a software to conduct polls about Dates, Times or general Questions.
 
 
 This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <mafiasi.de>, rewritten using the Django framework as a backend.
+Poll creation pannel
+![image](https://user-images.githubusercontent.com/15912256/190876284-ac6dd2e0-04c6-4d44-a53d-7dd72263a109.png)
+![image](https://user-images.githubusercontent.com/15912256/190876419-d129d3c2-cda0-4da6-8b7a-7a30bf5d83e9.png)
+![image](https://user-images.githubusercontent.com/15912256/190876455-55d8dc36-a117-4c41-b4ce-5184f5db8bc5.png)
+What the user see when choosing a combination
+![image](https://user-images.githubusercontent.com/15912256/190876484-a5b3cb2c-db77-4c5f-b1f2-43b5106c4691.png)
+and here are the result being displayed 
+![image](https://user-images.githubusercontent.com/15912256/190876528-178ace35-a3b8-4a55-8bf6-5c5afe0662c9.png)
 
-# Using Docker
+# Features
+ * set if anonymous votes are casted or if the user must provide it's name
+ * set if registration is required for voting
+ * allow the creation of private event only accessible to thoses invited
+ * Poll can be created for full day event or just a few hours. Custom classes can also be defined
+ * URL can be set manually or randomly choosen
+
+# Installation
+you can deploy this tool on your server either by manually clonning the repo and setting it up or you can run a docker image.
+
+## Using Docker
 
 ~~~
 docker build --tag <imagename>
@@ -20,7 +38,7 @@ The Container listens for uwsgi traffic on Port 3008 and for HTTP traffic on Por
 
 TODO: add example nginx Config
 
-# Manual Install
+## Manual Install
 
 Get the code:
 
@@ -50,7 +68,7 @@ Run Testserver:
 ./manage.py runserver
 ```
 
-# Production
+## Production
 
 In production Senty is used for error reporting.
 django-auth-ldap is used vor login via ldap
@@ -80,7 +98,7 @@ For Production systems it is nessesarry to run
 ./manage.py collectstatic
 ```
 
-# Management of Dependencies
+## Management of Dependencies
 
 We use pip-tools to manage the dependencies.
 After modification or the requirements*.in files or for updates of packages run
