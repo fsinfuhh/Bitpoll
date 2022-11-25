@@ -1,6 +1,6 @@
-{% load i18n %}{% load settings_value %}{% load userformat %}{% value_from_settings BASE_URL as base_url%}{% value_from_settings MAIL_SIGNATURE as signature %}{% format_user invitation.invited_by 'email' as user%}{% url 'groups_index' as url %}{% autoescape off %}{% blocktrans %}Hi {{ invitation.invitee.get_full_name }},
+{% load i18n %}{% load settings_value %}{% load userformat %}{% value_from_settings BASE_URL as base_url%}{% value_from_settings MAIL_SIGNATURE as signature %}{% format_user invitation.invited_by 'email' as user%}{% url 'groups_index' as url %}{% autoescape off %}{% blocktrans with full_name=invitation.invitee.get_full_name group_name=invitation.group.name %}Hi {{ full_name }},
 
-{{ user }} invited you to join the group "{{ invitation.group.name }}". To accept this invitation and join the group, visit
+{{ user }} invited you to join the group "{{ group_name }}". To accept this invitation and join the group, visit
 
   {{ base_url }}{{ url }}
 
