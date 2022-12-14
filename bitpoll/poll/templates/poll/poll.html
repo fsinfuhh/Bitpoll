@@ -16,13 +16,13 @@
         <div class="table-noscroll-y">
             <div class="table-scroll-x">
             {% if not matrix %}
-                <p class="alert alert-warning">
+                <p class="toast toast-warning">
                 {% blocktrans %}
                 This Poll does not contain any Choices, you can create some at the Choices tab
                 {% endblocktrans %}
                 </p>
             {% endif %}
-                <table class="table poll auto-width" id="poll">
+                <table class="table poll auto-width sticky-table" id="poll">
                     <thead>
                     {% for row in matrix %}
                         <tr>
@@ -45,95 +45,88 @@
                             {% if poll.hide_participants and not poll|poll_is_owner:request.user and user != vote.user %}
                             <td class="author author-hidden">{% trans "Hidden User" %}</td>
                             {% else %}
-                            <td class="author"
-                                data-toggle="popover"
-                                data-trigger="hover"
-                                data-container="body"
-                                data-title="{{ vote.display_name|force_escape|force_escape }}"
-                                data-content="
-                                    {{ vote.date_created }}
-                                    {% if vote.comment %}
-                                        <div class='comment'>{{ vote.comment|force_escape|force_escape }}</div>
+                                <td class="author popover popover-right">
+                                    {% if vote.comment or vote.assigned_by %}
+                                        <div class="pull-left vote-extra-icons">
+                                            {% if vote.comment %}
+                                                <i class="fa fa-comment-o"></i>
+                                            {% endif %}
+                                            {% if vote.assigned_by %}
+                                                <i class="fa fa-tag"></i>
+                                            {% endif %}
+                                        </div>
                                     {% endif %}
-                                    {% if vote.assigned_by %}
-                                    <div class='assigned'>
-                                        {% trans 'Assigned after voting by' %} {{ vote.assigned_by.get_displayname|force_escape|force_escape }}</div>
-                                    {% endif %}">
-                                {% if vote.comment or vote.assigned_by %}
-                                    <div class="pull-left vote-extra-icons">
-                                        {% if vote.comment %}
-                                            <i class="fa fa-comment-o"></i>
-                                        {% endif %}
-                                        {% if vote.assigned_by %}
-                                            <i class="fa fa-tag"></i>
-                                        {% endif %}
+                                    <span>{{ vote.display_name }}</span>
+                                    <div class="popover-container">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">{{ vote.display_name }}</h3>
+                                                <div class="card-subtitle">
+                                                    {% trans 'Voted on:' %} {{ vote.date_created|date }}
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                {% if vote.comment %}
+                                                    <div class="comment"><b>{% trans 'Comment:' %} </b>{{ vote.comment }}</div>
+                                                {% endif %}
+                                                {% if vote.assigned_by %}
+                                                    <div class="assigned">
+                                                        {% trans 'Assigned after voting by' %} {{ vote.assigned_by.get_displayname }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                     </div>
-                                {% endif %}
-                                {{ vote.display_name }}
-                            </td>
+                                </td>
                             {% endif %}
                             {% for vote_choice in vote_choices %}
-                                <td class="vote-choice text-center {% if vote_choice.comment %}comment{% endif %}
-                                    {% if not vote_choice.value %}none{% endif %}
-                                    {% if vote_choice.value.deleted %}choice-deleted{% else %}
-                                        {% endif %}"
-                                    data-toggle="popover"
-                                    data-trigger="hover"
-                                    data-container="body"
-                                    data-title="{{ vote_choice.choice.get_title|force_escape|force_escape }}"
-                                    data-content="{% if poll.hide_participants and not poll|poll_is_owner:request.user and user != vote.user %}
-                                            {% trans 'Hidden User' %}{% else %}{{ vote.display_name|force_escape|force_escape }}{% endif %}
-                                            {% if vote_choice.comment %}<div class='comment'>{{ vote_choice.comment|force_escape|force_escape }}</div>{% endif %}"
-                                    data-placement="bottom" data-choice-value="{{ vote_choice.value_id }}">
-                                    <span class="bg-{{ vote_choice.value.color }} fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}"></span>
+                                <td class="vote-choice popover {% if vote_choice.comment %}comment{% endif %}
+                                    {% if not vote_choice.value %}none{% endif %}">
+                                    <span class="bg-{{ vote_choice.value.color }}
+                                        fa fa-{% if vote_choice.value %}{{ vote_choice.value.icon }}{% else %}question{% endif %}
+                                        {% if vote_choice.value.deleted %}choice-deleted{% endif %}"></span>
+                                    <div class="popover-container">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">{{ vote_choice.choice.get_title }}</h3>
+                                                <div class="card-subtitle">{% trans 'User:' %}
+                                                    {% if poll.hide_participants and not poll|poll_is_owner:request.user and user != vote.user %}
+                                                        {% trans 'Hidden User' %}{% else %}{{ vote.display_name }}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            {% if vote_choice.comment %}
+                                                <div class='card-body comment'>
+                                                    <b>{% trans 'Comment:' %} </b>{{ vote_choice.comment }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </td>
                             {% endfor %}
                             <td class="noprint vote-actions">
                                 {% if vote|vote_can_edit:request.user %}
                                     <a href="{% url 'poll_voteEdit' poll.url vote.id %}"
-                                       class="btn btn-xs btn-default" title="{{ _('Edit vote') }}"><i
+                                       class="btn btn-sm" title="{{ _('Edit vote') }}"><i
                                             class="fa fa-pencil"></i></a>
                                 {% endif %}
                                 {% if vote|vote_can_delete:request.user %}
                                     <a href="{% url 'poll_voteDelete' poll.url vote.id %}"
-                                       class="btn btn-xs btn-default" title="{{ _('Delete vote') }}"><i
+                                       class="btn btn-sm" title="{{ _('Delete vote') }}"><i
                                             class="fa fa-trash-o"></i></a>
                                 {% endif %}
                                 {% if not request.user.is_anonymous and vote.user == None and vote|vote_can_edit:request.user %}
                                     <a href="{% url 'poll_voteAssign' poll.url vote.id %}"
-                                       class="btn btn-xs btn-default" title="{{ _('Assign user') }}">
+                                       class="btn btn-sm" title="{{ _('Assign user') }}">
                                         <i class="fa fa-user"></i></a>
                                 {% endif %}
-                                {% comment %}
-                                    {% if not vote.anonymous and not vote.user and poll.user_can_administrate(current_user) %}
-                                        <a href="{{ url_for('poll_vote_assign', slug=poll.slug, vote_id=vote.id) }}"
-                                           class="btn btn-xs btn-default" title="{{ _('Assign a user') }}"><i
-                                                class="fa fa-user"></i></a>
-                                    {% endif %}
-                                    </td>
-                                {% endcomment %}
+                            </td>
                         </tr>
                     {% endfor %}
                     {% for invited in invitations %}
                         <tr class="vote {% if invited.user == request.user %} mine{% endif %}">
-                            <td class="author"
-                                data-toggle="popover"
-                                data-trigger="hover"
-                                data-container="body"
-                                data-title="{{ invited.user.get_displayname|force_escape|force_escape }}"
-                                data-content="">
-                                {{ invited.user.get_displayname }}
-                            </td>
+                            <td class="author">{{ invited.user.get_displayname }}</td>
                             {% for row in matrix.0 %}
-                                <td class="vote-choice text-center none"
-                                    data-toggle="popover"
-                                    data-trigger="hover"
-                                    data-container="body"
-                                    data-title=""
-                                    data-content="{{ invited.user.get_displayname|force_escape|force_escape }}"
-                                    data-placement="bottom" data-choice-value="">
-                                    <span class="fa fa-question"></span>
-                                </td>
+                                <td class="vote-choice none"><span class="fa fa-question"></span></td>
                             {% endfor %}
                             <td class="noprint vote-actions">
                                 {% if invited.user == request.user %}
@@ -147,39 +140,40 @@
                     </tbody>
                     <tfoot>
                     {% if summary %}
-                    <tr id="scores">
-                        <th>
-                            <span class="print-only"><b>{% trans 'Scores' %}<br/></b></span>
-                        </th>
-                        {#                            {% set scores, counts, totals, max_score = poll.get_stats() %}#}
-                        {% for choice in stats %}
-                            <th class="choice-sum {% if choice.score == max_score %}maximum{% endif %}"
-                                data-toggle="popover"
-                                data-trigger="hover"
-                                data-container="body"
-                                data-title="{{ choice.text.text|force_escape|force_escape }}"
-                                data-content="{% for choice_value in choice.choices %}
-                                        <div class='value'>{{ choice_value.count|force_escape|force_escape }}
-                                            <i class='fa fa-times'></i>
-                                            <span class='label choice-sum-value-label {% if choice_value.deleted %}choice-deleted{% else %}
-                                        bg-{{ choice_value.color }}{% endif %}'>
+                        <tr id="scores">
+                            <th>
+                                <span class="print-only"><b>{% trans 'Scores' %}</b></span>
+                            </th>
+                            {% for choice in stats %}
+                                <th class="choice-sum popover {% if choice.score == max_score %}maximum{% endif %}">
+                                    <div class="popover-container">
+                                        <div class="card">
+                                            <div class="card-header"><h3 class="card-title">{{ choice.text }}</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                {% for choice_value in choice.choices %}
+                                                    <div class='value'>{{ choice_value.count }}
+                                                        <i class='fa fa-times'></i>
+                                                        <span class='label choice-sum-value-label
+                                                            {% if choice_value.deleted %}choice-deleted{% else %}
+                                                                bg-{{ choice_value.color }}{% endif %}'>
                                                 <span class='fa fa-{{ choice_value.icon }}'></span>
-                                            </span>{{ choice_value.title|force_escape|force_escape }}
-                                        </div>{% endfor %}
-                                        <div class='score'>
-                                        {% trans 'Score' %}: {{ choice.count|or_none }}</div>"
-                                data-placement="top"
-                                {% if poll.show_score_in_summary %}
-                                    data-score="{{ choice.count }}">
+                                            </span>{{ choice_value.title }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            <div class='card-footer score'>
+                                                {% trans 'Score' %}: {{ choice.count|or_none }}</div>
+                                        </div>
+                                    </div>
+                                    <span>{% if poll.show_score_in_summary %}
                                     {{ choice.count }}
                                 {% else %}
-                                    data-score="{{ choice.score|percentage }}">
                                     {{ choice.score|percentage }}
-                                    {% endif %}
-                                {# if vote.score != 0 else 1  TODO: das if soll glaube ich ob da übrhaupt was da ist #}
-                            </th>
-                        {% endfor %}
-                    </tr>
+                                    {% endif %}</span>
+                                </th>
+                            {% endfor %}
+                        </tr>
                     <tr class="print-only">
                         <th>
                             {% trans 'Score' %}

@@ -1,71 +1,88 @@
-// language=JQuery-CSS
 (function () {
-    var setChoiceByCell, showComment;
+    if (get_elem(".vote-choice-column")) {
+        let setChoiceByCell, showComment;
 
-    showComment = function () {
-        $(this).hide().closest("td").find("input").css("width", 0).show().animate({
-            width: "100%"
-        }, 400, "linear").focus();
-        return false;
-    };
+        showComment = function (el) {
+            const td = el.closest("td");
+            show_elem(td.getElementsByTagName('input')[0]);
+            hide_elem(td.getElementsByTagName('button')[0]);
+            return false;
+        };
 
-    setChoiceByCell = function (cell) {
-        return cell.control.checked = true;
-    };
+        setChoiceByCell = function (cell) {
+            return cell.control.checked = true;
+        };
 
-    $(function () {
-        var $table, draggingMouse, draggingStartCell, max, min, ref, ref1, ref2, step;
+        let draggingMouse, draggingStartCell;
 
-        $(".vote-choice-form").hide();
+        hide_elems_selector(".vote-choice-form");
+
         // Buttons: "Show comment field"
-        $(".vote-choice-edit").click(showComment);
-        // Button: "Show all comment fields"
-        $(".vote-choice-edit-all").click(function () {
-            return $(".vote-choice-edit").each(function (i) {
-                return setTimeout((function (_this) {
-                    return function () {
-                        return showComment.call($(_this));
-                    };
-                })(this), i * 50);
+        get_elems(".vote-choice-edit").forEach(function (elem) {
+            elem.addEventListener("click", function (e) {
+                e.preventDefault();
+                return showComment(e.target)
             });
         });
-        // Hide comment fields, but show those that do have input
-        $(".vote-comment .vote-choice-comment").hide();
-        $(".vote-comment input[value!=\"\"]").each(function () {
-            showComment.call($(this).closest(".vote-comment").find(".vote-choice-edit"));
-            return showComment.call($(this).closest(".vote-comment").find(".vote-choice-comment"));
+
+        // Button: "Show all comment fields"
+        get_elem(".vote-choice-edit-all").addEventListener("click", function (e) {
+            return get_elems(".vote-choice-edit").forEach(function (el) {
+                return showComment(el);
+            });
         });
+
+
+        // Hide comment fields, but show those that do have input
+        get_elems(".vote-comment").forEach(function (elem) {
+            const input = elem.getElementsByTagName('input')[0];
+            const button = elem.getElementsByTagName('button')[0];
+            if (input.value === "") {
+                hide_elem(input);
+                show_elem(button)
+            }
+        });
+
 
         // Button: "all" (selecting the whole column)
-        $(".vote-choice-column").click(function () {
-            var choice;
-            choice = $(this).data("choice");
-            return $('.vote-choice input[value="' + choice + '"] ~ label').each(function () {
-                return setChoiceByCell(this);
+        get_elems(".vote-choice-column").forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                const choice = e.target.getAttribute("data-choice");
+                return get_elems('.vote-choice input[value="' + choice + '"] ~ label').forEach(function (elem) {
+                    return setChoiceByCell(elem);
+                });
             });
         });
-
         // Fast selecting of voting cells
         draggingMouse = false;
         draggingStartCell = null;
-        $("td.vote-choice label").mousedown(function () {
-            draggingMouse = true;
-            draggingStartCell = this;
-            $('table.vote').disableSelect();
-            return $('body').on('mouseup', function () {
-                draggingMouse = false;
-                return $('table.vote').enableSelect();
+        get_elems("td.vote-choice label").forEach(function (el) {
+            el.addEventListener('mousedown', function () {
+                draggingMouse = true;
+                draggingStartCell = el;
+                addClass(get_elem('table.vote'), 'user-select-none');
+                return false;
+            });
+            el.addEventListener('mouseenter', function (e) {
+                if (draggingMouse) {
+                    if (draggingStartCell) {
+                        setChoiceByCell(draggingStartCell);
+                        draggingStartCell = null;
+                    }
+                    return setChoiceByCell(e.target);
+                }
             });
         });
-        $("td.vote-choice label").mouseenter(function () {
+        get_elem('body').addEventListener('mouseup', function (el) {
             if (draggingMouse) {
-                if (draggingStartCell) {
-                    setChoiceByCell(draggingStartCell);
-                    draggingStartCell = null;
-                }
-                return setChoiceByCell(this);
+                draggingMouse = false;
+                removeClass(get_elem('table.vote'), 'user-select-none');
+                return false;
             }
         });
+
+        /* code for numeric polls
+        let $table, max, min, ref, ref1, ref2, step;
         $table = $("table.vote");
         min = ((ref = $table.attr("data-minimum")) != null ? ref.toNumber() : void 0) || 0;
         max = ((ref1 = $table.attr("data-maximum")) != null ? ref1.toNumber() : void 0) || 100;
@@ -91,7 +108,6 @@
                 console.log(val);
                 return $(this).val(val);
             });
-        });
-    });
-
+        });*/
+    }
 }).call();

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load widget_tweaks %}
+{% load spectre_css %}
 {% load settings_value %}
 {% load i18n %}
 {% load poll_filter vote_permissions poll_permissions %}
@@ -9,9 +9,9 @@
 
 {% block content %}
     {% include 'poll/poll_header.html' %}
-    <div class="container">
     <h3>{% trans 'Invitations' %}</h3>
-        <div class="col-md-6">
+    <div class="columns">
+        <div class="column col-6 col-md-12">
             <form method="post" action="{% url 'invitations' poll.url %}">
                 {% csrf_token %}
                 <table class="table table-condensed table-striped">
@@ -31,27 +31,25 @@
                                 {{ invitation.date_created }}
                             </td>
                             <td>
-                                <button class="action default" type="submit" name="resend" value="{{ invitation.id }}"><i class="fa fa-refresh"></i></button>
-                                <button class="action default" type="submit" name="delete" value="{{ invitation.id }}"><i class="fa fa-trash-o"></i></button>
+                                <button class="btn" type="submit" name="resend" value="{{ invitation.id }}"><i class="fa fa-refresh"></i></button>
+                                <button class="btn" type="submit" name="delete" value="{{ invitation.id }}"><i class="fa fa-trash-o"></i></button>
                             </td>
                         </tr>
                     {% endfor %}
                 </table>
                 {% if False %}  {# TODO #}
-                    <input class="action secondary" value="{% trans 'Resend all' %}" name="resend_all" type="submit" style="float: right;">
+                    <input class="btn" value="{% trans 'Resend all' %}" name="resend_all" type="submit" style="float: right;">
                 {% endif %}
             </form>
         </div>
-        <div class="col-md-6">
+        <div class="column col-5 col-ml-auto col-md-12">
             <form method="post" action="{% url 'invitations_send' poll.url %}">
                 {% csrf_token %}
                 <div class="form-group">
                   <label for="invite">{% trans 'User or Group' %}</label>
                     <div class="input-group">
                         <input id="invite" class="form-control" name="invite" value="" type="text">
-                        <div class="input-group-btn">
-                            <input class="action primary" value="Invite" type="submit">
-                        </div>
+                            <input class="btn btn-primary" value="Invite" type="submit">
                     </div>
                     <ul class="help-list">
                         <li>{% trans 'Enter the username or group title of the user or group of users you want to invite.' %}</li>
@@ -63,6 +61,6 @@
             </form>
         </div>
         <hr>
-        <a href="{% url 'poll_settings' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
+        <a href="{% url 'poll_settings' poll.url %}" class="btn">{% trans 'Back to poll' %}</a>
 </div>
 {% endblock %}

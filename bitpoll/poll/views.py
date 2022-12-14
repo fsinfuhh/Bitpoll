@@ -1,41 +1,42 @@
 import csv
-
 import re
+from datetime import timedelta
+from decimal import Decimal
+from typing import Dict
 
+from django.conf import settings as django_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import transaction, IntegrityError
-
+from django.db.models import Sum, Count, Q
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
-from django.db.models import Sum, Count, Q
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils.dateparse import parse_datetime
 from django.utils.formats import date_format
-from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import activate as tz_activate, localtime, now, make_naive, make_aware
 from django.utils.timezone import get_current_timezone
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
-from django_token_bucket.models import TokenBucket
+from pytz import timezone
 
-from bitpoll.caldav.utils import get_caldav
-from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
-from .forms import PollCopyForm, DateChoiceCreationForm, \
-    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, CommentForm
-from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, POLL_RESULTS, PollWatch
 from bitpoll.base.models import BitpollUser
+from bitpoll.base.views import generate_random_slug
+from bitpoll.caldav.utils import get_caldav
 from bitpoll.invitations.models import Invitation
+from bitpoll.poll.spam_util import create_anti_spam_challenge, get_spam_challenge_from_key, check_anti_spam_challange
+from django_token_bucket.models import TokenBucket
+from .forms import PollCopyForm, DateChoiceCreationForm, \
+    DTChoiceCreationDateForm, DTChoiceCreationTimeForm, PollSettingsForm, PollDeleteForm, ChoiceValueForm, \
+    CommentForm, VoteFormUser, VoteForm
+from .models import Poll, Choice, ChoiceValue, Vote, VoteChoice, Comment, PollWatch, ResultSorting
 
-from datetime import timedelta
-from decimal import Decimal
-from pytz import all_timezones, timezone
-from django.utils.dateparse import parse_datetime
 
-
-def poll(request, poll_url: str, export: bool=False):
+def poll(request, poll_url: str, export: bool = False):
     """
     :param export: if the view is exported to csv
     :param request
@@ -48,9 +49,9 @@ def poll(request, poll_url: str, export: bool=False):
     tz_activate(current_poll.get_tz_name(request.user))
 
     poll_votes = Vote.objects.filter(poll=current_poll).select_related('user')
-    if current_poll.sorting == Poll.ResultSorting.NAME:
+    if current_poll.sorting == ResultSorting.NAME:
         poll_votes = poll_votes.order_by('name')
-    elif current_poll.sorting == Poll.ResultSorting.DATE:
+    elif current_poll.sorting == ResultSorting.DATE:
         poll_votes = poll_votes.order_by('date_created')
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
@@ -58,7 +59,7 @@ def poll(request, poll_url: str, export: bool=False):
 
     # aggregate stats for all columns
     stats = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
-        score=Sum('votechoice__value__weight')).values('score', 'id', 'text')
+        score=Sum('votechoice__value__weight')).values('score', 'id', 'text', 'date')
     votes_count = poll_votes.count()
 
     invitations = current_poll.invitation_set.filter(vote=None)
@@ -114,22 +115,22 @@ def poll(request, poll_url: str, export: bool=False):
             'score': (stat['score'] / Decimal(votes_count)
                       if votes_count > 0 else 0) if stat['score'] is not None else None,
             'count': stat['score'],
-            'text': stat,
+            'text': stat['text'] if current_poll.type == 'universal' else stat['date'],
             'choices': [
                 {
                     'count': stat2['count'],
                     'color': stat2['votechoice__value__color'],
                     'icon': stat2['votechoice__value__icon'],
                     'deleted': stat2['votechoice__value__deleted'],
-                    'title': stat2['votechoice__value__title']} for
-                stat2 in stats2 if
-                stat2['id'] == stat['id'] and stat2['votechoice__value__color'] != None],
+                    'title': stat2['votechoice__value__title']
+                } for stat2 in stats2
+                if stat2['id'] == stat['id'] and stat2['votechoice__value__color'] is not None],
         } for stat in stats]
 
     if current_poll.current_user_is_owner(request) and current_poll.allow_unauthenticated_vote_changes:
-        messages.warning(request, _("Currently, unauthenticated users are allowed to change votes. This means, "
-                                    "that everyone is able to change every vote that has not been assigned to a user. "
-                                    "If you want to prevent this, change the settings."))
+        messages.info(request, _("Currently, unauthenticated users are allowed to change votes. This means, "
+                                 "that everyone is able to change every vote that has not been assigned to a user. "
+                                 "If you want to prevent this, change the settings."))
 
     if request.user.is_authenticated:
         # warn the user if the Timezone is not the same on the Poll and in his settings
@@ -138,8 +139,8 @@ def poll(request, poll_url: str, export: bool=False):
             messages.info(request, _("This poll was transferred from {} to your local timezone {}".format(
                 current_poll.timezone_name, request.user.timezone)))
         elif different_timezone:
-            messages.warning(request, _("This poll has a different timezone ({}) than you.".format(
-                current_poll.timezone_name)))
+            messages.warning(request, _("This poll has a different timezone ({}) than you ({}).".format(
+                current_poll.timezone_name, request.user.timezone)))
 
     deleted_choicevals_count = VoteChoice.objects.filter(choice__poll=current_poll, value__deleted=True).count()
     if deleted_choicevals_count > 0:
@@ -167,6 +168,10 @@ def poll(request, poll_url: str, export: bool=False):
             writer.writerow(row)
         return response
 
+    spam_challenge = create_anti_spam_challenge(current_poll.id)
+    comment_form = CommentForm(request.user)
+    comment_form.set_spam_challenge(spam_challenge)
+
     return TemplateResponse(request, "poll/poll.html", {
         'poll': current_poll,
         'matrix': matrix,
@@ -177,10 +182,11 @@ def poll(request, poll_url: str, export: bool=False):
         'max_score': max_score,
         'invitations': invitations if current_poll.show_invitations else [],
         'summary': summary,
-        'comment_form': CommentForm(),
+        'comment_form': comment_form,
         'comments': current_poll.comment_set.order_by('date_created'),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
-        'spam_challenge': create_anti_spam_challenge(current_poll.id),
+        'spam_challenge': spam_challenge,
+        'suppress_messages': True,
     })
 
 
@@ -200,7 +206,7 @@ def comment(request, poll_url, comment_id=None):
     if not request.user.is_anonymous:
         user = request.user
     if request.POST:
-        form = CommentForm(request.POST)
+        form = CommentForm(request.user, request.POST)
         if form.is_valid():
             token_bucket = TokenBucket.get("Comments", current_poll, 5, 1800, 'commenting')
             try:
@@ -213,7 +219,7 @@ def comment(request, poll_url, comment_id=None):
                             current_poll.id
                         )
                     else:
-                        spam_ok, err_message = False, _('This Field is rquired')
+                        spam_ok, err_message = False, _('This Field is required')
                 text = form.cleaned_data['text']
                 name = form.cleaned_data['name']
                 spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
@@ -248,7 +254,7 @@ def comment(request, poll_url, comment_id=None):
                 form.add_error(None, e)
                 spam_challenge = get_spam_challenge_from_key(form.cleaned_data['spam_key'], current_poll.id)
             except ValidationError as e:
-                # if the anti spam challenge faild we generate a new one.
+                # if the anti spam challenge failed we generate a new one.
                 spam_challenge = create_anti_spam_challenge(current_poll.id)
                 form.add_error('spam_answer', e.message)
         else:
@@ -257,16 +263,17 @@ def comment(request, poll_url, comment_id=None):
             else:
                 spam_challenge = create_anti_spam_challenge(current_poll.id)
     else:
+        spam_challenge = create_anti_spam_challenge(current_poll.id)
         if comment_id:
             comment_obj = get_object_or_404(Comment, pk=comment_id)
             if comment_obj.can_edit(request.user):
-                form = CommentForm(instance=comment_obj)
+                form = CommentForm(request.user, instance=comment_obj)
             else:
                 messages.error(request, _("You can't edit this Comment"))
                 return redirect('poll', poll_url)
         else:
-            form = CommentForm()
-        spam_challenge = create_anti_spam_challenge(current_poll.id)
+            form = CommentForm(request.user)
+    form.set_spam_challenge(spam_challenge)
     return TemplateResponse(request, 'poll/comment_edit.html', {
         'comment_form': form,
         'comment_edit_id': comment_id,
@@ -275,6 +282,7 @@ def comment(request, poll_url, comment_id=None):
     })
 
 
+@login_required
 def delete_comment(request, poll_url, comment_id):
     """
     :param request:
@@ -301,17 +309,12 @@ def delete_comment(request, poll_url, comment_id):
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated:
-                # TODO additional possibilities of deleting
-                if current_comment.can_delete(request.user):
-                    current_comment.delete()
-                    return redirect('poll', poll_url)
-                else:
-                    error_msg = _("Deletion not allowed. You are not {}.".format(str(current_comment.name)))
+            # TODO additional possibilities of deleting
+            if current_comment.can_delete(request.user):
+                current_comment.delete()
             else:
-                error_msg = _("Deletion not allowed. You are not authenticated.")
-        else:
-            return redirect('poll', poll_url)
+                messages.error(request, _("Deletion not allowed. You are not {}.".format(str(current_comment.name))))
+        return redirect('poll', poll_url)
 
     return TemplateResponse(request, 'poll/comment_delete.html', {
         'poll': current_poll,
@@ -394,11 +397,11 @@ def edit_date_choice(request, poll_url):
                         dates.append(date)
                     else:
                         error = True
-                        messages.error(_("There was en error interpreting the provided dates and times"))
+                        messages.error(request, _("There was en error interpreting the provided dates and times"))
                 except ValueError:
                     # This will most likely only happen with users turning of JS
                     error = True
-                    messages.error(_("There was en error interpreting the provided dates and times"))
+                    messages.error(request, _("There was en error interpreting the provided dates and times"))
             if not error:
                 for i, datum in enumerate(sorted(dates)):
                     choice_objs = Choice.objects.filter(poll=current_poll, date=datum)
@@ -423,7 +426,20 @@ def edit_date_choice(request, poll_url):
         'new_choice': form,
         'page': 'Choices',
         'is_dt_choice': False,
+        'suppress_messages': True,
     })
+
+
+def get_dt_initial_data(current_poll: Poll) -> Dict[str, str]:
+    choices = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
+    return {
+        'dates': ', '.join(sorted(set(list(
+            date_format(localtime(c.date), format='Y-m-d')
+            for c in choices)))),
+        'times': ', '.join(sorted(set(list(
+            date_format(localtime(c.date), format='H:i')
+            for c in choices)))),
+    }
 
 
 def edit_dt_choice_date(request, poll_url):
@@ -441,14 +457,7 @@ def edit_dt_choice_date(request, poll_url):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
-    initial = {
-        'dates': ','.join(set(list(
-            date_format(localtime(c.date), format='Y-m-d')
-            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
-        'times': ','.join(set(list(
-            date_format(localtime(c.date), format='H:i')
-            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
-    }
+    initial = get_dt_initial_data(current_poll)
     form = DTChoiceCreationDateForm(initial=initial)
     if request.method == 'POST':
         form = DTChoiceCreationDateForm(
@@ -461,6 +470,7 @@ def edit_dt_choice_date(request, poll_url):
                 'poll': current_poll,
                 'page': 'Choices',
                 'step': 2,
+                'suppress_messages': True,
             })
     return TemplateResponse(request, "poll/choice_creation_date.html", {
         'new_choice': form,
@@ -468,6 +478,7 @@ def edit_dt_choice_date(request, poll_url):
         'step': 1,
         'page': 'Choices',
         'is_dt_choice': True,
+        'suppress_messages': True,
     })
 
 
@@ -487,39 +498,32 @@ def edit_dt_choice_time(request, poll_url):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
-    initial = {
-        'dates': ','.join(
-            date_format(localtime(c.date), format='Y-m-d')
-            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')),
-        'times': ','.join(set(list(
-            date_format(localtime(c.date), format='H:i')
-            for c in current_poll.choice_set.filter(deleted=False).order_by('sort_key')))),
-    }
     if request.method == 'POST':
-        form = DTChoiceCreationTimeForm(request.POST, initial=initial)
+        form = DTChoiceCreationTimeForm(request.POST, initial=get_dt_initial_data(current_poll))
         if form.is_valid():
-            times = form.cleaned_data['times'].split(',')
-            dates = form.cleaned_data['dates'].split(',')
+            times = [value.strip() for value in form.cleaned_data['times'].split(',')]
+            dates = [value.strip() for value in form.cleaned_data['dates'].split(',')]
 
             initial_choices = current_poll.choice_set.filter(deleted=False).values_list('date')
-            initial_choices = list(initial_choices)
             initial_choices = [(date_format(localtime(elem[0]), format='Y-m-d'),
-                                date_format(localtime(elem[0]), format='H:i')) for elem in initial_choices]
+                                date_format(localtime(elem[0]), format='H:i')) for elem in list(initial_choices)]
 
             return TemplateResponse(request, "poll/dt_choice_creation_combinations.html", {
-                'times': times,
-                'dates': dates,
+                'times': sorted(times),
+                'dates': sorted(dates),
                 'initial_choices': initial_choices,
                 'poll': current_poll,
                 'page': 'Choices',
                 'step': 3,
+                'suppress_messages': True,
             })
-        elif form.cleaned_data['dates'] != "":
+        elif form.data.get('dates') != "":
             return TemplateResponse(request, "poll/dt_choice_creation_time.html", {
                 'time': form,
                 'poll': current_poll,
                 'page': 'Choices',
                 'step': 2,
+                'suppress_messages': True,
             })
     return redirect('poll_editDTChoiceDate', current_poll.url)
 
@@ -530,51 +534,46 @@ def edit_dt_choice_combinations(request, poll_url):
         return redirect('poll', poll_url)
 
     tz_activate(current_poll.timezone_name)
-    initial_choices = current_poll.choice_set.filter(deleted=False).values_list('date')
-    initial_choices = list(initial_choices)
-    initial_choices = [(date_format(localtime(elem[0]), format='Y-m-d'),
-                        date_format(localtime(elem[0]), format='H:i')) for elem in initial_choices]
 
     if request.method == 'POST':
         # getlist does not raise an exception if datetimes[] is not in request.POST
         chosen_combinations = request.POST.getlist('datetimes[]')
 
-        chosen_times = []
+        chosen_times = set()
         new_choices = []
-        old_choices = []
-        choices = current_poll.choice_set.all()
-        # List of the Old Ids, used for detection what has to be deleted
-        old_choices_ids = [c.pk for c in choices]
-        # parse datetime objects of chosen combinations
-        for combination in chosen_combinations:
-            try:
-                tz = timezone(current_poll.timezone_name)
-                timestamp = parse_datetime(combination)
-                if timestamp:
-                    chosen_times.append(tz.localize(timestamp))
-                else:
+        existing_choices = []
+        with transaction.atomic():
+            choices = current_poll.choice_set.all()
+            # List of the Old Ids, used for detection what has to be deleted
+            old_choices_ids = [c.pk for c in choices]
+            # parse datetime objects of chosen combinations
+            for combination in chosen_combinations:
+                try:
+                    tz = timezone(current_poll.timezone_name)
+                    timestamp = parse_datetime(combination)
+                    if timestamp:
+                        chosen_times.add(tz.localize(timestamp))
+                    else:  # should only happen if somebody have tampered with the form
+                        messages.error(request, _("There was en error interpreting the provided dates and times"))
+                        return redirect('poll_editDTChoiceDate', current_poll.url)
+                except ValueError:  # should only happen if somebody have tampered with the form
                     messages.error(request, _("There was en error interpreting the provided dates and times"))
                     return redirect('poll_editDTChoiceDate', current_poll.url)
-            except ValueError:
-                # at least one invalid time/date has been specified. Redirect to first step # TODO: error message spezifizierne
-                messages.error(request, _("There was en error interpreting the provided dates and times"))
-                return redirect('poll_editDTChoiceDate', current_poll.url)
-        # Search for already existing Choices
-        for i, date_time in enumerate(sorted(chosen_times)):
-            choice_obj = current_poll.choice_set.filter(date=date_time)
-            if choice_obj:
-                old_choices_ids.remove(choice_obj[0].pk)
-                choice_obj[0].sort_key = i
-                choice_obj[0].deleted = False  # Mark as not deleted
-                old_choices.append(choice_obj[0])
-            else:
-                new_choices.append(Choice(
-                    date=date_time, poll=current_poll, sort_key=i))
-        # Save new choices to database, Update/Delete old ones
-        with transaction.atomic():
+            # Search for already existing Choices
+            for i, date_time in enumerate(sorted(chosen_times)):
+                choice_obj = current_poll.choice_set.filter(date=date_time)  # TODO: dboptimize? or does django cache
+                if choice_obj:
+                    old_choices_ids.remove(choice_obj[0].pk)  # TODO: wy error
+                    choice_obj[0].sort_key = i
+                    choice_obj[0].deleted = False  # Mark as not deleted
+                    existing_choices.append(choice_obj[0])
+                else:
+                    new_choices.append(Choice(
+                        date=date_time, poll=current_poll, sort_key=i))
+            # Save new choices to database, Update/Delete old ones
             # Save the new Choices
             Choice.objects.bulk_create(new_choices)
-            for choice in old_choices:
+            for choice in existing_choices:
                 choice.save()
             Choice.objects.filter(pk__in=old_choices_ids).update(deleted=True)
         return redirect('poll', current_poll.url)
@@ -622,7 +621,7 @@ def edit_universal_choice(request, poll_url):
                 if not choice:
                     continue
                 pk = choice.group(1)
-                db_choice = get_object_or_404(Choice, poll=current_poll, pk=pk)
+                db_choice = get_object_or_404(Choice.objects.select_for_update(), poll=current_poll, pk=pk)
                 choice_text = request.POST.get(choice_id).strip()
                 if choice_text == '':
                     db_choice.deleted = True
@@ -636,10 +635,34 @@ def edit_universal_choice(request, poll_url):
                         db_choice.full_clean()
                         db_choice.save()
                     except ValidationError:
-                        #TODO: können hier auch andere fehler auftreten?
+                        # TODO: können hier auch andere fehler auftreten?
                         # TODO: reentry text in form? / Use normal ModelForm?
-                        messages.error(request, _('The title "{}" is to long. The maximum is 80 characters'.format(choice_text)))
+                        messages.error(request,
+                                       _('The title "{}" is to long. The maximum is 80 characters'.format(choice_text)))
                         error = True
+
+        if 'down' in request.POST or 'up' in request.POST:
+            with transaction.atomic():
+                if 'up' in request.POST:
+                    elem = get_object_or_404(Choice.objects.select_for_update(),
+                                             pk=request.POST['up'],
+                                             poll=current_poll)
+                    other_elem = Choice.objects.select_for_update().filter(poll=current_poll,
+                                                                           sort_key__lt=elem.sort_key).order_by(
+                        '-sort_key').first()
+                else:
+                    elem = get_object_or_404(Choice.objects.select_for_update(),
+                                             pk=request.POST['down'],
+                                             poll=current_poll)
+                    other_elem = Choice.objects.select_for_update().filter(poll=current_poll,
+                                                                           sort_key__gt=elem.sort_key).order_by(
+                        'sort_key').first()
+                if other_elem:
+                    orig_sort_key = elem.sort_key
+                    elem.sort_key = other_elem.sort_key
+                    other_elem.sort_key = orig_sort_key
+                    elem.save()
+                    other_elem.save()
         if 'next' in request.POST and not error:
             return redirect('poll', poll_url)
         if 'delete' in request.POST:
@@ -652,6 +675,7 @@ def edit_universal_choice(request, poll_url):
         'poll': current_poll,
         'page': 'Choices',
         'next_sort_key': current_poll.choice_set.count() + 1,  # TODO: unter umständen hier max nemen?
+        'suppress_messages': True,
     })
 
 
@@ -733,6 +757,7 @@ def edit_choicevalues_create(request, poll_url):
     return redirect('poll_editchoicevalues', current_poll.url)
 
 
+@login_required
 def delete(request, poll_url):
     """
     :param request:
@@ -743,17 +768,15 @@ def delete(request, poll_url):
     Otherwise the user is directed back to the poll's page.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    error_msg = ""
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated:
-                # TODO restriction for deletion same as edit?
-                if current_poll.can_edit(request.user, request):
-                    current_poll.delete()
-                return redirect('index')
+            # TODO restriction for deletion same as edit?
+            if current_poll.can_edit(request.user, request):
+                current_poll.delete()
             else:
-                error_msg = _("Deletion not allowed. You are not authenticated.")
+                messages.error(request, _("You need edit rights to the poll to delete it"))
+            return redirect('index')
         else:
             return redirect('poll', poll_url)
 
@@ -762,7 +785,6 @@ def delete(request, poll_url):
     return TemplateResponse(request, 'poll/poll_delete.html', {
         'poll': current_poll,
         'form': form,
-        'error': error_msg,
     })
 
 
@@ -791,111 +813,114 @@ def vote(request, poll_url, vote_id=None):
         else:
             return redirect('poll', poll_url)
 
+    if vote_id:
+        current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
+    else:
+        current_vote = Vote(poll=current_poll)
+
     tz_activate(current_poll.get_tz_name(request.user))
 
     if request.method == 'POST':
-        vote_id = request.POST.get('vote_id', None)
-        if vote_id:
-            current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
-            if not current_vote.can_edit(request.user):
+        if request.user.is_authenticated:
+            form = VoteFormUser(request.POST)
+        else:
+            form = VoteForm(request.POST)
+        if form.is_valid():
+            if vote_id and not current_vote.can_edit(request.user):
                 # the vote belongs to an user and it is not the authenticated user
                 return HttpResponseForbidden()  # todo: better errorpage?
-        else:
-            current_vote = Vote(poll=current_poll)
-        current_vote.date_created = now()
-        current_vote.comment = request.POST.get('comment')
-        if vote_id:
-            # leave the name as it was
-            pass
-        elif 'anonymous' in request.POST:
-            current_vote.name = 'Anonymous'
-        elif request.user.is_authenticated:
-            current_vote.name = request.user.get_displayname()
-            current_vote.user = request.user
+            current_vote.date_created = now()
+            current_vote.comment = form.cleaned_data['comment']
 
-            if request.user.auto_watch:
-                try:
-                    poll_watch = PollWatch(poll=current_poll, user=request.user)
-                    poll_watch.save()
-                except IntegrityError:
-                    pass
-        else:
-            current_vote.name = request.POST.get('name').strip()
-
-        if len(current_vote.name) > 80:
-            messages.error(
-                request, _("The Name is longer than the allowed name length of 80 characters")
-            )
-            return redirect('poll', poll_url) #todo: das macht keinen sinn, warum nicht verbessern?
-
-        current_vote.anonymous = 'anonymous' in request.POST
-
-        if not current_poll.anonymous_allowed and current_vote.anonymous:
-            messages.error(request, _("Anonymous votes are not allowed for this poll."))
-        else:
-            if current_vote.anonymous or current_vote.name:
-                # prevent non-anonymous vote without name
-                try:
-                    with transaction.atomic():
-                        new_choices = []
-
-                        current_vote.save()
-
-                        if request.user.is_authenticated:
-                            # check if this user was invited
-                            invitation = current_poll.invitation_set.filter(user=request.user)
-                            if invitation:
-                                invitation = invitation[0]
-                                invitation.vote = current_vote
-                                invitation.save()
-
-                        for choice in current_poll.choice_set.all():
-                            if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
-                                choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
-                                if not choice_value.deleted:
-                                    new_choices.append(VoteChoice(value=choice_value,
-                                                                  vote=current_vote,
-                                                                  choice=choice,
-                                                                  comment=request.POST.get(
-                                                                        'comment_{}'.format(choice.id)) or ''))
-                                else:
-                                    deleted_choicevals = True
-                            else:
-                                if current_poll.vote_all and not choice.deleted:
-                                    if not error_msg:  # TODO: error_msg is used in other places here to, maybe use
-                                        # deduplication for messages?
-                                        # https://stackoverflow.com/questions/23249807/django-remove-duplicate
-                                        # -messages-from-storage
-                                        messages.error(request, _('Due to the the configuration of this poll, '
-                                                                  'you have to fill all choices.'))
-                                    error_msg = True
-
-                        if deleted_choicevals:
-                            error_msg = True
-                            messages.error(request, _('Value for choice does not exist. This is probably due to '
-                                                      'changes in the poll. Please correct your vote.'))
-
-                        if not error_msg:
-                            if vote_id:
-                                VoteChoice.objects.filter(vote=current_vote).delete()
-                                # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
-                                # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
-                            else:
-                                for current_watch in current_poll.pollwatch_set.all():
-                                    current_watch.send(request=request, vote=current_vote)
-
-                            VoteChoice.objects.bulk_create(new_choices)
-                            messages.success(request, _('Vote has been recorded'))
-                            return redirect('poll', poll_url)
-                        else:
-                            raise IntegrityError("An Error while saving the Vote occurred, see message")
-                except IntegrityError as e:
-                    # Nothing todo as the main point in this exception is the database rollback
-                    pass
+            if form.cleaned_data['anonymous']:
+                current_vote.name = 'Anonymous'
+            elif request.user.is_authenticated and (not vote_id or current_vote.user == request.user):  # TODO
+                # only set on edit if same user
+                current_vote.name = request.user.get_displayname()
+                current_vote.user = request.user
             else:
-                messages.error(
-                    request, _('You need to either provide a name or post an anonymous vote.'))
+                current_vote.name = form.cleaned_data['name']
 
+            current_vote.anonymous = form.cleaned_data['anonymous']
+
+            if not current_poll.anonymous_allowed and current_vote.anonymous:
+                messages.error(request, _("Anonymous votes are not allowed for this poll."))
+            else:
+                if current_vote.anonymous or current_vote.name:
+                    # prevent non-anonymous vote without name
+                    try:
+                        with transaction.atomic():
+                            new_choices = []
+                            current_vote.save()
+
+                            if request.user.is_authenticated:
+                                # check if this user was invited
+                                invitation = current_poll.invitation_set.filter(user=request.user)
+                                if invitation:
+                                    invitation = invitation[0]
+                                    invitation.vote = current_vote
+                                    invitation.save()
+
+                            for choice in current_poll.choice_set.all():
+                                if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
+                                    choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+                                    if not choice_value.deleted:
+                                        new_choices.append(VoteChoice(value=choice_value,
+                                                                      vote=current_vote,
+                                                                      choice=choice,
+                                                                      comment=request.POST.get(
+                                                                          'comment_{}'.format(choice.id)) or ''))
+                                    else:
+                                        deleted_choicevals = True
+                                else:
+                                    if current_poll.vote_all and not choice.deleted:
+                                        if not error_msg:
+                                            messages.error(request, _('Due to the the configuration of this poll, '
+                                                                      'you have to fill all choices.'))
+                                        error_msg = True
+
+                            if deleted_choicevals:
+                                error_msg = True
+                                messages.error(request, _('Value for choice does not exist. This is probably due to '
+                                                          'changes in the poll. Please correct your vote.'))
+
+                            if not error_msg:
+                                if vote_id:
+                                    VoteChoice.objects.filter(vote=current_vote).delete()
+                                else:
+                                    for current_watch in current_poll.pollwatch_set.all():
+                                        current_watch.send(request=request, vote=current_vote)
+
+                                VoteChoice.objects.bulk_create(new_choices)
+                                messages.success(request,
+                                                 _('Vote has ben updated') if vote_id else _('Vote has been recorded'))
+                                if request.user.is_authenticated and request.user.auto_watch:
+                                    # todo: currently also watches on edit of other users votes, do we want to suppress that?
+                                    try:
+                                        poll_watch = PollWatch(poll=current_poll, user=request.user)
+                                        poll_watch.save()
+                                    except IntegrityError:
+                                        pass
+                                return redirect('poll', poll_url)
+                            else:
+                                raise IntegrityError("An Error while saving the Vote occurred, see message")
+                    except IntegrityError:
+                        # do nothing as the main point in this exception is the database rollback, the error
+                        # is communicated to the user via messages, selected choices are recunstructed below
+                        pass
+                else:
+                    form.add_error('name', _('You need to either provide a name or post an anonymous vote.'))
+    else:
+        if vote_id:
+            if current_vote.user:
+                form = VoteFormUser(initial={'name': current_vote.user.get_displayname()})
+            else:
+                form = VoteForm(instance=current_vote, initial={'name': current_vote.name})
+        else:
+            if request.user.is_authenticated:
+                form = VoteFormUser(initial={'name': request.user.get_displayname()})
+            else:
+                form = VoteForm()
     # no/invalid POST: show the dialog
     matrix = current_poll.get_choice_group_matrix(get_current_timezone())
     choices = []
@@ -926,6 +951,10 @@ def vote(request, poll_url, vote_id=None):
 
     events = get_caldav(choices, current_poll, request.user, request)
 
+    if request.user.is_authenticated and current_poll.get_tz_name(request.user) != request.user.timezone:
+        messages.warning(request, _("This poll has a different timezone ({}) than you ({}).".format(
+            current_poll.timezone_name, request.user.timezone)))
+
     return TemplateResponse(request, 'poll/vote_creation.html', {
         'poll': current_poll,
         'matrix': matrix,
@@ -936,9 +965,9 @@ def vote(request, poll_url, vote_id=None):
         'values': current_poll.choicevalue_set.filter(deleted=False).order_by('-weight', 'title'),
         'page': 'Vote',
         'current_vote': current_vote,
-        'timezone_warning': (request.user.is_authenticated and
-                             current_poll.get_tz_name(request.user) != request.user.timezone),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
+        'suppress_messages': True,
+        'form': form,
     })
 
 
@@ -1027,7 +1056,7 @@ def copy(request, poll_url):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     date_shift = 0
-    error_msg = ""
+    randomize_url = django_settings.DEFAULT_RANDOM_SLUG == 'true'  # this settings value is a javascript true/false
     if not current_poll.can_edit(request.user, request):
         return redirect('poll', poll_url)
 
@@ -1035,88 +1064,90 @@ def copy(request, poll_url):
         form = PollCopyForm(request.POST)
 
         if form.is_valid():
-            copy_choices = form.data.get('copy_choices', '')
-            copy_invitations = form.data.get('copy_invitations', '')
-            create_invitations_from_votes = form.data.get('create_invitations_from_votes', False)
-            copy_answer_values = form.data.get('copy_ans_values', '')
-            reset_ownership = form.data.get('reset_ownership', '')
-            date_shift = int(form.data.get('date_shift', ''))
+            date_shift = form.cleaned_data['date_shift']
 
             choice_values = current_poll.choicevalue_set.all()
             choices = current_poll.choice_set.all()
             invitations = current_poll.invitation_set.all()
             vote_users = current_poll.vote_set.all().values('user')
             invitation_users = invitations.values('user')
-
             new_poll = get_object_or_404(Poll, url=poll_url)
-            new_poll.pk = None
-            new_poll.title = form.cleaned_data['title']
-            new_poll.url = form.cleaned_data['url']
-            new_poll.due_date = form.cleaned_data['due_date']
+            with transaction.atomic():
+                new_poll.pk = None
+                new_poll.title = form.cleaned_data['title']
+                new_poll.url = form.cleaned_data['url']
+                new_poll.due_date = form.cleaned_data['due_date']
 
-            if date_shift and current_poll.due_date:
-                new_poll.due_date += timedelta(days=date_shift)
+                if form.cleaned_data['due_date']:
+                    due_date = form.cleaned_data['due_date']
+                    if due_date == new_poll.due_date:
+                        if date_shift and new_poll.due_date:
+                            new_poll.due_date += timedelta(days=date_shift)
+                    else:
+                        new_poll.due_date = due_date
 
-            if reset_ownership:
-                new_poll.user = None
-                new_poll.group = None
+                if form.cleaned_data['reset_ownership']:
+                    new_poll.user = None
+                    new_poll.group = None
 
-            new_poll.save()
+                new_poll.save()
 
-            if copy_invitations:
-                for invitation in invitations:
-                    invitation.pk = None
-                    invitation.poll = new_poll
-                    invitation.date_created = now()
-                    invitation.last_email = None
-                    invitation.creator = request.user
-                    invitation.save()
-                    invitation.send(request)
-
-            if create_invitations_from_votes:
-                for user in vote_users:
-                    if user not in invitation_users:
-                        invitation = Invitation(poll=new_poll, user=user, date_created=now(),
-                                                creator=request.user)
+                if form.cleaned_data['copy_invitations']:
+                    for invitation in invitations:
+                        invitation.pk = None
+                        invitation.poll = new_poll
+                        invitation.date_created = now()
+                        invitation.last_email = None
+                        invitation.creator = request.user
                         invitation.save()
                         invitation.send(request)
 
-            if copy_choices:
-                for choice in choices:
-                    choice.pk = None
-                    choice.poll = new_poll
-                    if date_shift and choice.date:
-                        choice.date += timedelta(days=date_shift)
-                    choice.save()
+                if form.cleaned_data['create_invitations_from_votes']:
+                    for user in vote_users:
+                        if user not in invitation_users:
+                            invitation = Invitation(poll=new_poll, user=user, date_created=now(),
+                                                    creator=request.user)
+                            invitation.save()
+                            invitation.send(request)
 
-            if copy_answer_values:
-                for value in choice_values:
-                    value.pk = None
-                    value.poll = new_poll
-                    value.save()
+                if form.cleaned_data['copy_choices']:
+                    for choice in choices:
+                        choice.pk = None
+                        choice.poll = new_poll
+                        if date_shift and choice.date:
+                            choice.date += timedelta(days=date_shift)
+                        choice.save()
 
-            return redirect('poll', new_poll.url)
+                if form.cleaned_data['copy_answer_values']:
+                    for value in choice_values:
+                        value.pk = None
+                        value.poll = new_poll
+                        value.save()
+
+                return redirect('poll', new_poll.url)
 
     else:
         form = PollCopyForm({
             'title': "Copy of " + current_poll.title,
             'due_date': current_poll.due_date,
-            'url': current_poll.url + '2'})  # we set an url, this will be overwritten by the slug generation JS
+            'url': generate_random_slug() if randomize_url else current_poll.url + '2',
+            'date_shift': 0,
+            'copy_ans_values': True,
+            'copy_choices': True,
+        })
 
     return TemplateResponse(request, 'poll/copy.html', {
         'form': form,
         'poll': current_poll,
         'date_shift': date_shift,
-        'error': error_msg,
+        'randomize_url': randomize_url,
+        'random_url': generate_random_slug() if randomize_url else '',
     })
 
 
-def settings(request, poll_url):
+def settings(request, poll_url: str):
     """
-
-    :param request:
-    :param poll_url:
-    :return:
+    Renders the settings page of an poll
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     groups = None
@@ -1134,7 +1165,7 @@ def settings(request, poll_url):
         form = PollSettingsForm(request.POST, instance=current_poll)
         if form.is_valid():
             new_poll = form.save(commit=False)
-            user = form.data.get('user', '')
+            user = form.cleaned_data['user']
             with transaction.atomic():
                 if user:
                     try:
@@ -1144,8 +1175,9 @@ def settings(request, poll_url):
                         user_error = _("User {} not Found".format(user))
                 else:
                     new_poll.user = None
-                    current_poll.choice_set.all()
-                if not user_error:
+                if new_poll.group and new_poll.group not in request.user.groups.all():
+                    form.add_error('group', _('You are not in this group'))
+                elif not user_error:
                     # change the Timezone in the Choices, date-polls are in UTC regardles of the timezone
                     if old_timezone_name != new_poll.timezone_name and current_poll.type == 'datetime':
                         new_timezone = timezone(new_poll.timezone_name)
@@ -1156,6 +1188,8 @@ def settings(request, poll_url):
                     new_poll.save()
                     messages.success(request, _('Settings have been changed'))
                     return redirect('poll_settings', current_poll.url)
+                else:
+                    form.add_error('user', user_error)
         else:
             user = form.cleaned_data.get('user', '')
     else:
@@ -1168,11 +1202,9 @@ def settings(request, poll_url):
         'form': form,
         'poll': current_poll,
         'page': 'Settings',
-        'groups': groups,
-        'results': POLL_RESULTS,
-        'timezones': all_timezones,
-        'user_error': user_error,
+        'groups': [(group.id, group.name) for group in groups] if request.user.is_authenticated else [],
         'user_select': user,
+        'suppress_messages': True,
     })
 
 

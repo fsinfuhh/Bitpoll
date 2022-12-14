@@ -3,6 +3,7 @@ import string
 import random
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
@@ -74,6 +75,7 @@ def index(request):
         'public_polls': public_polls,
         'randomize_url': randomize_url,
         'random_url': generate_random_slug() if randomize_url else '',
+        'login_form': AuthenticationForm,
     })
 
 
@@ -90,9 +92,9 @@ def user_settings(request):
                                 ).distinct().order_by('-due_date').select_related('user', 'group')
 
     if request.method == 'POST':
-        form = BitpollUserSettingsForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
+        user_form = BitpollUserSettingsForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
 
             if request.user.auto_watch:
                 for poll in polls.filter(Q(vote__user=request.user)):
@@ -101,8 +103,8 @@ def user_settings(request):
                         poll_watch.save()
                     except IntegrityError:
                         pass
-
-    user_form = BitpollUserSettingsForm(instance=request.user)
+    else:
+        user_form = BitpollUserSettingsForm(instance=request.user)
 
     # List of polls the user has voted on
     polls_voted = Vote.objects.filter(user=request.user, poll__in=polls).values_list('poll_id', flat=True)

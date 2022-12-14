@@ -1,84 +1,19 @@
 {% load i18n %}
+{% load spectre_css %}
+
 {% if comment_edit_id %}
     <form action="{% url 'poll_comment_edit' poll.url comment_edit_id %}" method="POST" class="form">
 {% else %}
     <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form">
 {%  endif %}
-    {% csrf_token %}
-    <div class="form-group">
-        {% if comment_form.non_field_errors %}
-            <div class="row">
-            <div class="alert alert-danger" role="alert">
-                {% for error in comment_form.non_field_errors %}
-                    {{ error }}
-                {% endfor %}
-            </div>
-            </div>
+    {% render_form_header comment_form %}
+        {% render_form_field comment_form.name %}
+        {% render_form_field comment_form.text %}
+        {% if not request.user.is_authenticated %}
+            {% render_form_field comment_form.spam_answer %}
+            {{ comment_form.spam_key }}
         {% endif %}
-        <div class="row">
-            <div class="col-sm-4">
-                {% if request.user.is_authenticated %}
-                    <label>{% trans 'Name' %}</label>
-                    <input class="form-control" type="text" title="Name" name="{{ comment_form.name.name }}"
-                           value="{{ request.user.get_displayname }}"
-                           readonly/>
-                {% else %}
-                    <label>{% trans 'Name' %}</label>
-                    <input class="form-control" type="text" title="Name" name="{{ comment_form.name.name }}"
-                           value="{{ comment_form.name.value|default_if_none:'' }}"
-                            {% if comment_edit_id %}readonly{% endif %}
-                    />
-                {% endif %}
-            {% if comment_form.name.errors %}
-                    <div class="form-errors">
-                        <div class="alert alert-danger">
-                            <div class="container">
-                                <i class="fa fa-times"></i>{{ comment_form.name.errors }}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
     <div class="form-group">
-        <label for="{{ comment_form.text.name }}">{% trans 'Comment' %}</label>
-        <textarea title="new Comment" name="{{ comment_form.text.name }}" class="form-control"
-                  rows="6">{{ comment_form.text.value|default_if_none:'' }}</textarea>
-        <p class="help-block">
-            {% blocktrans %}
-                You can use
-                <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
-                syntax for formatting.
-            {% endblocktrans %}
-            {% if comment_form.text.errors %}
-                    <div class="form-errors">
-                        <div class="alert alert-danger">
-                            <div class="container">
-                                <i class="fa fa-times"></i>{{ comment_form.text.errors }}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-        </p>
-    </div>
-    {% if not request.user.is_authenticated %}
-        <div class="form-group">
-            <label for="{{ comment_form.spam_answer.name }}">{{ spam_challenge.x }} {{ spam_challenge.op }} {{ spam_challenge.y }} =</label>
-            <input class="form-control" type="text" title="Challenge" name="{{ comment_form.spam_answer.name }}" value="{{ comment_form.spam_answer.value|default_if_none:'' }}">
-            {% if comment_form.spam_answer.errors %}
-                <div class="form-errors">
-                    <div class="alert alert-danger">
-                        <div class="container">
-                            <i class="fa fa-times"></i>{{ comment_form.spam_answer.errors }}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-            <input type="hidden" name="{{ comment_form.spam_key.name }}" value="{{ spam_challenge.key }}">
-        </div>
-    {% endif %}
-    <div class="form-group">
-        <input class="action primary" type="submit" title="Save Comment" value="{% trans 'Save Comment' %}">
+        <input class="btn btn-primary" type="submit" title="Save Comment" value="{% trans 'Save Comment' %}">
     </div>
 </form>

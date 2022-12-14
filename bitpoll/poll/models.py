@@ -20,52 +20,57 @@ from bitpoll.poll.util import DateTimePart, PartialDateTime
 from django.utils import translation
 
 POLL_TYPES = (
-    ('universal', 'Universal'),
-    ('datetime', 'Date-Time'),
-    ('date', 'Date'),
+    ('universal', _('Universal')),
+    ('datetime', _('Date-Time')),
+    ('date', _('Date')),
 )
 
 POLL_RESULTS = (
-    ('summary', 'Summary'),
-    ('complete', 'Complete'),
-    ('never', 'Never'),
-    ('summary after vote', 'Summary after Vote'),
-    ('complete after vote', 'Complete after Vote'),
+    ('summary', _('Summary')),
+    ('complete', _('Complete')),
+    ('never', _('Never')),
+    ('summary after vote', _('Summary after Vote')),
+    ('complete after vote', _('Complete after Vote')),
+)
+
+
+class ResultSorting(enum.IntEnum):
+    DATE = 0
+    NAME = 1
+
+
+POLL_RESULT_SORTING = (
+    (ResultSorting.DATE.value, _('Date')),
+    (ResultSorting.NAME.value, _('Name'))
 )
 
 
 class Poll(models.Model):
-    title = models.CharField(max_length=80)
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=80, verbose_name=_('Title'))
+    description = models.TextField(blank=True, verbose_name=_('Description'), help_text=_('You can use <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a> syntax for formatting.'))
     url = models.SlugField(max_length=80, unique=True)
     type = models.CharField(max_length=20, choices=POLL_TYPES)
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(BitpollUser, null=True, blank=True, on_delete=models.SET_NULL)
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
-    """owner_id = models.ForeignKey(Member)"""
+    user = models.ForeignKey(BitpollUser, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=_('owning user'))
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=_('owning group'))
 
     # === Extra settings ==
-    due_date = models.DateTimeField(null=True, blank=True)
-    anonymous_allowed = models.BooleanField(default=True)
-    public_listening = models.BooleanField(default=False)
-    require_login = models.BooleanField(default=False)
-    require_invitation = models.BooleanField(default=False)
-    show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete")
-    send_mail = models.BooleanField(default=False)
-    one_vote_per_user = models.BooleanField(default=True)
-    allow_unauthenticated_vote_changes = models.BooleanField(default=False)
-    allow_comments = models.BooleanField(default=True)
-    show_invitations = models.BooleanField(default=True)
-    timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
-    use_user_timezone = models.BooleanField(default=False)
-    vote_all = models.BooleanField(default=False)
-    sorting = models.IntegerField(default=0)
-    hide_participants = models.BooleanField(default=False)
-    show_score_in_summary = models.BooleanField(default=False)
-
-    class ResultSorting(enum.IntEnum):
-        DATE = 0
-        NAME = 1
+    due_date = models.DateTimeField(null=True, blank=True, verbose_name=_('due date'))
+    anonymous_allowed = models.BooleanField(default=True, verbose_name=_('allow anonymous votes'))
+    public_listening = models.BooleanField(default=False, verbose_name=_('public listening'))
+    require_login = models.BooleanField(default=False, verbose_name=_('login required'))
+    require_invitation = models.BooleanField(default=False, verbose_name=_('invitation required to vote'))
+    show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete", verbose_name=_('Show Results'), help_text=_('Owners of this poll and administrators will always see all votes.'))
+    one_vote_per_user = models.BooleanField(default=True, verbose_name=_('one vote per user'))
+    allow_unauthenticated_vote_changes = models.BooleanField(default=False, verbose_name=_('allow unauthenticated vote changes'))
+    allow_comments = models.BooleanField(default=True, verbose_name=_('allow comments'))
+    show_invitations = models.BooleanField(default=True, verbose_name=_('show invitations as empty votes'))
+    timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone], verbose_name=_('Timezone'))
+    use_user_timezone = models.BooleanField(default=False, verbose_name=_('Translate all times to the users timezone'))
+    vote_all = models.BooleanField(default=False, verbose_name=_('forbid empty choices'))
+    sorting = models.IntegerField(default=0, choices=POLL_RESULT_SORTING, verbose_name=_('Sort results by'))
+    hide_participants = models.BooleanField(default=False, verbose_name=_('hide participants'))
+    show_score_in_summary = models.BooleanField(default=False, verbose_name=_('Show score instead of percentage'))
 
     def __str__(self):
         return u'Poll {}'.format(self.title)
@@ -209,12 +214,6 @@ class Poll(models.Model):
         return user.is_authenticated and PollWatch.objects.filter(poll=self, user=user).count() > 0
 
 
-POLL_RESULT_SORTING = (
-    (Poll.ResultSorting.DATE, 'Date'),
-    (Poll.ResultSorting.NAME, 'Name')
-)
-
-
 class Choice(models.Model):
     text = models.CharField(max_length=80)
     date = models.DateTimeField(null=True, blank=True)
@@ -225,8 +224,10 @@ class Choice(models.Model):
     def __str__(self):
         if self.poll.type == 'universal':
             return self.text
+        elif self.poll.type == 'date':
+            return self.date.strftime("%Y-%m-%d")
         else:
-            return str(self.date)
+            return self.date
 
     @cached_property
     def get_title(self):
@@ -247,10 +248,10 @@ class Choice(models.Model):
 
 class ChoiceValue(models.Model):
     title = models.CharField(max_length=80)
-    icon = models.CharField(max_length=64)
+    icon = models.CharField(max_length=64, help_text=_('any FontAwesome icon'))
     color = models.CharField(max_length=7, validators=[RegexValidator('#?[a-fA-F0-9]{6}$',
-                                                                      message=_("Give an HTML color without the #"))])
-    weight = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+                                                                      message=_("Give an HTML color in hex notation (#5500ff)"))])
+    weight = models.DecimalField(max_digits=5, decimal_places=2, default=0.0, verbose_name=_('Weight'), help_text=_('usually between 0 and 1'))
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     deleted = models.BooleanField(default=False)
 
@@ -265,7 +266,7 @@ class ChoiceValue(models.Model):
 
 
 class Comment(models.Model):
-    text = models.TextField()
+    text = models.TextField(help_text=_('You can use <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a> syntax for formatting.'))
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)
@@ -287,9 +288,9 @@ class Comment(models.Model):
 
 class Vote(models.Model):
     name = models.CharField(max_length=80)
-    anonymous = models.BooleanField(default=False)
+    anonymous = models.BooleanField(default=False, help_text=_("Post as anonymous vote"))
     date_created = models.DateTimeField()
-    comment = models.TextField()
+    comment = models.TextField(blank=True)
     assigned_by = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, related_name='assigning')
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)

@@ -20,13 +20,14 @@ charset-normalizer==2.0.12
     # via requests
 cryptography==37.0.2
     # via django-encrypted-model-fields
-django==4.0.4
+django==3.2.13
     # via
     #   -r requirements.in
     #   django-auth-ldap
     #   django-encrypted-model-fields
     #   django-markdownify
     #   django-simple-csp
+    #   django-spectre-css
     #   django-token-bucket
 django-auth-ldap==4.0.0
     # via -r requirements-production.in
@@ -40,10 +41,14 @@ django-pipeline==2.0.8
     # via -r requirements.in
 django-simple-csp==0.3.dev1
     # via -r requirements.in
+django-spectre-css==0.3.dev1
+    # via -r requirements.in
 django-token-bucket==0.2.4
     # via -r requirements.in
 django-widget-tweaks==1.4.12
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   django-spectre-css
 icalendar==4.0.9
     # via -r requirements.in
 idna==3.3
@@ -80,6 +85,7 @@ pytz==2022.1
     # via
     #   -r requirements.in
     #   caldav
+    #   django
     #   icalendar
 pytz-deprecation-shim==0.1.0.post0
     # via tzlocal

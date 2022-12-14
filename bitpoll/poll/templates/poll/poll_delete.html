@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load widget_tweaks %}
+{% load spectre_css %}
 {% load settings_value %}
 {% load i18n %}
 {% load poll_filter vote_permissions poll_permissions %}
@@ -10,32 +10,19 @@
 {% block content %}
     {% include 'poll/poll_header.html' %}
     <div class="container">
-        {% csrf_token %}
         <h3>{% trans 'Delete Poll' %}</h3>
 
-        {% if error != "" %}
-            <div class="alert alert-danger">{{ error }}</div>
-            <br /><br />
-        {% endif %}
-        <div class="alert alert-danger">{% trans 'Shall the following Poll be deleted?' %}</div><br />
+        {% render_form_header form %}
 
-        <div class="form-group">
-            <label for="poll_title">Title: </label>
-            <input class="form-control" id="poll_title" value="{{ form.title.value }}" readonly><br />
-        </div>
-        <div class="form-group">
-            <label for="poll_due_date">{% trans 'Due-Date:' %}</label>
-            <input class="form-control" id="poll_due_date" value="{{ form.due_date.value }}" readonly><br />
-        </div>
-        <label for="poll_description">{% trans 'Description' %}</label> {# TODO: design #}
-        <div class="text " id="poll_description">
-            {% render_field form.description class+="form-control" readonly="readonly" %}
-        </div>
+        <div class="toast toast-warning">{% trans 'Shall the following Poll be deleted?' %}</div><br />
 
-        <br /><br />
+        {% render_form_field form.title readonly=True %}
+        {% render_form_field form.due_date readonly=True %}
+        {% render_form_field form.description readonly=True %}
+
         <form action="{% url 'poll_delete' poll.url %}" method="POST">{% csrf_token %}
-            <input type="submit" name="Cancel" value="{% trans 'Cancel' %}" class="action"/>
-            <input type="submit" name="Delete" value="{% trans 'Delete' %}" class="action primary"/>
+            <input type="submit" name="Cancel" value="{% trans 'Cancel' %}" class="btn"/>
+            <input type="submit" name="Delete" value="{% trans 'Delete' %}" class="btn btn-primary"/>
         </form>
     </div>
 {% endblock %}

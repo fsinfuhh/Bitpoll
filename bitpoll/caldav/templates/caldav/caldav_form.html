@@ -1,74 +1,49 @@
-{% load widget_tweaks %}
 {% load widget_tweaks_extras %}
+{% load spectre_css %}
 {% load i18n %}
 
 
 <p>{% blocktrans %}The data provided here will be saved into the Database to retrieve the calendar on voting in Polls.
-   The column is encrypted on the server side with a global key.{% endblocktrans %}</p>
+    The column is encrypted on the server side with a global key.{% endblocktrans %}</p>
 <p>{% blocktrans %}You can enter either a world readable CalDav calendar Url, or provide user and password to login to
-   the CalDav Server. If you make the calendar world readable check that the url is not predictable by
-   other people{% endblocktrans %}</p>
+    the CalDav Server. If you make the calendar world readable check that the url is not predictable by
+    other people{% endblocktrans %}</p>
 {% if edit %}
-    <h3>{% trans "Change Calendar"%}</h3>
-    <form action="{% url 'edit_save_calendar' calendar_id%}" method="post">
+    <h3>{% trans "Change Calendar" %}</h3>
+    <form action="{% url 'edit_save_calendar' calendar_id %}" method="post">
 {% else %}
-    <h3>{% trans "Add a Calendar"%}</h3>
+    <h3>{% trans "Add a Calendar" %}</h3>
     <form action="{% url 'change_calendar' %}" method="post">
 {% endif %}
-    {% csrf_token %}
-    {% if calendar_form.non_field_errors %}
-        {% for error in calendar_form.non_field_errors %}
-            <div class="alert alert-danger">{{ error }}</div>
-        {% endfor %}
-    {% endif %}
-    {{ calendar_form.name.label_tag }}
-    {% render_field calendar_form.name class+='form-control'%}
-    {% if calendar_form.name.errors %}
-        <div class="form-errors">
-            <div class="alert alert-danger">
-                <div class="container">
-                    <i class="fa fa-times"></i>{{ calendar_form.name.errors }}
-                </div>
-            </div>
-        </div>
-    {% endif %}
 
-    {% with  calendar_form.url.auto_id|add:"_0" as url_id %}
-    <label for="{{ url_id }}_0">{% trans "Calendar URL:"%}</label>
-    {% render_multi_field calendar_form.url 0 class="form-control" id=url_id%}
-    {% endwith %}
-    {% if calendar_form.url.errors %}
-        <div class="form-errors">
-            <div class="alert alert-danger">
-                <div class="container">
-                    <i class="fa fa-times"></i>{{ calendar_form.url.errors }}
-                </div>
-            </div>
-        </div>
-    {% endif %}
-    {% with  calendar_form.url.auto_id|add:"_1" as user_id %}
-        <label for="{{ user_id }}_1">{% trans "User:"%}</label>
-        {% render_multi_field calendar_form.url 1 class='form-control' id=user_id%}
-    {% endwith %}
-    {% with  calendar_form.url.auto_id|add:"_2" as pw_id %}
-        <label for="{{ pw_id }}">{% trans "Password:"%}</label>
-        {% render_multi_field calendar_form.url 2 class+="form-control" id=pw_id %}
-    {% endwith %}
-    <input type="submit" name="submit" value="{% trans 'Save' %}" class="action primary">
+{% render_form_header calendar_form %}
+
+{% render_form_field calendar_form.name %}
+
+{% trans "Calendar URL:" as url_label_text %}
+{% render_multi_field_part calendar_form.url 0 url_label_text %}
+
+{% trans "User:" as url_label_text %}
+{% render_multi_field_part calendar_form.url 1 url_label_text %}
+
+{% trans "Password:" as url_label_text %}
+{% render_multi_field_part calendar_form.url 2 url_label_text %}
+
+<input type="submit" name="submit" value="{% trans 'Save' %}" class="btn btn-primary">
 </form>
-<form action="{% url 'change_calendar' %}" method="post">
-{% csrf_token %}
+<br>
+
 {% if not edit %}
-<h3>{% trans "Current Calendars:"%}</h3>
-<ul>
-    {% for calendar in calendars %}
-        <li>{{ calendar.name }}
-            <button  name="delete" value="{{ calendar.id }}" class="btn btn-default btn-xs">
-                <i class="fa fa-trash-o"></i>
-            </button>
-            <a href="{% url 'edit_calendar' calendar.id %}" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i> </a>
-        </li>
-    {% endfor %}
-</ul>
+    <h3>{% trans "Current Calendars:" %}</h3>
+    <ul>
+        {% for calendar in calendars %}
+            <li>{{ calendar.name }}
+                <a href="{% url 'delete_calendar_confirm' calendar.id %}" class="btn btn-sm">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+                <a href="{% url 'edit_calendar' calendar.id %}" class="btn btn-sm"><i
+                        class="fa fa-pencil"></i> </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endif %}
-</form>

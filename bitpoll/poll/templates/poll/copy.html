@@ -5,6 +5,7 @@
 {% load i18n %}
 {% load pipeline %}
 {% load csp %}
+{% load spectre_css %}
 
 {% block title %}{% trans 'Copy Poll' %}{% endblock %}
 
@@ -13,110 +14,56 @@
 {% endblock %}
 
 {% block content %}
-        {% include 'poll/poll_header.html' %}
+    {% include 'poll/poll_header.html' %}
     <div class="container">
         <form action="{% url 'poll_copy' poll.url %}" method="post">
-            {% csrf_token %}
-            {% if error %}
-                <div class="form-errors">
-                    <div class="alert alert-danger">
-                        <div class="container">
-                            <i class="fa fa-times"></i>{{ error }}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
+            {% render_form_header form %}
 
             <h3>Copy Poll</h3>
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label for="title-input">{% trans 'Title' %}</label>
-                    <input autocomplete="off" class="form-control" id="title-input" name="{{ form.title.name }}"
-                           placeholder="Title" type="text" value="{{ form.title.value|default_if_none:'' }}"/>
-                    {% if form.title.errors %}
-                        <div class="form-errors">
-                            <div class="alert alert-danger">
-                                <div class="container">
-                                    <i class="fa fa-times"></i>{{ form.title.errors }}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
+            <div class="columns">
+                <div class="column col-5 col-md-12">
+                    {% render_form_field form.title %}
 
-                <div class="form-group">
-                    <label for="url-input">{% trans 'URL name' %}</label>
-                    <div class="pull-right">
-                        <script nonce="{% csp_js_nonce %}">var RANDOM_SLUGS = {% value_from_settings DEFAULT_RANDOM_SLUG %};</script>
-                            <div class="checkbox-inline">
-                                <input type="checkbox" name="random_slug" value="test" id="random_slug">
-                                <label for="random_slug">{% trans 'Randomize Urls' %}</label>
-                            </div>
-                            <button id="slug-randomize" class="action small"><i class="fa fa-random"></i><span>{% trans 'Randomize Now' %}</span>
+                    <div class="slug-right">
+                        <div class="form-group">
+                            <label class="form-switch form-inline">
+                                <input type="checkbox" name="random_slug" value="random_slug" id="random_slug"
+                                       {% if randomize_url %}checked="checked"{% endif %}>
+                                <i class="form-icon"></i> {% trans 'Randomize Urls' %}
+                            </label>
+                            <button id="slug-randomize" class="btn btn-sm script-only"><i
+                                    class="fa fa-random"></i>{% trans 'Randomize Now' %}
                             </button>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
-                        <input autocomplete="off" class="form-control" id="slug-input" name="{{ form.url.name }}"
-                               placeholder="URL" type="text" value="{{ form.url.value|default_if_none:'' }}"/>
-                    </div>
-                    {% if form.url.errors %}
-                        <div class="form-errors">
-                            <div class="alert alert-danger">
-                                <div class="container">
-                                    <i class="fa fa-times"></i>{{ form.url.errors }}
-                                </div>
-                            </div>
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
 
-                <label for="due-date-input">{% trans 'Due date' %}</label>
-                <div class="form-group">
-
-                    {% render_field form.due_date class+="form-control" %}
-                    {% if form.due_date.errors %}
-                        <div class="form-errors">
-                            <div class="alert alert-danger">
-                                <div class="container">
-                                    <i class="fa fa-times"></i>{{ form.due_date.errors }}
-                                </div>
-                            </div>
+                    <div id="slug" class="form-group{% if form.url.errors %} has-error{% endif %}">
+                        {# TODO: fieldsets in spectre-css module #}
+                        <label class="form-label" for="slug-input">URL name</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
+                            <input class="form-input" id="slug-input" name="{{ form.url.name }}" type="text"
+                                   value="{{ form.url.value|default_if_none:random_url }}" maxlength="80">
                         </div>
-                    {% endif %}
+                        {% if form.url.errors %}
+                            <p class="form-input-hint">{% for error in form.url.errors %}{{ error }}{% endfor %}</p>
+                        {% endif %}
+                    </div>
+
+                    {% render_form_field form.due_date %}
+
+                    <a href="{% url 'poll' poll.url %}" class="btn">{% trans 'Back to poll' %}</a>
+                    <input type="submit" value="{% trans 'Create' %}" class="btn btn-primary" name="create"/>
                 </div>
 
-                <a href="{% url 'poll' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
-                <input type="submit" value="{% trans 'Create' %}" class="action primary" name="create"/>
-            </div>
-
-            <div class="col-md-5 col-md-offset-1">
-                <label>{% trans 'Settings to copy' %}</label>
-                <div class="checkbox">
-                    <input type="checkbox" id="copy_choices" name="copy_choices" checked>
-                    <label for="copy_choices">{% trans 'Copy choices' %}</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" id="copy_invitations" name="copy_invitations" checked>
-                    <label for="copy_invitations">{% trans 'Copy invitations' %}</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" id="create_invitations_from_votes" name="create_invitations_from_votes">
-                    <label for="create_invitations_from_votes">{% trans 'Create invitations from votes' %}</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" id="copy_ans_values" name="copy_ans_values" checked>
-                    <label for="copy_ans_values">{% trans 'Copy possible answer values' %}</label>
-                </div>
-                <div class="checkbox">
-                    <input type="checkbox" id="reset_ownership" name="reset_ownership">
-                    <label for="reset_ownership">{% trans 'Reset ownership' %}</label>
-                </div>
-
-                <div class="form-group">
-                    <label for="date-shift">{% trans 'Date shift (days)' %}</label>
-                    <input autocomplete="off" class="form-control" id="date-shift" name="date_shift"
-                       placeholder="{% trans 'Due Date' %}" type="text" value="{{ date_shift|default_if_none:'0' }}"/>
+                <div class="column col-5 col-ml-auto col-md-12">
+                    <h3>{% trans 'Settings to copy' %}</h3>
+                    {% render_form_field form.copy_choices switch=True %}
+                    {% render_form_field form.copy_invitations switch=True %}
+                    {% render_form_field form.create_invitations_from_votes switch=True %}
+                    {% render_form_field form.copy_answer_values switch=True %}
+                    {% render_form_field form.reset_ownership switch=True %}
+                    {% render_form_field form.date_shift %}
                 </div>
             </div>
         </form>
@@ -126,5 +73,5 @@
 {% load csp %}
 {% block additionalJS %}
     {% javascript 'create_poll' %}
-    <script nonce="{% csp_js_nonce %}">$.datetimepicker.setLocale('{{ request.LANGUAGE_CODE }}');</script>
+    <script nonce="{% csp_js_nonce %}">$.datetimepicker.setLocale('{{ request.LANGUAGE_CODE }}');$('#{{ form.due_date.id_for_label }}').datetimepicker()</script>
 {% endblock %}

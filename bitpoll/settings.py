@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django_spectre_css',
     'django_simple_csp',
     'markdownify',
     'widget_tweaks',
@@ -118,7 +119,9 @@ PIPELINE = {
             'source_filenames': (
                 'css/font-awesome.css',
                 'scss/main.scss',
-                'scss/poll.scss'
+                'scss/poll.scss',
+                'scss/navbar.scss',  # TODO: move to base_scren and hide navbar in print?
+                'scss/list-group.scss',
             ),
             'output_filename': 'css/base.css',
         },
@@ -133,11 +136,10 @@ PIPELINE = {
         },
         'base_screen': {
             'source_filenames': (
-                'css/bootstrap.css',
-                'css/bootstrap-theme.css',
-                # 'css/jquery-range.css',  # this belongs to commented out JS class
+                'css/lib/spectre.css',
+                'css/lib/spectre-exp.css',
+                'css/lib/spectre-icons.css',
                 'scss/form.scss',
-                'scss/action.scss',
                 'scss/slider.scss',
                 'scss/timeinput.scss',
                 'css/jquery.datetimepicker.css',
@@ -161,14 +163,13 @@ PIPELINE = {
     'JAVASCRIPT': {
         'base': {
             'source_filenames': (
-                'js/lib/jquery-3.2.1.js',
-                'js/lib/bootstrap.js',
+                'js/util.js',
+                'js/polyfill.js',
             ),
             'output_filename': 'js/base.js',
         },
         'create_poll': {
             'source_filenames': (
-                'js/create.js',
                 'js/slug.js',
             ),
             'output_filename': 'js/index.js',
@@ -182,19 +183,19 @@ PIPELINE = {
         },
         'base_late': {
             'source_filenames': (
-                #'js/lib/jquery-range.min.js',  # TODO: is this needet for the numeric polls?
                 'js/lib/moment-with-locales.min.js',
-                'js/lib/mousetrap.min.js',
                 'js/main.js',
-                'js/util.js',
-                'js/custom-select.jquery.js',
-                'js/common.js',
-                'js/slider.js',
+                #'js/slider.js',
                 'js/vote.js',
-                'js/lib/jquery.datetimepicker.full.min.js',
-
             ),
             'output_filename': 'js/base_late.js',
+        },
+        'search': {
+            'source_filenames': (
+                'js/lib/auto-complete.js',
+                'js/search.js'
+            ),
+            'output_filename': 'js/autocomplete.js',
         },
     },
     'COMPILERS': (
@@ -299,11 +300,11 @@ ALLOW_CUSTOM_SLUGS = True
 DEFAULT_RANDOM_SLUG = 'true'  # this value is an JS true/false
 
 MESSAGE_TAGS = {
-    messages.DEBUG: 'debug',
-    messages.INFO: 'info',
-    messages.SUCCESS: 'success',
-    messages.WARNING: 'warning',
-    messages.ERROR: 'danger',
+    messages.DEBUG: 'toast',
+    messages.INFO: 'toast toast-primary',
+    messages.SUCCESS: 'toast toast-success',
+    messages.WARNING: 'toast toast-warning',
+    messages.ERROR: 'toast toast-error',
 }
 
 # Url to the Base Homepage and Text on the Link, leave empty to not use this option

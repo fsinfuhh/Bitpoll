@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans 'CalDav Delete Calendar' %}{% endblock %}
+
+{% block content %}
+
+    <form action="{% url 'change_calendar' %}" method="post">
+        {% csrf_token %}
+        <h3>{% trans "Do you want to Delete the following Calendar:" %}</h3>
+        <p><b>{{ calendar_name }}</b>: {{ calendar_url }}</p>
+        <button name="delete" value="{{ calendar_id }}" class="btn btn-error">
+            <i class="fa fa-trash-o"></i> {% trans 'Delete' %}
+        </button>
+        <a href="{% url 'settings' %}" class="btn">{% trans 'Cancel' %} </a>
+
+    </form>
+{% endblock %}

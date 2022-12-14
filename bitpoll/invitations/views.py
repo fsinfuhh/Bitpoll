@@ -19,7 +19,9 @@ def invite(request, poll_url):
 
     if request.method == 'POST':
         if not current_poll.can_edit(request.user, request):
-            error_msg = "Not allowed to edit"
+            messages.error(
+                request, _("You are not allowed to edit this Poll")
+            )
         else:
             if 'resend_all' in request.POST:
                 for invitation in current_poll.invitation_set:
@@ -42,6 +44,7 @@ def invite(request, poll_url):
 
     return TemplateResponse(request, 'invitations/Invitation.html', {
         'poll': current_poll,
+        'suppress_messages': True,
     })
 
 

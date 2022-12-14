@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load pipeline %}
 {% load i18n %}
+{% load spectre_css %}
 
 {% block title %}Create choice{% endblock %}
 
@@ -11,77 +12,93 @@
 {% block content %}
     {% include "poll/poll_header.html" %}
 
-        <div class="container">
+    <div class="container">
         {% if is_dt_choice %}
             {% include  "poll/dt_choice_header.html" %}
         {% else %}
             {% include "poll/noscript_date_time.html" %}
         {% endif %}
         <form action="{{ request.url }}" method="POST" id="date-time-form">
-            {% csrf_token %}
+            {% render_form_header new_choice %}
             <div id="date-time-form-content">
-                <div class="form-group">
-                    <label for="{{ new_choice.dates.id }}">{% trans 'Dates' %}</label>
-                  {{ new_choice.dates }}
-                </div>
+                {% render_form_field new_choice.dates %}
             </div>
-            <div class="alert alert-info">
+            <div class="toast toast-primary">
                 <i class="fa fa-exclamation-circle"></i>
                 {% if is_dt_choice %}
                     {% blocktrans %}Please select the days that you want to
-                    be able to choose. In the next step, you will select time slots.{% endblocktrans %}
+                        be able to choose. In the next step, you will select time slots.{% endblocktrans %}
                 {% else %}
                     {% blocktrans %}Please select the days that you want to
-                    be able to choose.{% endblocktrans %}
+                        be able to choose.{% endblocktrans %}
                 {% endif %}
             </div>
-            <div class="script-only">
-                <div class="calendar" data-calendar-field="#date" id="calendar">
-                    <table class="table auto-width">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    <button class="action icon" id="calendar-prev-month"><i class="fa fa-caret-left"></i>
-                                    </button>
-                                </th>
-                                <th class="title" colspan="6">MONTHNAME</th>
-                                <th>
-                                    <button class="action icon" id="calendar-next-month"><i class="fa fa-caret-right"></i>
-                                    </button>
-                                </th>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>{% trans 'Mo' %}</td>
-                                <td>{% trans 'Tu' %}</td>
-                                <td>{% trans 'We' %}</td>
-                                <td>{% trans 'Th' %}</td>
-                                <td>{% trans 'Fr' %}</td>
-                                <td>{% trans 'Sa' %}</td>
-                                <td>{% trans 'Su' %}</td>
-                            </tr>
-
-                            {% for i in "12345" %}
-                                <tr class="week">
-                                    <td></td>
-                                    {% for j in "1234567" %}
-                                        <td>{{ j }}</td>
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            {#  render form errors manually for JS enabled view#}
+            {% if new_choice.dates.errors %}
+                    <div class="toast toast-warning script-only">
+                        <div class="container"><i class="fa fa-exclamation-circle"></i>
+                            {% blocktrans %}Please select at least one Date{% endblocktrans %}
+                    </div>
                 </div>
-                <div class="calendar-list">
-                    <ul id="calendar-list"></ul>
+            {% endif %}
+            <div class="script-only">
+                <div class="columns">
+                    <div class="column col-mx-auto col-auto">
+                        <div class="columns">
+                            <div class="column col-auto">
+                                <div class="calendar" data-calendar-field="#date" id="calendar">
+                                    <table class="table auto-width">
+                                        <tbody>
+                                        <tr>
+                                            <th>
+                                                <button class="btn btn-sm" id="calendar-prev-month"><i
+                                                        class="fa fa-caret-left"></i>
+                                                </button>
+                                            </th>
+                                            <th class="title" colspan="6">MONTHNAME</th>
+                                            <th>
+                                                <button class="btn btn-sm" id="calendar-next-month"><i
+                                                        class="fa fa-caret-right"></i>
+                                                </button>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>{% trans 'Mo' %}</td>
+                                            <td>{% trans 'Tu' %}</td>
+                                            <td>{% trans 'We' %}</td>
+                                            <td>{% trans 'Th' %}</td>
+                                            <td>{% trans 'Fr' %}</td>
+                                            <td>{% trans 'Sa' %}</td>
+                                            <td>{% trans 'Su' %}</td>
+                                        </tr>
+
+                                        {% for i in "12345" %}
+                                            <tr class="week">
+                                                <td></td>
+                                                {% for j in "1234567" %}
+                                                    <td>{{ j }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="column col-3">
+                                <div class="calendar-list">
+                                    <ul id="calendar-list"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-actions">
-                <a class="action btn-js-back script-only" href="#">{% trans 'Back' %}</a>
-                <input type="submit" class="action primary" value="{% trans 'Next' %}">
+                <input type="submit" class="btn btn-primary pull-right" value="{% trans 'Next' %}">
             </div>
         </form>
-        </div>
+    </div>
 
 {% endblock %}
 

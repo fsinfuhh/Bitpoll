@@ -39,16 +39,14 @@ table.poll td, table.poll th, table.poll tr {
 table.poll {
     border-collapse: separate !important;
     border-spacing: 3px !important;
-    margin: .7em -3px;
 }
 
-.poll, .vote {
+.poll {
     font-size: 9pt;
 }
 
 .poll .choice-text,
-.poll .choice-sum,
-.vote .choice-text {
+.poll .choice-sum {
     white-space: nowrap;
     font-weight: bold;
     background: #EEE;
@@ -58,17 +56,20 @@ table.poll {
     white-space: nowrap !important;
 }
 
-.vote .choice-text {
+.vote {
     text-align: right;
 }
 
 .poll .choice-group,
 .poll .author,
-.poll .vote-actions,
-.vote .choice-group {
+.poll .vote-actions {
     font-weight: bold;
     background: #EEE;
     vertical-align: middle;
+}
+
+table td.vote-actions {
+    padding: .2rem .6rem;
 }
 
 .vote-extra-icons {
@@ -94,8 +95,38 @@ table.poll {
 }
 
 .poll .author {
-    padding: 0 2em;
+    padding: .6rem 2em;
     text-align: right;
+    height: 100%;
+    //width: 100%;
+    max-width: 20em;
+    & > span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: inline-block;
+        line-height: 1em;
+        vertical-align: middle;
+        width: 100%;
+    }
+}
+
+.vote-options {
+    width: 20em;
+}
+
+.poll .popover-container {
+    text-align: left;
+    font-weight: normal;
+    white-space: normal;
+    color: black;
+
+    .value span {
+        color: white;
+    }
+}
+
+.poll .popover {
+    display: table-cell;
 }
 
 .poll .author-hidden {
@@ -109,8 +140,12 @@ table.poll {
     white-space: inherit;
 }
 
-.vote .choice-group {
-    text-align: right;
+.checkbox-cell ~ .choice-text {
+    min-width: 7em;
+}
+
+.btn-sm {
+    min-width: 1.4rem;
 }
 
 .poll .choice-sum.maximum {
@@ -136,11 +171,13 @@ table.poll {
 
 .vote-choice {
     /*border: 5px solid white;*/
-    color: white;
-    font-size: 16px;
     min-width: 4em;
     max-width: 10em;
     text-align: center;
+    span, label {
+        color: white;
+        font-size: 16px;
+    }
 }
 
 .vote .vote-choice {
@@ -158,17 +195,6 @@ td.control {
 
 td.control {
     cursor: pointer;
-}
-
-.vote-choice-radio {
-    padding: 0;
-    list-style: none;
-}
-
-.vote-choice-radio li {
-    display: inline;
-    padding: 0;
-    margin-right: 1em;
 }
 
 table.poll td.none {
@@ -191,14 +217,20 @@ table.poll td.numeric {
 }
 
 td.vote-comment {
-    display: block;
     max-width: 300px;
-    padding: 2px !important;
+    padding: 0.5em;
 }
 
 .vote-comment input {
     width: 30em;
     vertical-align: center;
+}
+
+.user-select-none {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .choice.deleted,
@@ -262,15 +294,10 @@ tr.choice td {
     .comment {
         padding: .7em;
         min-height: 68px;
-        border: 1px solid #F6F6F6;
-        border-width: 0 2px;
+        border: 2px solid #F6F6F6;
 
         &:nth-child(2n+1) {
             background-color: #F6F6F6;
-        }
-
-        &:nth-child(2n):last-child {
-            border-bottom-width: 2px;
         }
 
         .meta {
@@ -395,25 +422,77 @@ td.vote-header {
     }
 }
 
-.table tbody > tr > td.vote-choice {
-    padding: 0;
-    background-color: #D6D6D6;
-    label, span {
-        //width: 100%;
-        //height: 100%;
-        cursor: pointer;
-        padding: 8px 0;
-        margin: 0;
-        display: block;
-        line-height: 1.428571429; // weil bootstrap
+@supports (-moz-appearance:none) {  // select only FF
+    .poll tbody > tr {
+        & > td.vote-choice {
+            height: 100%; // This has to be 0 so it works in Chrome, in FF only 100% works
+        }
     }
+}
 
-    input[type=radio] {
-        display: none;
+.poll tbody > tr {
+    height: 1px;
 
+    & > td {
+        height: 0; // This has to be 0 so it works in Chrome, in FF 100% also works
+        min-height: 3.5em;
+
+        &.choice-group {
+            max-width: 12em;
+        }
+
+        &.vote-choice {
+            padding: 0;
+            background-color: #D6D6D6;
+
+            label, span {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: 100%;
+                cursor: pointer;
+                padding: 8px 0;
+            }
+
+            input[type=radio] {
+                display: none;
+
+            }
+        }
     }
 }
 
 td.vote-choice span, td.control {
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+}
+
+@media #{$media-tablet-desktop} {
+    .sticky-table {
+        thead, tfoot {
+            & tr {
+                & > th {
+                    position: sticky;
+                    z-index: 2;
+                    top: 0;
+                }
+
+                & > :first-child {
+                    z-index: 3;
+                    left: 0;
+                    top: 0;
+                }
+
+                & > :first-child {
+                    background: #ffffff;
+                }
+            }
+        }
+
+        tbody tr > :first-child {
+            position: sticky;
+            z-index: 1;
+            left: 0;
+        }
+    }
 }

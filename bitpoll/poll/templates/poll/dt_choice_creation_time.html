@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load pipeline %}
+{% load spectre_css %}
 
 {% block title %}Create choice{% endblock %}
 
@@ -14,20 +15,23 @@
     {% include  "poll/dt_choice_header.html" %}
         <form action="{% url 'poll_editDTChoiceTime' poll.url %}" method="POST" id="date-time-form">
             <div id="date-time-form-content">
-                 {% csrf_token %}
-                 <div class="form-group"><label for="{{ time.dates.label_for }}">{% trans 'Dates' %}</label>
-                  {{ time.dates }}
-                </div>
-                <div class="form-group"><label for="{{ time.times.label_for }}">{% trans 'Times' %}</label>
-                  {{ time.times }}
-                </div>
+                 {% render_form time %}
             </div>
             <div class="script-only">
-                <div class="alert alert-info">
+                <div class="toast">
                   <div class="container"><i class="fa fa-exclamation-circle"></i>{% blocktrans %}Please select the time slots that you
                     want to be able to choose. In the next step, you will match them against the selected days. {% endblocktrans %}
                     </div>
                 </div>
+                {#  render form errors manually for JS enabled view #}
+                {% if time.times.errors %}
+                    <div class="toast toast-warning script-only">
+                        <div class="container"><i class="fa fa-exclamation-circle"></i>
+                            {% blocktrans %}Please select at least one Time{% endblocktrans %}
+                    </div>
+                </div>
+                {% endif %}
+
                 <div class="time-input">
                     <div id="time-slider">
                         <div id="time-slider-knob"></div>
@@ -36,18 +40,19 @@
                         <div class="hour animated"></div>
                         <div class="minute animated"></div>
                     </div>
-                    <div class="form-inline" id="time-slider-form">
-                        <input type="text" class="form-control" placeholder="HH" id="time-hour">
-                        <input type="text" class="form-control" placeholder="MM" id="time-minute">
-                        <input type="submit" class="action" value="{% trans 'Add' %}" id="time-add-button">
+                    <div class="form-group" id="time-slider-form">
+                        <input type="number" min="0" max="24" class="form-input form-inline" placeholder="HH" id="time-hour">
+                        <input type="number" min="0" max="60" class="form-input form-inline" placeholder="MM" id="time-minute">
+                        <input type="submit" class="btn btn-primary" value="{% trans 'Add' %}" id="time-add-button">
                     </div>
                 </div>
                 <div class="calendar-list">
                     <ul class="time-slots"></ul>
                 </div>
             </div>
-            <div class="form-actions"><a class="action btn-js-back script-only" href="">{% trans 'Back' %}</a>
-              <input type="submit" class="action primary" value="{% trans 'Next' %}">
+            <div class="form-actions">
+                <a class="btn-js-back script-only" href="">{% trans 'Back' %}</a>
+                <input type="submit" class="btn btn-primary pull-right" value="{% trans 'Next' %}">
             </div>
         </form>
     </div>

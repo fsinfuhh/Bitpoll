@@ -1,0 +1,42 @@
+{% load i18n %}
+
+<header id="header">
+    <nav class="navbar">
+        <input type="checkbox" id="hamburger">
+        <div class="navbar-section">
+            <a href="{% url 'index' %}"><i class="fa fa-plus"></i>{% trans 'Create poll' %}</a>
+            {% if home_url %}
+                <a href="{{ home_url }}"><i class="fa fa-home"></i>{{ home_url_name }}</a>
+            {% endif %}
+            <a href="{% url 'about' %}"><i class="fa fa-question-circle"></i>{% trans 'About' %}</a>
+        </div>
+        <div class="navbar-center">
+            <a href="{% url 'index' %}">Bitpoll</a>
+        </div>
+        <label for="hamburger" class="navbar-hamburger"><span>{% trans 'Menu' %}</span><span> {% trans 'Hide Menu' %}</span></label>
+        <ul class="navbar-section navbar-hamburger">
+
+            {% if request.user.is_anonymous %}
+                {% if register %}
+                    <li>
+                        <a href="{% url 'registration_request_account' %}">
+                            <i class="fa fa-pencil"></i>{% trans 'Register' %}
+                        </a>
+                    </li>
+                {% endif %}
+                <li><a href="{% url 'login' %}?next={{ request.path }}"><i
+                        class="fa fa-sign-in"></i>{% trans 'Login' %}</a></li>
+            {% else %}
+                <li><a href="{% url 'settings' %}"><i class="fa fa-user"></i>{{ request.user.get_displayname }}</a></li>
+                {% if group_management_enabled %}
+                    <li>
+                        {% load group_tags %}
+                        {% open_invitations as oi %}
+                        <a {% if oi %}class="badge" data-badge="{{ oi }}"{% endif %} href="{% url 'groups_index' %}"><i class="fa fa-group"></i>{% trans 'Groups' %}</a></li>
+                {% endif %}
+                <li><a href="{% url 'settings' %}"><i class="fa fa-pencil"></i>{% trans 'Settings' %}</a></li>
+                <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>{% trans 'Logout' %}</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>

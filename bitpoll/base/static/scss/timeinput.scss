@@ -59,8 +59,11 @@
 
 #time-slider-form {
     display: inline-block;
-    vertical-align: middle;
+    //vertical-align: middle;
     margin-left: 20px;
+    input[type="number"] {
+        width: 4em;
+    }
 }
 
 #time-slider-form input[type="text"] {

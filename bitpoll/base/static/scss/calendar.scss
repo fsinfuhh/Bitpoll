@@ -13,6 +13,10 @@
             font-size: 0.8em;
         }
 
+        .btn {
+            width: 2.1em;
+        }
+
         td {
             text-align: center;
             padding: 4pt !important;
@@ -21,12 +25,6 @@
                 border-right: 1px solid #DDD;
                 border-bottom: 0;
                 border-top: 0;
-            }
-
-            .btn {
-                display: inline-block;
-                width: 2.5em;
-                text-align: center;
             }
         }
     }
@@ -59,17 +57,23 @@
 
 .calendar-list {
     display: inline-block;
-    padding: 1em 0;
+    //padding: 1em 0;
     vertical-align: top;
     white-space: normal;
 
     ul {
         padding: 0;
         list-style: none;
-
+        //height: 25em;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-flow: column wrap;
+        flex-flow: column wrap;
+        margin: -0.4rem 0 .8rem .8rem;
         li {
             display: block;
             margin-bottom: 4px;
+            margin-right: 1em;
         }
     }
 }
@@ -78,4 +82,61 @@
     display: inline-block;
     width: 2.5em;
     text-align: center;
+}
+
+.date-remove-button {
+    width: 100%;
+}
+
+.btn {
+    background-color: #f9f9f9;
+}
+
+#date-time-form-content {
+    margin-bottom: 2em;
+}
+
+
+td.checkbox-cell {
+    padding: 0;
+    background-color: #F6F6F6;
+    text-align: center;
+    cursor: pointer;
+    //display: block;
+    min-width: 4em;
+
+    & input{
+        display: none;
+        &:checked {
+            & ~ label {
+                background-color: #9C6;
+                & > i.fa-check-square-o {
+                    display: inline;
+                }
+                & > i.fa-square-o {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    label {
+        background-color: #F96;
+        display: block;
+        color: white;
+        padding: 0.8em;
+        font-size: 16px;
+        cursor: pointer;
+        height: 100%;
+        & > i {
+
+            &.fa-check-square-o {
+                display: none;
+            }
+        }
+    }
+}
+
+#date-time-form .form-actions {
+    margin-top: 1em;
 }

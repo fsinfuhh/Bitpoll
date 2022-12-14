@@ -4,6 +4,7 @@
 {% load tz %}
 {% load pipeline %}
 {% load widget_tweaks %}
+{% load spectre_css %}
 {% block title %}{{ poll.title }}{% endblock %}
 {% block css %}
     {% stylesheet 'poll_edit' %}
@@ -14,9 +15,9 @@
 {% block content %}
         {% include 'poll/poll_header.html' %}
 
-    <div class="container container-fluid">
-    <div class="row">
-        <div class="col-md-12">
+    <div class="container">
+    <div class="columns">
+        <div class="column col-12">
             <p>
             {% blocktrans %}Here you can edit which options the voters have for each choice you give them. By default,
             <b>yes</b>, <b>no</b>, <b>maybe</b> and <b>rather not</b> are always enabled, but you can disable or change any of these.
@@ -29,8 +30,8 @@
             </p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-8">
+    <div class="columns">
+        <div class="column col-7 col-md-12">
             <form method="post">
                 {% csrf_token %}
                 <h2>{% trans 'Available Values' %}</h2>
@@ -62,11 +63,11 @@
                                 <strong>{{ choiceval.votechoice_count }}</strong> / {{ poll.vote_set.count }}
                             </td>
                             <td class="author">
-                                <button class="action default" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-sm" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa fa-pencil"></i></button>
                                 {% if not choiceval.deleted %}
-                                    <button class="action default" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa fa-trash-o"></i></button>
+                                    <button class="btn btn-sm" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa fa-trash-o"></i></button>
                                 {% else %}
-                                    <button class="action default" type="submit" name="restore" value="{{ choiceval.id }}"><i class="fa fa-undo"></i></button>
+                                    <button class="btn btn-sm" type="submit" name="restore" value="{{ choiceval.id }}"><i class="fa fa-undo"></i></button>
                                 {% endif %}
                             </td>
                         </tr>
@@ -75,78 +76,27 @@
                 </table>
             </form>
 
-            <a href="{% url 'poll_settings' poll.url %}" class="action">{% trans ' Back' %}</a>
+            <a href="{% url 'poll_settings' poll.url %}" class="btn">{% trans ' Back' %}</a>
         </div>
 
-        <div class="col-md-4">
+        <div class="column col-4 col-md-12 col-ml-auto">
             <h2>{% trans 'Add choice value' %}</h2>
 
             <form method="post" action="{% url 'poll_editchoicevalues_create' poll.url %}">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="title">{% trans 'Title' %}</label>
-                    {% render_field form.title class+="form-control" %}
-                    {% if form.title.errors %}
-                        <div class="form-errors">
-                        <div class="alert alert-danger">
-                            <div class="container">
-                                <i class="fa fa-times"></i>{{ form.title.errors }}
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="color">{% trans 'Color' %}</label>
-                    <input type="color" class="form-control" name="{{ form.color.name }}" value="#{{ form.color.value|default_if_none:'90db45' }}" />
-                        {% if form.color.errors %}
-                            <div class="form-errors">
-                            <div class="alert alert-danger">
-                                <div class="container">
-                                    <i class="fa fa-times"></i>{{ form.color.errors }}
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="weight">{% trans 'Weight' %}</label>
-                    <span class="help-inline">{% trans '(usually between 0 and 1)' %}</span>
-                        {% render_field form.weight class+="form-control" %}
-                        {% if form.weight.errors %}
-                            <div class="form-errors">
-                            <div class="alert alert-danger">
-                                <div class="container">
-                                    <i class="fa fa-times"></i>{{ form.weight.errors }}
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="icon">{% trans 'Icon' %}</label>
-                    <span class="help-inline">{% trans '(any FontAwesome icon)' %}</span>
-                    <div class="input-group">
-                        <span class="input-group-addon">fa fa-</span>
-                        {% render_field form.icon class+="form-control" %}
-                        {% if form.icon.errors %}
-                            <div class="form-errors">
-                                <div class="alert alert-danger">
-                                    <div class="container">
-                                        <i class="fa fa-times"></i>{{ form.icon.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
+                {% render_form_header form %}
+                    {% render_form_field form.title %}
+                {% render_form_field form.color value='#90db45'%}
+
+                        {% render_form_field form.weight %}
+                        {# <span class="input-group-addon">fa fa-</span> #}
+                        {% render_form_field form.icon%}
 
                 {% if choiceval_select %}
                     <input name="choiceval_id" value="{{ choiceval_select.id }}" type="hidden" readonly>
-                    <input class="action primary" type="submit" value="{% trans 'Edit' %}">
+                    <input class="btn btn-primary" type="submit" value="{% trans 'Edit' %}">
                 {% else %}
                     <input name="choiceval_id" value="" type="hidden" readonly>
-                    <input class="action primary" type="submit" value="{% trans 'Add' %}">
+                    <input class="btn btn-primary" type="submit" value="{% trans 'Add' %}">
                 {% endif %}
 
                 <h3>Available icons</h3>

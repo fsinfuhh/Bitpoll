@@ -4,6 +4,7 @@
 {% load settings_value %}
 {% load i18n %}
 {% load poll_filter vote_permissions %}
+{% load spectre_css %}
 
 {% block title %}{{ poll.title }}{% endblock %}
 
@@ -12,187 +13,76 @@
 {% endblock %}
 
 {% block content %}
-        {% include 'poll/poll_header.html' %}
-        <div class="container">
+    {% include 'poll/poll_header.html' %}
+    <div class="container">
 
-    <form action="{% url 'poll_settings' poll.url %}" method="post">
-    {% csrf_token %}
-        <div class="col-md-5">
-            <div class="form-group">
-                <label for="title-input">{% trans 'Title' %}</label>
-                <input autocomplete="off" class="form-control" id="title-input" name="{{ form.title.name }}"
-                    placeholder="{% trans 'Title' %}" type="text" value="{{ form.title.value|default_if_none:'' }}" />
-                {% if form.title.errors %}
-                    <div class="form-errors">
-                        <div class="alert alert-danger">
-                            <div class="container">
-                                <i class="fa fa-times"></i>{{ form.title.errors }}
-                            </div>
-                        </div>
+        <form action="{% url 'poll_settings' poll.url %}" method="post">
+            {% render_form_header form %}
+            <div class="columns">
+                <div class="column col-5 col-md-12">
+                    {% render_form_field form.title %}
+                    {% render_form_field form.due_date %}
+                    {% render_form_field form.show_results %}
+                    {% render_form_field form.timezone_name %}
+
+                    {% render_form_field form.use_user_timezone switch=True %}
+                    {% render_form_field form.description %}
+                    <br>
+                    <div class="form-group hide-md">
+                        <a href="{% url 'poll' poll.url %}" class="btn">{% trans 'Back to poll' %}</a>
+                        <input type="submit" class="btn btn-primary" name="Save" value="{% trans 'Save changes' %}">
                     </div>
-                {% endif %}
-            </div>
+                </div>
 
-            <label for="due-date-input">{% trans 'Due date'%}</label>
-            <div class="form-group">
 
-                {% render_field form.due_date class+="form-control" id+="datetimepicker" %}
-                 {% if form.due_date.errors %}
-                    <div class="form-errors">
-                        <div class="alert alert-danger">
-                            <div class="container">
-                                <i class="fa fa-times"></i>{{ form.due_date.errors }}
-                            </div>
-                        </div>
+                <div class="column col-5 col-md-12 col-ml-auto">
+                    <h3>{% trans 'additional Settings' %}</h3>
+                    <div class="help-block">
+                        {% blocktrans %}
+                            These settings are not retroactive, meaning that changing them will not modify
+                            votes/comments already created.
+                        {% endblocktrans %}
                     </div>
-                {% endif %}
-            </div>
+                    {% render_form_field form.allow_comments switch=True %}
+                    {% render_form_field form.anonymous_allowed switch=True %}
+                    {% render_form_field form.require_login switch=True %}
+                    {% render_form_field form.require_invitation switch=True %}
+                    {% render_form_field form.public_listening switch=True %}
+                    {% render_form_field form.allow_unauthenticated_vote_changes switch=True %}
+                    {% render_form_field form.one_vote_per_user switch=True %}
+                    {% render_form_field form.show_invitations switch=True %}
+                    {% render_form_field form.vote_all switch=True %}
+                    {% render_form_field form.hide_participants switch=True %}
+                    {% render_form_field form.show_score_in_summary switch=True %}
+                    {% render_form_field form.sorting %}
 
-            <label for="show-result-select">{% trans 'Show Results' %}</label><br>
-            {% render_field  form.show_results class+='form-control'%}
-            <br>
-            <div class="help-block">
-                {% blocktrans %}
-                Owners of this poll and administrators will always see all votes.
-                {% endblocktrans %}
-            </div>
+                    <h4>{% trans 'Owner of the Poll' %}</h4>
+                    <div class="help-block">
+                        {% blocktrans %}
+                            Only the owner of a poll, or a member of the owner group, can edit the settings on this
+                            page.
+                            If you set this to "Nobody", then anyone may claim exclusive ownership. Most restrictive
+                            settings above are useless if you do not claim ownership of this poll.
+                        {% endblocktrans %}
+                    </div>
+                    {% render_form_field form.user value=user_select %}
 
-            <div class="form-group">
-                <label for="timezone-select">{% trans 'Timezone' %}</label><br>
-                <select id="timezone-select" class="form-control" name="{{ form.timezone_name.name }}">
-                    {% for timezone in timezones %}
-                        {% if timezone == form.timezone_name.value %}
-                            <option value="{{ timezone }}" selected="selected"> {{ timezone }}</option>
-                        {% else %}
-                            <option value="{{ timezone }}"> {{ timezone }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-                <div class="checkbox">
-                    <input type="checkbox" id="use_user_timezone" name="{{ form.use_user_timezone.name }}" {% if form.use_user_timezone.value %} checked {% endif %}>
-                    <label for="use_user_timezone">{% trans 'Translate all times to the users timezone' %}</label>
+                    {% render_form_field form.group replace_choices=groups empty_option='------' %}
+
+
+                    <h3>{% trans 'Very advanced stuff' %}</h3><br>
+                    <a href="{% url 'poll_editchoicevalues' poll.url %}">{% trans 'Edit possible answer values' %}</a><br>
+                    <a href="{% url 'invitations' poll.url %}">{% trans 'Manage invitations' %}</a><br>
+                    <a href="{% url 'poll_copy' poll.url %}">{% trans 'Copy poll' %}</a><br>
+                    <a class="red" href="{% url 'poll_delete' poll.url %}">{% trans 'Delete this poll' %}</a>
+                    <div class="form-group show-md">
+                        <a href="{% url 'poll' poll.url %}" class="btn">{% trans 'Back to poll' %}</a>
+                        <input type="submit" class="btn btn-primary" name="Save" value="{% trans 'Save changes' %}">
+                    </div>
                 </div>
             </div>
-
-            <br>
-            <label for="description-input">{% trans 'Description' %}</label>
-            <div class="text " id="description-input">
-                {% render_field form.description class+="form-control" %}
-                {% blocktrans %}
-                You can use
-                <a href="http://daringfireball.net/projects/markdown/" target="_blank">Markdown</a>
-                syntax for formatting.
-            {% endblocktrans %}
-            </div>
-            <br>
-            <a href="{% url 'poll' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
-            <input type="submit" class="action primary" name="Save" value="{% trans 'Save changes' %}">
-        </div>
-
-
-        <div class="col-md-5 col-md-offset-1">
-          <label>{% trans 'Additional Settings' %}</label>
-            <div class="checkbox">
-                <input type="checkbox" id="allow_comments" name="{{ form.allow_comments.name }}" {% if form.allow_comments.value %} checked {% endif %}>
-                <label for="allow_comments">{% trans 'Allow comments' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="anonymous_allowed" name="{{ form.anonymous_allowed.name }}" {% if form.anonymous_allowed.value %} checked {% endif %}>
-                <label for="anonymous_allowed">{% trans 'Allow anonymous votes' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="require_login" name="{{ form.require_login.name }}" {% if form.require_login.value %} checked {% endif %}>
-                <label for="require_login">{% trans 'Login required' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="require_invitation" name="{{ form.require_invitation.name }}" {% if form.require_invitation.value %} checked {% endif %}>
-                <label for="require_invitation">{% trans 'Invitation required to vote' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="public_listening" name="{{ form.public_listening.name }}" {% if form.public_listening.value %} checked {% endif %}>
-                <label for="public_listening">{% trans 'Show in public poll list' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="allow_unauthenticated_vote_changes" name="{{ form.allow_unauthenticated_vote_changes.name }}" {% if form.allow_unauthenticated_vote_changes.value %} checked {% endif %}>
-                <label for="allow_unauthenticated_vote_changes">{% trans 'Allow unauthenticated vote changes' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="one_vote_per_user" name="{{ form.one_vote_per_user.name }}" {% if form.one_vote_per_user.value %} checked {% endif %}>
-                <label for="one_vote_per_user">{% trans 'One vote per user' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="show_invitations" name="{{ form.show_invitations.name }}" {% if form.show_invitations.value %} checked {% endif %}>
-                <label for="show_invitations">{% trans 'Show invitations as empty votes' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="vote_all" name="{{ form.vote_all.name }}" {% if form.vote_all.value %} checked {% endif %}>
-                <label for="vote_all">{% trans 'Forbid empty choices' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="vote_hide_participants" name="{{ form.hide_participants.name }}" {% if form.hide_participants.value %} checked {% endif %}>
-                <label for="vote_hide_participants">{% trans 'Hide participants' %}</label>
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="vote_show_score_in_summary" name="{{ form.show_score_in_summary.name }}" {% if form.show_score_in_summary.value %} checked {% endif %}>
-                <label for="vote_show_score_in_summary">{% trans 'Show score instead of percentage' %}</label>
-            </div>
-            <div class="">
-                Sort results by:
-            {# TODO: use enum values #}
-                <input type="radio" name="{{ form.sorting.name }}" value="0" id="sorting_date" {% if form.sorting.value == 0 %} checked {% endif %}><label for="sorting_date">Date</label>
-                <input type="radio" name="{{ form.sorting.name }}" value="1" id="sorting_name" {% if form.sorting.value == 1 %} checked {% endif %}><label for="sorting_name">Name</label>
-            </div>
-            <div class="help-block">
-                {% blocktrans %}
-                These settings are not retroactive, meaning that changing them will not modify votes/comments already created.
-                {% endblocktrans %}
-            </div>
-
-
-            <div class="form-group">
-                <label for="user-select">{% trans 'User' %}</label>
-                <input autocomplete="off" class="form-control" id="user-select" name="user"
-                    placeholder="{% trans 'User' %}" type="text" value="{{ user_select }}" />
-                {% if user_error %}
-                    <div class="form-errors">
-                        <div class="alert alert-danger">
-                            <div class="container">
-                                <i class="fa fa-times"></i>{{ user_error }}
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-
-            <label for="group-select">{% trans 'Group' %}</label><br>
-            <select id="group-select" class="form-control" name="{{ form.group.name }}">
-                {% if form.group.value == None %}
-                    <option value="" selected="selected">-----</option>
-                {% else %}
-                    <option value="">-----</option>
-                {% endif %}
-
-                {% for group in groups %}
-                    {% if group.id == form.group.value %}
-                        <option value="{{ group.id }}" selected="selected"> {{ group.name }}</option>
-                    {% else %}
-                        <option value="{{ group.id }}"> {{ group.name }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <div class="help-block">
-                {% blocktrans %}
-                Only the owner of a poll, or a member of the owner group, can edit the settings on this page.
-                If you set this to "Nobody", then anyone may claim exclusive ownership. Most restrictive settings above are useless if you do not claim ownership of this poll.
-                {% endblocktrans %}
-            </div>
-            <label>{% trans 'Advanced Options' %}</label><br>
-            <a href="{% url 'poll_editchoicevalues' poll.url %}">{% trans 'Edit possible answer values' %}</a><br>
-            <a href="{% url 'invitations' poll.url %}">{% trans 'Manage invitations' %}</a><br>
-            <a href="{% url 'poll_copy' poll.url %}">{% trans 'Copy poll' %}</a><br>
-            <a class="red" href="{% url 'poll_delete' poll.url %}">{% trans 'Delete this poll' %}</a>
-        </div></form>
-        </div>
+        </form>
+    </div>
 {% endblock %}
 
 {% load csp %}
