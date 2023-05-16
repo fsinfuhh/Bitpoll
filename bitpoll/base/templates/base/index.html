@@ -45,7 +45,7 @@
                         <div class="script-only">
                             <ul id="create-type-list" class="type-choices">
                                 <li data-value="datetime">
-                                    <div class="icon"><i class="fa fa-clock-o"></i>
+                                    <div class="icon"><i class="fa-solid fa-clock"></i>
                                     </div>
                                     <div class="text">
                                         <div class="title">{% trans 'Date and Time' %}</div>
@@ -53,7 +53,7 @@
                                     </div>
                                 </li>
                                 <li data-value="date">
-                                    <div class="icon"><i class="fa fa-calendar"></i>
+                                    <div class="icon"><i class="fa-solid fa-calendar"></i>
                                     </div>
                                     <div class="text">
                                       <div class="title">{% trans 'Date' %}</div>
@@ -61,7 +61,7 @@
                                     </div>
                                 </li>
                                 <li data-value="universal">
-                                    <div class="icon"><i class="fa fa-list"></i>
+                                    <div class="icon"><i class="fa-solid fa-list"></i>
                                     </div>
                                     <div class="text">
                                         <div class="title">{% trans 'Normal Poll' %}</div>
@@ -69,7 +69,7 @@
                                     </div>
                                 </li>
                                 <li data-value="numeric" class="hidden">
-                                    <div class="icon"><i class="fa fa-sliders"></i>
+                                    <div class="icon"><i class="fa-solid fa-sliders"></i>
                                     </div>
                                     <div class="text">
                                         <div class="title">{% trans 'Numeric' %}</div>
@@ -91,7 +91,7 @@
                             <div class="form-errors">
                                 <div class="alert alert-danger">
                                     <div class="container">
-                                    <i class="fa fa-times"></i>{{ poll_form.title.errors }}
+                                    <i class="fa-solid fa-times"></i>{{ poll_form.title.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                         <input type="checkbox" name="random_slug" value="random_slug" id="random_slug" {% if randomize_url %}checked="checked"{% endif %}>
                                         <label for="random_slug">{% trans 'Randomize Urls' %}</label>
                                     </div>
-                                    <button id="slug-randomize" class="action small script-only"><i class="fa fa-random"></i><span>{% trans 'Randomize Now' %}</span>
+                                    <button id="slug-randomize" class="action small script-only"><i class="fa-solid fa-random"></i><span>{% trans 'Randomize Now' %}</span>
                                     </button>
                                 </div>
                                 <label for="slug">URL name</label>
@@ -122,7 +122,7 @@
                                         <div class="form-errors">
                                             <div class="alert alert-danger">
                                                 <div class="container">
-                                                <i class="fa fa-times"></i>{{ poll_form.url.errors }}
+                                                <i class="fa-solid fa-times"></i>{{ poll_form.url.errors }}
                                                 </div>
                                             </div>
                                         </div>
@@ -140,7 +140,7 @@
                                     <div class="form-errors">
                                         <div class="alert alert-danger">
                                             <div class="container">
-                                                <i class="fa fa-times"></i>{{ poll_form.due_date.errors }}
+                                                <i class="fa-solid fa-times"></i>{{ poll_form.due_date.errors }}
                                             </div>
                                         </div>
                                     </div>
@@ -180,10 +180,10 @@
                     </div></div>
                     <div class="form-group text-center">
                         <a id="advanced-toggle" href="#" class="action">
-                            <span class="more"><i class="fa fa-plus-square-o"></i>
+                            <span class="more"><i class="fa-solid fa-plus-square-o"></i>
                                 <span>{% trans 'More options' %}</span>
                             </span>
-                            <span class="less hidden"><i class="fa fa-minus-square-o"></i>
+                            <span class="less hidden"><i class="fa-solid fa-minus-square-o"></i>
                                 <span>{% trans 'Less options' %}</span>
                             </span>
                         </a>
@@ -224,7 +224,7 @@
                 <h4>{% trans 'Register for more' %}</h4>
                 <p>{% blocktrans %}Registered users have access to the full width of features available.{% endblocktrans %}
                 </p>
-                <a href="{% url 'registration_request_account' %}" class="action"><i class="fa fa-pencil"></i><span>{% trans 'Register' %}</span></a>
+                <a href="{% url 'registration_request_account' %}" class="action"><i class="fa-solid fa-pencil"></i><span>{% trans 'Register' %}</span></a>
             </div>
             {% endif %}
         {# TODO: own polls? #}
@@ -251,7 +251,7 @@
                     <h4>{% trans 'Public polls' %}</h4>
                     {% if not public_polls %}
                         <div class="alert alert-info">
-                            <div class="container"><i class="fa fa-exclamation-circle"></i>{% trans 'There are currently no public polls.' %}
+                            <div class="container"><i class="fa-solid fa-exclamation-circle"></i>{% trans 'There are currently no public polls.' %}
                             </div>
                         </div>
                     {% else %}

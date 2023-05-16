@@ -45,16 +45,16 @@
                                 </td>
                                 <td>
                                     <a href="#" class="btn btn-default btn-xs choice-move-up">
-                                        <i class="fa fa-arrow-up"></i>
+                                        <i class="fa-solid fa-arrow-up"></i>
                                     </a>
                                     <a href="#" class="btn btn-default btn-xs choice-move-down">
-                                        <i class="fa fa-arrow-down"></i>
+                                        <i class="fa-solid fa-arrow-down"></i>
                                     </a>
                                     <button name="delete" value="{{ choice.pk }}" class="btn btn-default btn-xs">
                                         {% if not choice.deleted %}
-                                            <i class="fa fa-trash-o"></i>
+                                            <i class="fa-solid fa-trash-o"></i>
                                         {% else %}
-                                            <i class="fa fa-undo"></i>
+                                            <i class="fa-solid fa-undo"></i>
                                         {% endif %}
                                     </button>
                                 </td>
@@ -68,7 +68,7 @@
                                            value="{{ next_sort_key }}">
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-primary" name="submit"><i
-                                                class="fa fa-plus"></i></button>
+                                                class="fa-solid fa-plus"></i></button>
                                     </span>
                                 </div>
                             </td>

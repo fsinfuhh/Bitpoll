@@ -116,7 +116,9 @@ PIPELINE = {
     'STYLESHEETS': {
         'base': {
             'source_filenames': (
-                'css/font-awesome.css',
+                'fontawesome/css/fontawesome.css',
+                'fontawesome/css/solid.css',
+                'fontawesome/css/v4-shims.css',
                 'scss/main.scss',
                 'scss/poll.scss'
             ),

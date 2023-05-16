@@ -27,7 +27,7 @@
         <div class="form-errors">
             <div class="alert alert-danger">
                 <div class="container">
-                    <i class="fa fa-times"></i>{{ calendar_form.name.errors }}
+                    <i class="fa-solid fa-times"></i>{{ calendar_form.name.errors }}
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
         <div class="form-errors">
             <div class="alert alert-danger">
                 <div class="container">
-                    <i class="fa fa-times"></i>{{ calendar_form.url.errors }}
+                    <i class="fa-solid fa-times"></i>{{ calendar_form.url.errors }}
                 </div>
             </div>
         </div>
@@ -64,9 +64,9 @@
     {% for calendar in calendars %}
         <li>{{ calendar.name }}
             <button  name="delete" value="{{ calendar.id }}" class="btn btn-default btn-xs">
-                <i class="fa fa-trash-o"></i>
+                <i class="fa-solid fa-trash-o"></i>
             </button>
-            <a href="{% url 'edit_calendar' calendar.id %}" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i> </a>
+            <a href="{% url 'edit_calendar' calendar.id %}" class="btn btn-xs btn-default"><i class="fa-solid fa-pencil"></i> </a>
         </li>
     {% endfor %}
 </ul>

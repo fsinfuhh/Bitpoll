@@ -41,30 +41,30 @@
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-left">
-                        <li><a href="{% url 'index' %}"><i class="fa fa-plus"></i>{% trans 'Create poll' %}</a></li>
+                        <li><a href="{% url 'index' %}"><i class="fa-solid fa-plus"></i>{% trans 'Create poll' %}</a></li>
                         {% if home_url %}
-                            <li><a href="{{ home_url }}"><i class="fa fa-home"></i>{{ home_url_name }}</a></li>
+                            <li><a href="{{ home_url }}"><i class="fa-solid fa-home"></i>{{ home_url_name }}</a></li>
                         {% endif %}
-                        <li><a href="{% url 'about' %}"><i class="fa fa-question-circle"></i>{% trans 'About' %}</a></li>
+                        <li><a href="{% url 'about' %}"><i class="fa-solid fa-question-circle"></i>{% trans 'About' %}</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_anonymous %}
                         {% if register %}
-                            <li><a href="{% url 'registration_request_account' %}"><i class="fa fa-pencil"></i>{% trans 'Register' %}</a></li>
+                            <li><a href="{% url 'registration_request_account' %}"><i class="fa-solid fa-pencil"></i>{% trans 'Register' %}</a></li>
                         {% endif %}
-                        <li><a href="{% url 'login' %}?next={{ request.path }}"><i class="fa fa-sign-in"></i>{% trans 'Login' %}</a></li>
+                        <li><a href="{% url 'login' %}?next={{ request.path }}"><i class="fa-solid fa-sign-in"></i>{% trans 'Login' %}</a></li>
                     {% else %}
-                        <li><a href="{% url 'settings' %}"><i class="fa fa-user"></i>{{ request.user.get_displayname }}</a></li>
+                        <li><a href="{% url 'settings' %}"><i class="fa-solid fa-user"></i>{{ request.user.get_displayname }}</a></li>
                         {% if group_management_enabled %}
                             {% load group_tags %}
                             {% open_invitations as oi %}
                             {% if oi %}
                                 <span class="badge">{{ oi }}</span>
                             {% endif %}
-                            <li><a href="{% url 'groups_index' %}"><i class="fa fa-group"></i>{% trans 'Groups' %}</a></li>
+                            <li><a href="{% url 'groups_index' %}"><i class="fa-solid fa-group"></i>{% trans 'Groups' %}</a></li>
                         {% endif %}
-                        <li><a href="{% url 'settings' %}"><i class="fa fa-pencil"></i>{% trans 'Settings' %}</a></li>
-                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-in"></i>{% trans 'Logout' %}</a></li>
+                        <li><a href="{% url 'settings' %}"><i class="fa-solid fa-pencil"></i>{% trans 'Settings' %}</a></li>
+                        <li><a href="{% url 'logout' %}"><i class="fa-solid fa-sign-in"></i>{% trans 'Logout' %}</a></li>
                     {% endif %}
                     </ul>
                 </div>

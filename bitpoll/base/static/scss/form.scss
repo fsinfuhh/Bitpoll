@@ -148,7 +148,7 @@ section.section {
             // }
 
             // mobile
-            .fa {
+            .fa-solid {
                 background: $primary-color;
                 color: white;
             }
@@ -174,7 +174,7 @@ section.section {
             // mobile
             margin-right: 8px;
 
-            .fa {
+            .fa-solid {
                 // mobile
                 $size: 14px*2;
                 width: $size;
@@ -216,7 +216,7 @@ section.section {
                     color: white;
                 }
 
-                .fa {
+                .fa-solid {
                     background: none;
                     color: inherit;
                 }
