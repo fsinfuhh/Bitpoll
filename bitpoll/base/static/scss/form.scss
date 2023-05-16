@@ -246,19 +246,16 @@ section.section {
 .form-step {
     $color: #444;
 
-    text-align: center;
     color: $color;
-    margin: 32px 0 16px 0;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5ch;
+
+    margin: 32px 0 16px 0;
     font-weight: bold;
     font-size: 0.8em;
-
-    .number, .title {
-        display: inline;
-    }
-
-    .number {
-    }
 
     &:before, &:after {
         display: inline-block;
