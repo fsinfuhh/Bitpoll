@@ -92,7 +92,7 @@ body {
     padding-bottom: 150px;
 }
 
-.btn-xs .fa {
+.btn-xs .fa-solid {
     font-size: 14px;
     margin: -1px;
     vertical-align: -1px;
@@ -127,7 +127,7 @@ body {
     font-size: 9pt;
 }
 
-.alert .fa {
+.alert .fa-solid {
     font-size: 20px;
     vertical-align: middle;
     margin: -1em 0.2em -0.9em 0;
@@ -376,7 +376,7 @@ footer {
     }
 
     h2 {
-        i.fa {
+        i.fa-solid {
             margin-right: 10px;
         }
     }
@@ -396,12 +396,8 @@ footer {
     text-align: center;
     margin: 100px auto;
 
-    .fa {
+    .fa-solid {
         font-size: 100px;
-    }
-
-    h1 {
-
     }
 
     p {
@@ -421,7 +417,7 @@ footer {
     margin-top: 40px;
 }
 
-.poll-overview .fa {
+.poll-overview .fa-solid {
     margin-right: 4px;
 }
 

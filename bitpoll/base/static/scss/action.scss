@@ -97,12 +97,12 @@ $variants: (
     }
 
 
-    i.fa {
+    i.fa-solid {
         font-size: 14px;
     }
 
-    i.fa + span,
-    span + i.fa {
+    i.fa-solid + span,
+    span + i.fa-solid {
         margin-left: 6px;
     }
 

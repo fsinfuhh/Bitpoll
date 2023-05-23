@@ -83,13 +83,13 @@ function updateDateTimeList() {
 
     $(".time-slots").html("");
     times.forEach(function(time) {
-        $(".time-slots").append('<li><button class="action time-remove-button" title="remove time" data-time="' + time + '"><span>' + time + '</span><i class="fa fa-times"></i></button></li>');
+        $(".time-slots").append('<li><button class="action time-remove-button" title="remove time" data-time="' + time + '"><span>' + time + '</span><i class="fa-solid fa-times"></i></button></li>');
     });
 
     $("#calendar-list").html("");
     dates.forEach(function(date) {
         var formatDate = moment(date).format("ddd D MMM");
-        $("#calendar-list").append('<li><button class="action date-remove-button" title="remove date" data-date="' + date +'"><span>' + formatDate + '</span><i class="fa fa-times"></i></button></li> ');
+        $("#calendar-list").append('<li><button class="action date-remove-button" title="remove date" data-date="' + date +'"><span>' + formatDate + '</span><i class="fa-solid fa-times"></i></button></li> ');
     });
 
     // $(".date-remove-button, .time-remove-button").tooltip({"placement": "right"});
@@ -285,7 +285,7 @@ function makeWeek(week) {
     if(past && !future) {
         tr.append($('<td class="left"></td>'))
     } else {
-        tr.append($('<td class="left"><button class="week action icon default"><i class="fa fa-angle-double-right"></i></button></td>'))
+        tr.append($('<td class="left"><button class="week action icon default"><i class="fa-solid fa-angle-double-right"></i></button></td>'))
     }
 
     for(var i = 0; i < 7; ++i) {

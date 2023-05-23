@@ -23,7 +23,7 @@
                     </tr>
                     {% for invitation in poll.invitation_set.all %}
                         <tr>
-                            <td>{% if invitation.vote %}<i class="fa fa-check"></i>{% endif %}</td>
+                            <td>{% if invitation.vote %}<i class="fa-solid fa-check"></i>{% endif %}</td>
                             <td>
                                 {{ invitation.user.username }}
                             </td>
@@ -31,8 +31,8 @@
                                 {{ invitation.date_created }}
                             </td>
                             <td>
-                                <button class="action default" type="submit" name="resend" value="{{ invitation.id }}"><i class="fa fa-refresh"></i></button>
-                                <button class="action default" type="submit" name="delete" value="{{ invitation.id }}"><i class="fa fa-trash-o"></i></button>
+                                <button class="action default" type="submit" name="resend" value="{{ invitation.id }}"><i class="fa-solid fa-refresh"></i></button>
+                                <button class="action default" type="submit" name="delete" value="{{ invitation.id }}"><i class="fa-solid fa-trash-o"></i></button>
                             </td>
                         </tr>
                     {% endfor %}

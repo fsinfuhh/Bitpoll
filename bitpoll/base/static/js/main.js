@@ -41,9 +41,7 @@ $(document).ready(function() {
 
     $(".icon-preview button").click(function() {
         $("#id_icon").val($(this).data("icon"));
-    }).each(function() {
-        //$(this).find("span").text(ICONS[$(this).data("icon")]).hide();
-    }).css("width", "28px");
+    }).css("width", "fit-content");
 
     // Comment positioning
     // Relative positioning is not defined on elements with
