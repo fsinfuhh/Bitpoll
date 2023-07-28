@@ -3,7 +3,7 @@
 Bitpoll is a software to conduct polls about Dates, Times or general Questions.
 
 
-This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <mafiasi.de>, rewritten using the Django framework as a backend.
+This isa new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <mafiasi.de>, rewritten using the Django framework as a backend.
 
 # Using Docker
 
