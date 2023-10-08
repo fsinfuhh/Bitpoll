@@ -25,6 +25,16 @@ URL_PREFIX = ''
 #        ]
 INSTALLED_APPS_LOCAL = []
 
+# To use OpenId:
+INSTALLED_APPS_LOCAL.append('simple_openid_connect.integrations.django')
+USE_OPENID = True
+OPENID_ISSUER = "..."
+OPENID_CLIENT_ID = "..."
+OPENID_BASE_URI = "..."
+OPENID_SCOPE = "openid profile email"
+LOGIN_URL = "simple_openid_connect_django:login"
+LOGOUT_REDIRECT_URL = "home"
+
 # Compress the JS and CSS files, for more Options see https://django-pipeline.readthedocs.io/en/latest/compressors.html
 # the Compressor have to be installed in the system
 PIPELINE_LOCAL = {}
