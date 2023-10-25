@@ -394,7 +394,7 @@ URL_PREFIX = ''
 
 ANTI_SPAM_CHALLENGE_TTL = 60 * 60 * 24 * 7  # Defaults to 7 days
 
-USE_OPENID = False
+OPENID_ENABLED = False
 
 from .settings_local import *
 

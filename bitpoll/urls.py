@@ -15,6 +15,7 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.contrib.auth import views as auth_views
+from django.core.exceptions import ImproperlyConfigured
 from django.urls import include, path, re_path
 from django.contrib import admin
 from django.shortcuts import redirect, render
@@ -34,16 +35,19 @@ urlpatterns = [
     path(r'admin/', admin.site.urls),
 ]
 
-if settings.USE_OPENID:
+if settings.OPENID_ENABLED and settings.GROUP_MANAGEMENT:
+    raise ImproperlyConfigured("You can't use both OPENID_ENABLED and GROUP_MANAGEMENT at the same time.")
+
+if settings.OPENID_ENABLED:
     urlpatterns += [
         path("auth/openid/", include("simple_openid_connect.integrations.django.urls")),
-        path("login/", RedirectView.as_view(url="/auth/openid/login/"), name='login'),
-        path("logout/", RedirectView.as_view(url="/auth/openid/logout/"), name='logout'),
+        path("login/", RedirectView.as_view(url="/auth/openid/login/"), name="login"),
+        path("logout/", RedirectView.as_view(url="/auth/openid/logout/"), name="logout"),
     ]
 else:
     urlpatterns += [
-        path('login/', auth_views.LoginView.as_view(), name='login', ),
-        path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
+        path("login/", auth_views.LoginView.as_view(), name="login"),
+        path("logout/", auth_views.LogoutView.as_view(next_page="index"), name="logout"),
     ]
 
 

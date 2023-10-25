@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
@@ -67,6 +68,11 @@ def invitation_send(request, poll_url):
             except ObjectDoesNotExist:
                 try:
                     group = Group.objects.get(name=receiver)
+                    if settings.OPENID_ENABLED:
+                        # import here to avoid import errors if openid is not enabled
+                        from bitpoll.base.openid import refresh_group_users
+                        refresh_group_users(group)
+
                     for group_user in group.user_set.all():
                         try:
                             invitation = Invitation(user=group_user, poll=current_poll, date_created=now(),

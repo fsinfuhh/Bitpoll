@@ -26,14 +26,16 @@ URL_PREFIX = ''
 INSTALLED_APPS_LOCAL = []
 
 # To use OpenId:
-INSTALLED_APPS_LOCAL.append('simple_openid_connect.integrations.django')
-USE_OPENID = True
-OPENID_ISSUER = "..."
-OPENID_CLIENT_ID = "..."
-OPENID_BASE_URI = "..."
-OPENID_SCOPE = "openid profile email"
-LOGIN_URL = "simple_openid_connect_django:login"
-LOGOUT_REDIRECT_URL = "home"
+#INSTALLED_APPS_LOCAL.append('simple_openid_connect.integrations.django')
+#OPENID_ENABLED = True
+#OPENID_ISSUER = "https://identity.mafiasi.de/realms/mafiasi"
+#OPENID_API_BASE = "https://identity.mafiasi.de/admin/realms/mafiasi"
+#OPENID_CLIENT_ID = "..."
+#OPENID_CLIENT_SECRET = "..."
+#OPENID_BASE_URI = "..."
+#OPENID_SCOPE = "openid profile email"
+#LOGIN_URL = "simple_openid_connect_django:login"
+#LOGOUT_REDIRECT_URL = "index"
 
 # Compress the JS and CSS files, for more Options see https://django-pipeline.readthedocs.io/en/latest/compressors.html
 # the Compressor have to be installed in the system
