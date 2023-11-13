@@ -1,5 +1,5 @@
 # customize to your needs
-
+import re
 # You must insert your own random value here
 # SECURITY WARNING: keep the secret key used in production secret!
 # see <https://docs.djangoproject.com/en/dev/howto/deployment/checklist/#secret-key>
@@ -35,6 +35,7 @@ INSTALLED_APPS_LOCAL = []
 #OPENID_BASE_URI = "..."
 #OPENID_SCOPE = "openid profile email"
 #OPENID_USER_MAPPER = 'bitpoll.base.openid.BitpollUserMapper'
+#OPENID_ADMIN_GROUPS = re.compile('admins|superusers')
 #LOGIN_URL = "simple_openid_connect_django:login"
 #LOGOUT_REDIRECT_URL = "index"
 

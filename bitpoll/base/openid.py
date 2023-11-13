@@ -31,6 +31,9 @@ class BitpollUserMapper(UserMapper):
             group = Group.objects.get_or_create(name=group_name)[0]
             group.user_set.add(user)
             group.save()
+            if settings.OPENID_ADMIN_GROUPS.fullmatch(group.name) is not None:
+                user.is_superuser = True
+                user.is_staff = True
 
 
 def refresh_group_users(group: Group):
