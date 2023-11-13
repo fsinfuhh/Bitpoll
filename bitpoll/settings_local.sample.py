@@ -34,6 +34,7 @@ INSTALLED_APPS_LOCAL = []
 #OPENID_CLIENT_SECRET = "..."
 #OPENID_BASE_URI = "..."
 #OPENID_SCOPE = "openid profile email"
+#OPENID_USER_MAPPER = 'bitpoll.base.openid.BitpollUserMapper'
 #LOGIN_URL = "simple_openid_connect_django:login"
 #LOGOUT_REDIRECT_URL = "index"
 

@@ -126,8 +126,6 @@ urllib3==2.1.0
     # via
     #   requests
     #   sentry-sdk
-uwsgi==2.0.23
-    # via -r requirements-production.in
 vobject==0.9.6.1
     # via caldav
 webencodings==0.5.1
