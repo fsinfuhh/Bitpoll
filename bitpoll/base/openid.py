@@ -13,7 +13,7 @@ class BitpollUserMapper(UserMapper):
         # if there is already a user with this username, we create the openid association if it does not exist yet
         User = get_user_model()
         try:
-            user = User.objects.get(username=user_data.username)
+            user = User.objects.get(username=user_data.preferred_username)
             OpenidUser.objects.get_or_create(
                 sub=user_data.sub,
                 defaults={
