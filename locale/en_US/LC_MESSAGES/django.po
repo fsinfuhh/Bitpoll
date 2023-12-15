@@ -208,8 +208,8 @@ msgstr "Login required to vote."
 
 #: bitpoll/base/templates/base/index.html:23
 msgid ""
-"This instance is reserved for users of <a href=\"https://mafiasi."
-"de\">mafiasi.de</a>.\n"
+"This instance is reserved for users of <a "
+"href=\"%(account_website)s\">%(account_name)s</a>.\n"
 "                If you do not have an account there, please use the public "
 "version at <a href=\"https://bitpoll.de\">bitpoll.de</a>."
 msgstr ""
