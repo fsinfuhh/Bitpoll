@@ -26,6 +26,7 @@ from bitpoll.settings import IMPRINT_URL
 from django.core import signing
 from django.conf import settings
 
+from django.utils.translation import gettext_lazy as _
 
 def index(request):
     """
@@ -53,10 +54,10 @@ def index(request):
                 current_poll.save()
             # TODO: lazy translation
             # TODO: load from config
-            ChoiceValue(title="yes", icon="check", color="90db46", weight=1, poll=current_poll).save()
-            ChoiceValue(title="no", icon="ban", color="c43131", weight=0, poll=current_poll).save()
-            ChoiceValue(title="maybe", icon="question", color="ffe800", weight=0.5, poll=current_poll).save()
-            ChoiceValue(title="rather not", icon="thumbs-down", color="B0E", weight=0.25, poll=current_poll).save()
+            ChoiceValue(title=_("yes"), icon="check", color="90db46", weight=1, poll=current_poll).save()
+            ChoiceValue(title=_("no"), icon="ban", color="c43131", weight=0, poll=current_poll).save()
+            ChoiceValue(title=_("maybe"), icon="question", color="ffe800", weight=0.5, poll=current_poll).save()
+            ChoiceValue(title=_("rather not"), icon="thumbs-down", color="B0E", weight=0.25, poll=current_poll).save()
 
             if current_poll.type == 'universal':  # TODO: heir könnte auch auf die algemeine edit url weitergeleitet werden
                 return redirect('poll_editUniversalChoice', current_poll.url)

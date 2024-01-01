@@ -114,7 +114,7 @@
                                     <button id="slug-randomize" class="action small script-only"><i class="fa-solid fa-random"></i><span>{% trans 'Randomize Now' %}</span>
                                     </button>
                                 </div>
-                                <label for="slug">URL name</label>
+                                <label for="slug">{% trans 'URL name' %}</label>
                                 <div class="input-group"><span class="input-group-addon">{% value_from_settings BASE_URL %}/poll/</span>
                                     <input class="form-control" id="slug-input" name="{{ poll_form.url.name }}" type="text"
                                            value="{{ poll_form.url.value|default_if_none:random_url }}" maxlength="80">
