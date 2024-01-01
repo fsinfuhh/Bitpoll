@@ -66,6 +66,7 @@ PIPELINE_LOCAL = {}
 #    ('de', 'Deutsch'),
 #    ('en', 'English'),
 #    #('fr', 'Français'),
+#    ('it', 'Italiano'),
 #)
 
 #REGISTER_ENABLED = True
