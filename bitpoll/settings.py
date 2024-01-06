@@ -327,7 +327,7 @@ LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'), )
 LANGUAGES = (
     ('de', 'Deutsch'),
     ('en', 'English'),
-    #('fr', 'Français'),
+    ('it', 'Italiano'),
 )
 
 REGISTER_ENABLED = True
