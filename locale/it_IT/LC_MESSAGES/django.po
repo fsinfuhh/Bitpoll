@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
+# ITALIAN TRANSLATION
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Fabio Lovato <fabiol@mailbox.org>, 2024.
 #
 msgid ""
 msgstr ""
