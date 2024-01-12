@@ -203,7 +203,8 @@
             </div>
         </div>
     </section>
-    {% if request.user.is_anonymous %}
+    {% value_from_settings OPENID_ENABLED as openid %}
+    {% if request.user.is_anonymous and not openid %}
     <section class="section login">
         <div class="container">
             <div class="halfsize">
