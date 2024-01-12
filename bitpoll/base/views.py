@@ -41,7 +41,7 @@ def index(request):
     """
     public_polls = Poll.objects.filter(public_listening=True)  # TODO: limit & sotierung & pagination oder so?
     randomize_url = settings.DEFAULT_RANDOM_SLUG == 'true'  # this settings value is a javascript true/false
-    if request.method == 'POST':
+    if request.method == 'POST' and (request.user.is_authenticated or not settings.POLL_CREATION_REQUIRES_LOGIN):
         randomize_url = 'random_slug' in request.POST
         post_data = request.POST.copy()
         if randomize_url and request.POST.get('url', '') == '':

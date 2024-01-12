@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 00:45+0200\n"
+"POT-Creation-Date: 2023-12-15 15:58+0100\n"
 "PO-Revision-Date: 2022-07-04 00:46+0200\n"
 "Last-Translator: Timon Engelke <timon.engelke@uni-hamburg.de>\n"
 "Language-Team: \n"
@@ -200,7 +200,21 @@ msgid ""
 "a>."
 msgstr ""
 
-#: bitpoll/base/templates/base/index.html:19
+#: bitpoll/base/templates/base/index.html:21
+#, fuzzy
+#| msgid "Login required to vote."
+msgid "Login required to create polls"
+msgstr "Login required to vote."
+
+#: bitpoll/base/templates/base/index.html:23
+msgid ""
+"This instance is reserved for users of <a "
+"href=\"%(account_website)s\">%(account_name)s</a>.\n"
+"                If you do not have an account there, please use the public "
+"version at <a href=\"https://bitpoll.de\">bitpoll.de</a>."
+msgstr ""
+
+#: bitpoll/base/templates/base/index.html:26
 msgid "Create a poll"
 msgstr "Create a poll"
 

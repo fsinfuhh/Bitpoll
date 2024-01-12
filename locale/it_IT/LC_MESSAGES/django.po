@@ -247,7 +247,24 @@ msgstr ""
 "                    <a href=\"https://github.com/fsinfuhh/BitPoll\">GitHub</"
 "a>."
 
-#: bitpoll/base/templates/base/index.html:19
+#: bitpoll/base/templates/base/index.html:23
+msgid "Login required to create polls"
+msgstr "Accesso richiesto per creare sondaggi"
+
+#: bitpoll/base/templates/base/index.html:25
+#, python-format
+msgid ""
+"This instance is reserved for users of <a "
+"href=\"%(account_website)s\">%(account_name)s</a>.\n"
+"                If you do not have an account there, please use the public "
+"version at <a href=\"https://bitpoll.de\">bitpoll.de</a>."
+msgstr ""
+"Questa istanza è riservata agli utenti di  <a "
+"href=\"%(account_website)s\">%(account_name)s</a>.\n"
+"Se non si dispone di un account, utilizzare la versione pubblica su <a "
+"href=\"https://bitpoll.de\">bitpoll.de</a>."
+
+#: bitpoll/base/templates/base/index.html:28
 msgid "Create a poll"
 msgstr "Crea un sondaggio"
 

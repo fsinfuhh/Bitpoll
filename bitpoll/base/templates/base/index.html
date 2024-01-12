@@ -16,6 +16,15 @@
     <section class="section create-poll">
         <div class="container">
             <div class="halfsize">
+            {% value_from_settings POLL_CREATION_REQUIRES_LOGIN as requires_login %}
+            {% value_from_settings POLL_CREATION_ACCOUNT_WEBSITE as account_website %}
+            {% value_from_settings POLL_CREATION_ACCOUNT_NAME as account_name %}
+            {% if requires_login and request.user.is_anonymous %}
+                <h1>{% trans 'Login required to create polls' %}</h1>
+                <hr/>
+                <p class="lead">{% blocktrans %}This instance is reserved for users of <a href="{{ account_website }}">{{ account_name }}</a>.
+                If you do not have an account there, please use the public version at <a href="https://bitpoll.de">bitpoll.de</a>.{% endblocktrans %}</p>
+            {% else %}
                 <h1>{% trans 'Create a poll' %}</h1>
                 <hr/>
                 <form method="POST" class="form" action="{% url 'index' %}">
@@ -190,6 +199,7 @@
                         <input type="submit" value="{% trans 'Create' %}" class="action primary"/>
                     </div>
                 </form>
+            {% endif %}
             </div>
         </div>
     </section>
