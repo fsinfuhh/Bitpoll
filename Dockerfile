@@ -1,6 +1,6 @@
 #sentry-cli releases -o sentry-internal new -p bitpoll $VERSION
 # Dockerfile
-FROM python:slim as common-base
+FROM python:3.12-slim as common-base
 
 #ENV DJANGO_SETTINGS_MODULE foo.settings
 ENV UID=2008
