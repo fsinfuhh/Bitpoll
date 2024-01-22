@@ -19,16 +19,16 @@ Get the example settings file and adapt it according to your needs:
 ```
 wget https://raw.githubusercontent.com/fsinfuhh/Bitpoll/master/bitpoll/settings_local.sample.py -O run/config/settings.py
 ```
+It is important to change at least the database settings, secret key, and allowed hosts.
 
 Start the docker container:
 ```
 docker run -a stdout -a stderr --rm --name bitpoll -p 3008:3008 -p 3009:3009 --volume ./run/static:/opt/static --volume ./run/config:/opt/config ghcr.io/fsinfuhh/bitpoll
 ```
 
-The Static assets from `run/static` have to be served from the Webserver at `/static/`.
-The Container listens for uwsgi traffic on Port 3008 and for HTTP traffic on Port 8009.
-
-TODO: add example nginx Config
+The container is reachable on port 3009.
+If you use an external web server, you can use uwsgi traffic on port 3008 and serve the static
+assets from `run/static` at `/static/`.
 
 # Manual Install
 
