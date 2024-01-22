@@ -1,5 +1,6 @@
 # customize to your needs
 import re
+import os
 # You must insert your own random value here
 # SECURITY WARNING: keep the secret key used in production secret!
 # see <https://docs.djangoproject.com/en/dev/howto/deployment/checklist/#secret-key>
@@ -10,6 +11,9 @@ FIELD_ENCRYPTION_KEY = "this+is+an+example+key+please+generate+one+="
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
+# The domain name of the site
+ALLOWED_HOSTS = ['bitpoll.example.com']
 
 ## If Bitpoll is served via HTTPS enable the next two options
 #SESSION_COOKIE_SECURE = True
