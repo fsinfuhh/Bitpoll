@@ -41,8 +41,8 @@ if settings.OPENID_ENABLED and settings.GROUP_MANAGEMENT:
 if settings.OPENID_ENABLED:
     urlpatterns += [
         path("auth/openid/", include("simple_openid_connect.integrations.django.urls")),
-        path("login/", RedirectView.as_view(url="/auth/openid/login/"), name="login"),
-        path("logout/", RedirectView.as_view(url="/auth/openid/logout/"), name="logout"),
+        path("login/", RedirectView.as_view(url="/auth/openid/login/", query_string=True), name="login"),
+        path("logout/", RedirectView.as_view(url="/auth/openid/logout/", query_string=True), name="logout"),
     ]
 else:
     urlpatterns += [
