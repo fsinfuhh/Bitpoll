@@ -104,7 +104,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'django-simple-csp.middleware.csp.CSPMiddleware',
+    'django_simple_csp.middleware.csp.CSPMiddleware',
     'pipeline.middleware.MinifyHTMLMiddleware',
 ]
 
