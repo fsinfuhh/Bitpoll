@@ -43,6 +43,10 @@ INSTALLED_APPS_LOCAL = []
 #LOGIN_URL = "simple_openid_connect_django:login"
 #LOGOUT_REDIRECT_URL = "index"
 
+MIDDLEWARE_LOCAL = [
+#    "simple_openid_connect.integrations.django.middleware.TokenVerificationMiddleware",
+]
+
 # Compress the JS and CSS files, for more Options see https://django-pipeline.readthedocs.io/en/latest/compressors.html
 # the Compressor have to be installed in the system
 PIPELINE_LOCAL = {}
