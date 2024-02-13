@@ -186,6 +186,12 @@ PIPELINE = {
             ),
             'output_filename': 'js/poll_edit.js',
         },
+        'poll_view': {
+            'source_filenames': (
+                'js/poll_filter.js',
+            ),
+            'output_filename': 'js/poll_view.js',
+        },
         'base_late': {
             'source_filenames': (
                 #'js/lib/jquery-range.min.js',  # TODO: is this needet for the numeric polls?

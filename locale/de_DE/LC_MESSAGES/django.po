@@ -1504,9 +1504,31 @@ msgstr "Auswertung"
 msgid "Details"
 msgstr "Details"
 
+#: bitpoll/poll/templates/poll/poll.html:218
+#: bitpoll/poll/templates/poll/poll.html:225
+#: bitpoll/poll/templates/poll/poll.html:239
+msgid "Filter"
+msgstr "Filter"
+
 #: bitpoll/poll/templates/poll/poll.html:216
 msgid "Export as CSV"
 msgstr "Als CSV exportieren"
+
+#: bitpoll/poll/templates/poll/poll.html:246
+msgid "Minimum percentage"
+msgstr "Minimaler Prozentsatz"
+
+#: bitpoll/poll/templates/poll/poll.html:259
+msgid "Maximum count"
+msgstr "Maximale Anzahl"
+
+#: bitpoll/poll/templates/poll/poll.html:268
+msgid "Reset"
+msgstr "Reset"
+
+#: bitpoll/poll/templates/poll/poll.html:272
+msgid "Done"
+msgstr "Fertig"
 
 #: bitpoll/poll/templates/poll/poll.html:219
 msgid "Comments"
