@@ -1415,12 +1415,12 @@ msgstr ""
 msgid "Vote"
 msgstr "Vote"
 
-#: bitpoll/poll/templates/poll/poll.html:153
-msgid "Scores"
-msgstr "Scores"
+#: bitpoll/poll/templates/poll/poll.html:154
+msgid "Percentage"
+msgstr "Percentage"
 
-#: bitpoll/poll/templates/poll/poll.html:171
-#: bitpoll/poll/templates/poll/poll.html:186
+#: bitpoll/poll/templates/poll/poll.html:172
+#: bitpoll/poll/templates/poll/poll.html:187
 msgid "Score"
 msgstr "Score"
 
