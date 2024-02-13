@@ -1500,12 +1500,12 @@ msgstr "Assegna utente"
 msgid "Vote"
 msgstr "Vota"
 
-#: bitpoll/poll/templates/poll/poll.html:153
-msgid "Scores"
-msgstr "Punteggi"
+#: bitpoll/poll/templates/poll/poll.html:154
+msgid "Percentage"
+msgstr ""
 
-#: bitpoll/poll/templates/poll/poll.html:171
-#: bitpoll/poll/templates/poll/poll.html:186
+#: bitpoll/poll/templates/poll/poll.html:172
+#: bitpoll/poll/templates/poll/poll.html:187
 msgid "Score"
 msgstr "Punteggio"
 

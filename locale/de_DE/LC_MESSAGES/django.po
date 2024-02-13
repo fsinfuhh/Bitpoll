@@ -1491,14 +1491,14 @@ msgstr "Weise einen User zu"
 msgid "Vote"
 msgstr "Abstimmen"
 
-#: bitpoll/poll/templates/poll/poll.html:153
-msgid "Scores"
-msgstr "Auswertungen"
+#: bitpoll/poll/templates/poll/poll.html:154
+msgid "Percentage"
+msgstr "Prozentsatz"
 
-#: bitpoll/poll/templates/poll/poll.html:171
-#: bitpoll/poll/templates/poll/poll.html:186
+#: bitpoll/poll/templates/poll/poll.html:172
+#: bitpoll/poll/templates/poll/poll.html:187
 msgid "Score"
-msgstr "Auswertung"
+msgstr "Punktzahl"
 
 #: bitpoll/poll/templates/poll/poll.html:193
 msgid "Details"
@@ -1692,7 +1692,7 @@ msgstr "Teilnehmerliste verbergen"
 
 #: bitpoll/poll/templates/poll/settings.html:137
 msgid "Show score instead of percentage"
-msgstr "Zeige Score statt Prozentsatz"
+msgstr "Zeige Punktzahl statt Prozentsatz"
 
 #: bitpoll/poll/templates/poll/settings.html:146
 msgid ""
