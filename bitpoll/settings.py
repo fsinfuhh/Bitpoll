@@ -52,6 +52,7 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'HOME_URL_NAME',
     'IMPRINT_TEXT',
     'IMPRINT_URL',
+    'PRIVACY_URL',
     'TIME_ZONE',
     'REGISTER_ENABLED',
     'MAIL_SIGNATURE',
@@ -325,6 +326,9 @@ IMPRINT_TEXT = """
 <h1>Impressum</h1>
 <p>Text goes here</p>
 """
+
+## if the PRIVACY_URL is not empty use it as an link to the privacy policy, else use bitpoll/base/templates/base/privacy.html
+PRIVACY_URL = ""
 
 LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'), )
 
