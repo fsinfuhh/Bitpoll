@@ -4,8 +4,6 @@
 #
 #    pip-compile --output-file=requirements-production.txt requirements-production.in requirements.in
 #
-annotated-types==0.6.0
-    # via pydantic
 asgiref==3.7.2
     # via django
 bleach[css]==6.1.0
@@ -13,30 +11,20 @@ bleach[css]==6.1.0
 caldav==1.3.9
     # via -r requirements.in
 certifi==2024.2.2
-    # via
-    #   requests
-    #   sentry-sdk
+    # via requests
 cffi==1.16.0
     # via cryptography
 charset-normalizer==3.3.2
     # via requests
 cryptography==42.0.2
-    # via
-    #   cryptojwt
-    #   django-encrypted-model-fields
-cryptojwt==1.8.3
-    # via simple-openid-connect
+    # via django-encrypted-model-fields
 django==5.0.2
     # via
     #   -r requirements.in
-    #   django-auth-ldap
     #   django-encrypted-model-fields
     #   django-markdownify
     #   django-simple-csp
     #   django-token-bucket
-    #   simple-openid-connect
-django-auth-ldap==4.6.0
-    # via -r requirements-production.in
 django-encrypted-model-fields==0.6.5
     # via -r requirements.in
 django-friendly-tag-loader==1.3.1
@@ -51,47 +39,29 @@ django-token-bucket==0.2.4
     # via -r requirements.in
 django-widget-tweaks==1.5.0
     # via -r requirements.in
-furl==2.1.3
-    # via simple-openid-connect
-icalendar==5.0.11
+icalendar==5.0.12
     # via
     #   -r requirements.in
     #   caldav
     #   recurring-ical-events
     #   x-wr-timezone
-idna==3.6
+idna==3.7
     # via requests
 libsass==0.23.0
     # via libsasscompiler
 libsasscompiler==0.1.9
     # via -r requirements.in
-lxml==5.1.0
+lxml==5.2.1
     # via caldav
-markdown==3.5.2
+markdown==3.6
     # via django-markdownify
-orderedmultidict==1.0.1
-    # via furl
-psycopg2-binary==2.9.9
-    # via -r requirements-production.in
-pyasn1==0.5.1
-    # via
-    #   pyasn1-modules
-    #   python-ldap
-pyasn1-modules==0.3.0
-    # via python-ldap
 pycparser==2.21
     # via cffi
-pydantic==2.6.1
-    # via simple-openid-connect
-pydantic-core==2.16.2
-    # via pydantic
-python-dateutil==2.8.2
+python-dateutil==2.9.0.post0
     # via
     #   icalendar
     #   recurring-ical-events
     #   vobject
-python-ldap==3.4.4
-    # via django-auth-ldap
 pytz==2024.1
     # via
     #   -r requirements.in
@@ -99,43 +69,29 @@ pytz==2024.1
     #   icalendar
     #   recurring-ical-events
     #   x-wr-timezone
-recurring-ical-events==2.1.2
+recurring-ical-events==2.2.1
     # via caldav
 requests==2.31.0
-    # via
-    #   caldav
-    #   cryptojwt
-    #   simple-openid-connect
-sentry-sdk==1.40.2
-    # via -r requirements-production.in
-simple-openid-connect[django]==1.0.0
-    # via -r requirements-production.in
+    # via caldav
 six==1.16.0
     # via
     #   bleach
-    #   furl
-    #   orderedmultidict
     #   python-dateutil
 sqlparse==0.4.4
     # via django
 tinycss2==1.2.1
     # via bleach
 typing-extensions==4.9.0
-    # via
-    #   asgiref
-    #   pydantic
-    #   pydantic-core
+    # via asgiref
 tzlocal==5.2
     # via caldav
 urllib3==2.2.0
-    # via
-    #   requests
-    #   sentry-sdk
-vobject==0.9.6.1
+    # via requests
+vobject==0.9.7
     # via caldav
 webencodings==0.5.1
     # via
     #   bleach
     #   tinycss2
-x-wr-timezone==0.0.6
+x-wr-timezone==0.0.7
     # via recurring-ical-events
