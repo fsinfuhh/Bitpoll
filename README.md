@@ -2,27 +2,30 @@
 
 Bitpoll is a software to conduct polls about Dates, Times or general Questions.
 
-
 This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <https://bitpoll.de>, rewritten using the Django framework as a backend.
 
-# Using Docker
+## Using Docker
 
 The docker image is built automatically from the current master branch.
 You can use the following commands to set up the docker container:
 
 Create a directory for static and config files:
-```
+
+```bash
 mkdir -p run/{log,static,config}
 ```
 
 Get the example settings file and adapt it according to your needs:
-```
+
+```bash
 wget https://raw.githubusercontent.com/fsinfuhh/Bitpoll/master/bitpoll/settings_local.sample.py -O run/config/settings.py
 ```
+
 It is important to change at least the database settings, secret key, and allowed hosts.
 
 Start the docker container:
-```
+
+```bash
 docker run -a stdout -a stderr --rm --name bitpoll -p 3008:3008 -p 3009:3009 --volume ./run/static:/opt/static --volume ./run/config:/opt/config ghcr.io/fsinfuhh/bitpoll
 ```
 
@@ -30,17 +33,17 @@ The container is reachable on port 3009.
 If you use an external web server, you can use uwsgi traffic on port 3008 and serve the static
 assets from `run/static` at `/static/`.
 
-# Manual Install
+## Manual Install
 
 Get the code:
 
-~~~
+```bash
 git clone https://github.com/fsinfuhh/Bitpoll
-~~~
+```
 
 Generate a Python virtualenv and install dependencies:
 
-```
+```bash
 virtualenv -p $(which python3) .pyenv
 source .pyenv/bin/activate
 pip install -r requirements.txt
@@ -50,17 +53,17 @@ Copy `bitpoll/settings_local.sample.py` to `bitpoll/settings_local.py` and custo
 
 Initialise Database:
 
-```
+```bash
 ./manage.py migrate
 ```
 
 Run Testserver:
 
-```
+```bash
 ./manage.py runserver
 ```
 
-# Production
+## Production
 
 In production Senty is used for error reporting.
 django-auth-ldap is used vor login via ldap
@@ -74,7 +77,7 @@ sudo apt install g++ make python3-psycopg2 python3-ldap3 gettext gcc python3-dev
 
 Install Python Dependencies
 
-```
+```bash
 pip install -r requirements-production.txt
 ```
 
@@ -90,7 +93,7 @@ For Production systems it is nessesarry to run
 ./manage.py collectstatic
 ```
 
-# Management of Dependencies
+## Management of Dependencies
 
 We use pip-tools to manage the dependencies.
 After modification or the requirements*.in files or for updates of packages run
