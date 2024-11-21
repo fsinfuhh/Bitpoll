@@ -3,6 +3,7 @@ $(document).ready(function() {
     $(".script-only").css("display", "block");
     $("a.script-only").css("display", "inline-block");
     $("button.script-only").css("display", "inline-block");
+    $("span.script-only").css("display", "inline");
     $("td.script-only").css("display", "table-cell");
     $("tr.script-only").css("display", "table-row");
     $("table.script-only").css("display", "table");
