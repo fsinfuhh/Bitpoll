@@ -30,6 +30,10 @@ class BitpollUserMapper(UserMapper):
 
     def automap_user_attrs(self, user, user_data):
         super().automap_user_attrs(user, user_data)
+        if hasattr(user_data, "display_name"):
+            user.displayname = user_data.display_name
+            user.save()
+        
         groups = getattr(user_data, "groups", [])
         for group_name in groups:
             group = Group.objects.get_or_create(name=group_name)[0]
