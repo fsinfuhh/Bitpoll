@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load pipeline %}
 {% load i18n %}
 {% load poll_filter vote_permissions comment_permissions poll_permissions %}
 {% load tz %}
@@ -149,7 +150,7 @@
                     {% if summary %}
                     <tr id="scores">
                         <th>
-                            <span class="print-only"><b>{% trans 'Scores' %}<br/></b></span>
+                            <span class="print-only"><b>{% trans 'Percentage' %}<br/></b></span>
                         </th>
                         {#                            {% set scores, counts, totals, max_score = poll.get_stats() %}#}
                         {% for choice in stats %}
@@ -211,8 +212,68 @@
             {# TODO: Add legend for choice values #}
         </div>
 
-        <div class="pull-right">
+        <div class="pull-right noprint">
+            <span class="script-only" id="filterLink">
+                <a class="" href="#" data-toggle="modal" data-target="#filterModal">{% trans 'Filter' %}</a>
+                &middot;
+            </span>
+            {# Highlight link if poll results are filtered #}
+            <span class="script-only hidden" id="filterLinkWarning">
+                <a class="text-warning" href="#" data-toggle="modal" data-target="#filterModal">
+                    <i class="fa fa-filter"></i>
+                    <strong>{% trans 'Filter' %}</strong>
+                </a>
+                &middot;
+            </span>
             <a href="{% url 'poll_export_csv' poll.url %}">{% trans 'Export as CSV' %}</a>
+        </div>
+
+        <div class="modal fade noprint" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="filterModalLabel">{% trans 'Filter' %}</h4>
+                    </div>
+                    <form>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <label for="recipient-name" class="control-label">{% trans 'Minimum percentage' %}</label>
+                                        <div class="input-group">
+                                            <input type="number" min="0" max="100" class="form-control" id="filter-threshold-percent">
+                                            <span class="input-group-addon">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 text-center">
+                                        <label>&nbsp;</label>
+                                        <div class="or">
+                                            <i class="fa fa-exchange"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label for="message-text" class="control-label">{% trans 'Maximum count' %}</label>
+                                        <input type="number" min="0" max="{{ matrix|first|length }}" class="form-control" id="filter-threshold-count"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="action secondary pull-left" data-dismiss="modal" id="filter-reset">
+                                <i class="fa fa-undo"></i>
+                                {% trans 'Reset' %}
+                            </button>
+                            <button type="button" class="action primary" data-dismiss="modal" id="filter-apply">
+                                <i class="fa fa-check"></i>
+                                {% trans 'Done' %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <br/><br/>{% if comments %}<h1 class="print-only">{% trans 'Comments' %}</h1>{% endif %}
@@ -253,4 +314,8 @@
             {% endif %}
         </div>
         </div>
+{% endblock %}
+
+{% block additionalJS %}
+    {% javascript 'poll_view' %}
 {% endblock %}
