@@ -22,7 +22,7 @@ from bitpoll.base.forms import BitpollUserSettingsForm
 from pytz import all_timezones
 
 from bitpoll.registration.forms import RegisterForm
-from bitpoll.settings import IMPRINT_URL
+from bitpoll.settings import IMPRINT_URL, PRIVACY_URL
 from django.core import signing
 from django.conf import settings
 
@@ -161,7 +161,10 @@ def problems(request):
 
 
 def privacy(request):
-    return TemplateResponse(request, 'base/privacy.html')
+    if PRIVACY_URL:
+        return redirect(PRIVACY_URL)
+    else:
+        return TemplateResponse(request, 'base/privacy.html')
 
 
 @login_required
