@@ -58,6 +58,10 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'GROUP_MANAGEMENT',
     'PUBLIC_POLLS',
     'CALENDAR_ENABLED',
+    'POLL_CREATION_REQUIRES_LOGIN',
+    'POLL_CREATION_ACCOUNT_WEBSITE',
+    'POLL_CREATION_ACCOUNT_NAME',
+    'OPENID_ENABLED',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -100,7 +104,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'django-simple-csp.middleware.csp.CSPMiddleware',
+    'django_simple_csp.middleware.csp.CSPMiddleware',
     'pipeline.middleware.MinifyHTMLMiddleware',
 ]
 
@@ -116,7 +120,9 @@ PIPELINE = {
     'STYLESHEETS': {
         'base': {
             'source_filenames': (
-                'css/font-awesome.css',
+                'fontawesome/css/fontawesome.css',
+                'fontawesome/css/solid.css',
+                'fontawesome/css/v4-shims.css',
                 'scss/main.scss',
                 'scss/poll.scss'
             ),
@@ -325,11 +331,14 @@ LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'), )
 LANGUAGES = (
     ('de', 'Deutsch'),
     ('en', 'English'),
-    #('fr', 'Français'),
+    ('it', 'Italiano'),
 )
 
 REGISTER_ENABLED = True
 GROUP_MANAGEMENT = REGISTER_ENABLED
+POLL_CREATION_REQUIRES_LOGIN = False
+POLL_CREATION_ACCOUNT_WEBSITE = "https://example.org"
+POLL_CREATION_ACCOUNT_NAME = "Example"
 
 CSP_REPORT_ONLY = True
 CSP_REPORT_URL = ""
@@ -392,7 +401,11 @@ URL_PREFIX = ''
 
 ANTI_SPAM_CHALLENGE_TTL = 60 * 60 * 24 * 7  # Defaults to 7 days
 
+OPENID_ENABLED = False
+
 from .settings_local import *
 
 INSTALLED_APPS += INSTALLED_APPS_LOCAL
+if "MIDDLEWARE_LOCAL" in locals():
+    MIDDLEWARE += MIDDLEWARE_LOCAL
 PIPELINE.update(PIPELINE_LOCAL)

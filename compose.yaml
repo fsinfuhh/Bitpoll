@@ -1,0 +1,19 @@
+services:
+  bitpoll:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+     - 3008:3008
+     - 3009:3009
+    volumes:
+     - ./run/static:/opt/static
+     - ./run/config:/opt/config
+     - ./run/log/:/opt/log
+  web:
+    image: nginx:1.23
+    volumes:
+     - ./docker_files/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+     - ./run/static:/opt/static
+    ports:
+     - "80:80"

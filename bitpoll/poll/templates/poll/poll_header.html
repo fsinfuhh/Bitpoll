@@ -11,10 +11,10 @@
             <form class="form form-inline pull-right" action="{% url 'poll_watch' poll.url %}" method="post">
                 {% csrf_token %}
                 {% if request.user|is_watching:poll %}
-                    <button class="action noprint" type="submit"><i class="fa fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
+                    <button class="action noprint" type="submit"><i class="fa-solid fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
                 {% else %}
                     {% if request.user|can_watch:poll %}
-                        <button class="action noprint" type="submit"><i class="fa fa-eye"></i> {% trans 'Watch Poll' %}</button>
+                        <button class="action noprint" type="submit"><i class="fa-solid fa-eye"></i> {% trans 'Watch Poll' %}</button>
                     {% endif %}
                 {% endif %}
             </form>
@@ -24,45 +24,45 @@
         </h1>
         <ul class="poll-details">
             <li title="{% trans 'Creation date:' %} {{ poll.created }}">
-                <i class="fa fa-calendar-plus-o"></i>
+                <i class="fa-solid fa-calendar-plus-o"></i>
                 <span class="content">{{ poll.created }}</span>
             </li>
             {% if poll.due_date %}
                 <li title="{% trans 'Due date' %}: {{ poll.due_date }}">
-                <i class="fa fa-calendar-check-o"></i>
+                <i class="fa-solid fa-calendar-check-o"></i>
                 <span class="content">{{ poll.due_date }}</span>
                 </li>
             {% endif %}
             <li title="{% trans 'Poll type' %}">
-                <i class="fa fa-{{ poll.get_icon }}"></i>
+                <i class="fa-solid fa-{{ poll.get_icon }}"></i>
                 <span class="content">{{ poll.get_type_display }}</span>
             </li>
             {% if poll.user %}
                 <li title="{% trans 'Ownership' %}: {{ poll.user.username }}">
-                <i class="fa fa-user"></i>
+                <i class="fa-solid fa-user"></i>
                 <span class="content">{{ poll.user.get_displayname }}</span>
                 </li>
             {% endif %}
             {% if poll.group %}
                 <li title="{% trans 'Group' %}: {{ poll.group.name }}">
-                <i class="fa fa-group"></i>
+                <i class="fa-solid fa-group"></i>
                 <span class="content">{{ poll.group.name }}</span>
                 </li>
             {% endif %}
             {% if poll.anonymous_allowed %}
-                <li title="{% trans 'Anonymous voting allowed' %}"><i class="fa fa-check"></i>
+                <li title="{% trans 'Anonymous voting allowed' %}"><i class="fa-solid fa-check"></i>
                     <span class="content">{% trans 'Anonymous voting' %}</span></li>
             {% endif %}
             {% if poll.require_invitation %}
-                <li title="{% trans 'Invitation required' %}"><i class="fa fa-check"></i>
+                <li title="{% trans 'Invitation required' %}"><i class="fa-solid fa-check"></i>
                     <span class="content">{% trans 'Invitation required' %}</span></li>
             {% endif %}
             {% if poll.require_login %}
-                <li title="{% trans 'Login required' %}"><i class="fa fa-check"></i>
+                <li title="{% trans 'Login required' %}"><i class="fa-solid fa-check"></i>
                     <span class="content">{% trans 'Login required' %}</span></li>
             {% endif %}
                 {% if poll.vote_all %}
-                    <li title="{% trans 'Empty choices forbidden' %}"><i class="fa fa-ban"></i>
+                    <li title="{% trans 'Empty choices forbidden' %}"><i class="fa-solid fa-ban"></i>
                         <span class="content">{% trans 'Empty choices forbidden' %}</span></li>
                 {% endif %}
         </ul>
@@ -75,33 +75,33 @@
             <ul class="poll-tabs noprint">
                 <li class="{% if page == "" %}active{% endif %}"><a data-shortcut="g o"
                                                                     href="{% url 'poll' poll.url %}"><i
-                        class="fa fa-table"></i>
+                        class="fa-solid fa-table"></i>
                     <span>{% trans 'Overview' %}</span></a>
                 </li>
             {% comment %}
                 <li class="{% if page == "Activity" %}active{% endif %}"><a data-shortcut="g a" href="{# TODO #}"><i
-                    class="fa fa-comments-o"></i><span>{% trans 'Activity' %}</span></a>
+                    class="fa-solid fa-comments-o"></i><span>{% trans 'Activity' %}</span></a>
                 </li>
             {%  endcomment %}
                 {% if poll|poll_can_edit:request.user %}
                      <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s"
                                                                                 href="{% url 'poll_settings' poll.url %}">
-                        <i class="fa fa-wrench"></i><span>{% trans 'Settings' %}</span></a>
+                        <i class="fa-solid fa-wrench"></i><span>{% trans 'Settings' %}</span></a>
                     </li>
                     <li class="{% if page == "Choices" %}active{% endif %}">
                         <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
-                                class="fa fa-list"></i><span>{% trans 'Choices' %}</span></a>
+                                class="fa-solid fa-list"></i><span>{% trans 'Choices' %}</span></a>
                     </li>
                 {% endif %}
                 {% if poll.one_vote_per_user and poll|has_voted:request.user %}
                     <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
                                                                                  href="{% url 'poll_voteEdit' poll.url poll|get_own_vote_pk:request.user %}"><i
-                        class="fa fa-check"></i><span>{% trans 'Edit Vote' %}</span></a>
+                        class="fa-solid fa-check"></i><span>{% trans 'Edit Vote' %}</span></a>
                     </li>
                 {% else %}
                     <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
                                                                                  href="{% url 'poll_vote' poll.url %}"><i
-                        class="fa fa-check"></i><span>{% trans 'Vote' %}</span></a>
+                        class="fa-solid fa-check"></i><span>{% trans 'Vote' %}</span></a>
                     </li>
                 {% endif %}
             </ul>

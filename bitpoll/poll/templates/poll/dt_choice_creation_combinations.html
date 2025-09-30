@@ -14,7 +14,7 @@
     <div class="container">
     {% include  "poll/dt_choice_header.html" %}
     <div class="alert alert-info">
-        <i class="fa fa-exclamation-circle"></i>{% blocktrans %}Here you can select which day/time combinations
+        <i class="fa-solid fa-exclamation-circle"></i>{% blocktrans %}Here you can select which day/time combinations
           are available for voting.{% endblocktrans %}
 
     </div>
@@ -48,9 +48,9 @@
 
                         {% endfor %}
                         <td class="choice-text script-only">
-                            <button class="action icon toggle toggle-select toggle-row"><i class="fa fa-check-square-o"></i>
+                            <button class="action icon toggle toggle-select toggle-row"><i class="fa-solid fa-check-square-o"></i>
                             </button>
-                            <button class="action icon toggle toggle-deselect toggle-row"><i class="fa fa-square-o"></i>
+                            <button class="action icon toggle toggle-deselect toggle-row"><i class="fa-solid fa-square-o"></i>
                             </button>
                         </td>
                         </tr>
@@ -60,16 +60,16 @@
                     <td></td>
                     {% for time in times %}
                     <td class="choice-text script-only">
-                        <button class="action icon toggle toggle-select toggle-column"><i class="fa fa-check-square-o"></i>
+                        <button class="action icon toggle toggle-select toggle-column"><i class="fa-solid fa-check-square-o"></i>
                         </button>
-                        <button class="action icon toggle toggle-deselect toggle-column"><i class="fa fa-square-o"></i>
+                        <button class="action icon toggle toggle-deselect toggle-column"><i class="fa-solid fa-square-o"></i>
                         </button>
                     </td>
                     {% endfor %}
                     <td class="choice-text script-only">
-                        <button class="action icon toggle toggle-select toggle-all"><i class="fa fa-check-square-o"></i>
+                        <button class="action icon toggle toggle-select toggle-all"><i class="fa-solid fa-check-square-o"></i>
                         </button>
-                        <button class="action icon toggle toggle-deselect toggle-all"><i class="fa fa-square-o"></i>
+                        <button class="action icon toggle toggle-deselect toggle-all"><i class="fa-solid fa-square-o"></i>
                         </button>
                     </td>
                     <td></td>

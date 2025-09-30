@@ -55,18 +55,18 @@
                                         choice-deleted
                                     {% else %}
                                         bg-{{ choiceval.color }}
-                                    {% endif %} fa fa-{% if choiceval %}{{ choiceval.icon }}{% else %}question{% endif %}"></span>
+                                    {% endif %} fa-solid fa-{% if choiceval %}{{ choiceval.icon }}{% else %}question{% endif %}"></span>
                             </td>
                             <td class="author">{{ choiceval.weight }}</td>
                             <td class="author">
                                 <strong>{{ choiceval.votechoice_count }}</strong> / {{ poll.vote_set.count }}
                             </td>
                             <td class="author">
-                                <button class="action default" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa fa-pencil"></i></button>
+                                <button class="action default" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa-solid fa-pencil"></i></button>
                                 {% if not choiceval.deleted %}
-                                    <button class="action default" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa fa-trash-o"></i></button>
+                                    <button class="action default" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa-solid fa-trash-o"></i></button>
                                 {% else %}
-                                    <button class="action default" type="submit" name="restore" value="{{ choiceval.id }}"><i class="fa fa-undo"></i></button>
+                                    <button class="action default" type="submit" name="restore" value="{{ choiceval.id }}"><i class="fa-solid fa-undo"></i></button>
                                 {% endif %}
                             </td>
                         </tr>
@@ -90,7 +90,7 @@
                         <div class="form-errors">
                         <div class="alert alert-danger">
                             <div class="container">
-                                <i class="fa fa-times"></i>{{ form.title.errors }}
+                                <i class="fa-solid fa-times"></i>{{ form.title.errors }}
                             </div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
                             <div class="form-errors">
                             <div class="alert alert-danger">
                                 <div class="container">
-                                    <i class="fa fa-times"></i>{{ form.color.errors }}
+                                    <i class="fa-solid fa-times"></i>{{ form.color.errors }}
                                 </div>
                             </div>
                         </div>
@@ -117,7 +117,7 @@
                             <div class="form-errors">
                             <div class="alert alert-danger">
                                 <div class="container">
-                                    <i class="fa fa-times"></i>{{ form.weight.errors }}
+                                    <i class="fa-solid fa-times"></i>{{ form.weight.errors }}
                                 </div>
                             </div>
                         </div>
@@ -127,13 +127,13 @@
                     <label for="icon">{% trans 'Icon' %}</label>
                     <span class="help-inline">{% trans '(any FontAwesome icon)' %}</span>
                     <div class="input-group">
-                        <span class="input-group-addon">fa fa-</span>
+                        <span class="input-group-addon">fa-solid fa-</span>
                         {% render_field form.icon class+="form-control" %}
                         {% if form.icon.errors %}
                             <div class="form-errors">
                                 <div class="alert alert-danger">
                                     <div class="container">
-                                        <i class="fa fa-times"></i>{{ form.icon.errors }}
+                                        <i class="fa-solid fa-times"></i>{{ form.icon.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +149,7 @@
                     <input class="action primary" type="submit" value="{% trans 'Add' %}">
                 {% endif %}
 
-                <h3>Available icons</h3>
+                <h3>{% trans 'Available icons' %}</h3>
                 <p class="script-only icon-script-insert">{% trans 'Click icon to insert it into the form.' %}</p>
 
             </form>
@@ -157,315 +157,315 @@
             <ul class="icon-preview">
                 <li>
                     <button data-icon="smile-o">
-                        <i class="fa fa-smile-o fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-smile-o fa-2x"></i>
                         <span>Smile</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="meh-o">
-                        <i class="fa fa-meh-o fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-meh-o fa-2x"></i>
                         <span>Meh</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="frown-o">
-                        <i class="fa fa-frown-o fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-frown-o fa-2x"></i>
                         <span>Frown</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="star">
-                        <i class="fa fa-star fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-star fa-2x"></i>
                         <span>Star</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="star-half-o">
-                        <i class="fa fa-star-half-o fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-star-half-o fa-2x"></i>
                         <span>Half star</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="star-o">
-                        <i class="fa fa-star-o fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-star-o fa-2x"></i>
                         <span>No star</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="thumbs-up">
-                        <i class="fa fa-thumbs-up fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-thumbs-up fa-2x"></i>
                         <span>Thumbs up!</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="thumbs-down">
-                        <i class="fa fa-thumbs-down fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-thumbs-down fa-2x"></i>
                         <span>Thumbs down</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="adjust">
-                        <i class="fa fa-adjust fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-adjust fa-2x"></i>
                         <span>Adjust</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="asterisk">
-                        <i class="fa fa-asterisk fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-asterisk fa-2x"></i>
                         <span>Asterisk</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="ban">
-                        <i class="fa fa-ban fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-ban fa-2x"></i>
                         <span>No</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="beer">
-                        <i class="fa fa-beer fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-beer fa-2x"></i>
                         <span>Beer!!11elf</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="book">
-                        <i class="fa fa-book fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-book fa-2x"></i>
                         <span>Book</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="bolt">
-                        <i class="fa fa-bolt fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-bolt fa-2x"></i>
                         <span>Bolt</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="calendar">
-                        <i class="fa fa-calendar fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-calendar fa-2x"></i>
                         <span>Calendar</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="check">
-                        <i class="fa fa-check fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-check fa-2x"></i>
                         <span>Yes</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="check-circle">
-                        <i class="fa fa-check-circle fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-check-circle fa-2x"></i>
                         <span>Check</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="circle">
-                        <i class="fa fa-circle fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-circle fa-2x"></i>
                         <span>Disk</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="circle-o">
-                        <i class="fa fa-circle-o fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-circle-o fa-2x"></i>
                         <span>Circle</span>
                     </button>
                 </li>
 
                 <li>
-                    <button data-icon="clock-o">
-                        <i class="fa fa-clock-o fa-2x"></i>
+                    <button data-icon="clock">
+                        <i class="fa-solid fa-fw fa-clock fa-2x"></i>
                         <span>Clock</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="code">
-                        <i class="fa fa-code fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-code fa-2x"></i>
                         <span>Code</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="coffee">
-                        <i class="fa fa-coffee fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-coffee fa-2x"></i>
                         <span>Coffe</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="comment">
-                        <i class="fa fa-comment fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-comment fa-2x"></i>
                         <span>Comment</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="comments">
-                        <i class="fa fa-comments fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-comments fa-2x"></i>
                         <span>Comments</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="cutlery">
-                        <i class="fa fa-cutlery fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-cutlery fa-2x"></i>
                         <span>Mensa</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="dashboard">
-                        <i class="fa fa-dashboard fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-dashboard fa-2x"></i>
                         <span>Dashboard</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="exclamation-triangle">
-                        <i class="fa fa-exclamation-triangle fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-exclamation-triangle fa-2x"></i>
                         <span>Warning</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="flag">
-                        <i class="fa fa-flag fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-flag fa-2x"></i>
                         <span>Flag</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="flask">
-                        <i class="fa fa-flask fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-flask fa-2x"></i>
                         <span>Lab</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="globe">
-                        <i class="fa fa-globe fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-globe fa-2x"></i>
                         <span>Globe/WWW</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="heart">
-                        <i class="fa fa-heart fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-heart fa-2x"></i>
                         <span>Heart &amp;lt;3</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="home">
-                        <i class="fa fa-home fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-home fa-2x"></i>
                         <span>Home</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="lightbulb-o">
-                        <i class="fa fa-lightbulb-o fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-lightbulb-o fa-2x"></i>
                         <span>Lightbulb</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="magic">
-                        <i class="fa fa-magic fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-magic fa-2x"></i>
                         <span>Magic</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="moon-o">
-                        <i class="fa fa-moon-o fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-moon-o fa-2x"></i>
                         <span>Moon</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="phone">
-                        <i class="fa fa-phone fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-phone fa-2x"></i>
                         <span>Phone</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="music">
-                        <i class="fa fa-music fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-music fa-2x"></i>
                         <span>Music</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="power-off">
-                        <i class="fa fa-power-off fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-power-off fa-2x"></i>
                         <span>Power off</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="rocket">
-                        <i class="fa fa-rocket fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-rocket fa-2x"></i>
                         <span>Rocket</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="sun-o">
-                        <i class="fa fa-sun-o fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-sun-o fa-2x"></i>
                         <span>Sun</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="umbrella">
-                        <i class="fa fa-umbrella fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-umbrella fa-2x"></i>
                         <span>Umbrella</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="android">
-                        <i class="fa fa-android fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-android fa-2x"></i>
                         <span>Android</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="github">
-                        <i class="fa fa-github fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-github fa-2x"></i>
                         <span>Github</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="stack-overflow">
-                        <i class="fa fa-stack-overflow fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-stack-overflow fa-2x"></i>
                         <span>StackOverflow</span>
                     </button>
                 </li>
 
                 <li>
                     <button data-icon="linux">
-                        <i class="fa fa-linux fa-2x"></i>
+                        <i class="fa-solid fa-fw fa-linux fa-2x"></i>
                         <span>Linux</span>
                     </button>
                 </li>

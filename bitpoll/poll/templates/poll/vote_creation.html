@@ -58,14 +58,14 @@
                             <input type="radio" id="{{ choice.id }}_{{ value.id }}" value="{{ value.id }}" name="{{ choice.id }}" title=""
                                     {% if value == vote %} checked {% endif %}
                                 />
-                                <label for="{{ choice.id }}_{{ value.id }}" class="fa fa-{{ value.icon }}"></label>
+                                <label for="{{ choice.id }}_{{ value.id }}" class="fa-solid fa-{{ value.icon }}"></label>
                             </td>
                         {% endfor %}
                         <td class="vote-comment">
                             <div class="script-only">
                                 <button class="btn btn-sm btn-default vote-choice-edit"
                                         title="{{ _('Add a comment') }}"><i
-                                        class="fa fa-comment-o"></i></button>
+                                        class="fa-solid fa-comment-o"></i></button>
                             </div>
                             <input type="text" class="vote-choice-comment form-control" name="comment_{{ choice.id }}" title=""
                                    value="{{ comment }}"/>
@@ -120,7 +120,7 @@
                     <td colspan="{{ matrix_len }}"></td>
                     <td colspan="4">
                         <button class="action primary block" type="submit" name="submit" value="Vote">
-                            <i class="fa fa-check"></i>
+                            <i class="fa-solid fa-check"></i>
                             <span>{% trans 'Save vote' %}</span>
                         </button>
                     </td>

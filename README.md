@@ -2,67 +2,79 @@
 
 Bitpoll is a software to conduct polls about Dates, Times or general Questions.
 
+This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <https://bitpoll.de>, rewritten using the Django framework as a backend.
 
-This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <mafiasi.de>, rewritten using the Django framework as a backend.
-
-
-# Features
+## Features
  * set if anonymous votes are casted or if the user must provide it's name
  * set if registration is required for voting
  * allow the creation of private event only accessible to thoses invited
  * Poll can be created for full day event or just a few hours. Custom classes can also be defined
  * URL can be set manually or randomly choosen
 
-# Demo
+## Demo
 
 https://bitpoll.de 
 
-# GUI
+## GUI
 
-## Poll Creation Panel
+### Poll Creation Panel
 
 ![image](https://user-images.githubusercontent.com/15912256/190876284-ac6dd2e0-04c6-4d44-a53d-7dd72263a109.png)
 ![image](https://user-images.githubusercontent.com/15912256/190876419-d129d3c2-cda0-4da6-8b7a-7a30bf5d83e9.png)
 ![image](https://user-images.githubusercontent.com/15912256/190876455-55d8dc36-a117-4c41-b4ce-5184f5db8bc5.png)
 
-## Voting View
+### Voting View
 
 ![image](https://user-images.githubusercontent.com/15912256/190876484-a5b3cb2c-db77-4c5f-b1f2-43b5106c4691.png)
 
-## Poll Results
+### Poll Results
 
 ![image](https://user-images.githubusercontent.com/15912256/190876528-178ace35-a3b8-4a55-8bf6-5c5afe0662c9.png)
 
-# Installation
+## Installation
 
-You can deploy this tool on your server either by manually clonning the repo and setting it up or you can run a docker image.
+You can deploy this tool on your server either by manually cloning the repo and setting it up or you can run a docker image.
 
-## Using Docker
+### Using Docker
 
-~~~
-docker build --tag <imagename>
-cd <workdir>
+The docker image is built automatically from the current master branch.
+You can use the following commands to set up the docker container:
+
+Create a directory for static and config files:
+
+```bash
 mkdir -p run/{log,static,config}
-cp <original_dir>/bitpoll/settings_local.py run/config/settings.py
-vim run/config/settings.py
-docker run -a stdout -a stderr --rm --name bitpoll -p 3008:3008 -p 3009:3009 --volume `pwd`/run/static:/opt/static --volume `pwd`/run/config:/opt/config --volume `pwd`/run/log/:/opt/log <image_name>
-~~~
-The Static assets from <workdir>/run/static have to be served from the Webserver at /static/.
-The Container listens for uwsgi traffic on Port 3008 and for HTTP traffic on Port 8009
+```
 
-TODO: add example nginx Config
+Get the example settings file and adapt it according to your needs:
 
-## Manual Install
+```bash
+wget https://raw.githubusercontent.com/fsinfuhh/Bitpoll/master/bitpoll/settings_local.sample.py -O run/config/settings.py
+```
+
+It is important to change at least the database settings, secret key, and allowed hosts.
+
+Start the docker container:
+
+```bash
+docker run -a stdout -a stderr --rm --name bitpoll -p 3008:3008 -p 3009:3009 --volume ./run/static:/opt/static --volume ./run/config:/opt/config ghcr.io/fsinfuhh/bitpoll
+```
+
+The container is reachable on port 3009.
+If you use an external web server, you can use uwsgi traffic on port 3008 and serve the static
+assets from `run/static` at `/static/`.
+
+### Manual Install
 
 Get the code:
 
-~~~
+```bash
 git clone https://github.com/fsinfuhh/Bitpoll
-~~~
+```
 
 Generate a Python virtualenv and install dependencies:
 
-```
+```bash
 virtualenv -p $(which python3) .pyenv
 source .pyenv/bin/activate
 pip install -r requirements.txt
@@ -72,17 +84,17 @@ Copy `bitpoll/settings_local.sample.py` to `bitpoll/settings_local.py` and custo
 
 Initialise Database:
 
-```
+```bash
 ./manage.py migrate
 ```
 
 Run Testserver:
 
-```
+```bash
 ./manage.py runserver
 ```
 
-## Production
+### Production
 
 In production Senty is used for error reporting.
 django-auth-ldap is used vor login via ldap
@@ -96,7 +108,7 @@ sudo apt install g++ make python3-psycopg2 python3-ldap3 gettext gcc python3-dev
 
 Install Python Dependencies
 
-```
+```bash
 pip install -r requirements-production.txt
 ```
 

@@ -1,5 +1,6 @@
 # customize to your needs
-
+import re
+import os
 # You must insert your own random value here
 # SECURITY WARNING: keep the secret key used in production secret!
 # see <https://docs.djangoproject.com/en/dev/howto/deployment/checklist/#secret-key>
@@ -10,6 +11,9 @@ FIELD_ENCRYPTION_KEY = "this+is+an+example+key+please+generate+one+="
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
+# The domain name of the site
+ALLOWED_HOSTS = ['bitpoll.example.com']
 
 ## If Bitpoll is served via HTTPS enable the next two options
 #SESSION_COOKIE_SECURE = True
@@ -24,6 +28,24 @@ URL_PREFIX = ''
 #        'raven.contrib.django.raven_compat',
 #        ]
 INSTALLED_APPS_LOCAL = []
+
+# To use OpenId:
+#INSTALLED_APPS_LOCAL.append('simple_openid_connect.integrations.django')
+#OPENID_ENABLED = True
+#OPENID_ISSUER = "https://identity.mafiasi.de/realms/mafiasi"
+#OPENID_API_BASE = "https://identity.mafiasi.de/admin/realms/mafiasi"
+#OPENID_CLIENT_ID = "..."
+#OPENID_CLIENT_SECRET = "..."
+#OPENID_BASE_URI = "..."
+#OPENID_SCOPE = "openid profile email"
+#OPENID_USER_MAPPER = 'bitpoll.base.openid.BitpollUserMapper'
+#OPENID_ADMIN_GROUPS = re.compile('admins|superusers')
+#LOGIN_URL = "simple_openid_connect_django:login"
+#LOGOUT_REDIRECT_URL = "index"
+
+MIDDLEWARE_LOCAL = [
+#    "simple_openid_connect.integrations.django.middleware.TokenVerificationMiddleware",
+]
 
 # Compress the JS and CSS files, for more Options see https://django-pipeline.readthedocs.io/en/latest/compressors.html
 # the Compressor have to be installed in the system
@@ -66,6 +88,7 @@ PIPELINE_LOCAL = {}
 #    ('de', 'Deutsch'),
 #    ('en', 'English'),
 #    #('fr', 'Français'),
+#    ('it', 'Italiano'),
 #)
 
 #REGISTER_ENABLED = True

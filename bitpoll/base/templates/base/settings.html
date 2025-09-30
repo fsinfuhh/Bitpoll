@@ -32,30 +32,30 @@
                         </td>
                         <td width="10">
                             {% if user == poll.user %}
-                              <span class="label label-danger form-control"><i class="fa fa-user"></i> {% trans 'Owner' %} </span>
+                              <span class="label label-danger form-control"><i class="fa-solid fa-user"></i> {% trans 'Owner' %} </span>
                             {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not owner' %}</span>
+                              <span class="label label-default form-control"><i class="fa-solid fa-ban"></i> {% trans 'Not owner' %}</span>
                             {% endif %}
                         </td>
                         <td width="10">
                             {% if poll.id in polls_group %}
-                                <span class="label label-warning form-control"><i class="fa fa-group"></i> {{ poll.group.name }}</span>
+                                <span class="label label-warning form-control"><i class="fa-solid fa-group"></i> {{ poll.group.name }}</span>
                             {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not own group' %}</span>
+                              <span class="label label-default form-control"><i class="fa-solid fa-ban"></i> {% trans 'Not own group' %}</span>
                             {% endif %}
                         </td>
                         <td width="10">
                             {% if poll.id in polls_voted %}
-                              <span class="label label-success form-control"><i class="fa fa-check"></i> {% trans 'Voted' %} </span>
+                              <span class="label label-success form-control"><i class="fa-solid fa-check"></i> {% trans 'Voted' %} </span>
                             {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-ban"></i> {% trans 'Not voted' %} </span>
+                              <span class="label label-default form-control"><i class="fa-solid fa-ban"></i> {% trans 'Not voted' %} </span>
                             {% endif %}
                         </td>
                         <td width="10">
                             {% if poll.id in polls_watched %}
-                              <span class="label label-info form-control"><i class="fa fa-eye"></i> {% trans 'Watching' %} </span>
+                              <span class="label label-info form-control"><i class="fa-solid fa-eye"></i> {% trans 'Watching' %} </span>
                             {% else %}
-                              <span class="label label-default form-control"><i class="fa fa-eye-slash"></i> {% trans 'Not watching' %} </span>
+                              <span class="label label-default form-control"><i class="fa-solid fa-eye-slash"></i> {% trans 'Not watching' %} </span>
                             {% endif %}
                         </td>
                     </tr>

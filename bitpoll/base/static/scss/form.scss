@@ -148,7 +148,7 @@ section.section {
             // }
 
             // mobile
-            .fa {
+            .fa-solid {
                 background: $primary-color;
                 color: white;
             }
@@ -174,7 +174,7 @@ section.section {
             // mobile
             margin-right: 8px;
 
-            .fa {
+            .fa-solid {
                 // mobile
                 $size: 14px*2;
                 width: $size;
@@ -216,7 +216,7 @@ section.section {
                     color: white;
                 }
 
-                .fa {
+                .fa-solid {
                     background: none;
                     color: inherit;
                 }
@@ -246,19 +246,16 @@ section.section {
 .form-step {
     $color: #444;
 
-    text-align: center;
     color: $color;
-    margin: 32px 0 16px 0;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5ch;
+
+    margin: 32px 0 16px 0;
     font-weight: bold;
     font-size: 0.8em;
-
-    .number, .title {
-        display: inline;
-    }
-
-    .number {
-    }
 
     &:before, &:after {
         display: inline-block;

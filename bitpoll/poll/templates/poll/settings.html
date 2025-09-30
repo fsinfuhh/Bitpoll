@@ -26,7 +26,7 @@
                     <div class="form-errors">
                         <div class="alert alert-danger">
                             <div class="container">
-                                <i class="fa fa-times"></i>{{ form.title.errors }}
+                                <i class="fa-solid fa-times"></i>{{ form.title.errors }}
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="form-errors">
                         <div class="alert alert-danger">
                             <div class="container">
-                                <i class="fa fa-times"></i>{{ form.due_date.errors }}
+                                <i class="fa-solid fa-times"></i>{{ form.due_date.errors }}
                             </div>
                         </div>
                     </div>
@@ -137,10 +137,10 @@
                 <label for="vote_show_score_in_summary">{% trans 'Show score instead of percentage' %}</label>
             </div>
             <div class="">
-                Sort results by:
+                {% trans 'Sort results by:' %}
             {# TODO: use enum values #}
-                <input type="radio" name="{{ form.sorting.name }}" value="0" id="sorting_date" {% if form.sorting.value == 0 %} checked {% endif %}><label for="sorting_date">Date</label>
-                <input type="radio" name="{{ form.sorting.name }}" value="1" id="sorting_name" {% if form.sorting.value == 1 %} checked {% endif %}><label for="sorting_name">Name</label>
+                <input type="radio" name="{{ form.sorting.name }}" value="0" id="sorting_date" {% if form.sorting.value == 0 %} checked {% endif %}><label for="sorting_date">&nbsp;{% trans 'Date' %}</label>
+                <input type="radio" name="{{ form.sorting.name }}" value="1" id="sorting_name" {% if form.sorting.value == 1 %} checked {% endif %}><label for="sorting_name">&nbsp;{% trans 'Name' %}</label>
             </div>
             <div class="help-block">
                 {% blocktrans %}
@@ -157,7 +157,7 @@
                     <div class="form-errors">
                         <div class="alert alert-danger">
                             <div class="container">
-                                <i class="fa fa-times"></i>{{ user_error }}
+                                <i class="fa-solid fa-times"></i>{{ user_error }}
                             </div>
                         </div>
                     </div>

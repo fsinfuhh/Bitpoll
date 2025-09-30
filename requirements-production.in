@@ -1,4 +1,4 @@
 sentry-sdk
 django-auth-ldap
-uwsgi
 psycopg2-binary
+simple_openid_connect[django]
