@@ -4,7 +4,38 @@ Bitpoll is a software to conduct polls about Dates, Times or general Questions.
 
 This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <https://bitpoll.de>, rewritten using the Django framework as a backend.
 
-## Using Docker
+## Features
+ * set if anonymous votes are casted or if the user must provide it's name
+ * set if registration is required for voting
+ * allow the creation of private event only accessible to thoses invited
+ * Poll can be created for full day event or just a few hours. Custom classes can also be defined
+ * URL can be set manually or randomly choosen
+
+## Demo
+
+https://bitpoll.de 
+
+## GUI
+
+### Poll Creation Panel
+
+![Poll Creation Step 1](img/creation-1.png)
+![Poll Creation Step 2](img/creation-2.png)
+![Poll Creation Step 3](img/creation-3.png)
+
+### Voting View
+
+![Voting View](img/voting.png)
+
+### Poll Results
+
+![Poll Results](img/results.png)
+
+## Installation
+
+You can deploy this tool on your server either by manually cloning the repo and setting it up or you can run a docker image.
+
+### Using Docker
 
 The docker image is built automatically from the current master branch.
 You can use the following commands to set up the docker container:
@@ -33,7 +64,7 @@ The container is reachable on port 3009.
 If you use an external web server, you can use uwsgi traffic on port 3008 and serve the static
 assets from `run/static` at `/static/`.
 
-## Manual Install
+### Manual Install
 
 Get the code:
 
@@ -63,7 +94,7 @@ Run Testserver:
 ./manage.py runserver
 ```
 
-## Production
+### Production
 
 In production Senty is used for error reporting.
 django-auth-ldap is used vor login via ldap
