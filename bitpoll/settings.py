@@ -114,7 +114,7 @@ STATICFILES_FINDERS = [
     'pipeline.finders.PipelineFinder',
 ]
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 
 PIPELINE = {
     'STYLESHEETS': {
@@ -210,7 +210,7 @@ PIPELINE = {
     'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',  # TODO
 }
 
-PIPELINE_ENABLED = False  # todo uglfyer mal ansehen
+PIPELINE_ENABLED = True
 
 ROOT_URLCONF = 'bitpoll.urls'
 
