@@ -63,11 +63,11 @@
                                 <strong>{{ choiceval.votechoice_count }}</strong> / {{ poll.vote_set.count }}
                             </td>
                             <td class="author">
-                                <button class="btn btn-sm" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-sm" type="submit" name="edit" value="{{ choiceval.id }}"><i class="fa-solid fa-pencil"></i></button>
                                 {% if not choiceval.deleted %}
-                                    <button class="btn btn-sm" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa fa-trash-o"></i></button>
+                                    <button class="btn btn-sm" type="submit" name="delete" value="{{ choiceval.id }}"><i class="fa-solid fa-trash-o"></i></button>
                                 {% else %}
-                                    <button class="btn btn-sm" type="submit" name="restore" value="{{ choiceval.id }}"><i class="fa fa-undo"></i></button>
+                                    <button class="btn btn-sm" type="submit" name="restore" value="{{ choiceval.id }}"><i class="fa-solid fa-undo"></i></button>
                                 {% endif %}
                             </td>
                         </tr>

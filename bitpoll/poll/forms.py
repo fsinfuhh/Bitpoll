@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField, Form, HiddenInput, IntegerField, ChoiceField, BooleanField, TextInput, \
     SplitDateTimeField, SplitDateTimeWidget
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from pytz import all_timezones
 from time import strptime
 

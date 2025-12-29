@@ -49,10 +49,10 @@
                                     {% if vote.comment or vote.assigned_by %}
                                         <div class="pull-left vote-extra-icons">
                                             {% if vote.comment %}
-                                                <i class="fa fa-comment-o"></i>
+                                                <i class="fa-solid fa-comment-o"></i>
                                             {% endif %}
                                             {% if vote.assigned_by %}
-                                                <i class="fa fa-tag"></i>
+                                                <i class="fa-solid fa-tag"></i>
                                             {% endif %}
                                         </div>
                                     {% endif %}
@@ -126,7 +126,7 @@
                         <tr class="vote {% if invited.user == request.user %} mine{% endif %}">
                             <td class="author">{{ invited.user.get_displayname }}</td>
                             {% for row in matrix.0 %}
-                                <td class="vote-choice none"><span class="fa fa-question"></span></td>
+                                <td class="vote-choice none"><span class="fa-solid fa-question"></span></td>
                             {% endfor %}
                             <td class="noprint vote-actions">
                                 {% if invited.user == request.user %}

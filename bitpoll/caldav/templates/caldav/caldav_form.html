@@ -39,10 +39,10 @@
         {% for calendar in calendars %}
             <li>{{ calendar.name }}
                 <a href="{% url 'delete_calendar_confirm' calendar.id %}" class="btn btn-sm">
-                    <i class="fa fa-trash-o"></i>
+                    <i class="fa-solid fa-trash-o"></i>
                 </a>
                 <a href="{% url 'edit_calendar' calendar.id %}" class="btn btn-sm"><i
-                        class="fa fa-pencil"></i> </a>
+                        class="fa-solid fa-pencil"></i> </a>
             </li>
         {% endfor %}
     </ul>

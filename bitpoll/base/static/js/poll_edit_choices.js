@@ -107,7 +107,7 @@ function updateDateTimeList() {
         times.forEach(function (time) {
             time_slots.insertAdjacentHTML('beforeend', '<li>' +
                 '<button class="btn time-remove-button" title="remove time" data-time="' + time + '">' +
-                '<span>' + time + '</span> <i class="fa fa-times"></i></button></li>');
+                '<span>' + time + '</span> <i class="fa-solid fa-times"></i></button></li>');
         });
     }
 
@@ -115,7 +115,7 @@ function updateDateTimeList() {
     if (calendar_list) {
         calendar_list.innerHTML = "";
         dates.forEach(function (date) {
-            const format = "ddd D MMM";
+            let format = "ddd D MMM";
             const date_obj = moment(date);
             if (date_obj.year() !== moment().year()) {
                 format = "ddd D MMM YYYY"
@@ -123,7 +123,7 @@ function updateDateTimeList() {
             const formatDate = date_obj.format(format);
             calendar_list.insertAdjacentHTML('beforeend', '<li>' +
                 '<button class="btn date-remove-button" title="remove date" data-date="' + date + '">' +
-                '<span>' + formatDate + '</span> <i class="fa fa-times"></i></button></li> ');
+                '<span>' + formatDate + '</span> <i class="fa-solid fa-times"></i></button></li> ');
         });
     }
 
@@ -333,7 +333,7 @@ function makeWeek(week) {
     if (past && !future) {
         tr.insertAdjacentHTML('beforeend', '<td class="left"></td>')
     } else {
-        tr.insertAdjacentHTML('beforeend', '<td class="left"><button class="week btn btn-sm"><i class="fa fa-angle-double-right"></i></button></td>')
+        tr.insertAdjacentHTML('beforeend', '<td class="left"><button class="week btn btn-sm"><i class="fa-solid fa-angle-double-right"></i></button></td>')
     }
 
     for (let i = 0; i < 7; ++i) {

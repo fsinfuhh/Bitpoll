@@ -11,7 +11,7 @@
         <h3>{% trans "Do you want to Delete the following Calendar:" %}</h3>
         <p><b>{{ calendar_name }}</b>: {{ calendar_url }}</p>
         <button name="delete" value="{{ calendar_id }}" class="btn btn-error">
-            <i class="fa fa-trash-o"></i> {% trans 'Delete' %}
+            <i class="fa-solid fa-trash-o"></i> {% trans 'Delete' %}
         </button>
         <a href="{% url 'settings' %}" class="btn">{% trans 'Cancel' %} </a>
 

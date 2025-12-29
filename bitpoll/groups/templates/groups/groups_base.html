@@ -26,10 +26,10 @@
             {% csrf_token %}
             <div class="input-group">
               <button class="btn btn-success btn-sm input-group-btn" title="{% trans 'Accept invitation' %}" name="accept">
-                <span class="fa fa-check"></span>
+                <span class="fa-solid fa-check"></span>
               </button>
               <button class="btn btn-error btn-sm input-group-btn" title="{% trans 'Decline invitation' %}" name="refuse">
-                <span class="fa fa-close"></span>
+                <span class="fa-solid fa-close"></span>
 
               </button>
             </div>
@@ -43,7 +43,7 @@
     <h5>
       {% trans 'My Groups' %}
       <a class="btn btn-success btn-sm pull-right" title="{% trans 'Create new group' %}" href="{% url 'groups_create' %}">
-        <span class="fa fa-plus"></span>
+        <span class="fa-solid fa-plus"></span>
         <span class="hidden-sm hidden-xs">{% trans 'New' %}</span>
       </a>
     </h5>
