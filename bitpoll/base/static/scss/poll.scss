@@ -73,7 +73,8 @@ table td.vote-actions {
 }
 
 .vote-extra-icons {
-    margin-right: 0.4em;
+    //margin-right: 0.4em;
+    display: inline
 }
 
 .poll td {
@@ -472,8 +473,8 @@ td.vote-choice span, td.control {
         thead, tfoot {
             & tr {
                 & > th {
-                    position: sticky;
-                    z-index: 2;
+                    //position: sticky; //seems to only be needed on first-child; moved there; makes popovers funky
+                    //z-index: 2; //TODO: das macht die popover hinter diese
                     top: 0;
                 }
 
@@ -485,6 +486,7 @@ td.vote-choice span, td.control {
 
                 & > :first-child {
                     background: #ffffff;
+                    position: sticky;
                 }
             }
         }
