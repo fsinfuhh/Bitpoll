@@ -17,6 +17,19 @@
     <section class="section create-poll">
         <div class="container">
             <div class="halfsize">
+            {% value_from_settings POLL_CREATION_REQUIRES_LOGIN as requires_login %}
+            {% value_from_settings POLL_CREATION_ACCOUNT_WEBSITE as account_website %}
+            {% value_from_settings POLL_CREATION_ACCOUNT_NAME as account_name %}
+            {% value_from_settings OPENID_ENABLED as openid %}
+            {% if requires_login and request.user.is_anonymous %}
+                <h1>{% trans 'Login required to create polls' %}</h1>
+                <hr/>
+                <p class="lead">{% blocktrans %}This instance is reserved for users of <a href="{{ account_website }}">{{ account_name }}</a>.
+                If you do not have an account there, please use the public version at <a href="https://bitpoll.de">bitpoll.de</a>.{% endblocktrans %}</p>
+                {% if openid %}
+                <a href="{% url 'login' %}" class="action primary"><i class="fa-solid fa-sign-in"></i>&nbsp;{% trans 'Login' %}</a>
+                {% endif %}
+            {% else %}
                 <h1>{% trans 'Create a poll' %}</h1>
                 <hr/>
                 <form method="POST" class="form" action="{% url 'index' %}">
@@ -31,7 +44,7 @@
                                {% if poll_form.type.value == "datetime" or not poll_form.type.value %}checked{% endif %}>
 
                         <label for="radio-datetime">
-                            <span class="create-icon"><i class="fa fa-clock-o"></i></span>
+                            <span class="create-icon"><i class="fa-solid fa-clock-o"></i></span>
                             <span>
                                     <span class="title">{% trans 'Date and Time' %}</span>
                                     <span class="description">{% trans 'Schedule date and time for an event' %}</span>
@@ -42,7 +55,7 @@
                                {% if poll_form.type.value == "date" %}checked{% endif %}>
 
                         <label for="radio-date">
-                            <span class="create-icon"><i class="fa fa-calendar"></i></span>
+                            <span class="create-icon"><i class="fa-solid fa-calendar"></i></span>
                             <span>
                                     <span class="title">{% trans 'Date' %}</span>
                                     <span class="description">{% trans 'Schedule an all-day event' %}</span>
@@ -52,7 +65,7 @@
                                class="d-hide create-type-select" id="radio-universal"
                                {% if poll_form.type.value == "universal" %}checked{% endif %}>
                         <label for="radio-universal">
-                            <span class="create-icon"><i class="fa fa-list"></i></span>
+                            <span class="create-icon"><i class="fa-solid fa-list"></i></span>
                             <span>
                                     <span class="title">{% trans 'Normal Poll' %}</span>
                                     <span class="description">{% trans 'Retrieve opinions on various choices' %}</span>
@@ -62,7 +75,7 @@
                                class="d-hide create-type-select" id="radio-numeric"
                                {% if poll_form.type.value == "numeric" %}checked{% endif %}>
                         <label class="d-hide" for="radio-numeric">
-                            <span class="create-icon"><i class="fa fa-sliders"></i></span>
+                            <span class="create-icon"><i class="fa-solid fa-sliders"></i></span>
                             <span class="title">{% trans 'Numeric' %}</span>
                             <span class="description">{% trans 'Rate each choice in a numeric range' %}</span>
                         </label>
@@ -121,19 +134,20 @@
                     </div>
                 <p></p>
                     <div class="form-group text-center">
-                        <label for="advanced_open_checkbox" class="more btn"><i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                        <label for="advanced_open_checkbox" class="more btn"><i class="fa-solid fa-plus-square-o" aria-hidden="true"></i>
                                 <span>{% trans 'More options' %}</span>
                         </label>
-                        <label for="advanced_open_checkbox" class="less hidden btn"><i class="fa fa-minus-square-o" aria-hidden="true"></i>
+                        <label for="advanced_open_checkbox" class="less hidden btn"><i class="fa-solid fa-minus-square-o" aria-hidden="true"></i>
                                     <span>{% trans 'Less options' %}</span>
                         </label>
                         <input type="submit" value="{% trans 'Create' %}" class="btn btn-primary"/>
                     </div>
                 </form>
+            {% endif %}
             </div>
         </div>
     </section>
-    {% if request.user.is_anonymous %}
+    {% if request.user.is_anonymous and not openid %}
     <section class="section login">
         <div class="container">
             <div class="halfsize">
@@ -157,7 +171,7 @@
                 <h4>{% trans 'Register for more' %}</h4>
                 <p>{% blocktrans %}Registered users have access to the full width of features available.{% endblocktrans %}
                 </p>
-                <a href="{% url 'registration_request_account' %}" class="btn btn-primary"><i class="fa fa-pencil"></i> <span>{% trans 'Register' %}</span></a>
+                <a href="{% url 'registration_request_account' %}" class="btn btn-primary"><i class="fa-solid fa-pencil"></i> <span>{% trans 'Register' %}</span></a>
             </div>
             {% endif %}
         {# TODO: own polls? #}
@@ -184,7 +198,7 @@
                     <h4>{% trans 'Public polls' %}</h4>
                     {% if not public_polls %}
                         <div class="toast toast-primary">
-                            <div class="container"><i class="fa fa-exclamation-circle"></i> {% trans 'There are currently no public polls.' %}
+                            <div class="container"><i class="fa-solid fa-exclamation-circle"></i> {% trans 'There are currently no public polls.' %}
                             </div>
                         </div>
                     {% else %}

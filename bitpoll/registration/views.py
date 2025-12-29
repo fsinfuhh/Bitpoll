@@ -47,7 +47,7 @@ def request_successful(request, email):
 
 def create_account(request, info_token):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('index')
     try:
         info = signing.loads(info_token, max_age=TOKEN_MAX_AGE)
     except signing.SignatureExpired:
@@ -82,7 +82,7 @@ def create_account(request, info_token):
             user.backend = 'django.contrib.auth.backends.ModelBackend'
 
             login(request, user)
-            return redirect('home')
+            return redirect('index')
     else:
         form = SetPasswordForm(None)
 

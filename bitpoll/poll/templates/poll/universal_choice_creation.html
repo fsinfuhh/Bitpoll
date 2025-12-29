@@ -45,16 +45,16 @@
                                 </td>
                                 <td>
                                     <button  name="up" value="{{ choice.pk }}" class="btn btn-sm choice-move-up">
-                                        <i class="fa fa-arrow-up"></i>
+                                        <i class="fa-solid fa-arrow-up"></i>
                                     </button>
                                     <button name="down" value="{{ choice.pk }}" href="#" class="btn btn-sm choice-move-down">
-                                        <i class="fa fa-arrow-down"></i>
+                                        <i class="fa-solid fa-arrow-down"></i>
                                     </button>
                                     <button name="delete" value="{{ choice.pk }}" class="btn btn-sm">
                                         {% if not choice.deleted %}
-                                            <i class="fa fa-trash-o"></i>
+                                            <i class="fa-solid fa-trash-o"></i>
                                         {% else %}
-                                            <i class="fa fa-undo"></i>
+                                            <i class="fa-solid fa-undo"></i>
                                         {% endif %}
                                     </button>
                                 </td>
@@ -67,7 +67,7 @@
                                     <input name="choice_sort_key" class="choice-sort-key" type="hidden"
                                            value="{{ next_sort_key }}">
                                         <button type="submit" class="btn btn-primary input-group-btn btn-sm" name="submit"><i
-                                                class="fa fa-plus"></i></button>
+                                                class="fa-solid fa-plus"></i></button>
                                 </div>
                             </td>
                             <td></td>

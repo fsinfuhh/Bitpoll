@@ -59,7 +59,8 @@
                 href="{% url 'imprint' %}"
                 target="_blank">{% trans 'Imprint' %}</a><span
                 class="separator"></span><a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
-                class="separator"></span>
+                class="separator"></span><a href="{% url 'privacy' %}">{% trans 'Privacy Policy' %}</a><span
+                    class="separator"></span>
             {% trans 'Current timezone is' %} {% if request.user.is_authenticated %}{% timezone request.user.timezone %}
                 {% get_current_timezone as TIME_ZONE %}{% endtimezone %}{% else %}
                 {% get_current_timezone as TIME_ZONE %}{% endif %}{{ TIME_ZONE }}<span
@@ -69,7 +70,11 @@
                 <button name="language" value="de" class="btn btn-link lang-btn" type="submit">Deutsch</button>
                 &middot;
                 <button name="language" value="en" class="btn btn-link lang-btn" type="submit">English</button>
+                &middot;
+                <button name="language" value="it" class="btn btn-link lang-btn" type="submit">Italiano</button>
             </form>
+            </p>
+        </form>
 
             {% if debug %}
                 <div class="footer-warning">

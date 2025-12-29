@@ -140,7 +140,7 @@ class Poll(models.Model):
         if self.type == 'universal':
             return 'list'
         if self.type == 'datetime':
-            return 'clock-o'
+            return 'clock'
         if self.type == 'date':
             return 'calendar'
 

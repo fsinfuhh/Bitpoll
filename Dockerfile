@@ -1,6 +1,6 @@
 #sentry-cli releases -o sentry-internal new -p bitpoll $VERSION
 # Dockerfile
-FROM python:slim as common-base
+FROM python:3.11-slim as common-base
 
 #ENV DJANGO_SETTINGS_MODULE foo.settings
 ENV UID=2008
@@ -10,6 +10,8 @@ RUN usermod -u $UID -g nogroup -d /opt/bitpoll www-data
 RUN mkdir -p /opt/bitpoll
 
 WORKDIR /opt/bitpoll
+
+RUN apt update && apt install -y --no-install-recommends libldap-2.5-0 libsasl2-2 uwsgi uwsgi-plugin-python3 && rm -rf /var/lib/apt/lists/*
 
 FROM common-base as base-builder
 
@@ -21,12 +23,10 @@ RUN apt-get update && apt-get -y --no-install-recommends install g++ wget python
 
 COPY requirements-production.txt .
 
-RUN pip install --no-warn-script-location --prefix=/install -U -r requirements-production.txt uwsgi
+RUN pip install --no-warn-script-location --prefix=/install -U -r requirements-production.txt
 
 FROM dependencies as collect-static
 
-#TODO: replace with linked files or Path/LD/Python ENV variables
-RUN cp -r /install/* /usr/local
 
 RUN npm install cssmin uglify-js -g
 
@@ -35,7 +35,9 @@ COPY bitpoll bitpoll
 COPY locale locale
 COPY docker_files/config/settings.py bitpoll/settings_local.py
 
-RUN python3 /opt/bitpoll/manage.py collectstatic --noinput && \
+# Set Pythonpath tro the packages installed with pip bevore so they are aviable in this step
+RUN export PYTHONPATH=/install/lib/python$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1,2)/site-packages && \
+    python3 /opt/bitpoll/manage.py collectstatic --noinput && \
     python3 manage.py compilemessages &&\
     rm bitpoll/settings_local.py
 

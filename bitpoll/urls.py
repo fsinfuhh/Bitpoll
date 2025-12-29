@@ -15,10 +15,12 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.contrib.auth import views as auth_views
+from django.core.exceptions import ImproperlyConfigured
 from django.urls import include, path, re_path
 from django.contrib import admin
 from django.shortcuts import redirect, render
 from django.urls import path
+from django.views.generic.base import RedirectView
 import django.conf.urls.i18n
 
 from bitpoll import settings
@@ -27,15 +29,27 @@ urlpatterns = [
     path('poll/', include('bitpoll.poll.urls')),
     path('', include('bitpoll.base.urls')),
     path('invitations/', include('bitpoll.invitations.urls')),
-    path('', lambda req: redirect('index'), name='home'),
-    path('login/', auth_views.LoginView.as_view(), name='login', ),
-    path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
     path(r'registration/', include('bitpoll.registration.urls')),
 
     path(r'i18n/', include(django.conf.urls.i18n)),
     path(r'admin/', admin.site.urls),
-
 ]
+
+if settings.OPENID_ENABLED and settings.GROUP_MANAGEMENT:
+    raise ImproperlyConfigured("You can't use both OPENID_ENABLED and GROUP_MANAGEMENT at the same time.")
+
+if settings.OPENID_ENABLED:
+    urlpatterns += [
+        path("auth/openid/", include("simple_openid_connect.integrations.django.urls")),
+        path("login/", RedirectView.as_view(url="/auth/openid/login/", query_string=True), name="login"),
+        path("logout/", RedirectView.as_view(url="/auth/openid/logout/", query_string=True), name="logout"),
+    ]
+else:
+    urlpatterns += [
+        path("login/", auth_views.LoginView.as_view(), name="login"),
+        path("logout/", auth_views.LogoutView.as_view(next_page="index"), name="logout"),
+    ]
+
 
 if settings.CALENDAR_ENABLED:
     urlpatterns += [

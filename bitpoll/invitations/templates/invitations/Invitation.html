@@ -23,7 +23,7 @@
                     </tr>
                     {% for invitation in poll.invitation_set.all %}
                         <tr>
-                            <td>{% if invitation.vote %}<i class="fa fa-check"></i>{% endif %}</td>
+                            <td>{% if invitation.vote %}<i class="fa-solid fa-check"></i>{% endif %}</td>
                             <td>
                                 {{ invitation.user.username }}
                             </td>
