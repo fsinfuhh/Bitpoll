@@ -1,4 +1,0 @@
-sentry-sdk
-django-auth-ldap
-psycopg2-binary
-simple_openid_connect[django]

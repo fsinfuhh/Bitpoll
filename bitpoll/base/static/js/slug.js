@@ -1,9 +1,8 @@
-// language=JQuery-CSS
 (function () {
-    var makeRandomString;
+    let makeRandomString;
 
     makeRandomString = function (length) {
-        var i, j, possible, ref, text;
+        let i, j, possible, ref, text;
         text = "";
         possible = "ABCDEFGHJKLMNPQRTUVWXYZabcdefghjkmnpqrstuvwxyz0123456789";
         for (i = j = 0, ref = length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
@@ -12,24 +11,22 @@
         return text;
     };
 
-    $(function () {
-        var $randomSlug, $randomizeButton, $slugInput, $title, update, updateRandom, updateRandomSlug, updateTitle;
-        $randomizeButton = $('#slug-randomize');
-        $title = $('#title-input');
-        $slugInput = $('#slug-input');
-        $randomSlug = $('#random_slug');
+    (function () {
+        let $randomSlug, $randomizeButton, $slugInput, $title, update, updateRandom, updateRandomSlug, updateTitle;
+        $randomizeButton = get_elem('#slug-randomize');
+        $title = get_elem('#id_title');
+        $slugInput = get_elem('#slug-input');
+        $randomSlug = get_elem('#random_slug');
 
         // Check if we are on a page with a slug input
         if ($title.length === 0) {
             return;
         }
 
-        $randomSlug.prop('checked', RANDOM_SLUGS);
         update = function (random) {
-            var slug, title;
-            title = $title.val();
-            slug = $slugInput.val();
-            if ($randomSlug.prop('checked') || random || !title) {
+            let title = $title.value;
+            let slug = $slugInput.value;
+            if ($randomSlug.checked || random || !title) {
                 // Do not regenerate the slug if a random slug is already set
                 if (!slug || random || slug === "None") {
                     slug = makeRandomString(8);
@@ -37,28 +34,26 @@
             } else {
                 slug = get_slug(title);
             }
-            return $slugInput.val(slug);
+            return $slugInput.value = slug;
         };
-        updateTitle = function () {
+        updateTitle = function (e) {
             update(false);
             return false;
         };
-        updateRandom = function () {
+        updateRandom = function (e) {
             update(true);
-            $randomSlug.prop('checked', true);
-            return false;
+            $randomSlug.checked = true;
+            e.preventDefault()
         };
-        updateRandomSlug = function () {
-            $slugInput.val('');  // reset the current slug
+        updateRandomSlug = function (e) {
+            $slugInput.value = '';  // reset the current slug
             update(false);
-            return true;
         };
 
         // Bind events
-        $randomizeButton.on("click", updateRandom);
-        $title.on("input", updateTitle);
-        $randomSlug.on("click", updateRandomSlug);
-        return update(false);
-    });
+        $randomizeButton.addEventListener("click", updateRandom);
+        $title.addEventListener("keyup", updateTitle);
+        $randomSlug.addEventListener("click", updateRandomSlug);
+    }).call();
 
 }).call();

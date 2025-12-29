@@ -1,0 +1,120 @@
+
+.navbar {
+  margin-bottom: 2em;
+  background: #333;
+  padding: 0.7em;
+  font-size: 1.2em;
+
+  a {
+    color: #fff; //textcolor
+    padding: 0 15px;
+  }
+
+  i {
+    display: inline-block;
+    margin-right: .5em;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+
+    li {
+      margin: 0;
+    }
+  }
+}
+
+.navbar-center a { //logo
+  color: lightgrey;
+  font-size: 1.2em;
+  vertical-align: center;
+  padding: 0;
+}
+
+body nav {
+  label {
+    span + span {
+      display: none;
+      visibility: hidden;
+    }
+  }
+
+  input {
+    display: none;
+    visibility: hidden
+  }
+}
+
+//only full screen menu
+@media only screen and (min-width: 80rem) {
+  body nav label {
+    span {
+      display: none;
+      visibility: hidden;
+    }
+  }
+}
+
+//mobile view
+@media only screen and (max-width: 80rem) {
+  nav.navbar {
+    & > .navbar-section {
+
+      display: block;
+      visibility: hidden;
+      position: absolute;
+      z-index: 1000;
+      margin: 2.4rem 0 2rem 0.6rem;
+      width: calc(100% - 2.5rem);
+      max-height: 0;
+      overflow: hidden;
+      font-size: 1.2em;
+      padding: 1em;
+      background-color: #027bcb;
+      transition: visibility 0.5s ease-out, max-height 0.5s ease-out, padding 0s ease-out .5s;
+
+      li ~ li { //lines between menu items
+        border-top: 2px solid #000;
+      }
+
+      li {
+        padding: 1em;
+      }
+    }
+
+    & label {
+      display: block;
+      visibility: visible;
+      cursor: pointer;
+      font-size: 1.2em;
+      vertical-align: center;
+      padding: 0;
+      color: #fff;
+
+      span:before {
+        content: "\2261\00a0"
+      }
+    }
+
+    & input:checked {
+      & ~ label {
+        span { //hide the first span (normal menue text)
+          display: none;
+          visibility: hidden;
+        }
+
+        span + span { //show the second span (hide menue text)
+          display: block;
+          visibility: visible;
+        }
+      }
+
+      & ~ .navbar-hamburger {
+        visibility: visible;
+        max-height: 100%;
+        transition-delay: 0s;
+      }
+    }
+  }
+}

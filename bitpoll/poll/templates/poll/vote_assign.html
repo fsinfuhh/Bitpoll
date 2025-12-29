@@ -1,20 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load poll_filter %}
-{% load widget_tweaks %}
+{% load spectre_css %}
 
 {% block title %}{% trans 'Assign a vote to a user' %}{% endblock %}
 
 {% block content %}
     {% include 'poll/poll_header.html' %}
     <div class="container">
-    {% if timezone_warning %}
-      <p class="alert alert-warning">
-      {% blocktrans %}
-      This poll has a different timezone than you.
-      {% endblocktrans %}
-      </p>
-    {% endif %}
         <h1>{% trans 'Assign a vote to a user' %}</h1>
         <br>
         {% blocktrans with name=vote.name %}
@@ -27,9 +20,9 @@
             <div class="form-group">
                 <label for="name">{% trans 'New vote owner' %}</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" name="username" id="name">
+                    <input type="text" class="form-input" name="username" id="name">
                     <div class="input-group-btn">
-                        <input class="action primary" type="submit" value="{% trans 'Assign' %}">
+                        <input class="btn btn-primary" type="submit" value="{% trans 'Assign' %}">
                     </div>
                 </div>
             </div>
@@ -45,7 +38,7 @@
                 </ul>
             {% endblocktrans %}
 
-            <a href="{% url 'poll' poll.url %}" class="action">{% trans 'Back to poll' %}</a>
+            <a href="{% url 'poll' poll.url %}" class="btn">{% trans 'Back to poll' %}</a>
         </form>
     </div>
 {% endblock %}

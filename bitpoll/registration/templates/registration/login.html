@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load widget_tweaks %}
 {% load settings_value %}
+{% load spectre_css %}
+
 {% block title %}{% trans "Login" %}{% endblock %}
 
 {% value_from_settings REGISTER_ENABLED as register %}
@@ -10,11 +12,6 @@
     <section class="section create-poll">
         <div class="container">
             <div class="halfsize">
-                {% block messages %}
-                    {% for message in messages %}
-                        <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
-                    {% endfor %}
-                {% endblock messages %}
                 {% if next %}
                     {% if user.is_authenticated %}
                         <p>{% trans "Your account doesn't have access to this page. To proceed, please login with an account that has access." %}</p>
@@ -23,35 +20,9 @@
                     {% endif %}
                 {% endif %}
                 <form method="post" action="{% url 'login' %}">
-                    {% csrf_token %}
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            {% for error in form.non_field_errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    <div class="form-group{% if form.username.errors %} has-error{% endif %}">
-                        <label class="control-label">{% trans "Username" %}</label>
-                        {% render_field form.username class+="form-control" %}
-                        <div class="help-block">
-                            {% if form.username.errors %}
-                                <p>{% for error in form.username.errors %}{{ error }} {% endfor %}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="form-group{% if form.password.errors %} has-error{% endif %}">
-                        <label class="control-label">{% trans "Password" %}</label>
-                        {% render_field form.password class+="form-control" %}
-                        {% if form.password.errors %}
-                            <span class="help-block">
-                        {% for error in form.password.errors %}{{ error|escape }} {% endfor %}
-                    </span>
-                        {% endif %}
-                    </div>
-                    <input type="hidden" name="next" value="{{ next }}"/>
+                    {% render_form form %}
                     <div class="form-group">
-                        <button type="submit" class="primary action">{% trans "Login" %}</button>
+                        <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
                     </div>
                 </form>
                 {% if register %}{# TODO: link to central account management? #}

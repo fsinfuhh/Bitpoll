@@ -126,18 +126,18 @@ For Production systems it is nessesarry to run
 
 ## Management of Dependencies
 
-We use pip-tools to manage the dependencies.
-After modification or the requirements*.in files or for updates of packages run
+We use pyprojects.toml to manage the dependencies.
+After modification or the requirements*.in files or for updates of packages run (the last one is for historical compatibility for the moment)
 
 ```bash
-pip-compile --upgrade --output-file requirements.txt requirements.in
-pip-compile --upgrade --output-file requirements-production.txt  requirements-production.in requirements.in
+uv pip compile pyproject.toml > requirements.txt
+uv pip compile pyproject.toml > requirements-production.txt
 ```
 
 to sync your enviroment with the requirements.txt just run
 
 ```bash
-pip-sync
+uv sync
 ```
 
 this will install/deinstall dependencies so that the virtualenv is matching the requirements file

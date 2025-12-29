@@ -14,11 +14,12 @@ class BitpollUserChangeForm(UserChangeForm):
 
 class BitpollUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
-        ('Additional info', {'fields': ('language', 'email_invitation', 'timezone', 'auto_watch')}),
+        ('Additional info', {'fields': ('language', 'email_invitation', 'timezone', 'auto_watch', 'displayname')}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
-        ('Additional info', {'fields': ('language', 'email_invitation', 'timezone', 'auto_watch')}),
+        ('Additional info', {'fields': ('language', 'email_invitation', 'timezone', 'auto_watch', 'displayname')}),
     )
     form = BitpollUserChangeForm
+
 
 admin.site.register(BitpollUser, BitpollUserAdmin)
