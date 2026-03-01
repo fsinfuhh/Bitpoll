@@ -42,8 +42,6 @@ class Poll(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(BitpollUser, null=True, blank=True, on_delete=models.SET_NULL)
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
-    """owner_id = models.ForeignKey(Member)"""
-
     # === Extra settings ==
     due_date = models.DateTimeField(null=True, blank=True)
     anonymous_allowed = models.BooleanField(default=True)
@@ -95,10 +93,10 @@ class Poll(models.Model):
         return True
 
     def has_voted(self, user: AbstractUser) -> bool:
-        return user.is_authenticated and Vote.objects.filter(user=user, poll=self).count() > 0
+        return user.is_authenticated and Vote.objects.filter(user=user, poll=self).exists()
 
     def get_own_vote(self, user: AbstractUser):
-        return Vote.objects.filter(user=user, poll=self)[0]
+        return Vote.objects.filter(user=user, poll=self).first()
 
     def can_edit(self, user: AbstractUser, request: HttpRequest=None) -> bool:
         """
@@ -112,7 +110,7 @@ class Poll(models.Model):
         has_owner = self.group or self.user
         is_owner = self.is_owner(user)
 
-        can_edit = ((not has_owner) or is_owner) and user.is_authenticated or not has_owner
+        can_edit = ((not has_owner) or is_owner) and user.is_authenticated
         if request and not can_edit:
             messages.error(
                 request, _("You are not allowed to edit this Poll.")
@@ -120,11 +118,11 @@ class Poll(models.Model):
         return can_edit
 
     def can_watch(self, user: AbstractUser) -> bool:
-        if self.can_vote(user) and self.show_results not in ('never', 'summary after vote', 'complete after vote'):
-            # If the user can vote and the results are not restricted
+        if self.is_owner(user):
             return True
-        if self.has_voted(user) and self.show_results not in ('never', ):
-            # If the user has voted and can view the results
+        if self.can_vote(user) and self.show_results not in ('never', 'summary after vote', 'complete after vote'):
+            return True
+        if self.has_voted(user) and self.show_results not in ('never',):
             return True
         return False
 
@@ -180,7 +178,6 @@ class Poll(models.Model):
         return matrix
 
     def get_tz_name(self, user: BitpollUser):
-        # TODO: local etc beachten (umrechenn auf user...)
         if self.type == 'date':
             # Datepolls are using UTC as timezone
             tz = 'UTC'
@@ -206,7 +203,7 @@ class Poll(models.Model):
         :param user: The User in Question
         :return: True if the User watches the Poll
         """
-        return user.is_authenticated and PollWatch.objects.filter(poll=self, user=user).count() > 0
+        return user.is_authenticated and PollWatch.objects.filter(poll=self, user=user).exists()
 
 
 POLL_RESULT_SORTING = (
@@ -308,25 +305,15 @@ class Vote(models.Model):
         return False
 
     def can_delete(self, user: BitpollUser) -> bool:
-        """
-        Determine if the user can delete the Vote
-
-        :param user:
-        :return:
-        """
-        #if self.poll.owner == user:  # TODO: gruppen, owner algemein
-        #    return True
         if user.is_anonymous:
             return False
         return self.can_edit(user)
-    
+
     @property
     def display_name(self) -> str:
-        """Name of user if assigned, name field or anonymous else."""
         if self.anonymous:
             return _('Anonymous')
         if self.user:
-            # return '{} ({})'.format(self.user.first_name, self.user.username)
             return self.user.get_displayname()
         return self.name
 
@@ -359,7 +346,7 @@ class PollWatch(models.Model):
         translation.activate(self.user.language)
         link = reverse('poll', args=(self.poll.url,))
         if vote.anonymous:
-            username = _("Annonymus")
+            username = _("Anonymous")
         elif vote.user:
             username = vote.user.username
         else:
@@ -369,16 +356,16 @@ class PollWatch(models.Model):
             'user': username if self.poll.show_results == "complete" else _("by an user"),
             'poll': self.poll.title,
             'link': link,
-            'hide_participants': self.poll.hide_participants  # TODO: simplify merge with usernameshadowing above
+            'hide_participants': self.poll.hide_participants
         })
         try:
-            send_mail(_("New votes for {}".format(self.poll.title)), email_content, None,
+            send_mail(_("New votes for {}").format(self.poll.title), email_content, None,
                       [self.user.email])
         except SMTPRecipientsRefused:
             translation.activate(old_lang)
             messages.error(
-                request, _("The mail server had an error sending the notification to {}".format(
-                    self.user.username))
+                request, _("The mail server had an error sending the notification to {}").format(
+                    self.user.username)
             )
         translation.activate(old_lang)
 
