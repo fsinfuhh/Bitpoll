@@ -48,4 +48,5 @@ class InvitationForm(forms.Form):
         return invitations
 
     def save(self):
-        self.get_invitation().save()
+        for invitation in self.get_invitations():
+            invitation.save()

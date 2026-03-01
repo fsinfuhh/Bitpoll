@@ -40,7 +40,7 @@ STATIC_ROOT = os.path.join(ROOT_DIR, '_static')
 # Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'ALLOW_CUSTOM_SLUGS',
@@ -115,7 +115,11 @@ STATICFILES_FINDERS = [
     'pipeline.finders.PipelineFinder',
 ]
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "pipeline.storage.PipelineManifestStorage",
+    },
+}
 
 PIPELINE = {
     'STYLESHEETS': {
@@ -278,6 +282,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'base.BitpollUser'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 CSRF_COOKIE_HTTPONLY = True
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
@@ -290,8 +296,6 @@ LANGUAGE_CODE = 'de-de'
 TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
-
-USE_L10N = True
 
 USE_TZ = True
 

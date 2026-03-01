@@ -19,7 +19,7 @@ class Invitation(models.Model):
     class Meta:
         unique_together = ('user', 'poll')
 
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, related_name='creator')
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
@@ -43,12 +43,12 @@ class Invitation(models.Model):
             except SMTPRecipientsRefused:
                 translation.activate(old_lang)
                 messages.error(
-                    request, _("The mail server had an error sending the notification to {}".format(self.user.username))
+                    request, _("The mail server had an error sending the notification to {}").format(self.user.username)
                 )
             translation.activate(old_lang)
         else:
             messages.error(
-                request, _("You have send an Email for {} in the last 12 Hours".format(self.user.username))
+                request, _("You have sent an email for {} in the last 12 hours").format(self.user.username)
             )
 
     def can_edit(self, user: BitpollUser, request: HttpRequest=None):

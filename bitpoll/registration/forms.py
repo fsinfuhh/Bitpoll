@@ -57,10 +57,9 @@ class NickChangeForm(forms.Form):
     nickname = forms.CharField(max_length=20)
 
     def save(self):
-        ldap_user = self.user.get_ldapuser()
-        ldap_user.display_name = u"{} ({})".format(
+        self.user.displayname = u"{} ({})".format(
             self.cleaned_data['nickname'], self.user.username)
-        ldap_user.save()
+        self.user.save()
 
 
 class EmailChangeForm(forms.Form):

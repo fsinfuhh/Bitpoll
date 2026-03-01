@@ -23,7 +23,7 @@ def invite(request, poll_url):
             error_msg = "Not allowed to edit"
         else:
             if 'resend_all' in request.POST:
-                for invitation in current_poll.invitation_set:
+                for invitation in current_poll.invitation_set.all():
                     invitation.send(request)
                 return redirect('poll_settings', current_poll.url)
 
@@ -55,7 +55,7 @@ def invitation_send(request, poll_url):
             request, _("You are not allowed to edit this Poll")
         )
     else:
-        receivers = request.POST.get('invite', None).split()
+        receivers = request.POST.get('invite', '').split()
         for receiver in receivers:
             try:
                 user = BitpollUser.objects.get(username=receiver)
@@ -64,7 +64,7 @@ def invitation_send(request, poll_url):
                 invitation.save()
                 invitation.send(request)
             except IntegrityError:
-                messages.warning(request, _("The user {} was already invited".format(receiver)))
+                messages.warning(request, _("The user {} was already invited").format(receiver))
             except ObjectDoesNotExist:
                 try:
                     group = Group.objects.get(name=receiver)
@@ -86,6 +86,6 @@ def invitation_send(request, poll_url):
                     user_error += " '{}'".format(receiver)
         if user_error:
             messages.error(
-                request, _("The following User/Groups could not be found:  {}".format(user_error))
+                request, _("The following User/Groups could not be found:  {}").format(user_error)
             )
     return redirect('invitations', current_poll.url)
