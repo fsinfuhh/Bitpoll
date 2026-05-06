@@ -11,7 +11,7 @@ RUN mkdir -p /opt/bitpoll
 
 WORKDIR /opt/bitpoll
 
-RUN apt update && apt install -y --no-install-recommends libldap-2.5-0 libsasl2-2 uwsgi uwsgi-plugin-python3 && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y --no-install-recommends libldap2 libsasl2-2 uwsgi uwsgi-plugin-python3 && rm -rf /var/lib/apt/lists/*
 
 FROM common-base as base-builder
 
