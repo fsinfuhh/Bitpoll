@@ -11,7 +11,7 @@ RUN mkdir -p /opt/bitpoll
 
 WORKDIR /opt/bitpoll
 
-RUN apt update && apt install -y --no-install-recommends libldap2 libsasl2-2 uwsgi uwsgi-plugin-python3 && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y --no-install-recommends libldap2 libsasl2-2 libexpat1&& rm -rf /var/lib/apt/lists/*
 
 FROM common-base as base-builder
 
@@ -57,7 +57,7 @@ RUN chmod o+r -R .
 RUN ln -sf /opt/config/settings.py /opt/bitpoll/bitpoll/settings_local.py
 RUN ln -sf /opt/storage/media /opt/bitpoll/_media
 
-ARG RELEASE_VERSION=2022.05.22
+ARG RELEASE_VERSION=2026.05.06
 RUN echo $RELEASE_VERSION > /opt/bitpoll/.releaseversion
 
 ENV LANG=C.UTF-8
