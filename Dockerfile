@@ -57,7 +57,7 @@ RUN chmod o+r -R .
 RUN ln -sf /opt/config/settings.py /opt/bitpoll/bitpoll/settings_local.py
 RUN ln -sf /opt/storage/media /opt/bitpoll/_media
 
-ARG RELEASE_VERSION=2026.05.06
+ARG RELEASE_VERSION=2026.05.20
 RUN echo $RELEASE_VERSION > /opt/bitpoll/.releaseversion
 
 ENV LANG=C.UTF-8
