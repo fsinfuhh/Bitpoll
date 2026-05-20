@@ -53,7 +53,7 @@ class Poll(models.Model):
     show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete")
     send_mail = models.BooleanField(default=False)
     one_vote_per_user = models.BooleanField(default=True)
-    allow_unauthenticated_vote_changes = models.BooleanField(default=False)
+    allow_unauthenticated_vote_changes = models.BooleanField(default=True)
     allow_comments = models.BooleanField(default=True)
     show_invitations = models.BooleanField(default=True)
     timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
