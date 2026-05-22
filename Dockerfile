@@ -11,7 +11,7 @@ RUN mkdir -p /opt/bitpoll
 
 WORKDIR /opt/bitpoll
 
-RUN apt update && apt install -y --no-install-recommends libldap2 libsasl2-2 libexpat1&& rm -rf /var/lib/apt/lists/*
+RUN URLLIB3_NO_OVERRIDE=1 apt update && apt install -y --no-install-recommends libldap2 libsasl2-2 libexpat1&& rm -rf /var/lib/apt/lists/*
 
 FROM common-base as base-builder
 
@@ -23,7 +23,7 @@ RUN apt-get update && apt-get -y --no-install-recommends install g++ wget python
 
 COPY requirements-production.txt .
 
-RUN pip install --no-warn-script-location --prefix=/install -U -r requirements-production.txt
+RUN URLLIB3_NO_OVERRIDE=1 pip install --no-warn-script-location --prefix=/install -U --no-binary urllib3-future -r requirements-production.txt
 
 FROM dependencies as collect-static
 
