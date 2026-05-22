@@ -1,6 +1,6 @@
 #sentry-cli releases -o sentry-internal new -p bitpoll $VERSION
 # Dockerfile
-FROM python:3.11-slim as common-base
+FROM python:3.12-slim as common-base
 
 #ENV DJANGO_SETTINGS_MODULE foo.settings
 ENV UID=2008
@@ -11,7 +11,7 @@ RUN mkdir -p /opt/bitpoll
 
 WORKDIR /opt/bitpoll
 
-RUN apt update && apt install -y --no-install-recommends libldap2 libsasl2-2 libexpat1&& rm -rf /var/lib/apt/lists/*
+RUN URLLIB3_NO_OVERRIDE=1 apt update && apt install -y --no-install-recommends libldap2 libsasl2-2 libexpat1&& rm -rf /var/lib/apt/lists/*
 
 FROM common-base as base-builder
 
@@ -23,7 +23,7 @@ RUN apt-get update && apt-get -y --no-install-recommends install g++ wget python
 
 COPY requirements-production.txt .
 
-RUN pip install --no-warn-script-location --prefix=/install -U -r requirements-production.txt
+RUN URLLIB3_NO_OVERRIDE=1 pip install --no-warn-script-location --prefix=/install -U --no-binary urllib3-future -r requirements-production.txt
 
 FROM dependencies as collect-static
 
@@ -57,7 +57,7 @@ RUN chmod o+r -R .
 RUN ln -sf /opt/config/settings.py /opt/bitpoll/bitpoll/settings_local.py
 RUN ln -sf /opt/storage/media /opt/bitpoll/_media
 
-ARG RELEASE_VERSION=2026.05.06
+ARG RELEASE_VERSION=2026.05.20
 RUN echo $RELEASE_VERSION > /opt/bitpoll/.releaseversion
 
 ENV LANG=C.UTF-8

@@ -115,7 +115,14 @@ STATICFILES_FINDERS = [
     'pipeline.finders.PipelineFinder',
 ]
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'pipeline.storage.PipelineManifestStorage',
+    },
+}
 
 PIPELINE = {
     'STYLESHEETS': {
@@ -413,3 +420,6 @@ INSTALLED_APPS += INSTALLED_APPS_LOCAL
 if "MIDDLEWARE_LOCAL" in locals():
     MIDDLEWARE += MIDDLEWARE_LOCAL
 PIPELINE.update(PIPELINE_LOCAL)
+
+if OPENID_ENABLED:
+    LOGIN_URL = '/auth/openid/login/'
