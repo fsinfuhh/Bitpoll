@@ -165,6 +165,9 @@ def privacy(request):
         return redirect(PRIVACY_URL)
     else:
         return TemplateResponse(request, 'base/privacy.html')
+    
+def robots(request):
+    return HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")
 
 
 @login_required

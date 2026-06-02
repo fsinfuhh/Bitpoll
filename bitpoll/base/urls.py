@@ -12,4 +12,5 @@ urlpatterns = [
     path('autocomplete', views.autocomplete, name='base_autocomplete'),
     path('problems', views.problems, name='base_problems'),
     path('privacy/', views.privacy, name='privacy'),
+    path('robots.txt', views.robots, name='robots'),
 ]
