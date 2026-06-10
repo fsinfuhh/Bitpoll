@@ -16,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 
 from bitpoll.base.models import BitpollUser
 from bitpoll.base.validators import validate_timezone
-from bitpoll.poll.util import DateTimePart, PartialDateTime
+from bitpoll.poll.util import DateTimePart, PartialDateTime, split_unescape
 from django.utils import translation
 
 POLL_TYPES = (
@@ -239,7 +239,7 @@ class Choice(models.Model):
         if self.date:
             return [PartialDateTime(self.date, DateTimePart.date, tz),
                     PartialDateTime(self.date, DateTimePart.time, tz)]
-        return [part.strip() for part in self.text.split("/") if part]
+        return [part.strip() for part in split_unescape(self.text, "/") if part]
 
     def votechoice_count(self):
         return self.votechoice_set.filter(value__isnull=False).count()
