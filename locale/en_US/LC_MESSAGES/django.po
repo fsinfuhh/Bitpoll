@@ -1415,12 +1415,12 @@ msgstr ""
 msgid "Vote"
 msgstr "Vote"
 
-#: bitpoll/poll/templates/poll/poll.html:153
-msgid "Scores"
-msgstr "Scores"
+#: bitpoll/poll/templates/poll/poll.html:154
+msgid "Percentage"
+msgstr "Percentage"
 
-#: bitpoll/poll/templates/poll/poll.html:171
-#: bitpoll/poll/templates/poll/poll.html:186
+#: bitpoll/poll/templates/poll/poll.html:172
+#: bitpoll/poll/templates/poll/poll.html:187
 msgid "Score"
 msgstr "Score"
 
@@ -1428,9 +1428,31 @@ msgstr "Score"
 msgid "Details"
 msgstr ""
 
+#: bitpoll/poll/templates/poll/poll.html:218
+#: bitpoll/poll/templates/poll/poll.html:225
+#: bitpoll/poll/templates/poll/poll.html:239
+msgid "Filter"
+msgstr "Filter"
+
 #: bitpoll/poll/templates/poll/poll.html:216
 msgid "Export as CSV"
 msgstr ""
+
+#: bitpoll/poll/templates/poll/poll.html:246
+msgid "Minimum percentage"
+msgstr "Minimum percentage"
+
+#: bitpoll/poll/templates/poll/poll.html:259
+msgid "Maximum count"
+msgstr "Maximum count"
+
+#: bitpoll/poll/templates/poll/poll.html:268
+msgid "Reset"
+msgstr "Reset"
+
+#: bitpoll/poll/templates/poll/poll.html:272
+msgid "Done"
+msgstr "Done"
 
 #: bitpoll/poll/templates/poll/poll.html:219
 msgid "Comments"
