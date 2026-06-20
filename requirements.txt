@@ -6,7 +6,7 @@
 #
 asgiref==3.11.1
     # via django
-bleach[css]==6.3.0
+bleach[css]==6.4.0
     # via django-markdownify
 caldav==3.2.0
     # via -r requirements.in
