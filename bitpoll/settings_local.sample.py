@@ -31,6 +31,7 @@ INSTALLED_APPS_LOCAL = []
 
 # To use OpenId:
 #INSTALLED_APPS_LOCAL.append('simple_openid_connect.integrations.django')
+#OPENID_PROVIDER = "keycloak"
 #OPENID_ENABLED = True
 #OPENID_ISSUER = "https://identity.mafiasi.de/realms/mafiasi"
 #OPENID_API_BASE = "https://identity.mafiasi.de/admin/realms/mafiasi"

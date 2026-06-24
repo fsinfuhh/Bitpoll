@@ -6,7 +6,7 @@
 #
 asgiref==3.11.1
     # via django
-bleach[css]==6.3.0
+bleach[css]==6.4.0
     # via django-markdownify
 caldav==3.2.0
     # via -r requirements.in
@@ -16,7 +16,7 @@ charset-normalizer==3.4.7
     # via niquests
 click==8.3.3
     # via x-wr-timezone
-cryptography==48.0.0
+cryptography==48.0.1
     # via django-encrypted-model-fields
 django==6.0.5
     # via

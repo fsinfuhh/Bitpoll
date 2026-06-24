@@ -86,31 +86,54 @@ def refresh_group_users(group: Group):
                 value=token_response.refresh_token,
                 timeout=oidc_expiry2cache_expiry(token_response.refresh_expires_in),
             )
+            
+    if settings.OPENID_PROVIDER == "authentik":
+        # get users from group
+        response = requests.get(
+            settings.OPENID_API_BASE + "/groups/?name=" + quote(group.name),
+            headers={"Authorization": "Bearer " + access_token},
+        )
+        
+        users = response.json()["results"][0]["users_obj"]
 
-    # get group id
-    response = requests.get(
-        settings.OPENID_API_BASE + "/groups?exact=true&search=" + quote(group.name),
-        headers={"Authorization": "Bearer " + access_token},
-    )
-    group_id = response.json()[0]["id"]
-    # get users
-    response = requests.get(
-        settings.OPENID_API_BASE
-        + "/groups/"
-        + group_id
-        + "/members?briefRepresentation=true",
-        headers={"Authorization": "Bearer " + access_token},
-    )
-    # add users to group
-    User = get_user_model()
-    for user_json in response.json():
-        user = User.objects.get_or_create(
-            username=user_json["username"],
-            defaults={
-                "first_name": user_json["firstName"],
-                "last_name": user_json["lastName"],
-                "email": user_json["email"],
-            },
-        )[0]
-        group.user_set.add(user)
+        # add users to group
+        User = get_user_model()
+        for user_json in users:
+            user = User.objects.get_or_create(
+                username=user_json["username"],
+                defaults={
+                    "first_name": user_json["attributes"]["fn"],
+                    "last_name": user_json["attributes"]["sn"],
+                    "email": user_json["email"],
+                },
+            )[0]
+            group.user_set.add(user)
+        
+    else:
+        # get group id
+        response = requests.get(
+            settings.OPENID_API_BASE + "/groups?exact=true&search=" + quote(group.name),
+            headers={"Authorization": "Bearer " + access_token},
+        )
+        group_id = response.json()[0]["id"]
+        # get users
+        response = requests.get(
+            settings.OPENID_API_BASE
+            + "/groups/"
+            + group_id
+            + "/members?briefRepresentation=true",
+            headers={"Authorization": "Bearer " + access_token},
+        )
+        # add users to group
+        User = get_user_model()
+        for user_json in response.json():
+            user = User.objects.get_or_create(
+                username=user_json["username"],
+                defaults={
+                    "first_name": user_json["firstName"],
+                    "last_name": user_json["lastName"],
+                    "email": user_json["email"],
+                },
+            )[0]
+            group.user_set.add(user)
     group.save()
