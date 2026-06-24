@@ -167,7 +167,7 @@ def privacy(request):
         return TemplateResponse(request, 'base/privacy.html')
     
 def robots(request):
-    return HttpResponse("User-agent: *\nDisallow: /", content_type="text/plain")
+    return HttpResponse("User-agent: *\nDisallow: /\nAllow: /$", content_type="text/plain")
 
 
 @login_required
