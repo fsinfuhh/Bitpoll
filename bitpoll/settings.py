@@ -18,6 +18,13 @@ from django.contrib import messages
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
+# Overridden by settings_local.py in deployments. These defaults keep Django
+# importable for local development and automated tests.
+SECRET_KEY = 'bitpoll-development-only-secret-key'
+FIELD_ENCRYPTION_KEY = 'this+is+an+example+key+please+generate+one+='
+DEBUG = False
+ALLOWED_HOSTS = ['testserver', 'localhost', '127.0.0.1']
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -414,11 +421,20 @@ ANTI_SPAM_CHALLENGE_TTL = 60 * 60 * 24 * 7  # Defaults to 7 days
 
 OPENID_ENABLED = False
 
-from .settings_local import *
+# Local settings are intentionally ignored by git and are optional for tests
+# and development. Production deployments can still override every setting.
+INSTALLED_APPS_LOCAL = []
+MIDDLEWARE_LOCAL = []
+PIPELINE_LOCAL = {}
+
+try:
+    from .settings_local import *
+except ModuleNotFoundError as error:
+    if error.name != 'bitpoll.settings_local':
+        raise
 
 INSTALLED_APPS += INSTALLED_APPS_LOCAL
-if "MIDDLEWARE_LOCAL" in locals():
-    MIDDLEWARE += MIDDLEWARE_LOCAL
+MIDDLEWARE += MIDDLEWARE_LOCAL
 PIPELINE.update(PIPELINE_LOCAL)
 
 if OPENID_ENABLED:

@@ -4,6 +4,7 @@ FROM python:3.12-slim as common-base
 
 #ENV DJANGO_SETTINGS_MODULE foo.settings
 ENV UID=2008
+ENV PATH="/opt/bitpoll/.venv/bin:$PATH"
 
 RUN usermod -u $UID -g nogroup -d /opt/bitpoll www-data
 
@@ -19,11 +20,12 @@ RUN pip install -U pip setuptools
 
 FROM base-builder as dependencies
 
-RUN apt-get update && apt-get -y --no-install-recommends install g++ wget python3-pip make gettext gcc python3-dev libldap2-dev gpg gpg-agent curl libsasl2-dev npm
+RUN apt-get update && apt-get -y --no-install-recommends install g++ wget python3-pip make gettext gcc python3-dev libldap2-dev gpg gpg-agent curl libsasl2-dev npm && \
+    pip install --no-cache-dir uv
 
-COPY requirements-production.txt .
+COPY pyproject.toml uv.lock README.md .
 
-RUN URLLIB3_NO_OVERRIDE=1 pip install --no-warn-script-location --prefix=/install -U --no-binary urllib3-future -r requirements-production.txt
+RUN uv sync --locked --no-dev --extra production --no-install-project
 
 FROM dependencies as collect-static
 
@@ -35,17 +37,16 @@ COPY bitpoll bitpoll
 COPY locale locale
 COPY docker_files/config/settings.py bitpoll/settings_local.py
 
-# Set Pythonpath tro the packages installed with pip bevore so they are aviable in this step
-RUN export PYTHONPATH=/install/lib/python$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1,2)/site-packages && \
-    python3 /opt/bitpoll/manage.py collectstatic --noinput && \
-    python3 manage.py compilemessages &&\
+# Dependencies are installed in /opt/bitpoll/.venv by uv in the previous stage.
+RUN uv run --locked /opt/bitpoll/manage.py collectstatic --noinput && \
+    uv run --locked manage.py compilemessages &&\
     rm bitpoll/settings_local.py
 
 FROM common-base
 
 #RUN apt-get -y --no-install-recommends install python3-psycopg2 python3-ldap3 gettext
 
-COPY --from=dependencies /install /usr/local
+COPY --from=dependencies /opt/bitpoll/.venv /opt/bitpoll/.venv
 COPY --from=collect-static /opt/bitpoll .
 
 COPY docker_files/run /usr/local/bin

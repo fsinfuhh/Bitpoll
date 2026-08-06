@@ -1,0 +1,59 @@
+[project]
+name = "bitpoll"
+version = "0.0.0"
+description = "A Django application for date and time polls"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "caldav",
+    "django",
+    "django-encrypted-model-fields",
+    "django-friendly-tag-loader",
+    "django-markdownify",
+    "django-pipeline",
+    "django-simple-csp",
+    "django-token-bucket>=0.2.2",
+    "django-widget-tweaks",
+    "icalendar",
+    "libsasscompiler",
+    "pytz",
+    "urllib3",
+]
+
+[project.optional-dependencies]
+production = [
+    "django-auth-ldap",
+    "psycopg2-binary",
+    "sentry-sdk",
+    "simple-openid-connect[django]",
+    "uwsgi",
+]
+
+dev = [
+    "pytest",
+    "pytest-django",
+    "pytest-cov",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "bitpoll.settings_test"
+python_files = ["test_*.py", "*_test.py"]
+testpaths = ["bitpoll"]
+addopts = "--strict-markers"
+markers = [
+    "django_db: test requires access to the Django test database",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-django",
+]
+
+
+
+
