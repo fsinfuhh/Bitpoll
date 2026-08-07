@@ -10,8 +10,8 @@ urlpatterns = [
     re_path(r'^g/([a-zA-Z0-9_\-\.]+)/invite$', invite, name='groups_invite'),
     re_path(r'^g/([a-zA-Z0-9_\-\.]+)/action/(\d+)$', group_action,
             name='groups_action'),
-    re_path(r'^invitations/(\d+)/action', invitation_action,
+    re_path(r'^invitations/(\d+)/action$', invitation_action,
             name='groups_invitation_action'),
-    re_path(r'^invitations/(\d+)/withdraw', withdraw_invite,
+    re_path(r'^invitations/(\d+)/withdraw$', withdraw_invite,
             name='groups_withdraw_invite'),
 ]

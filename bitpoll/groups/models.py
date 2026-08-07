@@ -69,7 +69,7 @@ class GroupInvitation(models.Model):
     invited_by = models.ForeignKey(settings.AUTH_USER_MODEL,
             related_name='given_invitations', on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'Invitation to {0} for {1}'.format(self.group, self.invitee)
 
     def accept(self):

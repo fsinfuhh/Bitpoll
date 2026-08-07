@@ -59,7 +59,7 @@ def get_caldav(choices: List[Choice], current_poll: Poll, user: BitpollUser, req
                                     pass
                 cache.set(cache_key, events_calendar)
             except AuthorizationError as e:
-                messages.warning(request, ugettext_lazy('Could not access your calendar "%s" due to an authorization error' % calendar_obj.name))
+                messages.warning(request, gettext_lazy('Could not access your calendar "%s" due to an authorization error' % calendar_obj.name))
         events += events_calendar
     for choice in choices:
         ev_tmp = []
