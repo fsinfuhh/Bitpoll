@@ -130,7 +130,7 @@ def group_action(request, group_name, member_pk):
             group_proxy.remove_member(member, check_sole_admin=True)
             messages.success(request, _('User was removed from group'))
         except GroupError as e:
-            messages.errror(request, e.message)
+            messages.error(request, e.message)
     elif 'grant_admin' in request.POST:
         group_proxy.grant_admin(member)
         messages.success(request, _('User was granted group admin.'))
@@ -139,7 +139,7 @@ def group_action(request, group_name, member_pk):
             group_proxy.revoke_admin(member)
             messages.success(request, _('Revoked group admin rights from user.'))
         except GroupError as e:
-            messages.errror(request, e.message)
+            messages.error(request, e.message)
     
     return redirect('groups_show', group.name) 
 

@@ -182,13 +182,13 @@ def _send_mail_or_error_page(subject, content, address, request):
     try:
         send_mail(subject, content, None, [address])
     except SMTPRecipientsRefused as e:
-        wrong_email, (error_code, error_msg) = e.recipients.items()[0]
+        wrong_email, (error_code, error_msg) = next(iter(e.recipients.items()))
         unknown = 'User unknown' in error_msg
         if not unknown:
             error_email_content = u'{0}: {1}'.format(e.__class__.__name__,
                                                      repr(e.recipients))
             send_mail(
-                _('Registration: Sending mail failed: {}'.format(address)),
+                _('Registration: Sending mail failed: {}').format(address),
                 error_email_content,
                 None,
                 [settings.TEAM_EMAIL])

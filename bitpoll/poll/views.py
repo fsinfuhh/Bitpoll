@@ -135,11 +135,11 @@ def poll(request, poll_url: str, export: bool=False):
         # warn the user if the Timezone is not the same on the Poll and in his settings
         different_timezone = current_poll.timezone_name != request.user.timezone
         if current_poll.use_user_timezone and different_timezone:
-            messages.info(request, _("This poll was transferred from {} to your local timezone {}".format(
-                current_poll.timezone_name, request.user.timezone)))
+            messages.info(request, _("This poll was transferred from {} to your local timezone {}").format(
+                current_poll.timezone_name, request.user.timezone))
         elif different_timezone:
-            messages.warning(request, _("This poll has a different timezone ({}) than you.".format(
-                current_poll.timezone_name)))
+            messages.warning(request, _("This poll has a different timezone ({}) than you.").format(
+                current_poll.timezone_name))
 
     deleted_choicevals_count = VoteChoice.objects.filter(choice__poll=current_poll, value__deleted=True).count()
     if deleted_choicevals_count > 0:
@@ -307,7 +307,7 @@ def delete_comment(request, poll_url, comment_id):
                     current_comment.delete()
                     return redirect('poll', poll_url)
                 else:
-                    error_msg = _("Deletion not allowed. You are not {}.".format(str(current_comment.name)))
+                    error_msg = _("Deletion not allowed. You are not {}.").format(str(current_comment.name))
             else:
                 error_msg = _("Deletion not allowed. You are not authenticated.")
         else:
@@ -325,16 +325,15 @@ def delete_comment(request, poll_url, comment_id):
 def watch(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
 
-    if not current_poll.can_watch(request.user):
-        messages.error(
-            request, _("You are not allowed to watch this poll.")
-        )
-        return redirect('poll', poll_url)
-
     if current_poll.user_watches(request.user):
         poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
         poll_watch.delete()
     else:
+        if not current_poll.can_watch(request.user):
+            messages.error(
+                request, _("You are not allowed to watch this poll.")
+            )
+            return redirect('poll', poll_url)
         poll_watch = PollWatch(poll=current_poll, user=request.user)
         poll_watch.save()
     return redirect('poll', poll_url)
@@ -394,7 +393,7 @@ def edit_date_choice(request, poll_url):
                         dates.append(date)
                     else:
                         error = True
-                        messages.error(_("There was en error interpreting the provided dates and times"))
+                        messages.error(request, _("There was an error interpreting the provided dates and times"))
                 except ValueError:
                     # This will most likely only happen with users turning of JS
                     error = True
@@ -820,7 +819,7 @@ def vote(request, poll_url, vote_id=None):
                 except IntegrityError:
                     pass
         else:
-            current_vote.name = request.POST.get('name').strip()
+            current_vote.name = request.POST.get('name', '').strip()
 
         if len(current_vote.name) > 80:
             messages.error(
@@ -951,16 +950,16 @@ def vote_assign(request, poll_url, vote_id):
             username = request.POST.get('username').strip()
             try:
                 user = BitpollUser.objects.get(username=username)
-                if not current_poll.vote_set.filter(Q(user=user)) and current_poll.one_vote_per_user:
+                if current_poll.vote_set.filter(Q(user=user)).exists() and current_poll.one_vote_per_user:
+                    messages.info(request, _("This user has already voted and only one vote per user is permitted"))
+                else:
                     current_vote.user = user
                     current_vote.name = user.get_displayname()
                     current_vote.assigned_by = request.user
                     current_vote.save()
                     return redirect('poll', poll_url)
-                else:
-                    messages.info(request, _("This user has already voted and only one vote per user is permitted"))
             except ObjectDoesNotExist:
-                messages.warning(request, _("The user {} does not exists".format(username)))
+                messages.warning(request, _("The user {} does not exist").format(username))
         else:
             return HttpResponseForbidden()
 
@@ -1002,7 +1001,7 @@ def vote_delete(request, poll_url, vote_id):
                     current_vote.delete()
                     return redirect('poll', poll_url)
                 else:
-                    error_msg = _("Deletion not allowed. You are not {}.".format(str(current_vote.name)))
+                    error_msg = _("Deletion not allowed. You are not {}.").format(str(current_vote.name))
             else:
                 error_msg = _("Deletion not allowed. You are not authenticated.")
         else:
@@ -1141,10 +1140,9 @@ def settings(request, poll_url):
                         user_obj = BitpollUser.objects.get(username=user)
                         new_poll.user = user_obj
                     except ObjectDoesNotExist:
-                        user_error = _("User {} not Found".format(user))
+                        user_error = _("User {} not Found").format(user)
                 else:
                     new_poll.user = None
-                    current_poll.choice_set.all()
                 if not user_error:
                     # change the Timezone in the Choices, date-polls are in UTC regardles of the timezone
                     if old_timezone_name != new_poll.timezone_name and current_poll.type == 'datetime':

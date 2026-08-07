@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     re_path(r'^([a-zA-Z0-9_\-]+)/$', views.poll, name='poll'),
-    re_path(r'^([a-zA-Z0-9_\-]+).csv$', views.poll, {'export': True}, name='poll_export_csv'),
+    re_path(r'^([a-zA-Z0-9_\-]+)\.csv$', views.poll, {'export': True}, name='poll_export_csv'),
     re_path(r'^([a-zA-Z0-9_\-]+)/comment/$', views.comment, name='poll_comment'),
     re_path(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/edit/$', views.comment, name='poll_comment_edit'),
     re_path(r'^([a-zA-Z0-9_\-]+)/comment/(\d+)/delete/$', views.delete_comment, name='poll_deleteComment'),
@@ -18,8 +18,8 @@ urlpatterns = [
     re_path(r'^([a-zA-Z0-9_\-]+)/edit/choices/dateTime/combinations/$', views.edit_dt_choice_combinations,
         name='poll_editDTChoiceCombinations'),
     re_path(r'^([a-zA-Z0-9_\-]+)/edit/choices/universal/$', views.edit_universal_choice, name='poll_editUniversalChoice'),
-    re_path(r'^([a-zA-Z0-9_\-]+)/edit/choicevalues/', views.edit_choicevalues, name='poll_editchoicevalues'),
-    re_path(r'^([a-zA-Z0-9_\-]+)/edit/choicevalues_create', views.edit_choicevalues_create,
+    re_path(r'^([a-zA-Z0-9_\-]+)/edit/choicevalues/$', views.edit_choicevalues, name='poll_editchoicevalues'),
+    re_path(r'^([a-zA-Z0-9_\-]+)/edit/choicevalues_create$', views.edit_choicevalues_create,
         name='poll_editchoicevalues_create'),
 
     re_path(r'^([a-zA-Z0-9_\-]+)/delete/$', views.delete, name='poll_delete'),

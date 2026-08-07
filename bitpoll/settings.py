@@ -292,6 +292,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'base.BitpollUser'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 CSRF_COOKIE_HTTPONLY = True
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
@@ -304,8 +306,6 @@ LANGUAGE_CODE = 'de-de'
 TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
-
-USE_L10N = True
 
 USE_TZ = True
 
