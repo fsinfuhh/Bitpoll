@@ -30,6 +30,8 @@ production = [
 ]
 
 dev = [
+    "faker",
+    "model-bakery",
     "pytest",
     "pytest-django",
     "pytest-cov",
@@ -49,10 +51,15 @@ package = false
 
 [dependency-groups]
 dev = [
+    "faker",
+    "model-bakery",
     "pytest",
     "pytest-cov",
     "pytest-django",
 ]
+
+
+
 
 
 
