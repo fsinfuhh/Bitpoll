@@ -18,7 +18,7 @@ click==8.3.3
     # via x-wr-timezone
 cryptography==48.0.1
     # via django-encrypted-model-fields
-django==6.0.5
+django==6.0.6
     # via
     #   -r requirements.in
     #   django-encrypted-model-fields
