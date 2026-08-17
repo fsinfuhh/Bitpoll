@@ -86,7 +86,7 @@ recurring-ical-events==3.8.2
     #   icalendar-searcher
 six==1.17.0
     # via python-dateutil
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via django
 tinycss2==1.4.0
     # via bleach
