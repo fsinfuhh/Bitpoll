@@ -110,7 +110,7 @@ class Poll(models.Model):
         has_owner = self.group or self.user
         is_owner = self.is_owner(user)
 
-        can_edit = ((not has_owner) or is_owner) and user.is_authenticated
+        can_edit = (((not has_owner) or is_owner) and user.is_authenticated) or not has_owner
         if request and not can_edit:
             messages.error(
                 request, _("You are not allowed to edit this Poll.")
