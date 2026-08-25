@@ -19,7 +19,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django.urls import include, path, re_path
 from django.contrib import admin
 from django.shortcuts import redirect, render
-from django.urls import path
 from django.views.generic.base import RedirectView
 import django.conf.urls.i18n
 
@@ -29,10 +28,10 @@ urlpatterns = [
     path('poll/', include('bitpoll.poll.urls')),
     path('', include('bitpoll.base.urls')),
     path('invitations/', include('bitpoll.invitations.urls')),
-    path(r'registration/', include('bitpoll.registration.urls')),
+    path('registration/', include('bitpoll.registration.urls')),
 
-    path(r'i18n/', include(django.conf.urls.i18n)),
-    path(r'admin/', admin.site.urls),
+    path('i18n/', include(django.conf.urls.i18n)),
+    path('admin/', admin.site.urls),
 ]
 
 if settings.OPENID_ENABLED and settings.GROUP_MANAGEMENT:

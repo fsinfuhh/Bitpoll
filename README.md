@@ -72,12 +72,10 @@ Get the code:
 git clone https://github.com/fsinfuhh/Bitpoll
 ```
 
-Generate a Python virtualenv and install dependencies:
+Install Python and development dependencies with uv:
 
 ```bash
-virtualenv -p $(which python3) .pyenv
-source .pyenv/bin/activate
-pip install -r requirements.txt
+uv sync --group dev
 ```
 
 Copy `bitpoll/settings_local.sample.py` to `bitpoll/settings_local.py` and customize the local settings.
@@ -94,9 +92,15 @@ Run Testserver:
 ./manage.py runserver
 ```
 
+Run the test suite:
+
+```bash
+uv run pytest
+```
+
 ### Production
 
-In production Senty is used for error reporting.
+In production Sentry is used for error reporting.
 django-auth-ldap is used vor login via ldap
 uwsgi to serve the app
 
@@ -109,7 +113,7 @@ sudo apt install g++ make python3-psycopg2 python3-ldap3 gettext gcc python3-dev
 Install Python Dependencies
 
 ```bash
-pip install -r requirements-production.txt
+uv sync --extra production
 ```
 
 Configure examples are in `settings_local.py`
@@ -126,18 +130,21 @@ For Production systems it is nessesarry to run
 
 ## Management of Dependencies
 
-We use pip-tools to manage the dependencies.
-After modification or the requirements*.in files or for updates of packages run
+We use uv to manage and lock the dependencies. Runtime dependencies are in
+`pyproject.toml`; production-only dependencies are in the `production` extra
+and test tooling is in the `dev` dependency group.
+
+After changing dependencies or for package updates, run:
 
 ```bash
-pip-compile --upgrade --output-file requirements.txt requirements.in
-pip-compile --upgrade --output-file requirements-production.txt  requirements-production.in requirements.in
+uv lock --upgrade
 ```
 
-to sync your enviroment with the requirements.txt just run
+Synchronize the local environment with the lockfile using:
 
 ```bash
-pip-sync
+uv sync --group dev
 ```
 
-this will install/deinstall dependencies so that the virtualenv is matching the requirements file
+For a production environment use `uv sync --extra production`. The committed
+`uv.lock` makes both environments reproducible.

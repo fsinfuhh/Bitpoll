@@ -1,9 +1,5 @@
-from django import template
 from django.conf import settings
-
-from django.template import TemplateSyntaxError, Variable, Node, Variable, Library
-
-register = template.Library()
+from django.template import TemplateSyntaxError, Variable, Node, Library
 
 register = Library()
 

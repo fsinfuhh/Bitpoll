@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import PasswordResetForm
-from django.urls import path
+from django.conf import settings
 
 from .views import *
 
@@ -17,13 +17,13 @@ urlpatterns = [
 # TODO: own settings value for changing password? If yes: remember to change template ifs when to show the link
 if settings.REGISTER_ENABLED:
     urlpatterns += [
-        path('password_reset/', auth_views.PasswordResetView.as_view(), {
-            'password_reset_form': PasswordResetForm
-        }, name='password_reset'),
-        path('password_reset/done', auth_views.PasswordResetDoneView.as_view(),
+        path('password_reset/', auth_views.PasswordResetView.as_view(
+            form_class=PasswordResetForm
+        ), name='password_reset'),
+        path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(),
             name='password_reset_done'),
         path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-        re_path(r'^password_reset/complete', auth_views.PasswordResetCompleteView.as_view(),
+        re_path(r'^password_reset/complete$', auth_views.PasswordResetCompleteView.as_view(),
             name='password_reset_complete')
     ]
 
