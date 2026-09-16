@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.core.cache import cache
 from simple_openid_connect.data import TokenSuccessResponse
 from simple_openid_connect.integrations.django.apps import OpenidAppConfig
-from simple_openid_connect.integrations.django.models import OpenidUser
+from simple_openid_connect.integrations.django.models import OpenidSession, OpenidUser
 from simple_openid_connect.integrations.django.user_mapping import UserMapper
 
 
@@ -17,12 +17,19 @@ class BitpollUserMapper(UserMapper):
         User = get_user_model()
         try:
             user = User.objects.get(username=user_data.preferred_username)
-            OpenidUser.objects.get_or_create(
-                sub=user_data.sub,
-                defaults={
-                    "user": user,
-                },
-            )
+            openid_user = OpenidUser.objects.filter(user=user).first()
+            if openid_user is not None and openid_user.sub != user_data.sub:
+                OpenidSession.objects.filter(user=openid_user).delete()
+                openid_user.delete()
+                openid_user = None
+
+            if openid_user is None:
+                OpenidUser.objects.get_or_create(
+                    sub=user_data.sub,
+                    defaults={
+                        "user": user,
+                    },
+                )
         except User.DoesNotExist:
             # if the user does not exist, it is automatically created by the super class
             pass
