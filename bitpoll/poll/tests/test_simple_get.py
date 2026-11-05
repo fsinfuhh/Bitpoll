@@ -57,6 +57,8 @@ def test_urls_without_login(client, poll, comment, vote, url_name, arg_count):
             assert response.status_code == 302
         case "poll_watch" | "poll_editchoicevalues_create":
             assert response.status_code == 405
+        case "poll_voteAssign" | "poll_voteDelete" | "poll_deleteComment":
+            assert response.status_code == 403
         case "poll_settings" | "poll_editChoice" | "poll_editDateChoice" | "poll_editDTChoiceDate" | "poll_editDTChoiceTime" | "poll_editDTChoiceCombinations" | "poll_editUniversalChoice" | "poll_editchoicevalues" | "poll_copy":
             assert response.status_code == 302
         case _:

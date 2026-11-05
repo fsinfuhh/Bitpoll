@@ -224,7 +224,7 @@ def comment(request, poll_url, comment_id=None):
                         if user:
                             name = user.get_displayname()
                         if comment_id:
-                            comment_obj = get_object_or_404(Comment, pk=comment_id)
+                            comment_obj = get_object_or_404(Comment, pk=comment_id, poll=current_poll)
                             if comment_obj.can_edit(request.user):
                                 comment_obj.text = text
                                 # comment.name = name # TODO: wenn wir das erlauben wollen mit angemeldet/nicht angemeldet aufpassen
@@ -258,7 +258,7 @@ def comment(request, poll_url, comment_id=None):
                 spam_challenge = create_anti_spam_challenge(current_poll.id)
     else:
         if comment_id:
-            comment_obj = get_object_or_404(Comment, pk=comment_id)
+            comment_obj = get_object_or_404(Comment, pk=comment_id, poll=current_poll)
             if comment_obj.can_edit(request.user):
                 form = CommentForm(instance=comment_obj)
             else:
@@ -282,41 +282,32 @@ def delete_comment(request, poll_url, comment_id):
     :param comment_id: ID of comment to be deleted
     :return:
 
+    Only the author of the comment or the owner of its poll may see the
+    confirmation page or delete the comment. Everyone else receives a 403.
+
     Case Delete:
-        If the user is authenticated and equal to the saved user of the comment, the comment is deleted
-        and the user is directed back to the poll's page
-
-        If the user is authenticated but differs from the saved user of the comment, the user is directed
-        back with error message "Deletion not allowed. You are not [comment.name]"
-
-        Without authentication the user is directed back with error message "Deletion not allowed.
-        You are not authenticated."
+        The comment is deleted and the user is directed back to the poll's page.
 
     Case Cancel:
         The user is redirected back to the poll's page.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    current_comment = get_object_or_404(Comment, id=comment_id)
-    error_msg = ""
+    current_comment = get_object_or_404(Comment, id=comment_id, poll=current_poll)
+
+    # Only the author of the comment (or the owner of its poll) may see the
+    # delete confirmation or delete the comment.
+    if not current_comment.can_delete(request.user):
+        return HttpResponseForbidden()
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated:
-                # TODO additional possibilities of deleting
-                if current_comment.can_delete(request.user):
-                    current_comment.delete()
-                    return redirect('poll', poll_url)
-                else:
-                    error_msg = _("Deletion not allowed. You are not {}.").format(str(current_comment.name))
-            else:
-                error_msg = _("Deletion not allowed. You are not authenticated.")
-        else:
-            return redirect('poll', poll_url)
+            current_comment.delete()
+        return redirect('poll', poll_url)
 
     return TemplateResponse(request, 'poll/comment_delete.html', {
         'poll': current_poll,
         'comment': current_comment,
-        'error': error_msg,
+        'error': "",
     })
 
 
@@ -665,7 +656,7 @@ def edit_choicevalues(request, poll_url):
         if 'delete' in request.POST:
             choiceval_id = request.POST.get('delete', None)
             if choiceval_id:
-                choiceval = get_object_or_404(ChoiceValue, id=choiceval_id)
+                choiceval = get_object_or_404(ChoiceValue, id=choiceval_id, poll=current_poll)
                 choiceval.deleted = True
                 choiceval.save()
             return redirect('poll_editchoicevalues', current_poll.url)
@@ -673,7 +664,7 @@ def edit_choicevalues(request, poll_url):
         if 'restore' in request.POST:
             choiceval_id = request.POST.get('restore', None)
             if choiceval_id:
-                choiceval = get_object_or_404(ChoiceValue, id=choiceval_id)
+                choiceval = get_object_or_404(ChoiceValue, id=choiceval_id, poll=current_poll)
                 choiceval.deleted = False
                 choiceval.save()
             return redirect('poll_editchoicevalues', current_poll.url)
@@ -681,7 +672,7 @@ def edit_choicevalues(request, poll_url):
         elif 'edit' in request.POST:
             choiceval_id = request.POST.get('edit', None)
             if choiceval_id:
-                choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id)
+                choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id, poll=current_poll)
                 form = ChoiceValueForm(instance=choiceval_select)
 
     return TemplateResponse(request, 'poll/choicevalue.html', {
@@ -720,7 +711,7 @@ def edit_choicevalues_create(request, poll_url):
     else:
         choiceval_id = request.POST.get('choiceval_id', None)
         if choiceval_id:
-            choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id)
+            choiceval_select = get_object_or_404(ChoiceValue, id=choiceval_id, poll=current_poll)
         else:
             choiceval_select = None
         return TemplateResponse(request, 'poll/choicevalue.html', {
@@ -850,7 +841,7 @@ def vote(request, poll_url, vote_id=None):
 
                         for choice in current_poll.choice_set.all():
                             if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
-                                choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+                                choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)], poll=current_poll)
                                 if not choice_value.deleted:
                                     new_choices.append(VoteChoice(value=choice_value,
                                                                   vote=current_vote,
@@ -901,7 +892,10 @@ def vote(request, poll_url, vote_id=None):
     comments = []
     choice_votes = []
     if vote_id:
-        current_vote = get_object_or_404(Vote, pk=vote_id)
+        current_vote = get_object_or_404(Vote, pk=vote_id, poll=current_poll)
+        if not current_vote.can_edit(request.user):
+            # the vote belongs to an user and it is not the authenticated user
+            return HttpResponseForbidden()
     else:
         current_vote = Vote()
     choices_orig = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
@@ -910,7 +904,7 @@ def vote(request, poll_url, vote_id=None):
         value = None
         if request.method == 'POST':
             if str(choice.id) in request.POST:
-                value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
+                value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)], poll=current_poll)
             else:
                 value = None
             cur_comment = request.POST.get('comment_{}'.format(choice.id)) or ''
@@ -943,25 +937,25 @@ def vote(request, poll_url, vote_id=None):
 
 def vote_assign(request, poll_url, vote_id):
     current_poll = get_object_or_404(Poll, url=poll_url)
-    current_vote = get_object_or_404(Vote, id=vote_id)
+    current_vote = get_object_or_404(Vote, id=vote_id, poll=current_poll)
+
+    if not (request.user.is_authenticated and current_vote.can_edit(request.user)):
+        return HttpResponseForbidden()
 
     if request.method == 'POST':
-        if request.user.is_authenticated and current_vote.can_edit(request.user):
-            username = request.POST.get('username').strip()
-            try:
-                user = BitpollUser.objects.get(username=username)
-                if current_poll.vote_set.filter(Q(user=user)).exists() and current_poll.one_vote_per_user:
-                    messages.info(request, _("This user has already voted and only one vote per user is permitted"))
-                else:
-                    current_vote.user = user
-                    current_vote.name = user.get_displayname()
-                    current_vote.assigned_by = request.user
-                    current_vote.save()
-                    return redirect('poll', poll_url)
-            except ObjectDoesNotExist:
-                messages.warning(request, _("The user {} does not exist").format(username))
-        else:
-            return HttpResponseForbidden()
+        username = request.POST.get('username').strip()
+        try:
+            user = BitpollUser.objects.get(username=username)
+            if current_poll.vote_set.filter(Q(user=user)).exists() and current_poll.one_vote_per_user:
+                messages.info(request, _("This user has already voted and only one vote per user is permitted"))
+            else:
+                current_vote.user = user
+                current_vote.name = user.get_displayname()
+                current_vote.assigned_by = request.user
+                current_vote.save()
+                return redirect('poll', poll_url)
+        except ObjectDoesNotExist:
+            messages.warning(request, _("The user {} does not exist").format(username))
 
     return TemplateResponse(request, 'poll/vote_assign.html', {
         'poll': current_poll,
@@ -976,41 +970,32 @@ def vote_delete(request, poll_url, vote_id):
     :param vote_id: ID of vote to be deleted
     :return:
 
+    Only users who are allowed to delete the vote may see the confirmation
+    page. Everyone else receives a 403.
+
     Case Delete:
-        If the user is authenticated and is equal to the saved user in the vote, the current vote is deleted.
-        The user is redirected to the poll's page.
-
-        If the user is authenticated but not equal to the saved user, the user is directed back with
-        error message "Deletion not allowed. You are not [user of vote]".
-
-        If the user is not authenticated, the user is directed back with error message
-        "Deletion not allowed. You are not authenticated."
+        The current vote is deleted and the user is redirected to the poll's page.
 
     Case Cancel:
-        The user is directed back to the poll's page.
+        The user is redirected to the poll's page.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    current_vote = get_object_or_404(Vote, id=vote_id)
-    error_msg = ""
+    current_vote = get_object_or_404(Vote, id=vote_id, poll=current_poll)
+
+    # Never expose the vote's details on the confirmation page to users who
+    # are not allowed to delete it.
+    if not current_vote.can_delete(request.user):
+        return HttpResponseForbidden()
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            if request.user.is_authenticated:
-                # TODO additional possibilities of deleting
-                if current_vote.can_delete(request.user):
-                    current_vote.delete()
-                    return redirect('poll', poll_url)
-                else:
-                    error_msg = _("Deletion not allowed. You are not {}.").format(str(current_vote.name))
-            else:
-                error_msg = _("Deletion not allowed. You are not authenticated.")
-        else:
-            return redirect('poll', poll_url)
+            current_vote.delete()
+        return redirect('poll', poll_url)
 
     return TemplateResponse(request, 'poll/vote_delete.html', {
         'poll': current_poll,
         'vote': current_vote,
-        'error': error_msg,
+        'error': "",
     })
 
 

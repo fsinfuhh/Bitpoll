@@ -30,14 +30,14 @@ def invite(request, poll_url):
             elif 'resend' in request.POST:
                 invitation_id = request.POST.get('resend', None)
                 if invitation_id:
-                    invitation = get_object_or_404(Invitation, pk=invitation_id)
+                    invitation = get_object_or_404(Invitation, pk=invitation_id, poll=current_poll)
                     invitation.send(request)
                 return redirect('invitations', current_poll.url)
 
             elif 'delete' in request.POST:
                 invitation_id = request.POST.get('delete', None)
                 if invitation_id:
-                    invitation = get_object_or_404(Invitation, id=invitation_id)
+                    invitation = get_object_or_404(Invitation, id=invitation_id, poll=current_poll)
                     invitation.delete()
                 return redirect('invitations', current_poll.url)
 
