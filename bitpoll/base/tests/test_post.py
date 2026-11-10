@@ -53,4 +53,36 @@ def test_user_settings_post_updates_user_and_watch(client):
     assert PollWatch.objects.filter(poll=poll, user=user).exists()
 
 
+def test_logout_get_is_not_allowed(client, django_user_model):
+    # Since Django 5 LogoutView only accepts POST requests.
+    user = django_user_model.objects.create_user(username="logout-get", password="password")
+    client.force_login(user)
 
+    response = client.get(reverse("logout"))
+
+    assert response.status_code == 405
+
+
+def test_logout_post_logs_user_out(client, django_user_model):
+    user = django_user_model.objects.create_user(username="logout-post", password="password")
+    client.force_login(user)
+
+    response = client.post(reverse("logout"))
+
+    assert response.status_code == 302
+    assert response["Location"] == reverse("index")
+    assert "_auth_user_id" not in client.session
+
+
+def test_logout_is_rendered_as_post_form(client, django_user_model):
+    # A plain link to /logout/ would trigger the 405 from LogoutView, so the
+    # navigation must submit a POST form instead.
+    user = django_user_model.objects.create_user(username="logout-form", password="password")
+    client.force_login(user)
+
+    response = client.get(reverse("index"))
+
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert f'<form method="post" action="{reverse("logout")}">' in content
+    assert f'<a href="{reverse("logout")}">' not in content

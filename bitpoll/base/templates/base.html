@@ -68,7 +68,12 @@
                             <li><a href="{% url 'groups_index' %}"><i class="fa-solid fa-group"></i>{% trans 'Groups' %}</a></li>
                         {% endif %}
                         <li><a href="{% url 'settings' %}"><i class="fa-solid fa-pencil"></i>{% trans 'Settings' %}</a></li>
-                        <li><a href="{% url 'logout' %}"><i class="fa-solid fa-sign-in"></i>{% trans 'Logout' %}</a></li>
+                        <li>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-link"><i class="fa-solid fa-sign-in"></i>{% trans 'Logout' %}</button>
+                            </form>
+                        </li>
                     {% endif %}
                     </ul>
                 </div>

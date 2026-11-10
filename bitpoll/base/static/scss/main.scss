@@ -86,6 +86,29 @@ body {
     .navbar-nav > li > a {
         color: #fff;
     }
+
+    .navbar-nav > li > form {
+        margin: 0;
+
+        > .btn-link {
+            color: #fff;
+            padding: 10px 15px;
+            line-height: 20px;
+            text-decoration: none;
+
+            &:hover, &:focus {
+                color: #fff;
+                background-color: transparent;
+            }
+        }
+    }
+
+    @media (min-width: 768px) {
+        .navbar-nav > li > form > .btn-link {
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+    }
 }
 
 #main-content {
