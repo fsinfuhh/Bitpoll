@@ -8,11 +8,14 @@ from .settings import *  # noqa: F401,F403
 
 DEBUG = True
 ALLOWED_HOSTS = ["testserver", "localhost", "127.0.0.1"]
-EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+MAILERS = {
+    "default": {
+        "BACKEND": "django.core.mail.backends.locmem.EmailBackend",
+    },
+}
 STORAGES = {
     **STORAGES,
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-
