@@ -333,7 +333,7 @@ HOME_URL = "https://example.com"
 HOME_URL_NAME = "Dashboard"
 
 # Test mail functionality by printing mails to console:
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# # MAILERS = {"default": {"BACKEND": "django.core.mail.backends.console.EmailBackend"}}
 
 # if the imprint URL is not empty use it as an link to the imprint, else use IMPRINT_TEXT
 IMPRINT_URL = ""
