@@ -59,6 +59,7 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'HOME_URL_NAME',
     'IMPRINT_TEXT',
     'IMPRINT_URL',
+    'PRIVACY_URL',
     'TIME_ZONE',
     'REGISTER_ENABLED',
     'MAIL_SIGNATURE',
@@ -69,7 +70,6 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'POLL_CREATION_ACCOUNT_WEBSITE',
     'POLL_CREATION_ACCOUNT_NAME',
     'OPENID_ENABLED',
-    'PRIVACY_URL',
     'PRIVACY_GROUP',
     'PRIVACY_ORGANIZATION',
     'PRIVACY_STREET',
@@ -144,12 +144,14 @@ PIPELINE = {
                 'fontawesome/css/solid.css',
                 'fontawesome/css/v4-shims.css',
                 'scss/main.scss',
-                'scss/poll.scss',
+                'scss/poll.scss'
             ),
             'output_filename': 'css/base.css',
         },
         'base_print': {
-            'source_filenames': ('css/print.css',),
+            'source_filenames': (
+                'css/print.css',
+            ),
             'output_filename': 'css/base_print.css',
             'extra_context': {
                 'media': 'print',
@@ -205,7 +207,9 @@ PIPELINE = {
             'output_filename': 'js/poll_edit.js',
         },
         'poll_view': {
-            'source_filenames': ('js/poll_filter.js',),
+            'source_filenames': (
+                'js/poll_filter.js',
+            ),
             'output_filename': 'js/poll_view.js',
         },
         'base_late': {
@@ -220,11 +224,14 @@ PIPELINE = {
                 'js/slider.js',
                 'js/vote.js',
                 'js/lib/jquery.datetimepicker.full.min.js',
+
             ),
             'output_filename': 'js/base_late.js',
         },
     },
-    'COMPILERS': ('libsasscompiler.LibSassCompiler',),
+    'COMPILERS': (
+        'libsasscompiler.LibSassCompiler',
+    ),
     'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',  # TODO
     'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor',  # TODO
 }
@@ -236,7 +243,8 @@ ROOT_URLCONF = 'bitpoll.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        ,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -267,7 +275,9 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'TIMEOUT': 60 * 30,
-        'OPTIONS': {'MAX_ENTRIES': 1000},
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
+        }
     }
 }
 
@@ -351,7 +361,7 @@ PRIVACY_STREET = "Street 123"
 PRIVACY_CITY = "City"
 PRIVACY_MAIL = "mail@example.com"
 
-LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'),)
+LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'), )
 
 LANGUAGES = (
     ('de', 'Deutsch'),
@@ -378,7 +388,7 @@ CALENDAR_ENABLED = True
 CALENDAR_MAX_TOKENS = 2
 CALENDAR_FILL_RATE = 500
 
-# See https://django-markdownify.readthedocs.io/en/latest/settings.html
+#See https://django-markdownify.readthedocs.io/en/latest/settings.html
 MARKDOWNIFY = {
     "default": {
         "WHITELIST_TAGS": [
@@ -400,23 +410,24 @@ MARKDOWNIFY = {
         ],
         "WHITELIST_ATTRS": [
             'href',
-            #'src',
-            #'alt',
+        #    'src',
+        #    'alt',
         ],
         "WHITELIST_PROTOCOLS": [
             'https',
         ],
         "WHITELIST_STYLES": [
-            #'color',
-            #'font-weight',
+        #    'color',
+        #    'font-weight',
         ],
         "LINKIFY_TEXT": {
             "PARSE_URLS": True,
+
             # Next key/value-pairs only have effect if "PARSE_URLS" is True
             "PARSE_EMAIL": False,
             "CALLBACKS": [],
             "SKIP_TAGS": [],
-        },
+        }
     }
 }
 

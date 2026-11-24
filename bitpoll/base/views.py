@@ -1,26 +1,33 @@
 import json
-import random
 import string
+import random
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.db import IntegrityError
-from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
-from django.utils.translation import gettext_lazy as _
-from pytz import all_timezones
+from django.db.models import Q
+from django.db import IntegrityError
 
 from bitpoll.base.autocomplete import autocomplete_users
-from bitpoll.base.forms import BitpollUserSettingsForm
-from bitpoll.base.models import USER_LANG, BitpollUser
+from bitpoll.base.models import BitpollUser
 from bitpoll.caldav.forms import DavCalendarForm
 from bitpoll.caldav.models import DavCalendar
-from bitpoll.poll.forms import PollCreationForm
-from bitpoll.poll.models import ChoiceValue, Poll, PollWatch, Vote
-from bitpoll.settings import IMPRINT_URL, PRIVACY_URL
 
+from bitpoll.poll.forms import PollCreationForm
+from bitpoll.poll.models import ChoiceValue, Poll, Vote, PollWatch
+
+from bitpoll.base.models import USER_LANG
+from bitpoll.base.forms import BitpollUserSettingsForm
+from pytz import all_timezones
+
+from bitpoll.registration.forms import RegisterForm
+from bitpoll.settings import IMPRINT_URL, PRIVACY_URL
+from django.core import signing
+from django.conf import settings
+
+from django.utils.translation import gettext_lazy as _
 
 def index(request):
     """
@@ -53,8 +60,7 @@ def index(request):
             ChoiceValue(title=_("maybe"), icon="question", color="ffe800", weight=0.5, poll=current_poll).save()
             ChoiceValue(title=_("rather not"), icon="thumbs-down", color="B0E", weight=0.25, poll=current_poll).save()
 
-            if current_poll.type == 'universal':
-                # TODO: heir könnte auch auf die algemeine edit url weitergeleitet werden
+            if current_poll.type == 'universal':  # TODO: heir könnte auch auf die algemeine edit url weitergeleitet werden
                 return redirect('poll_editUniversalChoice', current_poll.url)
             elif current_poll.type == 'date':
                 return redirect('poll_editDateChoice', current_poll.url)
@@ -62,19 +68,15 @@ def index(request):
                 return redirect('poll_editDTChoiceDate', current_poll.url)
     else:
         form = PollCreationForm()
-    return TemplateResponse(
-        request,
-        "base/index.html",
-        {
-            'poll_form': form,
-            'poll_count': Poll.objects.all().count(),
-            'votes_count': Vote.objects.all().count(),
-            'user_count': BitpollUser.objects.count(),
-            'public_polls': public_polls,
-            'randomize_url': randomize_url,
-            'random_url': generate_random_slug() if randomize_url else '',
-        },
-    )
+    return TemplateResponse(request, "base/index.html", {
+        'poll_form': form,
+        'poll_count': Poll.objects.all().count(),
+        'votes_count': Vote.objects.all().count(),
+        'user_count': BitpollUser.objects.count(),
+        'public_polls': public_polls,
+        'randomize_url': randomize_url,
+        'random_url': generate_random_slug() if randomize_url else '',
+    })
 
 
 def generate_random_slug():
@@ -83,17 +85,11 @@ def generate_random_slug():
 
 @login_required
 def user_settings(request):
-    polls = (
-        Poll.objects.filter(
-            Q(user=request.user)
-            | Q(vote__user=request.user)
-            | Q(group__user=request.user)
-            | Q(pollwatch__user=request.user)
-        )
-        .distinct()
-        .order_by('-due_date')
-        .select_related('user', 'group')
-    )
+    polls = Poll.objects.filter(Q(user=request.user)
+                                | Q(vote__user=request.user)
+                                | Q(group__user=request.user)
+                                | Q(pollwatch__user=request.user)
+                                ).distinct().order_by('-due_date').select_related('user', 'group')
 
     if request.method == 'POST':
         form = BitpollUserSettingsForm(request.POST, instance=request.user)
@@ -119,33 +115,33 @@ def user_settings(request):
     # List of polls that come from the group
     polls_group = Poll.objects.filter(group__user=request.user).values_list('id', flat=True)
 
-    return TemplateResponse(
-        request,
-        'base/settings.html',
-        {
-            'polls': polls,
-            'polls_voted': polls_voted,
-            'polls_watched': polls_watched,
-            'polls_group': polls_group,
-            'user': request.user,
-            'user_form': user_form,
-            'languages': USER_LANG,
-            'timezones': all_timezones,
-            'calendar_form': DavCalendarForm(user=request.user) if settings.CALENDAR_ENABLED else None,
-            'calendars': DavCalendar.objects.filter(user=request.user) if settings.CALENDAR_ENABLED else None,
-        },
-    )
+    return TemplateResponse(request, 'base/settings.html', {
+        'polls': polls,
+        'polls_voted': polls_voted,
+        'polls_watched': polls_watched,
+        'polls_group': polls_group,
+        'user': request.user,
+        'user_form': user_form,
+        'languages': USER_LANG,
+        'timezones': all_timezones,
+        'calendar_form': DavCalendarForm(user=request.user) if settings.CALENDAR_ENABLED else None,
+        'calendars': DavCalendar.objects.filter(user=request.user) if settings.CALENDAR_ENABLED else None,
+    })
 
 
 def imprint(request):
     if IMPRINT_URL:
         return redirect(IMPRINT_URL)
     else:
-        return TemplateResponse(request, 'base/imprint.html', {})
+        return TemplateResponse(request, 'base/imprint.html', {
+
+        })
 
 
 def about(request):
-    return TemplateResponse(request, 'base/about.html', {})
+    return TemplateResponse(request, 'base/about.html', {
+
+    })
 
 
 def licenses(request):
@@ -159,8 +155,10 @@ def tecnical(request):
 def problems(request):
     team_email = settings.TEAM_EMAIL
     if not request.user.is_authenticated:
-        team_email = team_email.replace('@', ' (AT) ')
-    return TemplateResponse(request, 'base/problems.html', {'team_email': team_email})
+        team_email = team_email.replace(u'@', u' (AT) ')
+    return TemplateResponse(request, 'base/problems.html', {
+        'team_email': team_email
+    })
 
 
 def privacy(request):
@@ -179,7 +177,6 @@ def privacy(request):
             },
         )
 
-
 def robots(request):
     return HttpResponse("User-agent: *\nDisallow: /\nAllow: /$", content_type="text/plain")
 
@@ -188,12 +185,11 @@ def robots(request):
 def autocomplete(request):
     term = request.GET.get('term', '')
     users = autocomplete_users(term)
-    result_json = json.dumps(
-        {
-            "users": [
-                {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name}
-                for user in users
-            ]
-        }
-    )
+    result_json = json.dumps({
+    "users": [{
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name
+        } for user in users]
+    })
     return HttpResponse(result_json, content_type='application/json')
