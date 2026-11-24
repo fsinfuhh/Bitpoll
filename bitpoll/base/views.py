@@ -2,6 +2,7 @@ import json
 import string
 import random
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -164,8 +165,18 @@ def privacy(request):
     if PRIVACY_URL:
         return redirect(PRIVACY_URL)
     else:
-        return TemplateResponse(request, 'base/privacy.html')
-    
+        return TemplateResponse(
+            request,
+            'base/privacy.html',
+            {
+                'privacy_group': settings.PRIVACY_GROUP,
+                'privacy_organization': settings.PRIVACY_ORGANIZATION,
+                'privacy_street': settings.PRIVACY_STREET,
+                'privacy_city': settings.PRIVACY_CITY,
+                'privacy_email': settings.PRIVACY_MAIL,
+            },
+        )
+
 def robots(request):
     return HttpResponse("User-agent: *\nDisallow: /\nAllow: /$", content_type="text/plain")
 

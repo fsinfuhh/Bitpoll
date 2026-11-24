@@ -70,6 +70,11 @@ TEMPLATE_ALLOWABLE_SETTINGS_VALUES = [
     'POLL_CREATION_ACCOUNT_WEBSITE',
     'POLL_CREATION_ACCOUNT_NAME',
     'OPENID_ENABLED',
+    'PRIVACY_GROUP',
+    'PRIVACY_ORGANIZATION',
+    'PRIVACY_STREET',
+    'PRIVACY_CITY',
+    'PRIVACY_MAIL',
 ]
 
 LOGIN_REDIRECT_URL = "/"
@@ -349,6 +354,12 @@ IMPRINT_TEXT = """
 
 ## if the PRIVACY_URL is not empty use it as an link to the privacy policy, else use bitpoll/base/templates/base/privacy.html
 PRIVACY_URL = ""
+
+PRIVACY_GROUP = ""
+PRIVACY_ORGANIZATION = "Example Organization"
+PRIVACY_STREET = "Street 123"
+PRIVACY_CITY = "City"
+PRIVACY_MAIL = "mail@example.com"
 
 LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'), )
 
